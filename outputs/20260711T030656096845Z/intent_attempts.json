@@ -1,0 +1,39 @@
+[
+  {
+    "attempt_index": 1,
+    "status": "rejected",
+    "phase": "semantic_validation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 1,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "710bc165319f03336aade1bddc845253c5c2d94bf0d993f9c651ced0bfdbdb01",
+    "diagnostic": "u_bend_bottom direct required-anchor realization predicts a minimum curvature radius of 9.08018 mm but at least 20 mm is required after deterministic handle optimization (factors [0.35, 0.4, 0.5, 0.45, 0.35]). Redistribute or add well-separated relative anchors so each direction change is spread over more distance; inverted_u_bridge direct required-anchor realization predicts a minimum curvature radius of 7.74362 mm but at least 20 mm is required after deterministic handle optimization (factors [0.4, 0.4, 0.4, 0.4, 0.4]). Redistribute or add well-separated relative anchors so each direction change is spread over more distance",
+    "lineage_reset": false,
+    "will_retry": true
+  },
+  {
+    "attempt_index": 2,
+    "status": "rejected",
+    "phase": "semantic_validation",
+    "semantic_attempt": 2,
+    "structured_retry_attempt": 1,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "47feac45d428aee2a6093f6a79936ad819a04306e4a1335ab4282288a7faf300",
+    "diagnostic": "inverted_u_bridge direct required-anchor realization predicts a minimum curvature radius of 15.1816 mm but at least 20 mm is required after deterministic handle optimization (factors [0.4, 0.4, 0.4, 0.4, 0.4]). Redistribute or add well-separated relative anchors so each direction change is spread over more distance",
+    "lineage_reset": false,
+    "will_retry": true
+  },
+  {
+    "attempt_index": 3,
+    "status": "accepted",
+    "phase": "semantic_validation",
+    "semantic_attempt": 3,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "e3e480e94be6a0f9988b95e7d4f8fff8cd6ffd9f02710264f902648e866d1bc1",
+    "diagnostic": null,
+    "lineage_reset": false
+  }
+]

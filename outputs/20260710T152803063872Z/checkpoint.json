@@ -1,0 +1,5497 @@
+{
+  "phase": "PREPARED",
+  "run_id": "20260710T152803063872Z",
+  "intent": {
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "target_behavior": [
+      {
+        "goal_id": "straight_start",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 40.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "upward_bend",
+        "depends_on_goal_ids": [
+          "straight_start"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": "+Z",
+        "path_kind": null,
+        "length": null,
+        "angle": 90.0,
+        "bend_radius": 30.0,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Broad upward bend resembling a section of a large donut."
+      },
+      {
+        "goal_id": "rising_spiral",
+        "depends_on_goal_ids": [
+          "upward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": null,
+        "path_kind": "spline",
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [
+          [
+            5.0,
+            0.0,
+            10.0
+          ],
+          [
+            20.0,
+            30.0,
+            20.0
+          ],
+          [
+            -1.0,
+            40.0,
+            30.0
+          ],
+          [
+            -1.0,
+            15.0,
+            40.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "spatial_s_curve",
+        "depends_on_goal_ids": [
+          "rising_spiral"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": null,
+        "path_kind": "spline",
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [
+          [
+            0.0,
+            0.0,
+            5.0
+          ],
+          [
+            15.0,
+            -1.0,
+            10.0
+          ],
+          [
+            30.0,
+            15.0,
+            15.0
+          ],
+          [
+            40.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "outward_bend",
+        "depends_on_goal_ids": [
+          "spatial_s_curve"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": 40.0,
+        "bend_radius": null,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Rotates pipe outward and slightly upward away from center."
+      },
+      {
+        "goal_id": "tapered_reducer",
+        "depends_on_goal_ids": [
+          "outward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "diameter_change",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": 15.0,
+        "wall_thickness_out": null,
+        "transition_length": 20.0,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth tapered transition near final section."
+      },
+      {
+        "goal_id": "final_outlet",
+        "depends_on_goal_ids": [
+          "tapered_reducer"
+        ],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 10.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      }
+    ],
+    "start_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "start_axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "expected_open_ports": 1,
+    "expected_open_ports_source": "derived",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Continuous internal flow passage required.",
+      "Maintain tangent continuity between all sections.",
+      "Spiral radius gradually reduces as the pipe rises.",
+      "Bends must not look angular or segmented."
+    ],
+    "prompt_sha256": "67ce3975be3f02335653ab90dbf8d687aa6e4e38b1f356172d4180f8d04db48e",
+    "contract_digest": "0c3bdc4b1675a66a09de3e6783219b8e0a312c242db8339e5cc252b340148092"
+  },
+  "previous_state": {
+    "state_id": "S2",
+    "state_version": 2,
+    "contract_digest": "0c3bdc4b1675a66a09de3e6783219b8e0a312c242db8339e5cc252b340148092",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 1,
+    "expected_open_ports_source": "derived",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Continuous internal flow passage required.",
+      "Maintain tangent continuity between all sections.",
+      "Spiral radius gradually reduces as the pipe rises.",
+      "Bends must not look angular or segmented."
+    ],
+    "module_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 47.123889803846886,
+        "minimum_curvature_radius": 30.0
+      }
+    },
+    "placed_modules": [
+      {
+        "id": "M1",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M1",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "path_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "out_axis": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M1.in",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M1.out",
+            "position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "START"
+        }
+      },
+      {
+        "id": "M2",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M2",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "start_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "path_points": [
+            [
+              40.0,
+              0.0,
+              0.0
+            ],
+            [
+              41.47203022982254,
+              0.0,
+              0.036136313844828294
+            ],
+            [
+              42.94051420988682,
+              0.0,
+              0.1444581998340908
+            ],
+            [
+              44.401914233660854,
+              0.0,
+              0.324704701056568
+            ],
+            [
+              45.852709660483846,
+              0.0,
+              0.5764415879030871
+            ],
+            [
+              47.289405397097916,
+              0.0,
+              0.8990624041636792
+            ],
+            [
+              48.70854031763387,
+              0.0,
+              1.2917899280337366
+            ],
+            [
+              50.1066956017666,
+              0.0,
+              1.7536780445093747
+            ],
+            [
+              51.48050297095269,
+              0.0,
+              2.2836140246613965
+            ],
+            [
+              52.82665280290846,
+              0.0,
+              2.880321206296699
+            ],
+            [
+              54.14190210477993,
+              0.0,
+              3.5423620695493483
+            ],
+            [
+              55.42308232579665,
+              0.0,
+              4.268141699991837
+            ],
+            [
+              56.66710699058807,
+              0.0,
+              5.055911630923642
+            ],
+            [
+              57.870979134773,
+              0.0,
+              5.9037740555806515
+            ],
+            [
+              59.03179852490936,
+              0.0,
+              6.80968639911789
+            ],
+            [
+              60.146768645410546,
+              0.0,
+              7.7714662393512235
+            ],
+            [
+              61.21320343559643,
+              0.0,
+              8.786796564403573
+            ],
+            [
+              62.22853376064877,
+              0.0,
+              9.85323135458945
+            ],
+            [
+              63.19031360088211,
+              0.0,
+              10.968201475090634
+            ],
+            [
+              64.09622594441934,
+              0.0,
+              12.129020865226995
+            ],
+            [
+              64.94408836907635,
+              0.0,
+              13.332893009411933
+            ],
+            [
+              65.73185830000816,
+              0.0,
+              14.57691767420335
+            ],
+            [
+              66.45763793045064,
+              0.0,
+              15.858097895220066
+            ],
+            [
+              67.1196787937033,
+              0.0,
+              17.173347197091534
+            ],
+            [
+              67.7163859753386,
+              0.0,
+              18.519497029047304
+            ],
+            [
+              68.24632195549063,
+              0.0,
+              19.893304398233397
+            ],
+            [
+              68.70821007196626,
+              0.0,
+              21.29145968236613
+            ],
+            [
+              69.10093759583631,
+              0.0,
+              22.71059460290208
+            ],
+            [
+              69.42355841209691,
+              0.0,
+              24.14729033951615
+            ],
+            [
+              69.67529529894344,
+              0.0,
+              25.598085766339146
+            ],
+            [
+              69.85554180016591,
+              0.0,
+              27.05948579011318
+            ],
+            [
+              69.96386368615518,
+              0.0,
+              28.527969770177457
+            ],
+            [
+              70.0,
+              0.0,
+              29.999999999999996
+            ]
+          ],
+          "end_position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "out_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M2.in",
+            "position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M2.out",
+            "position": [
+              70.0,
+              0.0,
+              29.999999999999996
+            ],
+            "axis": [
+              6.123233995736766e-17,
+              0.0,
+              1.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M1.out"
+        }
+      }
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out",
+        "position": [
+          70.0,
+          0.0,
+          29.999999999999996
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.in": {
+        "id": "M1.in",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.out": {
+        "id": "M1.out",
+        "position": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.in": {
+        "id": "M2.in",
+        "position": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out": {
+        "id": "M2.out",
+        "position": [
+          70.0,
+          0.0,
+          29.999999999999996
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "module_incidence_edges": [
+      {
+        "module_id": "M1",
+        "port_id": "M1.in"
+      },
+      {
+        "module_id": "M1",
+        "port_id": "M1.out"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.in"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out"
+      }
+    ],
+    "open_port_ids": [
+      "M2.out"
+    ],
+    "used_ports": [
+      "START",
+      "M1.out"
+    ],
+    "remaining_goals": [
+      {
+        "goal_id": "rising_spiral",
+        "depends_on_goal_ids": [
+          "upward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": null,
+        "path_kind": "spline",
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [
+          [
+            5.0,
+            0.0,
+            10.0
+          ],
+          [
+            20.0,
+            30.0,
+            20.0
+          ],
+          [
+            -1.0,
+            40.0,
+            30.0
+          ],
+          [
+            -1.0,
+            15.0,
+            40.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "spatial_s_curve",
+        "depends_on_goal_ids": [
+          "rising_spiral"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": null,
+        "path_kind": "spline",
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [
+          [
+            0.0,
+            0.0,
+            5.0
+          ],
+          [
+            15.0,
+            -1.0,
+            10.0
+          ],
+          [
+            30.0,
+            15.0,
+            15.0
+          ],
+          [
+            40.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "outward_bend",
+        "depends_on_goal_ids": [
+          "spatial_s_curve"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": 40.0,
+        "bend_radius": null,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Rotates pipe outward and slightly upward away from center."
+      },
+      {
+        "goal_id": "tapered_reducer",
+        "depends_on_goal_ids": [
+          "outward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "diameter_change",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": 15.0,
+        "wall_thickness_out": null,
+        "transition_length": 20.0,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth tapered transition near final section."
+      },
+      {
+        "goal_id": "final_outlet",
+        "depends_on_goal_ids": [
+          "tapered_reducer"
+        ],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 10.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      }
+    ],
+    "action_history": [
+      {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "straight_start"
+        ],
+        "completed_goal_ids": [
+          "straight_start"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "start_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "upward_bend"
+        ],
+        "completed_goal_ids": [
+          "upward_bend"
+        ],
+        "satisfied_components": []
+      }
+    ]
+  },
+  "candidate_state": {
+    "state_id": "S3",
+    "state_version": 3,
+    "contract_digest": "0c3bdc4b1675a66a09de3e6783219b8e0a312c242db8339e5cc252b340148092",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 1,
+    "expected_open_ports_source": "derived",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Continuous internal flow passage required.",
+      "Maintain tangent continuity between all sections.",
+      "Spiral radius gradually reduces as the pipe rises.",
+      "Bends must not look angular or segmented."
+    ],
+    "module_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 47.123889803846886,
+        "minimum_curvature_radius": 30.0
+      }
+    },
+    "placed_modules": [
+      {
+        "id": "M1",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M1",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "path_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "out_axis": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M1.in",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M1.out",
+            "position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "START"
+        }
+      },
+      {
+        "id": "M2",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M2",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "start_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "path_points": [
+            [
+              40.0,
+              0.0,
+              0.0
+            ],
+            [
+              41.47203022982254,
+              0.0,
+              0.036136313844828294
+            ],
+            [
+              42.94051420988682,
+              0.0,
+              0.1444581998340908
+            ],
+            [
+              44.401914233660854,
+              0.0,
+              0.324704701056568
+            ],
+            [
+              45.852709660483846,
+              0.0,
+              0.5764415879030871
+            ],
+            [
+              47.289405397097916,
+              0.0,
+              0.8990624041636792
+            ],
+            [
+              48.70854031763387,
+              0.0,
+              1.2917899280337366
+            ],
+            [
+              50.1066956017666,
+              0.0,
+              1.7536780445093747
+            ],
+            [
+              51.48050297095269,
+              0.0,
+              2.2836140246613965
+            ],
+            [
+              52.82665280290846,
+              0.0,
+              2.880321206296699
+            ],
+            [
+              54.14190210477993,
+              0.0,
+              3.5423620695493483
+            ],
+            [
+              55.42308232579665,
+              0.0,
+              4.268141699991837
+            ],
+            [
+              56.66710699058807,
+              0.0,
+              5.055911630923642
+            ],
+            [
+              57.870979134773,
+              0.0,
+              5.9037740555806515
+            ],
+            [
+              59.03179852490936,
+              0.0,
+              6.80968639911789
+            ],
+            [
+              60.146768645410546,
+              0.0,
+              7.7714662393512235
+            ],
+            [
+              61.21320343559643,
+              0.0,
+              8.786796564403573
+            ],
+            [
+              62.22853376064877,
+              0.0,
+              9.85323135458945
+            ],
+            [
+              63.19031360088211,
+              0.0,
+              10.968201475090634
+            ],
+            [
+              64.09622594441934,
+              0.0,
+              12.129020865226995
+            ],
+            [
+              64.94408836907635,
+              0.0,
+              13.332893009411933
+            ],
+            [
+              65.73185830000816,
+              0.0,
+              14.57691767420335
+            ],
+            [
+              66.45763793045064,
+              0.0,
+              15.858097895220066
+            ],
+            [
+              67.1196787937033,
+              0.0,
+              17.173347197091534
+            ],
+            [
+              67.7163859753386,
+              0.0,
+              18.519497029047304
+            ],
+            [
+              68.24632195549063,
+              0.0,
+              19.893304398233397
+            ],
+            [
+              68.70821007196626,
+              0.0,
+              21.29145968236613
+            ],
+            [
+              69.10093759583631,
+              0.0,
+              22.71059460290208
+            ],
+            [
+              69.42355841209691,
+              0.0,
+              24.14729033951615
+            ],
+            [
+              69.67529529894344,
+              0.0,
+              25.598085766339146
+            ],
+            [
+              69.85554180016591,
+              0.0,
+              27.05948579011318
+            ],
+            [
+              69.96386368615518,
+              0.0,
+              28.527969770177457
+            ],
+            [
+              70.0,
+              0.0,
+              29.999999999999996
+            ]
+          ],
+          "end_position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "out_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M2.in",
+            "position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M2.out",
+            "position": [
+              70.0,
+              0.0,
+              29.999999999999996
+            ],
+            "axis": [
+              6.123233995736766e-17,
+              0.0,
+              1.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M1.out"
+        }
+      },
+      {
+        "id": "M3",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M3",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              75.0,
+              0.0,
+              40.0
+            ],
+            [
+              82.5,
+              15.0,
+              45.0
+            ],
+            [
+              90.0,
+              30.0,
+              50.0
+            ],
+            [
+              80.0,
+              35.0,
+              55.0
+            ],
+            [
+              69.0,
+              40.0,
+              60.0
+            ],
+            [
+              69.0,
+              15.0,
+              70.0
+            ]
+          ],
+          "final_tangent": [
+            0.0,
+            -0.8944271909999159,
+            0.4472135954999579
+          ],
+          "start_position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 10.5,
+          "path_points": [
+            [
+              70.0,
+              0.0,
+              29.999999999999996
+            ],
+            [
+              75.0,
+              0.0,
+              40.0
+            ],
+            [
+              82.5,
+              15.0,
+              45.0
+            ],
+            [
+              90.0,
+              30.0,
+              50.0
+            ],
+            [
+              80.0,
+              35.0,
+              55.0
+            ],
+            [
+              69.0,
+              40.0,
+              60.0
+            ],
+            [
+              69.0,
+              15.0,
+              70.0
+            ]
+          ],
+          "end_position": [
+            69.0,
+            15.0,
+            70.0
+          ],
+          "out_axis": [
+            0.0,
+            -0.894427190999916,
+            0.447213595499958
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M3.in",
+            "position": [
+              70.0,
+              0.0,
+              29.999999999999996
+            ],
+            "axis": [
+              -6.123233995736766e-17,
+              -0.0,
+              -1.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M3.out",
+            "position": [
+              69.0,
+              15.0,
+              70.0
+            ],
+            "axis": [
+              0.0,
+              -0.894427190999916,
+              0.447213595499958
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M2.out"
+        }
+      }
+    ],
+    "open_ports": [
+      {
+        "id": "M3.out",
+        "position": [
+          69.0,
+          15.0,
+          70.0
+        ],
+        "axis": [
+          0.0,
+          -0.894427190999916,
+          0.447213595499958
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.in": {
+        "id": "M1.in",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.out": {
+        "id": "M1.out",
+        "position": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.in": {
+        "id": "M2.in",
+        "position": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out": {
+        "id": "M2.out",
+        "position": [
+          70.0,
+          0.0,
+          29.999999999999996
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M3.in": {
+        "id": "M3.in",
+        "position": [
+          70.0,
+          0.0,
+          29.999999999999996
+        ],
+        "axis": [
+          -6.123233995736766e-17,
+          -0.0,
+          -1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M3.out": {
+        "id": "M3.out",
+        "position": [
+          69.0,
+          15.0,
+          70.0
+        ],
+        "axis": [
+          0.0,
+          -0.894427190999916,
+          0.447213595499958
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "module_incidence_edges": [
+      {
+        "module_id": "M1",
+        "port_id": "M1.in"
+      },
+      {
+        "module_id": "M1",
+        "port_id": "M1.out"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.in"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out"
+      },
+      {
+        "module_id": "M3",
+        "port_id": "M3.in"
+      },
+      {
+        "module_id": "M3",
+        "port_id": "M3.out"
+      }
+    ],
+    "open_port_ids": [
+      "M3.out"
+    ],
+    "used_ports": [
+      "START",
+      "M1.out",
+      "M2.out"
+    ],
+    "remaining_goals": [
+      {
+        "goal_id": "spatial_s_curve",
+        "depends_on_goal_ids": [
+          "rising_spiral"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": null,
+        "path_kind": "spline",
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [
+          [
+            0.0,
+            0.0,
+            5.0
+          ],
+          [
+            15.0,
+            -1.0,
+            10.0
+          ],
+          [
+            30.0,
+            15.0,
+            15.0
+          ],
+          [
+            40.0,
+            0.0,
+            20.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "outward_bend",
+        "depends_on_goal_ids": [
+          "spatial_s_curve"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": 40.0,
+        "bend_radius": null,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Rotates pipe outward and slightly upward away from center."
+      },
+      {
+        "goal_id": "tapered_reducer",
+        "depends_on_goal_ids": [
+          "outward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "diameter_change",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": 15.0,
+        "wall_thickness_out": null,
+        "transition_length": 20.0,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth tapered transition near final section."
+      },
+      {
+        "goal_id": "final_outlet",
+        "depends_on_goal_ids": [
+          "tapered_reducer"
+        ],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 10.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      }
+    ],
+    "action_history": [
+      {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "straight_start"
+        ],
+        "completed_goal_ids": [
+          "straight_start"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "start_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "upward_bend"
+        ],
+        "completed_goal_ids": [
+          "upward_bend"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A3",
+        "action_type": "ADD_MODULE",
+        "target_port": "M2.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              75.0,
+              0.0,
+              40.0
+            ],
+            [
+              82.5,
+              15.0,
+              45.0
+            ],
+            [
+              90.0,
+              30.0,
+              50.0
+            ],
+            [
+              80.0,
+              35.0,
+              55.0
+            ],
+            [
+              69.0,
+              40.0,
+              60.0
+            ],
+            [
+              69.0,
+              15.0,
+              70.0
+            ]
+          ],
+          "final_tangent": [
+            0.0,
+            -0.8944271909999159,
+            0.4472135954999579
+          ],
+          "start_position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 10.5
+        },
+        "consumed_port_ids": [
+          "M2.out"
+        ],
+        "affected_goal_ids": [
+          "rising_spiral"
+        ],
+        "completed_goal_ids": [
+          "rising_spiral"
+        ],
+        "satisfied_components": []
+      }
+    ]
+  },
+  "candidate_digest": "0d9b997858d582feb67fb4c0837997982e49775c0d82227f2adea10592de4dcf",
+  "candidate_state_digest": "769f4df2d1b8255e195bd4d4ea760f292a4c8d0980c757afeb3629ddf30c016d",
+  "candidate_document": "CadGenCandidate_20260710T152803063872Z_3_2_0d9b997858d5",
+  "published_document": "CadGenPipe_20260710T152803063872Z_v3",
+  "previous_freecad_verified": true,
+  "action": {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "spline",
+      "waypoint_frame": "global",
+      "waypoints": [
+        [
+          75.0,
+          0.0,
+          40.0
+        ],
+        [
+          82.5,
+          15.0,
+          45.0
+        ],
+        [
+          90.0,
+          30.0,
+          50.0
+        ],
+        [
+          80.0,
+          35.0,
+          55.0
+        ],
+        [
+          69.0,
+          40.0,
+          60.0
+        ],
+        [
+          69.0,
+          15.0,
+          70.0
+        ]
+      ],
+      "final_tangent": [
+        0.0,
+        -0.8944271909999159,
+        0.4472135954999579
+      ],
+      "start_position": [
+        70.0,
+        0.0,
+        29.999999999999996
+      ],
+      "axis": [
+        6.123233995736766e-17,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "initial_tangent": [
+        6.123233995736766e-17,
+        0.0,
+        1.0
+      ],
+      "interpolation": "bspline",
+      "frenet": false,
+      "minimum_curvature_radius": 10.5
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "rising_spiral"
+    ],
+    "completed_goal_ids": [
+      "rising_spiral"
+    ],
+    "satisfied_components": []
+  },
+  "draft": {
+    "target_port": "M2.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "spline",
+      "waypoint_frame": "relative_to_target",
+      "waypoints": [
+        [
+          5.0,
+          0.0,
+          10.0
+        ],
+        [
+          12.5,
+          15.0,
+          15.0
+        ],
+        [
+          20.0,
+          30.0,
+          20.0
+        ],
+        [
+          10.0,
+          35.0,
+          25.0
+        ],
+        [
+          -1.0,
+          40.0,
+          30.0
+        ],
+        [
+          -1.0,
+          15.0,
+          40.0
+        ]
+      ],
+      "final_tangent": [
+        0.0,
+        -1.0,
+        0.5
+      ]
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "rising_spiral"
+    ],
+    "completed_goal_ids": [
+      "rising_spiral"
+    ],
+    "satisfied_components": [],
+    "rationale": "The previous attempt failed due to a high curvature peak at the second waypoint (relative [20, 30, 20]). Following the curvature_repair_hint, I have added two smoothing waypoints from the allowed numeric enum—[12.5, 15, 15] and [10, 35, 25]—to distribute the direction change more gradually while preserving all four required goal waypoints in their original order. The waypoint frame remains relative_to_target to simplify the implementation of the spiral rise."
+  },
+  "attempt_id": 2,
+  "step_verification": {
+    "transition": {
+      "step_index": 3,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "rising_spiral",
+        "depends_on_goal_ids": [
+          "upward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "spline",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [
+          [
+            5.0,
+            0.0,
+            10.0
+          ],
+          [
+            20.0,
+            30.0,
+            20.0
+          ],
+          [
+            -1.0,
+            40.0,
+            30.0
+          ],
+          [
+            -1.0,
+            15.0,
+            40.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "rising_spiral",
+          "depends_on_goal_ids": [
+            "upward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "spline",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [
+            [
+              5.0,
+              0.0,
+              10.0
+            ],
+            [
+              20.0,
+              30.0,
+              20.0
+            ],
+            [
+              -1.0,
+              40.0,
+              30.0
+            ],
+            [
+              -1.0,
+              15.0,
+              40.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target"
+        }
+      ],
+      "state_before_id": "S2",
+      "state_after_id": "S3",
+      "action_id": "A3",
+      "module": "route",
+      "target_port_before": {
+        "id": "M2.out",
+        "position": [
+          70.0,
+          0.0,
+          29.999999999999996
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M3",
+      "produced_port_ids": [
+        "M3.out"
+      ],
+      "removed_port_ids": [
+        "M2.out"
+      ],
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "connection_edge_ids": [
+        "E3"
+      ],
+      "affected_goal_ids": [
+        "rising_spiral"
+      ],
+      "completed_goal_ids": [
+        "rising_spiral"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M2.out"
+      ],
+      "open_port_ids_after": [
+        "M3.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0003_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M3",
+                "M2"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_18"
+              ],
+              "candidate_segment": [
+                [
+                  70.0,
+                  0.0,
+                  29.999999999999996
+                ],
+                [
+                  75.0,
+                  0.0,
+                  40.0
+                ]
+              ],
+              "existing_segment": [
+                [
+                  63.19031360088211,
+                  0.0,
+                  10.968201475090634
+                ],
+                [
+                  64.09622594441934,
+                  0.0,
+                  12.129020865226995
+                ]
+              ],
+              "centerline_separation": 18.82090442393349,
+              "required_separation": 20.0,
+              "clearance": -1.1790955760665085
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  "actions": [
+    {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "straight_start"
+      ],
+      "completed_goal_ids": [
+        "straight_start"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 30.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "start_position": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ]
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "upward_bend"
+      ],
+      "completed_goal_ids": [
+        "upward_bend"
+      ],
+      "satisfied_components": []
+    }
+  ],
+  "step_verifications": [
+    {
+      "transition": {
+        "step_index": 1,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "straight_start",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": []
+        },
+        "affected_goals": [
+          {
+            "goal_id": "straight_start",
+            "depends_on_goal_ids": [],
+            "allow_parallel": false,
+            "type": "move",
+            "direction": "+X",
+            "length": 40.0,
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [],
+            "required_waypoints": []
+          }
+        ],
+        "state_before_id": "S0",
+        "state_after_id": "S1",
+        "action_id": "A1",
+        "module": "route",
+        "target_port_before": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M1",
+        "produced_port_ids": [
+          "M1.out"
+        ],
+        "removed_port_ids": [
+          "START"
+        ],
+        "consumed_port_ids": [
+          "START"
+        ],
+        "connection_edge_ids": [
+          "E1"
+        ],
+        "affected_goal_ids": [
+          "straight_start"
+        ],
+        "completed_goal_ids": [
+          "straight_start"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "START"
+        ],
+        "open_port_ids_after": [
+          "M1.out"
+        ]
+      },
+      "status": "passed",
+      "issues": [],
+      "mcp_status": "skipped",
+      "mcp_required": false,
+      "mcp_result_path": null,
+      "mcp_error": null,
+      "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+      "freecad_validation_path": null,
+      "mcp_measurements": {},
+      "mcp_assembly_bounds": null
+    },
+    {
+      "transition": {
+        "step_index": 2,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "upward_bend",
+          "depends_on_goal_ids": [
+            "straight_start"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+Z",
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "notes": "Broad upward bend resembling a section of a large donut."
+        },
+        "affected_goals": [
+          {
+            "goal_id": "upward_bend",
+            "depends_on_goal_ids": [
+              "straight_start"
+            ],
+            "allow_parallel": false,
+            "type": "turn",
+            "direction": "+Z",
+            "angle": 90.0,
+            "bend_radius": 30.0,
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [],
+            "required_waypoints": [],
+            "notes": "Broad upward bend resembling a section of a large donut."
+          }
+        ],
+        "state_before_id": "S1",
+        "state_after_id": "S2",
+        "action_id": "A2",
+        "module": "route",
+        "target_port_before": {
+          "id": "M1.out",
+          "position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M2",
+        "produced_port_ids": [
+          "M2.out"
+        ],
+        "removed_port_ids": [
+          "M1.out"
+        ],
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "connection_edge_ids": [
+          "E2"
+        ],
+        "affected_goal_ids": [
+          "upward_bend"
+        ],
+        "completed_goal_ids": [
+          "upward_bend"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "M1.out"
+        ],
+        "open_port_ids_after": [
+          "M2.out"
+        ]
+      },
+      "status": "passed",
+      "issues": [
+        {
+          "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+          "severity": "warning",
+          "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+          "check_name": "conservative_collision",
+          "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+          "step_index": 2,
+          "action_id": "A2",
+          "module_id": "M2",
+          "port_ids": [],
+          "target_port_id": "M1.out",
+          "consumed_goal_index": 0,
+          "expected": {},
+          "actual": {
+            "candidates": [
+              {
+                "module_ids": [
+                  "M2",
+                  "M1"
+                ],
+                "segments": [
+                  "segment_1",
+                  "segment_0"
+                ],
+                "candidate_segment": [
+                  [
+                    41.47203022982254,
+                    0.0,
+                    0.036136313844828294
+                  ],
+                  [
+                    42.94051420988682,
+                    0.0,
+                    0.1444581998340908
+                  ]
+                ],
+                "existing_segment": [
+                  [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    40.0,
+                    0.0,
+                    0.0
+                  ]
+                ],
+                "centerline_separation": 1.4724737113747404,
+                "required_separation": 20.0,
+                "clearance": -18.52752628862526
+              }
+            ]
+          },
+          "suggestion": {}
+        }
+      ],
+      "mcp_status": "passed",
+      "mcp_required": false,
+      "mcp_result_path": "outputs/20260710T152803063872Z/step_mcp/step_2_attempt_1.json",
+      "mcp_error": null,
+      "skipped_mcp_reason": null,
+      "freecad_validation_path": "outputs/20260710T152803063872Z/step_mcp/step_2_validation_1.json",
+      "mcp_measurements": {
+        "M1": {
+          "centerline_length": 40.0
+        },
+        "M2": {
+          "centerline_length": 47.123889803846886,
+          "minimum_curvature_radius": 30.0
+        }
+      },
+      "mcp_assembly_bounds": {
+        "minimum": [
+          0.0,
+          -10.0,
+          -13.29568801169576
+        ],
+        "maximum": [
+          83.29568801169577,
+          10.0,
+          29.999999999999996
+        ]
+      }
+    }
+  ],
+  "attempts": [
+    {
+      "step_index": 1,
+      "attempt_index": 1,
+      "state_id": "S0",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "straight_start"
+        ],
+        "completed_goal_ids": [
+          "straight_start"
+        ],
+        "satisfied_components": [],
+        "rationale": "Satisfying the first goal 'straight_start' by creating a 40mm straight pipe segment along the +X direction from the starting port."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "straight_start"
+        ],
+        "completed_goal_ids": [
+          "straight_start"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [],
+      "observations": []
+    },
+    {
+      "step_index": 2,
+      "attempt_index": 1,
+      "state_id": "S1",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "upward_bend"
+        ],
+        "completed_goal_ids": [
+          "upward_bend"
+        ],
+        "satisfied_components": [],
+        "rationale": null
+      },
+      "resolved": {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "start_position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "upward_bend"
+        ],
+        "completed_goal_ids": [
+          "upward_bend"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "STATIC_COLLISION_REQUIRES_FREECAD"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+          "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+          "check_name": "conservative_collision",
+          "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+          "step_index": 2,
+          "action_id": "A2",
+          "module_id": "M2",
+          "port_ids": [],
+          "target_port_id": "M1.out",
+          "expected": {},
+          "actual": {
+            "candidates": [
+              {
+                "module_ids": [
+                  "M2",
+                  "M1"
+                ],
+                "segments": [
+                  "segment_1",
+                  "segment_0"
+                ],
+                "candidate_segment": [
+                  [
+                    41.47203022982254,
+                    0.0,
+                    0.036136313844828294
+                  ],
+                  [
+                    42.94051420988682,
+                    0.0,
+                    0.1444581998340908
+                  ]
+                ],
+                "existing_segment": [
+                  [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    40.0,
+                    0.0,
+                    0.0
+                  ]
+                ],
+                "centerline_separation": 1.4724737113747404,
+                "required_separation": 20.0,
+                "clearance": -18.52752628862526
+              }
+            ]
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 3,
+      "attempt_index": 1,
+      "state_id": "S2",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "M2.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "relative_to_target",
+          "waypoints": [
+            [
+              5.0,
+              0.0,
+              10.0
+            ],
+            [
+              20.0,
+              30.0,
+              20.0
+            ],
+            [
+              -1.0,
+              40.0,
+              30.0
+            ],
+            [
+              -1.0,
+              15.0,
+              40.0
+            ]
+          ],
+          "final_tangent": [
+            0.0,
+            -1.0,
+            0.5
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "rising_spiral"
+        ],
+        "completed_goal_ids": [
+          "rising_spiral"
+        ],
+        "satisfied_components": [],
+        "rationale": "Satisfying the rising_spiral goal by implementing a spline route starting from port M2.out. The waypoints are copied exactly from the goal requirement using the relative_to_target frame. The final_tangent is authored to follow the direction vector from the penultimate to the terminal waypoint ([0, -25, 10]), approximating the unit vector using available schema literals."
+      },
+      "resolved": {
+        "action_id": "A3",
+        "action_type": "ADD_MODULE",
+        "target_port": "M2.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              75.0,
+              0.0,
+              40.0
+            ],
+            [
+              90.0,
+              30.0,
+              50.0
+            ],
+            [
+              69.0,
+              40.0,
+              60.0
+            ],
+            [
+              69.0,
+              15.0,
+              70.0
+            ]
+          ],
+          "final_tangent": [
+            0.0,
+            -0.8944271909999159,
+            0.4472135954999579
+          ],
+          "start_position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 10.5
+        },
+        "consumed_port_ids": [
+          "M2.out"
+        ],
+        "affected_goal_ids": [
+          "rising_spiral"
+        ],
+        "completed_goal_ids": [
+          "rising_spiral"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 3,
+          "action_id": "A3",
+          "module_id": "M3",
+          "port_ids": [],
+          "target_port_id": "M2.out",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M3"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": true,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 0,
+                  "volume": 0.0
+                },
+                "outer_network": {
+                  "bop_errors": [],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": true,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 0,
+                  "volume": 0.0
+                },
+                "bore_network": {
+                  "assembly_intrusion_allowance": 0.00038576286305745954,
+                  "assembly_intrusion_volume": 0.0,
+                  "bop_errors": [
+                    "check_exception: Unorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "intrusion_check_method": "outer_minus_bore_construction_invariant",
+                  "intrusion_module_ids": [],
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 2
+                },
+                "modules": {
+                  "M3": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": true,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 2,
+                    "volume": 32782.48009585607
+                  }
+                },
+                "centerlines": {
+                  "M3": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                    "curve_length": 105.57413785273903,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 23.42678288085738,
+                    "minimum_radius": 4.394722966792131,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 1,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M3",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    }
+  ],
+  "committed_states": [
+    {
+      "state_id": "S0",
+      "state_version": 0,
+      "contract_digest": "0c3bdc4b1675a66a09de3e6783219b8e0a312c242db8339e5cc252b340148092",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 1,
+      "expected_open_ports_source": "derived",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Continuous internal flow passage required.",
+        "Maintain tangent continuity between all sections.",
+        "Spiral radius gradually reduces as the pipe rises.",
+        "Bends must not look angular or segmented."
+      ],
+      "module_measurements": {},
+      "placed_modules": [],
+      "open_ports": [
+        {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [],
+      "module_incidence_edges": [],
+      "open_port_ids": [
+        "START"
+      ],
+      "used_ports": [],
+      "remaining_goals": [
+        {
+          "goal_id": "straight_start",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 40.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "upward_bend",
+          "depends_on_goal_ids": [
+            "straight_start"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+Z",
+          "path_kind": null,
+          "length": null,
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Broad upward bend resembling a section of a large donut."
+        },
+        {
+          "goal_id": "rising_spiral",
+          "depends_on_goal_ids": [
+            "upward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": null,
+          "path_kind": "spline",
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [
+            [
+              5.0,
+              0.0,
+              10.0
+            ],
+            [
+              20.0,
+              30.0,
+              20.0
+            ],
+            [
+              -1.0,
+              40.0,
+              30.0
+            ],
+            [
+              -1.0,
+              15.0,
+              40.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "spatial_s_curve",
+          "depends_on_goal_ids": [
+            "rising_spiral"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": null,
+          "path_kind": "spline",
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [
+            [
+              0.0,
+              0.0,
+              5.0
+            ],
+            [
+              15.0,
+              -1.0,
+              10.0
+            ],
+            [
+              30.0,
+              15.0,
+              15.0
+            ],
+            [
+              40.0,
+              0.0,
+              20.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "outward_bend",
+          "depends_on_goal_ids": [
+            "spatial_s_curve"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": 40.0,
+          "bend_radius": null,
+          "plane_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Rotates pipe outward and slightly upward away from center."
+        },
+        {
+          "goal_id": "tapered_reducer",
+          "depends_on_goal_ids": [
+            "outward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "diameter_change",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": 15.0,
+          "wall_thickness_out": null,
+          "transition_length": 20.0,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Smooth tapered transition near final section."
+        },
+        {
+          "goal_id": "final_outlet",
+          "depends_on_goal_ids": [
+            "tapered_reducer"
+          ],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 10.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        }
+      ],
+      "action_history": []
+    },
+    {
+      "state_id": "S1",
+      "state_version": 1,
+      "contract_digest": "0c3bdc4b1675a66a09de3e6783219b8e0a312c242db8339e5cc252b340148092",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 1,
+      "expected_open_ports_source": "derived",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Continuous internal flow passage required.",
+        "Maintain tangent continuity between all sections.",
+        "Spiral radius gradually reduces as the pipe rises.",
+        "Bends must not look angular or segmented."
+      ],
+      "module_measurements": {},
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 40.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                40.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "out_axis": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                40.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M1.out",
+          "position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        }
+      ],
+      "open_port_ids": [
+        "M1.out"
+      ],
+      "used_ports": [
+        "START"
+      ],
+      "remaining_goals": [
+        {
+          "goal_id": "upward_bend",
+          "depends_on_goal_ids": [
+            "straight_start"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+Z",
+          "path_kind": null,
+          "length": null,
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Broad upward bend resembling a section of a large donut."
+        },
+        {
+          "goal_id": "rising_spiral",
+          "depends_on_goal_ids": [
+            "upward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": null,
+          "path_kind": "spline",
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [
+            [
+              5.0,
+              0.0,
+              10.0
+            ],
+            [
+              20.0,
+              30.0,
+              20.0
+            ],
+            [
+              -1.0,
+              40.0,
+              30.0
+            ],
+            [
+              -1.0,
+              15.0,
+              40.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "spatial_s_curve",
+          "depends_on_goal_ids": [
+            "rising_spiral"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": null,
+          "path_kind": "spline",
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [
+            [
+              0.0,
+              0.0,
+              5.0
+            ],
+            [
+              15.0,
+              -1.0,
+              10.0
+            ],
+            [
+              30.0,
+              15.0,
+              15.0
+            ],
+            [
+              40.0,
+              0.0,
+              20.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "outward_bend",
+          "depends_on_goal_ids": [
+            "spatial_s_curve"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": 40.0,
+          "bend_radius": null,
+          "plane_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Rotates pipe outward and slightly upward away from center."
+        },
+        {
+          "goal_id": "tapered_reducer",
+          "depends_on_goal_ids": [
+            "outward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "diameter_change",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": 15.0,
+          "wall_thickness_out": null,
+          "transition_length": 20.0,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Smooth tapered transition near final section."
+        },
+        {
+          "goal_id": "final_outlet",
+          "depends_on_goal_ids": [
+            "tapered_reducer"
+          ],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 10.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        }
+      ],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 40.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "straight_start"
+          ],
+          "completed_goal_ids": [
+            "straight_start"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    },
+    {
+      "state_id": "S2",
+      "state_version": 2,
+      "contract_digest": "0c3bdc4b1675a66a09de3e6783219b8e0a312c242db8339e5cc252b340148092",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 1,
+      "expected_open_ports_source": "derived",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Continuous internal flow passage required.",
+        "Maintain tangent continuity between all sections.",
+        "Spiral radius gradually reduces as the pipe rises.",
+        "Bends must not look angular or segmented."
+      ],
+      "module_measurements": {
+        "M1": {
+          "centerline_length": 40.0
+        },
+        "M2": {
+          "centerline_length": 47.123889803846886,
+          "minimum_curvature_radius": 30.0
+        }
+      },
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 40.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                40.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "out_axis": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                40.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        },
+        {
+          "id": "M2",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M2",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "circular_arc",
+            "bend_radius": 30.0,
+            "sweep_angle": 90.0,
+            "plane_normal": [
+              0.0,
+              -1.0,
+              0.0
+            ],
+            "start_position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "terminal_axis": [
+              6.123233995736766e-17,
+              0.0,
+              1.0
+            ],
+            "path_points": [
+              [
+                40.0,
+                0.0,
+                0.0
+              ],
+              [
+                41.47203022982254,
+                0.0,
+                0.036136313844828294
+              ],
+              [
+                42.94051420988682,
+                0.0,
+                0.1444581998340908
+              ],
+              [
+                44.401914233660854,
+                0.0,
+                0.324704701056568
+              ],
+              [
+                45.852709660483846,
+                0.0,
+                0.5764415879030871
+              ],
+              [
+                47.289405397097916,
+                0.0,
+                0.8990624041636792
+              ],
+              [
+                48.70854031763387,
+                0.0,
+                1.2917899280337366
+              ],
+              [
+                50.1066956017666,
+                0.0,
+                1.7536780445093747
+              ],
+              [
+                51.48050297095269,
+                0.0,
+                2.2836140246613965
+              ],
+              [
+                52.82665280290846,
+                0.0,
+                2.880321206296699
+              ],
+              [
+                54.14190210477993,
+                0.0,
+                3.5423620695493483
+              ],
+              [
+                55.42308232579665,
+                0.0,
+                4.268141699991837
+              ],
+              [
+                56.66710699058807,
+                0.0,
+                5.055911630923642
+              ],
+              [
+                57.870979134773,
+                0.0,
+                5.9037740555806515
+              ],
+              [
+                59.03179852490936,
+                0.0,
+                6.80968639911789
+              ],
+              [
+                60.146768645410546,
+                0.0,
+                7.7714662393512235
+              ],
+              [
+                61.21320343559643,
+                0.0,
+                8.786796564403573
+              ],
+              [
+                62.22853376064877,
+                0.0,
+                9.85323135458945
+              ],
+              [
+                63.19031360088211,
+                0.0,
+                10.968201475090634
+              ],
+              [
+                64.09622594441934,
+                0.0,
+                12.129020865226995
+              ],
+              [
+                64.94408836907635,
+                0.0,
+                13.332893009411933
+              ],
+              [
+                65.73185830000816,
+                0.0,
+                14.57691767420335
+              ],
+              [
+                66.45763793045064,
+                0.0,
+                15.858097895220066
+              ],
+              [
+                67.1196787937033,
+                0.0,
+                17.173347197091534
+              ],
+              [
+                67.7163859753386,
+                0.0,
+                18.519497029047304
+              ],
+              [
+                68.24632195549063,
+                0.0,
+                19.893304398233397
+              ],
+              [
+                68.70821007196626,
+                0.0,
+                21.29145968236613
+              ],
+              [
+                69.10093759583631,
+                0.0,
+                22.71059460290208
+              ],
+              [
+                69.42355841209691,
+                0.0,
+                24.14729033951615
+              ],
+              [
+                69.67529529894344,
+                0.0,
+                25.598085766339146
+              ],
+              [
+                69.85554180016591,
+                0.0,
+                27.05948579011318
+              ],
+              [
+                69.96386368615518,
+                0.0,
+                28.527969770177457
+              ],
+              [
+                70.0,
+                0.0,
+                29.999999999999996
+              ]
+            ],
+            "end_position": [
+              70.0,
+              0.0,
+              29.999999999999996
+            ],
+            "out_axis": [
+              6.123233995736766e-17,
+              0.0,
+              1.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M2.in",
+              "position": [
+                40.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M2.out",
+              "position": [
+                70.0,
+                0.0,
+                29.999999999999996
+              ],
+              "axis": [
+                6.123233995736766e-17,
+                0.0,
+                1.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "M1.out"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M2.out",
+          "position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.in": {
+          "id": "M2.in",
+          "position": [
+            40.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.out": {
+          "id": "M2.out",
+          "position": [
+            70.0,
+            0.0,
+            29.999999999999996
+          ],
+          "axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        },
+        {
+          "edge_id": "E2",
+          "port_a_id": "M1.out",
+          "port_b_id": "M2.in",
+          "action_id": "A2",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.in"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.out"
+        }
+      ],
+      "open_port_ids": [
+        "M2.out"
+      ],
+      "used_ports": [
+        "START",
+        "M1.out"
+      ],
+      "remaining_goals": [
+        {
+          "goal_id": "rising_spiral",
+          "depends_on_goal_ids": [
+            "upward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": null,
+          "path_kind": "spline",
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [
+            [
+              5.0,
+              0.0,
+              10.0
+            ],
+            [
+              20.0,
+              30.0,
+              20.0
+            ],
+            [
+              -1.0,
+              40.0,
+              30.0
+            ],
+            [
+              -1.0,
+              15.0,
+              40.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "spatial_s_curve",
+          "depends_on_goal_ids": [
+            "rising_spiral"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": null,
+          "path_kind": "spline",
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [
+            [
+              0.0,
+              0.0,
+              5.0
+            ],
+            [
+              15.0,
+              -1.0,
+              10.0
+            ],
+            [
+              30.0,
+              15.0,
+              15.0
+            ],
+            [
+              40.0,
+              0.0,
+              20.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "outward_bend",
+          "depends_on_goal_ids": [
+            "spatial_s_curve"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": 40.0,
+          "bend_radius": null,
+          "plane_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Rotates pipe outward and slightly upward away from center."
+        },
+        {
+          "goal_id": "tapered_reducer",
+          "depends_on_goal_ids": [
+            "outward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "diameter_change",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": 15.0,
+          "wall_thickness_out": null,
+          "transition_length": 20.0,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Smooth tapered transition near final section."
+        },
+        {
+          "goal_id": "final_outlet",
+          "depends_on_goal_ids": [
+            "tapered_reducer"
+          ],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 10.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        }
+      ],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 40.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "straight_start"
+          ],
+          "completed_goal_ids": [
+            "straight_start"
+          ],
+          "satisfied_components": []
+        },
+        {
+          "action_id": "A2",
+          "action_type": "ADD_MODULE",
+          "target_port": "M1.out",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "circular_arc",
+            "bend_radius": 30.0,
+            "sweep_angle": 90.0,
+            "plane_normal": [
+              0.0,
+              -1.0,
+              0.0
+            ],
+            "start_position": [
+              40.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "terminal_axis": [
+              6.123233995736766e-17,
+              0.0,
+              1.0
+            ]
+          },
+          "consumed_port_ids": [
+            "M1.out"
+          ],
+          "affected_goal_ids": [
+            "upward_bend"
+          ],
+          "completed_goal_ids": [
+            "upward_bend"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    }
+  ],
+  "planner_lineage": {
+    "intent": {
+      "interaction_id": "v1_ChdqZzlSYXNPYk0tYi0xZThQMGRlNTJBaxIXamc5UmFzT2JNLWItMWU4UDBkZTUyQWs",
+      "turns": 1,
+      "last_input_tokens": 3429
+    },
+    "step_planner": {
+      "interaction_id": "v1_ChZ2QTlSYW9YS0phZlkxZThQeWMyY1FREhc2ZzlSYW8ySk04UHIxZThQcXNHRjBBSQ",
+      "turns": 2,
+      "last_input_tokens": 5508
+    }
+  },
+  "planner_schema_profiles": {},
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 19449,
+    "cached_tokens": 3240,
+    "output_tokens": 2149,
+    "thought_tokens": 9424,
+    "tool_use_tokens": 0,
+    "total_tokens": 31022,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "preserved_suffix": null
+}

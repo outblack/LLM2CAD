@@ -1,0 +1,99 @@
+{
+  "state_id": "S0",
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "placed_modules": [],
+  "open_ports": [
+    {
+      "id": "START",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain"
+    }
+  ],
+  "used_ports": [],
+  "remaining_goals": [
+    {
+      "type": "branch",
+      "direction": null,
+      "length": null,
+      "angle": null,
+      "branch_count": 2,
+      "branch_angles": [],
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [
+        [
+          -1.0,
+          0.0,
+          1.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "diameter_out": null,
+      "end_type": null,
+      "notes": null
+    },
+    {
+      "type": "move",
+      "direction": "+X",
+      "length": 60.0,
+      "angle": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "diameter_out": null,
+      "end_type": null,
+      "notes": "The main passage connecting the left and right branch groups."
+    },
+    {
+      "type": "branch",
+      "direction": null,
+      "length": null,
+      "angle": null,
+      "branch_count": 2,
+      "branch_angles": [],
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [
+        [
+          1.0,
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "diameter_out": null,
+      "end_type": null,
+      "notes": null
+    }
+  ],
+  "action_history": []
+}

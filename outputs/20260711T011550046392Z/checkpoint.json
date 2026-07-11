@@ -1,0 +1,4623 @@
+{
+  "phase": "COMMITTED",
+  "run_id": "20260711T011550046392Z",
+  "intent": {
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "target_behavior": [
+      {
+        "goal_id": "initial_arm",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 40.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Length from upper-left start toward the first junction."
+      },
+      {
+        "goal_id": "left_junction",
+        "depends_on_goal_ids": [
+          "initial_arm"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [
+          [
+            -1.0,
+            0.0,
+            -1.0
+          ]
+        ],
+        "required_outlets": [],
+        "include_primary_outlet": true,
+        "junction_style": "smooth_hub",
+        "blend_radius": 30.0,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth Y junction for the lower-left branch; primary continues right."
+      },
+      {
+        "goal_id": "central_passage",
+        "depends_on_goal_ids": [
+          "left_junction"
+        ],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 40.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "The main passage connecting left and right branch pairs."
+      },
+      {
+        "goal_id": "right_junction",
+        "depends_on_goal_ids": [
+          "central_passage"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [
+          [
+            1.0,
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            0.0,
+            -1.0
+          ]
+        ],
+        "required_outlets": [],
+        "include_primary_outlet": false,
+        "junction_style": "smooth_hub",
+        "blend_radius": 30.0,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth Y junction for the upper-right and lower-right terminal branches."
+      }
+    ],
+    "start_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "start_axis": [
+      1.0,
+      0.0,
+      -1.0
+    ],
+    "expected_open_ports": 3,
+    "expected_open_ports_source": "explicit",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Asymmetric four-port hollow manifold with uniform diameter.",
+      "Junctions must be smooth Y-shaped blends without bulbous or spherical nodes.",
+      "Brushed metal or matte industrial metal finish with semi-gloss shading."
+    ],
+    "prompt_sha256": "9a74109b5bc1835abdd47e4fb27c3ff6613d16ed4e27cc26f4af3b380d38ab79",
+    "contract_digest": "1e70bac4dce867a111e20d167a9a8b5caddd70bd7eed5844ace657ecd9b9926b"
+  },
+  "previous_state": null,
+  "state": {
+    "state_id": "S0",
+    "state_version": 0,
+    "contract_digest": "1e70bac4dce867a111e20d167a9a8b5caddd70bd7eed5844ace657ecd9b9926b",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 3,
+    "expected_open_ports_source": "explicit",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Asymmetric four-port hollow manifold with uniform diameter.",
+      "Junctions must be smooth Y-shaped blends without bulbous or spherical nodes.",
+      "Brushed metal or matte industrial metal finish with semi-gloss shading."
+    ],
+    "module_measurements": {},
+    "placed_modules": [],
+    "open_ports": [
+      {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865475,
+          0.0,
+          -0.7071067811865475
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865475,
+          0.0,
+          -0.7071067811865475
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [],
+    "module_incidence_edges": [],
+    "open_port_ids": [
+      "START"
+    ],
+    "used_ports": [],
+    "remaining_goals": [
+      {
+        "goal_id": "initial_arm",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 40.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Length from upper-left start toward the first junction."
+      },
+      {
+        "goal_id": "left_junction",
+        "depends_on_goal_ids": [
+          "initial_arm"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [
+          [
+            -1.0,
+            0.0,
+            -1.0
+          ]
+        ],
+        "required_outlets": [],
+        "include_primary_outlet": true,
+        "junction_style": "smooth_hub",
+        "blend_radius": 30.0,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth Y junction for the lower-left branch; primary continues right."
+      },
+      {
+        "goal_id": "central_passage",
+        "depends_on_goal_ids": [
+          "left_junction"
+        ],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 40.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "The main passage connecting left and right branch pairs."
+      },
+      {
+        "goal_id": "right_junction",
+        "depends_on_goal_ids": [
+          "central_passage"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [
+          [
+            1.0,
+            0.0,
+            1.0
+          ],
+          [
+            1.0,
+            0.0,
+            -1.0
+          ]
+        ],
+        "required_outlets": [],
+        "include_primary_outlet": false,
+        "junction_style": "smooth_hub",
+        "blend_radius": 30.0,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Smooth Y junction for the upper-right and lower-right terminal branches."
+      }
+    ],
+    "action_history": []
+  },
+  "state_digest": "2f7ffb46a1e7558f710dc7303a94065ab27d190f407cce854cb5e0cef93f9668",
+  "geometry_digest": "ade4549860ec6b4228e1ff2e6a0722ffb45233a49f5fad65244020830060da22",
+  "freecad_verified": false,
+  "committed_states": [
+    {
+      "state_id": "S0",
+      "state_version": 0,
+      "contract_digest": "1e70bac4dce867a111e20d167a9a8b5caddd70bd7eed5844ace657ecd9b9926b",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 3,
+      "expected_open_ports_source": "explicit",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Asymmetric four-port hollow manifold with uniform diameter.",
+        "Junctions must be smooth Y-shaped blends without bulbous or spherical nodes.",
+        "Brushed metal or matte industrial metal finish with semi-gloss shading."
+      ],
+      "module_measurements": {},
+      "placed_modules": [],
+      "open_ports": [
+        {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [],
+      "module_incidence_edges": [],
+      "open_port_ids": [
+        "START"
+      ],
+      "used_ports": [],
+      "remaining_goals": [
+        {
+          "goal_id": "initial_arm",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 40.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Length from upper-left start toward the first junction."
+        },
+        {
+          "goal_id": "left_junction",
+          "depends_on_goal_ids": [
+            "initial_arm"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [
+            [
+              -1.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "required_outlets": [],
+          "include_primary_outlet": true,
+          "junction_style": "smooth_hub",
+          "blend_radius": 30.0,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Smooth Y junction for the lower-left branch; primary continues right."
+        },
+        {
+          "goal_id": "central_passage",
+          "depends_on_goal_ids": [
+            "left_junction"
+          ],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 40.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "The main passage connecting left and right branch pairs."
+        },
+        {
+          "goal_id": "right_junction",
+          "depends_on_goal_ids": [
+            "central_passage"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [
+            [
+              1.0,
+              0.0,
+              1.0
+            ],
+            [
+              1.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "required_outlets": [],
+          "include_primary_outlet": false,
+          "junction_style": "smooth_hub",
+          "blend_radius": 30.0,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Smooth Y junction for the upper-right and lower-right terminal branches."
+        }
+      ],
+      "action_history": []
+    }
+  ],
+  "actions": [],
+  "step_verifications": [],
+  "attempts": [
+    {
+      "step_index": 1,
+      "attempt_index": 1,
+      "state_id": "S0",
+      "phase": "static_step_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "I am initiating the manifold by routing the 'initial_arm' from the START port. According to the goal, this is a 40mm straight line segment in the +X direction ([1,0,0]). This action completes the first goal and prepares the 'left_junction' goal for the next state transition."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "MODULE_INPUT_AXIS_MISMATCH",
+        "PORT_CONTRACT_MISMATCH",
+        "ROUTE_START_TANGENT_MISMATCH"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_MODULE_INPUT_AXIS_MISMATCH",
+          "issue_code": "MODULE_INPUT_AXIS_MISMATCH",
+          "check_name": "module_connection",
+          "message": "Produced module input axis is not opposite the target port axis.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [
+            "M1.in",
+            "START"
+          ],
+          "target_port_id": "START",
+          "expected": {
+            "input_axis": [
+              -0.7071067811865475,
+              -0.0,
+              0.7071067811865475
+            ]
+          },
+          "actual": {
+            "input_axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "axis_alignment": 0.7071067811865476,
+            "outer_rim_error": 7.653668647301796,
+            "modeling_tolerance": 0.0001
+          },
+          "suggestion": {
+            "operation": "align_module_axis",
+            "target_port": "START"
+          }
+        },
+        {
+          "issue_id": "STEP_0001_02_PORT_CONTRACT_MISMATCH",
+          "issue_code": "PORT_CONTRACT_MISMATCH",
+          "check_name": "port_contract",
+          "message": "Mating ports violate position, axis, or section compatibility.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [
+            "START",
+            "M1.in"
+          ],
+          "target_port_id": "START",
+          "expected": {
+            "position_tolerance": 0.0001,
+            "anti_parallel_axis_dot": 0.9999,
+            "section_tolerance": 0.0001,
+            "maximum_rim_error": 0.0001
+          },
+          "actual": {
+            "stored_edge": {
+              "edge_id": "E1",
+              "port_a_id": "START",
+              "port_b_id": "M1.in",
+              "action_id": "A1",
+              "position_error": 0.0,
+              "anti_parallel_axis_dot": 0.7071067811865476,
+              "axis_angle_error": 0.7853981633974483,
+              "od_error": 0.0,
+              "id_error": 0.0,
+              "wall_error": 0.0,
+              "outer_rim_error": 7.653668647301796,
+              "inner_rim_error": 6.1229349178414365,
+              "connector_type_match": true,
+              "connector_gender_match": true,
+              "connector_standard_match": true,
+              "engagement": 0.0
+            },
+            "recomputed_interface": {
+              "position_error": 0.0,
+              "anti_parallel_axis_dot": 0.7071067811865476,
+              "axis_angle_error": 0.7853981633974483,
+              "od_error": 0.0,
+              "id_error": 0.0,
+              "wall_error": 0.0,
+              "outer_rim_error": 7.653668647301796,
+              "inner_rim_error": 6.1229349178414365
+            }
+          },
+          "suggestion": {}
+        },
+        {
+          "issue_id": "STEP_0001_03_ROUTE_START_TANGENT_MISMATCH",
+          "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+          "check_name": "route_continuity",
+          "message": "Route centerline is not tangent to the selected target port.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [
+            "START"
+          ],
+          "target_port_id": "START",
+          "expected": {
+            "dot": 0.9999,
+            "maximum_rim_error": 0.0001
+          },
+          "actual": {
+            "dot": 0.707106781187,
+            "outer_rim_error": 7.653668647301796
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 2,
+      "state_id": "S0",
+      "phase": "static_step_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The previous attempt failed because the route direction did not match the immutable target port's axis. The START port axis is [0.7071, 0, -0.7071], so a straight-line route must follow this vector to maintain tangency. This action creates a 40mm segment along that axis, satisfying the 'initial_arm' goal's length requirement and orientation while correcting the reported PORT_CONTRACT_MISMATCH."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 40.0,
+          "direction": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "GOAL_ROUTE_DIRECTION_MISMATCH"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_GOAL_ROUTE_DIRECTION_MISMATCH",
+          "issue_code": "GOAL_ROUTE_DIRECTION_MISMATCH",
+          "check_name": "goal_completion",
+          "message": "Completed route displacement does not follow its required direction.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {
+            "direction": "+X",
+            "dot": 0.9999
+          },
+          "actual": {
+            "dot": 0.7071067811865476
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 3,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "relative_to_target",
+          "waypoints": [
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The initial START port axis is [0.7071, 0, -0.7071], but the goal 'initial_arm' requires a displacement in the '+X' ([1, 0, 0]) direction for a length of 40mm. A straight 'line' route is impossible because it would either violate the port's tangency or the goal's direction. I am using a 'spline' route in the 'relative_to_target' frame. The first waypoint at [10, 0, 0] acts as a lead-in to ease the transition from the port's initial heading toward the +X goal axis, and the final waypoint at [40, 0, 0] completes the required 40mm displacement along +X."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: Self-intersecting wire\nSelf-intersecting wire\nUnorientable shape\nUnorientable shape\nUnorientable shape\nUnorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\nNo error\nNo error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 3,
+                  "volume": 12346.99969949461
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": true,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 3,
+                    "volume": 12745.45612729729
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                    "curve_length": 40.56571318416725,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 30.901956275008956,
+                    "minimum_radius": 4.2426406871192865,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 1,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "terminal_bore_failures": [
+                  {
+                    "allowance": 0.0001970406912331516,
+                    "blocked_volume": 19.704069123315158,
+                    "port_id": "M1.out"
+                  }
+                ],
+                "anchored_inlet_bore_failures": [
+                  {
+                    "allowance": 0.00019704069123315188,
+                    "blocked_volume": 19.704069123315122,
+                    "port_id": "START"
+                  }
+                ],
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                  "curve_length": 40.56571318416725,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 30.901956275008956,
+                  "minimum_radius": 4.2426406871192865,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 256
+                  },
+                  "minimum_radius_nearest_path_point_index": 1,
+                  "optimized_handle_factors": [
+                    0.45,
+                    0.3,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 4,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "relative_to_target",
+          "waypoints": [
+            [
+              15.0,
+              0.0,
+              -1.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The previous spline attempt failed with self-intersection and high curvature because the direction change from the port axis [0.7071, 0, -0.7071] to the required +X goal direction was too abrupt. I am using a spline with more well-separated waypoints in the 'relative_to_target' frame. The first waypoint at [15, 0, -1] provides a lead-in that follows the starting curvature, the second waypoint at [25, 0, 0] eases the turn toward the X-axis, and the final waypoint at [40, 0, 0] completes the 40mm displacement along +X."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              15.0,
+              0.0,
+              -1.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: Unorientable shape\nUnorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\nNo error\nNo error\nNo error\nNo error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 4,
+                  "volume": 12794.919642911345
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": true,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 4,
+                    "volume": 12794.92833741185
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                    "curve_length": 40.72752410481439,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 30.723724675974715,
+                    "minimum_radius": 7.025439716689181,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 0,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "terminal_bore_failures": [
+                  {
+                    "allowance": 0.0001970406912331516,
+                    "blocked_volume": 19.704069123315367,
+                    "port_id": "M1.out"
+                  }
+                ],
+                "anchored_inlet_bore_failures": [
+                  {
+                    "allowance": 0.00019704069123315188,
+                    "blocked_volume": 19.704069123315186,
+                    "port_id": "START"
+                  }
+                ],
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                  "curve_length": 40.72752410481439,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 30.723724675974715,
+                  "minimum_radius": 7.025439716689181,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 26
+                  },
+                  "minimum_radius_nearest_path_point_index": 0,
+                  "optimized_handle_factors": [
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 5,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "relative_to_target",
+          "waypoints": [
+            [
+              1.414213562,
+              0.0,
+              -1.0
+            ],
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The previous attempt failed due to a curvature peak at the inlet where the route turns from the port axis [0.7071, 0, -0.7071] toward the goal direction +X. To repair this, I have added two lead-in waypoints at [1.414, 0, -1] and [2.121, 0, -1] in the relative_to_target frame. These points align with the starting port axis (which points slightly in -Z) to ease the initial curvature before turning toward the required displacement anchors at [10, 0, 0] and [40, 0, 0]. This ensures tangency and satisfies the 40mm +X direction goal while maintaining a safe curvature radius."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.414213562,
+              0.0,
+              -1.0
+            ],
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: No error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": false,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 1,
+                  "volume": 8080.0414660731785
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": false,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 1,
+                    "volume": 7181.568700920828
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near authored path point index 2. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                    "curve_length": 40.40256513097576,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 31.048420254063373,
+                    "minimum_radius": 0.5744118987598233,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 2,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "terminal_bore_failures": [
+                  {
+                    "allowance": 0.0001970406912331516,
+                    "blocked_volume": 19.70406912331525,
+                    "port_id": "M1.out"
+                  }
+                ],
+                "anchored_inlet_bore_failures": [
+                  {
+                    "allowance": 0.00019704069123315188,
+                    "blocked_volume": 19.704069123315175,
+                    "port_id": "START"
+                  }
+                ],
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near authored path point index 2. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                  "curve_length": 40.40256513097576,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 31.048420254063373,
+                  "minimum_radius": 0.5744118987598233,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 513
+                  },
+                  "minimum_radius_nearest_path_point_index": 2,
+                  "optimized_handle_factors": [
+                    0.4,
+                    0.4,
+                    0.55,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 6,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.414213562,
+              0.0,
+              -180.0
+            ],
+            [
+              2.121320344,
+              0.0,
+              -180.0
+            ],
+            [
+              10.0,
+              0.0,
+              -180.0
+            ],
+            [
+              25.0,
+              0.0,
+              -180.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The initial arm must transition from the inlet axis [0.7071, 0, -0.7071] to the goal direction +X over a length of 40mm. Previous attempts failed due to curvature spikes at the start or sharp transitions in the middle. This spline uses lead-in waypoints (1.414 and 2.121 along the diagonal axis) to satisfy the inlet tangency perfectly, then spreads the direction change across well-separated intermediate points (10 and 25) before reaching the terminal point at 40. This approach follows the repair hint to distribute the turn and minimize curvature peaks."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.414213562,
+              0.0,
+              -180.0
+            ],
+            [
+              2.121320344,
+              0.0,
+              -180.0
+            ],
+            [
+              10.0,
+              0.0,
+              -180.0
+            ],
+            [
+              25.0,
+              0.0,
+              -180.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            0.08304547985373997,
+            0.0,
+            0.9965457582448797
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly_errors evidence is not empty",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "assembly not built"
+                  ],
+                  "is_closed": false,
+                  "is_null": true,
+                  "is_valid": false,
+                  "passed": false,
+                  "solid_count": 0,
+                  "volume": 0.0
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": false,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 1,
+                    "volume": 133509.45877379208
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                    "curve_length": 398.9426495886531,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 2.627536735684058,
+                    "minimum_radius": 0.001794992994247048,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 1,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "assembly_errors": [
+                  {
+                    "error": "Bnd_Box is void",
+                    "stage": "assembly_global_bore_cut"
+                  }
+                ],
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                  "curve_length": 398.9426495886531,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 2.627536735684058,
+                  "minimum_radius": 0.001794992994247048,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 320
+                  },
+                  "minimum_radius_nearest_path_point_index": 1,
+                  "optimized_handle_factors": [
+                    0.55,
+                    0.55,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 7,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              5.0,
+              0.0,
+              -1.0
+            ],
+            [
+              15.0,
+              0.0,
+              0.0
+            ],
+            [
+              30.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The goal is a 40mm arm from START to the +X direction. The inlet at START is aligned with [0.7071, 0, -0.7071]. Previous attempts failed with curvature spikes (radius near 0.001) because the spline was forced through waypoints that didn't align with the inlet tangent or the coordinate magnitude was misinterpreted (e.g., -180 instead of Z-offset). I am using a spline with a lead-in point at 2.121 (3 units along the inlet ray) and then gently easing the Z-component toward 0 at X=15, 30, and finally reaching the goal terminal point at [40, 0, 0]. This spreads the curvature and maintains the required arm length."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              5.0,
+              0.0,
+              -1.0
+            ],
+            [
+              15.0,
+              0.0,
+              0.0
+            ],
+            [
+              30.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: Self-intersecting wire\nSelf-intersecting wire\nUnorientable shape\nUnorientable shape\nUnorientable shape\nNo error\nNo error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 2,
+                  "volume": 7718.2314364878275
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": true,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 2,
+                    "volume": 7723.576407380975
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                    "curve_length": 40.325006793740584,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 31.10322053629673,
+                    "minimum_radius": 2.9018644896383488,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 0,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "terminal_bore_failures": [
+                  {
+                    "allowance": 0.0001970406912331516,
+                    "blocked_volume": 19.704069123315158,
+                    "port_id": "M1.out"
+                  }
+                ],
+                "anchored_inlet_bore_failures": [
+                  {
+                    "allowance": 0.00019704069123315188,
+                    "blocked_volume": 19.704069123315165,
+                    "port_id": "START"
+                  }
+                ],
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                  "curve_length": 40.325006793740584,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 31.10322053629673,
+                  "minimum_radius": 2.9018644896383488,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 80
+                  },
+                  "minimum_radius_nearest_path_point_index": 0,
+                  "optimized_handle_factors": [
+                    0.35,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 8,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The initial arm goal requires a 40mm length toward the +X direction, starting from START which has an axis of [0.7071, 0, -0.7071]. Previous attempts failed with curvature spikes near the inlet. Per the repair hint, I have added a lead-in waypoint at [2.1213, 0, -1] which lies exactly along the incoming port's tangent vector (approximately 3mm from the start). Subsequent waypoints at X=10 and X=25 gently transition the Z-coordinate to 0 before reaching the terminal goal at [40, 0, 0]. This avoids self-intersection and distributes the bend radius smoothly along the first segment of the manifold."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": true,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 0,
+                  "volume": 0.0
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": true,
+                    "is_null": false,
+                    "is_valid": true,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 0,
+                    "volume": 0.0
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                    "curve_length": 40.36554648492168,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 31.066779551476927,
+                    "minimum_radius": 1.9981473115966542,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 0,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                  "curve_length": 40.36554648492168,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 31.066779551476927,
+                  "minimum_radius": 1.9981473115966542,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 113
+                  },
+                  "minimum_radius_nearest_path_point_index": 0,
+                  "optimized_handle_factors": [
+                    0.35,
+                    0.55,
+                    0.55,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 9,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.414213562,
+              0.0,
+              -1.0
+            ],
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The goal is a 40mm path from START toward +X. The port START has an axis of [0.7071, 0, -0.7071]. Previous attempts failed because the curvature change near the inlet was too abrupt (minimum radius < 2.0). Following the repair hint, I have added two lead-in waypoints (at 1.414 and 2.121 along the diagonal ray) to maintain the inlet tangency more strictly before easing the path towards the XY plane. By using points at X=10 and X=25 to stabilize the Z-coordinate at 0, the direction change is distributed over a longer segment of the 40mm arm, increasing the minimum bend radius to a valid range."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.414213562,
+              0.0,
+              -1.0
+            ],
+            [
+              2.121320344,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              0.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: No error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": false,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 1,
+                  "volume": 8080.130373411218
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": false,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 1,
+                    "volume": 7146.494708810771
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near authored path point index 2. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                    "curve_length": 40.40314458129174,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 31.023800845733774,
+                    "minimum_radius": 0.5485201740903209,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 2,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "terminal_bore_failures": [
+                  {
+                    "allowance": 0.0001970406912331516,
+                    "blocked_volume": 19.704069123315158,
+                    "port_id": "M1.out"
+                  }
+                ],
+                "anchored_inlet_bore_failures": [
+                  {
+                    "allowance": 0.00019704069123315188,
+                    "blocked_volume": 19.704069123315175,
+                    "port_id": "START"
+                  }
+                ],
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near authored path point index 2. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                  "curve_length": 40.40314458129174,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 31.023800845733774,
+                  "minimum_radius": 0.5485201740903209,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 641
+                  },
+                  "minimum_radius_nearest_path_point_index": 2,
+                  "optimized_handle_factors": [
+                    0.4,
+                    0.4,
+                    0.55,
+                    0.4,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 10,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.5,
+              0.0,
+              -1.0
+            ],
+            [
+              4.0,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              -0.883883476
+            ],
+            [
+              20.0,
+              0.0,
+              -0.530330086
+            ],
+            [
+              30.0,
+              0.0,
+              -0.176776695
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The START port is angled at -45 degrees in the X-Z plane, while the initial_arm goal requires a +X direction with a length of 40. To avoid the previous curvature rejections, I am using a spline with multiple well-separated waypoints to distribute the turn gradually. The first waypoint [1.5, 0, -1] is closely aligned with the starting axis (within 11.5 degrees), and subsequent points slowly transition the Z-offset to zero over the 40mm length, ensuring a smooth curvature profile and satisfying the goal's terminal direction and length."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              1.5,
+              0.0,
+              -1.0
+            ],
+            [
+              4.0,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              -0.883883476
+            ],
+            [
+              20.0,
+              0.0,
+              -0.530330086
+            ],
+            [
+              30.0,
+              0.0,
+              -0.176776695
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            0.9998437866120837,
+            0.0,
+            0.017674908011356943
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: Self-intersecting wire\nSelf-intersecting wire\nUnorientable shape\nUnorientable shape\nInvalid imbrication of wires\nNo error\nNo error\nNo error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": false,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 2,
+                  "volume": 4386.145717519236
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": false,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 2,
+                    "volume": 4578.819497503213
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                    "curve_length": 40.35844595126991,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 31.065266570120166,
+                    "minimum_radius": 2.3546046287256592,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 1,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+                  "curve_length": 40.35844595126991,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 31.065266570120166,
+                  "minimum_radius": 2.3546046287256592,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 233
+                  },
+                  "minimum_radius_nearest_path_point_index": 1,
+                  "optimized_handle_factors": [
+                    0.35,
+                    0.45,
+                    0.45,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 11,
+      "state_id": "S0",
+      "phase": "static_step_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              3.0,
+              0.0,
+              -360.0
+            ],
+            [
+              6.0,
+              0.0,
+              -360.0
+            ],
+            [
+              15.0,
+              0.0,
+              -360.0
+            ],
+            [
+              25.0,
+              0.0,
+              -360.0
+            ],
+            [
+              40.0,
+              0.0,
+              -360.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The START port is oriented at [0.7071, 0, -0.7071]. Previous attempts failed because the spline waypoints forced a radius of curvature smaller than the pipe diameter (20mm) near the inlet, leading to self-intersection. To fix this, I am using waypoints that maintain a significant Z-offset for a longer distance, easing the turn into the +X heading. The first two waypoints are placed precisely along the starting vector's ray to ensure a linear lead-in before any curvature begins."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              3.0,
+              0.0,
+              -360.0
+            ],
+            [
+              6.0,
+              0.0,
+              -360.0
+            ],
+            [
+              15.0,
+              0.0,
+              -360.0
+            ],
+            [
+              25.0,
+              0.0,
+              -360.0
+            ],
+            [
+              40.0,
+              0.0,
+              -360.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "GOAL_ROUTE_DIRECTION_MISMATCH"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_GOAL_ROUTE_DIRECTION_MISMATCH",
+          "issue_code": "GOAL_ROUTE_DIRECTION_MISMATCH",
+          "check_name": "goal_completion",
+          "message": "Completed route displacement does not follow its required direction.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {
+            "direction": "+X",
+            "dot": 0.9999
+          },
+          "actual": {
+            "dot": 0.11043152607484653
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 12,
+      "state_id": "S0",
+      "phase": "freecad_semantic_validation",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              5.0,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              -1.0
+            ],
+            [
+              20.0,
+              0.0,
+              -0.530330086
+            ],
+            [
+              30.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "I am correcting the previous direction mismatch and self-intersection errors. The START port axis is [0.7071, 0, -0.7071]. To satisfy the +X direction (goal 'initial_arm' at 40mm), I used global waypoints that lead out along the port axis for the first 10mm to avoid tight turns near the inlet (addressing the radius/curvature failure) and then gradually converge the Z-coordinate to 0. The final waypoint at [40, 0, 0] ensures the net displacement is precisely in the +X direction relative to the [0,0,0] start point."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              5.0,
+              0.0,
+              -1.0
+            ],
+            [
+              10.0,
+              0.0,
+              -1.0
+            ],
+            [
+              20.0,
+              0.0,
+              -0.530330086
+            ],
+            [
+              30.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+          "check_name": "freecad_semantic_validation",
+          "message": "FreeCAD rejected the speculative geometry.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": "M1",
+          "port_ids": [],
+          "target_port_id": "START",
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD assembly check failed",
+            "evidence": {
+              "module_ids": [
+                "M1"
+              ],
+              "failed_checks": {
+                "assembly": {
+                  "bop_errors": [
+                    "check_exception: Unorientable shape\nUnorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\n"
+                  ],
+                  "bounds": {
+                    "maximum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "minimum": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  },
+                  "is_closed": true,
+                  "is_null": false,
+                  "is_valid": false,
+                  "passed": false,
+                  "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                  "solid_count": 2,
+                  "volume": -1851.4198779740261
+                },
+                "modules": {
+                  "M1": {
+                    "bop_errors": [
+                      "<depth-truncated>"
+                    ],
+                    "bounds": {
+                      "maximum": "<depth-truncated>",
+                      "minimum": "<depth-truncated>"
+                    },
+                    "is_closed": true,
+                    "is_null": false,
+                    "is_valid": false,
+                    "passed": false,
+                    "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                    "solid_count": 2,
+                    "volume": 12665.298322120696
+                  }
+                },
+                "centerlines": {
+                  "M1": {
+                    "curvature_method": "dense_piecewise_curve_sampling",
+                    "curvature_proof": "sampled_not_global_extremum",
+                    "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                    "curve_length": 40.31519062595483,
+                    "endpoint_tangency_passed": true,
+                    "endpoint_tangent_dots": {
+                      "final": "<depth-truncated>",
+                      "initial": "<depth-truncated>"
+                    },
+                    "minimum_join_tangent_dot": 1.0,
+                    "minimum_nonlocal_distance": 31.12846720986149,
+                    "minimum_radius": 3.263489152216024,
+                    "minimum_radius_location": {
+                      "edge_parameter": "<depth-truncated>",
+                      "position": "<depth-truncated>",
+                      "sample_index": "<depth-truncated>"
+                    },
+                    "minimum_radius_nearest_path_point_index": 0,
+                    "optimized_handle_factors": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ]
+                  }
+                },
+                "wall_section_failures": [
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "in"
+                  },
+                  {
+                    "authored_wall_thickness": 2.0,
+                    "failures": [
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "port": "out"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_1"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_2"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_3"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_4"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_5"
+                  },
+                  {
+                    "failures": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "module_id": "M1",
+                    "section": "spline_sample_6"
+                  }
+                ]
+              },
+              "centerline_context": {
+                "M1": {
+                  "curvature_method": "dense_piecewise_curve_sampling",
+                  "curvature_proof": "sampled_not_global_extremum",
+                  "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+                  "curve_length": 40.31519062595483,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0,
+                  "minimum_nonlocal_distance": 31.12846720986149,
+                  "minimum_radius": 3.263489152216024,
+                  "minimum_radius_location": {
+                    "edge_parameter": [
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "position": [
+                      "<depth-truncated>",
+                      "<depth-truncated>",
+                      "<depth-truncated>"
+                    ],
+                    "sample_index": 63
+                  },
+                  "minimum_radius_nearest_path_point_index": 0,
+                  "optimized_handle_factors": [
+                    0.45,
+                    0.3,
+                    0.4,
+                    0.4,
+                    0.4,
+                    0.4
+                  ]
+                }
+              }
+            }
+          },
+          "suggestion": {}
+        }
+      ]
+    },
+    {
+      "step_index": 1,
+      "attempt_index": 13,
+      "state_id": "S0",
+      "phase": "step_mcp",
+      "status": "rejected",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              15.0,
+              0.0,
+              -1.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": [],
+        "rationale": "The START port has an axis of [0.7071, 0, -0.7071]. To fix the inlet-local curvature peak identified in the repair hint, I am placing the first waypoint significantly further away (15mm) along the projected port ray. This ensures the spline remains nearly linear for a distance greater than the pipe's radius (10mm) before starting the turn. Subsequent waypoints at 25mm and 40mm gradually transition the Z-coordinate to 0 and satisfy the +X direction and 40mm length requirements of the 'initial_arm' goal."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "spline",
+          "waypoint_frame": "global",
+          "waypoints": [
+            [
+              15.0,
+              0.0,
+              -1.0
+            ],
+            [
+              25.0,
+              0.0,
+              0.0
+            ],
+            [
+              40.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.0,
+            -0.7071067811865475
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "initial_tangent": [
+            0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "final_tangent": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "interpolation": "bspline",
+          "frenet": false,
+          "minimum_curvature_radius": 20.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "initial_arm"
+        ],
+        "completed_goal_ids": [
+          "initial_arm"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "REQUIRED_STEP_MCP_FAILED"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0001_01_REQUIRED_STEP_MCP_FAILED",
+          "issue_code": "REQUIRED_STEP_MCP_FAILED",
+          "check_name": "step_mcp",
+          "message": "Required FreeCAD MCP infrastructure failed.",
+          "step_index": 1,
+          "action_id": "A1",
+          "module_id": null,
+          "port_ids": [],
+          "target_port_id": null,
+          "expected": {},
+          "actual": {
+            "error": "FreeCAD MCP reported execution failure: Failed to execute code: [Errno 61] Connection refused\nFailed to execute code: [Errno 61] Connection refused"
+          },
+          "suggestion": {}
+        }
+      ]
+    }
+  ],
+  "planner_lineage": {
+    "intent": {
+      "interaction_id": "v1_ChdUWmxSYXViVUUtYkR2cjBQOFpTSDJBaxIXVFpsUmF1YlVFLWJEdnIwUDhaU0gyQWs",
+      "turns": 1,
+      "last_input_tokens": 4251
+    },
+    "step_planner": {
+      "interaction_id": "v1_ChdJSnBSYXEtUEo2YkR2cjBQc3FtZDhRbxIXUlpwUmF1ZVJMOE8tdnIwUGtkbVJzQTQ",
+      "turns": 4,
+      "last_input_tokens": 13936
+    }
+  },
+  "planner_schema_profiles": {},
+  "llm_usage": {
+    "calls": 14,
+    "input_tokens": 121250,
+    "cached_tokens": 7487,
+    "output_tokens": 5455,
+    "thought_tokens": 22855,
+    "tool_use_tokens": 0,
+    "total_tokens": 149560,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "pending_repair_observations": [
+    {
+      "issue_id": "STEP_0001_01_REQUIRED_STEP_MCP_FAILED",
+      "issue_code": "REQUIRED_STEP_MCP_FAILED",
+      "check_name": "step_mcp",
+      "message": "Required FreeCAD MCP infrastructure failed.",
+      "step_index": 1,
+      "action_id": "A1",
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "expected": {},
+      "actual": {
+        "error": "FreeCAD MCP reported execution failure: Failed to execute code: [Errno 61] Connection refused\nFailed to execute code: [Errno 61] Connection refused"
+      },
+      "suggestion": {}
+    }
+  ],
+  "pending_draft": null,
+  "pending_draft_state_digest": null,
+  "pending_draft_attempt_index": null,
+  "next_attempt_index": 14,
+  "preserved_suffix": null
+}

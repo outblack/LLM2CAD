@@ -1,0 +1,1822 @@
+{
+  "state_id": "S6",
+  "state_version": 6,
+  "contract_digest": "7f497c28c9d526d3c48000d82c589bcde9d9f91b60e7d41e90d0898607a2f1e1",
+  "modeling_tolerance": 0.0001,
+  "global_spec": {
+    "outer_diameter": 18.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "expected_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [],
+  "design_notes": [
+    "Continuous unbranched hollow pipe body.",
+    "Inlet at origin travels in +X.",
+    "Rising coil: ~1.25 turns, rising 85mm, non-uniform profile.",
+    "S-stage: two lateral lobes rising 35mm.",
+    "Escape stage settles to +X horizontal outlet.",
+    "Final transition from 18mm OD/2mm WT to 12mm OD/1.5mm WT."
+  ],
+  "module_measurements": {
+    "M1": {
+      "centerline_length": 55.0
+    },
+    "M2": {
+      "centerline_length": 70.68583470577035,
+      "minimum_curvature_radius": 44.99999999999999
+    },
+    "M3": {
+      "centerline_length": 508.431362157564,
+      "minimum_curvature_radius": 18.532577069965487
+    },
+    "M4": {
+      "centerline_length": 259.3938368874857,
+      "minimum_curvature_radius": 28.316503920592595
+    },
+    "M5": {
+      "centerline_length": 261.1050532163944,
+      "minimum_curvature_radius": 27.5408629012224
+    },
+    "M6": {
+      "centerline_length": 45.0
+    }
+  },
+  "placed_modules": [
+    {
+      "id": "M1",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M1",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 55.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            55.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "end_position": [
+          55.0,
+          0.0,
+          0.0
+        ],
+        "out_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M1.out",
+          "position": [
+            55.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "START"
+      }
+    },
+    {
+      "id": "M2",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M2",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 45.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "start_position": [
+          55.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "path_points": [
+          [
+            55.0,
+            0.0,
+            0.0
+          ],
+          [
+            57.20804534473381,
+            0.0,
+            0.05420447076723889
+          ],
+          [
+            59.41077131483023,
+            0.0,
+            0.2166872997511362
+          ],
+          [
+            61.60287135049128,
+            0.0,
+            0.48705705158485557
+          ],
+          [
+            63.77906449072577,
+            0.0,
+            0.8646623818546288
+          ],
+          [
+            65.93410809564688,
+            0.0,
+            1.3485936062455224
+          ],
+          [
+            68.0628104764508,
+            0.0,
+            1.937684892050605
+          ],
+          [
+            70.1600434026499,
+            0.0,
+            2.630517066764064
+          ],
+          [
+            72.22075445642903,
+            0.0,
+            3.4254210369920983
+          ],
+          [
+            74.2399792043627,
+            0.0,
+            4.320481809445049
+          ],
+          [
+            76.21285315716989,
+            0.0,
+            5.313543104324026
+          ],
+          [
+            78.13462348869497,
+            0.0,
+            6.402212549987752
+          ],
+          [
+            80.0006604858821,
+            0.0,
+            7.583867446385462
+          ],
+          [
+            81.8064687021595,
+            0.0,
+            8.855661083370975
+          ],
+          [
+            83.54769778736404,
+            0.0,
+            10.214529598676833
+          ],
+          [
+            85.22015296811583,
+            0.0,
+            11.657199359026833
+          ],
+          [
+            86.81980515339464,
+            0.0,
+            13.18019484660536
+          ],
+          [
+            88.34280064097317,
+            0.0,
+            14.779847031884174
+          ],
+          [
+            89.78547040132317,
+            0.0,
+            16.452302212635953
+          ],
+          [
+            91.14433891662901,
+            0.0,
+            18.193531297840494
+          ],
+          [
+            92.41613255361455,
+            0.0,
+            19.999339514117896
+          ],
+          [
+            93.59778745001225,
+            0.0,
+            21.865376511305026
+          ],
+          [
+            94.68645689567597,
+            0.0,
+            23.787146842830097
+          ],
+          [
+            95.67951819055494,
+            0.0,
+            25.760020795637303
+          ],
+          [
+            96.5745789630079,
+            0.0,
+            27.77924554357096
+          ],
+          [
+            97.36948293323593,
+            0.0,
+            29.839956597350096
+          ],
+          [
+            98.06231510794939,
+            0.0,
+            31.937189523549193
+          ],
+          [
+            98.65140639375448,
+            0.0,
+            34.06589190435312
+          ],
+          [
+            99.13533761814537,
+            0.0,
+            36.22093550927423
+          ],
+          [
+            99.51294294841514,
+            0.0,
+            38.39712864950872
+          ],
+          [
+            99.78331270024886,
+            0.0,
+            40.589228685169765
+          ],
+          [
+            99.94579552923275,
+            0.0,
+            42.79195465526618
+          ],
+          [
+            100.0,
+            0.0,
+            45.0
+          ]
+        ],
+        "end_position": [
+          100.0,
+          0.0,
+          45.0
+        ],
+        "out_axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M2.in",
+          "position": [
+            55.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M2.out",
+          "position": [
+            100.0,
+            0.0,
+            45.0
+          ],
+          "axis": [
+            6.123233995736766e-17,
+            0.0,
+            1.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M1.out"
+      }
+    },
+    {
+      "id": "M3",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M3",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "waypoint_frame": "global",
+        "waypoints": [
+          [
+            100.0,
+            5.0,
+            65.0
+          ],
+          [
+            100.0,
+            20.0,
+            80.0
+          ],
+          [
+            100.0,
+            40.0,
+            85.0
+          ],
+          [
+            135.0,
+            90.0,
+            90.0
+          ],
+          [
+            170.0,
+            100.0,
+            95.0
+          ],
+          [
+            210.0,
+            80.0,
+            100.0
+          ],
+          [
+            230.0,
+            40.0,
+            105.0
+          ],
+          [
+            210.0,
+            0.0,
+            110.0
+          ],
+          [
+            170.0,
+            -15.0,
+            115.0
+          ],
+          [
+            135.0,
+            0.0,
+            120.0
+          ],
+          [
+            120.0,
+            40.0,
+            125.0
+          ],
+          [
+            135.0,
+            75.0,
+            125.0
+          ],
+          [
+            170.0,
+            90.0,
+            130.0
+          ]
+        ],
+        "start_position": [
+          100.0,
+          0.0,
+          45.0
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "initial_tangent": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "final_tangent": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 18.0,
+        "path_points": [
+          [
+            100.0,
+            0.0,
+            45.0
+          ],
+          [
+            100.0,
+            5.0,
+            65.0
+          ],
+          [
+            100.0,
+            20.0,
+            80.0
+          ],
+          [
+            100.0,
+            40.0,
+            85.0
+          ],
+          [
+            135.0,
+            90.0,
+            90.0
+          ],
+          [
+            170.0,
+            100.0,
+            95.0
+          ],
+          [
+            210.0,
+            80.0,
+            100.0
+          ],
+          [
+            230.0,
+            40.0,
+            105.0
+          ],
+          [
+            210.0,
+            0.0,
+            110.0
+          ],
+          [
+            170.0,
+            -15.0,
+            115.0
+          ],
+          [
+            135.0,
+            0.0,
+            120.0
+          ],
+          [
+            120.0,
+            40.0,
+            125.0
+          ],
+          [
+            135.0,
+            75.0,
+            125.0
+          ],
+          [
+            170.0,
+            90.0,
+            130.0
+          ]
+        ],
+        "end_position": [
+          170.0,
+          90.0,
+          130.0
+        ],
+        "out_axis": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M3.in",
+          "position": [
+            100.0,
+            0.0,
+            45.0
+          ],
+          "axis": [
+            -6.123233995736766e-17,
+            -0.0,
+            -1.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M3.out",
+          "position": [
+            170.0,
+            90.0,
+            130.0
+          ],
+          "axis": [
+            0.9113223768657671,
+            0.39056673294247163,
+            0.13018891098082386
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M2.out"
+      }
+    },
+    {
+      "id": "M4",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M4",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "waypoint_frame": "global",
+        "waypoints": [
+          [
+            205.0,
+            105.0,
+            135.0
+          ],
+          [
+            240.0,
+            140.0,
+            140.0
+          ],
+          [
+            280.0,
+            160.0,
+            150.0
+          ],
+          [
+            320.0,
+            120.0,
+            155.0
+          ],
+          [
+            360.0,
+            70.0,
+            165.0
+          ]
+        ],
+        "start_position": [
+          170.0,
+          90.0,
+          130.0
+        ],
+        "axis": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "initial_tangent": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ],
+        "final_tangent": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 18.0,
+        "path_points": [
+          [
+            170.0,
+            90.0,
+            130.0
+          ],
+          [
+            205.0,
+            105.0,
+            135.0
+          ],
+          [
+            240.0,
+            140.0,
+            140.0
+          ],
+          [
+            280.0,
+            160.0,
+            150.0
+          ],
+          [
+            320.0,
+            120.0,
+            155.0
+          ],
+          [
+            360.0,
+            70.0,
+            165.0
+          ]
+        ],
+        "end_position": [
+          360.0,
+          70.0,
+          165.0
+        ],
+        "out_axis": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M4.in",
+          "position": [
+            170.0,
+            90.0,
+            130.0
+          ],
+          "axis": [
+            -0.9113223768657671,
+            -0.39056673294247163,
+            -0.13018891098082386
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M4.out",
+          "position": [
+            360.0,
+            70.0,
+            165.0
+          ],
+          "axis": [
+            0.6172133998483676,
+            -0.7715167498104596,
+            0.1543033499620919
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M3.out"
+      }
+    },
+    {
+      "id": "M5",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M5",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "waypoint_frame": "global",
+        "waypoints": [
+          [
+            400.0,
+            20.0,
+            175.0
+          ],
+          [
+            430.0,
+            0.0,
+            175.0
+          ],
+          [
+            460.0,
+            10.0,
+            180.0
+          ],
+          [
+            490.0,
+            40.0,
+            185.0
+          ],
+          [
+            520.0,
+            70.0,
+            190.0
+          ],
+          [
+            560.0,
+            70.0,
+            190.0
+          ]
+        ],
+        "start_position": [
+          360.0,
+          70.0,
+          165.0
+        ],
+        "axis": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "initial_tangent": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ],
+        "final_tangent": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 18.0,
+        "path_points": [
+          [
+            360.0,
+            70.0,
+            165.0
+          ],
+          [
+            400.0,
+            20.0,
+            175.0
+          ],
+          [
+            430.0,
+            0.0,
+            175.0
+          ],
+          [
+            460.0,
+            10.0,
+            180.0
+          ],
+          [
+            490.0,
+            40.0,
+            185.0
+          ],
+          [
+            520.0,
+            70.0,
+            190.0
+          ],
+          [
+            560.0,
+            70.0,
+            190.0
+          ]
+        ],
+        "end_position": [
+          560.0,
+          70.0,
+          190.0
+        ],
+        "out_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M5.in",
+          "position": [
+            360.0,
+            70.0,
+            165.0
+          ],
+          "axis": [
+            -0.6172133998483676,
+            0.7715167498104596,
+            -0.1543033499620919
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M5.out",
+          "position": [
+            560.0,
+            70.0,
+            190.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M4.out"
+      }
+    },
+    {
+      "id": "M6",
+      "type": "transition",
+      "schema_version": 2,
+      "geometry_id": "solid_M6",
+      "params": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 45.0,
+        "start_position": [
+          560.0,
+          70.0,
+          190.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 18.0,
+        "wall_thickness_in": 2.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null,
+        "end_position": [
+          605.0,
+          70.0,
+          190.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M6.in",
+          "position": [
+            560.0,
+            70.0,
+            190.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 18.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M6.out",
+          "position": [
+            605.0,
+            70.0,
+            190.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 12.0,
+          "wall_thickness": 1.5,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M5.out"
+      }
+    }
+  ],
+  "open_ports": [
+    {
+      "id": "M6.out",
+      "position": [
+        605.0,
+        70.0,
+        190.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 1.5,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    }
+  ],
+  "port_nodes": {
+    "START": {
+      "id": "START",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M1.in": {
+      "id": "M1.in",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -1.0,
+        -0.0,
+        -0.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M1.out": {
+      "id": "M1.out",
+      "position": [
+        55.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M2.in": {
+      "id": "M2.in",
+      "position": [
+        55.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -1.0,
+        -0.0,
+        -0.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M2.out": {
+      "id": "M2.out",
+      "position": [
+        100.0,
+        0.0,
+        45.0
+      ],
+      "axis": [
+        6.123233995736766e-17,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M3.in": {
+      "id": "M3.in",
+      "position": [
+        100.0,
+        0.0,
+        45.0
+      ],
+      "axis": [
+        -6.123233995736766e-17,
+        -0.0,
+        -1.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M3.out": {
+      "id": "M3.out",
+      "position": [
+        170.0,
+        90.0,
+        130.0
+      ],
+      "axis": [
+        0.9113223768657671,
+        0.39056673294247163,
+        0.13018891098082386
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M4.in": {
+      "id": "M4.in",
+      "position": [
+        170.0,
+        90.0,
+        130.0
+      ],
+      "axis": [
+        -0.9113223768657671,
+        -0.39056673294247163,
+        -0.13018891098082386
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M4.out": {
+      "id": "M4.out",
+      "position": [
+        360.0,
+        70.0,
+        165.0
+      ],
+      "axis": [
+        0.6172133998483676,
+        -0.7715167498104596,
+        0.1543033499620919
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M5.in": {
+      "id": "M5.in",
+      "position": [
+        360.0,
+        70.0,
+        165.0
+      ],
+      "axis": [
+        -0.6172133998483676,
+        0.7715167498104596,
+        -0.1543033499620919
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M5.out": {
+      "id": "M5.out",
+      "position": [
+        560.0,
+        70.0,
+        190.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M6.in": {
+      "id": "M6.in",
+      "position": [
+        560.0,
+        70.0,
+        190.0
+      ],
+      "axis": [
+        -1.0,
+        -0.0,
+        -0.0
+      ],
+      "outer_diameter": 18.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M6.out": {
+      "id": "M6.out",
+      "position": [
+        605.0,
+        70.0,
+        190.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 1.5,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    }
+  },
+  "connection_edges": [
+    {
+      "edge_id": "E1",
+      "port_a_id": "START",
+      "port_b_id": "M1.in",
+      "action_id": "A1",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    },
+    {
+      "edge_id": "E2",
+      "port_a_id": "M1.out",
+      "port_b_id": "M2.in",
+      "action_id": "A2",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    },
+    {
+      "edge_id": "E3",
+      "port_a_id": "M2.out",
+      "port_b_id": "M3.in",
+      "action_id": "A3",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    },
+    {
+      "edge_id": "E4",
+      "port_a_id": "M3.out",
+      "port_b_id": "M4.in",
+      "action_id": "A4",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0000000000000002,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    },
+    {
+      "edge_id": "E5",
+      "port_a_id": "M4.out",
+      "port_b_id": "M5.in",
+      "action_id": "A5",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    },
+    {
+      "edge_id": "E6",
+      "port_a_id": "M5.out",
+      "port_b_id": "M6.in",
+      "action_id": "A6",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    }
+  ],
+  "module_incidence_edges": [
+    {
+      "module_id": "M1",
+      "port_id": "M1.in"
+    },
+    {
+      "module_id": "M1",
+      "port_id": "M1.out"
+    },
+    {
+      "module_id": "M2",
+      "port_id": "M2.in"
+    },
+    {
+      "module_id": "M2",
+      "port_id": "M2.out"
+    },
+    {
+      "module_id": "M3",
+      "port_id": "M3.in"
+    },
+    {
+      "module_id": "M3",
+      "port_id": "M3.out"
+    },
+    {
+      "module_id": "M4",
+      "port_id": "M4.in"
+    },
+    {
+      "module_id": "M4",
+      "port_id": "M4.out"
+    },
+    {
+      "module_id": "M5",
+      "port_id": "M5.in"
+    },
+    {
+      "module_id": "M5",
+      "port_id": "M5.out"
+    },
+    {
+      "module_id": "M6",
+      "port_id": "M6.in"
+    },
+    {
+      "module_id": "M6",
+      "port_id": "M6.out"
+    }
+  ],
+  "open_port_ids": [
+    "M6.out"
+  ],
+  "used_ports": [
+    "START",
+    "M1.out",
+    "M2.out",
+    "M3.out",
+    "M4.out",
+    "M5.out"
+  ],
+  "remaining_goals": [],
+  "action_history": [
+    {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 55.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "inlet_straight"
+      ],
+      "completed_goal_ids": [
+        "inlet_straight"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 45.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "start_position": [
+          55.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ]
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "upward_bend"
+      ],
+      "completed_goal_ids": [
+        "upward_bend"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A3",
+      "action_type": "ADD_MODULE",
+      "target_port": "M2.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "waypoint_frame": "global",
+        "waypoints": [
+          [
+            100.0,
+            5.0,
+            65.0
+          ],
+          [
+            100.0,
+            20.0,
+            80.0
+          ],
+          [
+            100.0,
+            40.0,
+            85.0
+          ],
+          [
+            135.0,
+            90.0,
+            90.0
+          ],
+          [
+            170.0,
+            100.0,
+            95.0
+          ],
+          [
+            210.0,
+            80.0,
+            100.0
+          ],
+          [
+            230.0,
+            40.0,
+            105.0
+          ],
+          [
+            210.0,
+            0.0,
+            110.0
+          ],
+          [
+            170.0,
+            -15.0,
+            115.0
+          ],
+          [
+            135.0,
+            0.0,
+            120.0
+          ],
+          [
+            120.0,
+            40.0,
+            125.0
+          ],
+          [
+            135.0,
+            75.0,
+            125.0
+          ],
+          [
+            170.0,
+            90.0,
+            130.0
+          ]
+        ],
+        "start_position": [
+          100.0,
+          0.0,
+          45.0
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "initial_tangent": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "final_tangent": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 18.0
+      },
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "affected_goal_ids": [
+        "rising_coil"
+      ],
+      "completed_goal_ids": [
+        "rising_coil"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A4",
+      "action_type": "ADD_MODULE",
+      "target_port": "M3.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "waypoint_frame": "global",
+        "waypoints": [
+          [
+            205.0,
+            105.0,
+            135.0
+          ],
+          [
+            240.0,
+            140.0,
+            140.0
+          ],
+          [
+            280.0,
+            160.0,
+            150.0
+          ],
+          [
+            320.0,
+            120.0,
+            155.0
+          ],
+          [
+            360.0,
+            70.0,
+            165.0
+          ]
+        ],
+        "start_position": [
+          170.0,
+          90.0,
+          130.0
+        ],
+        "axis": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "initial_tangent": [
+          0.9113223768657671,
+          0.39056673294247163,
+          0.13018891098082386
+        ],
+        "final_tangent": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 18.0
+      },
+      "consumed_port_ids": [
+        "M3.out"
+      ],
+      "affected_goal_ids": [
+        "s_curve_escape"
+      ],
+      "completed_goal_ids": [
+        "s_curve_escape"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A5",
+      "action_type": "ADD_MODULE",
+      "target_port": "M4.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "waypoint_frame": "global",
+        "waypoints": [
+          [
+            400.0,
+            20.0,
+            175.0
+          ],
+          [
+            430.0,
+            0.0,
+            175.0
+          ],
+          [
+            460.0,
+            10.0,
+            180.0
+          ],
+          [
+            490.0,
+            40.0,
+            185.0
+          ],
+          [
+            520.0,
+            70.0,
+            190.0
+          ],
+          [
+            560.0,
+            70.0,
+            190.0
+          ]
+        ],
+        "start_position": [
+          360.0,
+          70.0,
+          165.0
+        ],
+        "axis": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "initial_tangent": [
+          0.6172133998483676,
+          -0.7715167498104596,
+          0.1543033499620919
+        ],
+        "final_tangent": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 18.0
+      },
+      "consumed_port_ids": [
+        "M4.out"
+      ],
+      "affected_goal_ids": [
+        "outward_escape"
+      ],
+      "completed_goal_ids": [
+        "outward_escape"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A6",
+      "action_type": "ADD_MODULE",
+      "target_port": "M5.out",
+      "module": "transition",
+      "params": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 45.0,
+        "start_position": [
+          560.0,
+          70.0,
+          190.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 18.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 18.0,
+        "wall_thickness_in": 2.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null
+      },
+      "consumed_port_ids": [
+        "M5.out"
+      ],
+      "affected_goal_ids": [
+        "tapered_outlet"
+      ],
+      "completed_goal_ids": [
+        "tapered_outlet"
+      ],
+      "satisfied_components": []
+    }
+  ]
+}

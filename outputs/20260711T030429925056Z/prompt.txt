@@ -1,0 +1,17 @@
+Create a single continuous hollow pipe with a serpentine multi-bend shape.
+
+The pipe should be one connected body with a uniform circular cross-section. Use an outer diameter of approximately 20 mm and a wall thickness of approximately 2 mm.
+
+The overall shape should follow this sequence:
+
+1. Start with a vertical pipe rising upward on the left side, with an open top end. The left vertical section should be approximately 130 mm tall.
+2. From the bottom of this left vertical pipe, create a smooth large U-shaped bend that curves downward and then upward toward the middle. The bottom bend should be broad and rounded, with a centerline bend radius of approximately 35 mm.
+3. Connect this to a middle vertical pipe rising upward. The middle vertical section should be approximately 110 mm tall.
+4. At the top of the middle vertical pipe, create a smooth inverted U-shaped bridge that curves upward slightly and then bends down into a right vertical pipe. The top bridge should have a gentle rounded profile, with a span of approximately 50 mm and bend radius of about 25 mm.
+5. Extend the right vertical pipe downward. This right vertical section should be approximately 115 mm tall.
+6. At the bottom of the right vertical pipe, add a smooth 90-degree bend that turns into a long horizontal outlet pipe extending toward the right. The horizontal outlet section should be approximately 120 mm long.
+7. The far right end of the horizontal pipe should remain open and clearly show the hollow interior.
+
+The entire pipe must remain a single continuous hollow flow path. Keep all transitions smooth and rounded. Avoid sharp corners, disconnected parts, self-intersections, or blocked internal passages.
+
+Both the top opening on the left side and the outlet opening on the far right side should be clearly visible.

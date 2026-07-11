@@ -1,0 +1,239 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "initial_straight",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+Z",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "notes": "Moderately long straight section"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "initial_straight",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+Z",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "notes": "Moderately long straight section"
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "initial_straight"
+      ],
+      "completed_goal_ids": [
+        "initial_straight"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 2,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "upward_bend",
+        "depends_on_goal_ids": [
+          "initial_straight"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": "+Z",
+        "angle": 30.0,
+        "bend_radius": 30.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "notes": "Broad upward bend resembling a partial torus"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "upward_bend",
+          "depends_on_goal_ids": [
+            "initial_straight"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+Z",
+          "angle": 30.0,
+          "bend_radius": 30.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "notes": "Broad upward bend resembling a partial torus"
+        }
+      ],
+      "state_before_id": "S1",
+      "state_after_id": "S2",
+      "action_id": "A2",
+      "module": "route",
+      "target_port_before": {
+        "id": "M1.out",
+        "position": [
+          0.0,
+          0.0,
+          40.0
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M2",
+      "produced_port_ids": [
+        "M2.out"
+      ],
+      "removed_port_ids": [
+        "M1.out"
+      ],
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "connection_edge_ids": [
+        "E2"
+      ],
+      "affected_goal_ids": [
+        "upward_bend"
+      ],
+      "completed_goal_ids": [
+        "upward_bend"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M1.out"
+      ],
+      "open_port_ids_after": [
+        "M2.out"
+      ]
+    },
+    "status": "failed",
+    "issues": [
+      {
+        "issue_id": "STEP_0002_01_GOAL_TURN_ANGLE_MISMATCH",
+        "severity": "error",
+        "issue_code": "GOAL_TURN_ANGLE_MISMATCH",
+        "check_name": "goal_completion",
+        "message": "The actions completing this turn do not realize its required angle.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "consumed_goal_index": 0,
+        "expected": {
+          "angle": 30.0,
+          "tolerance": 0.1
+        },
+        "actual": {
+          "angle": 0.0,
+          "goal_id": "upward_bend"
+        },
+        "suggestion": {}
+      },
+      {
+        "issue_id": "STEP_0002_02_GOAL_BEND_RADIUS_MISMATCH",
+        "severity": "error",
+        "issue_code": "GOAL_BEND_RADIUS_MISMATCH",
+        "check_name": "goal_completion",
+        "message": "Completed turn uses the wrong bend radius.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "consumed_goal_index": 0,
+        "expected": {
+          "bend_radius": 30.0
+        },
+        "actual": {
+          "bend_radius": null
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  }
+]

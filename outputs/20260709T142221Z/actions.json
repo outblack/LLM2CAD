@@ -1,0 +1,100 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "junction_pipe",
+    "params": {
+      "branch_count": 2,
+      "branch_angles": [
+        45,
+        -45
+      ],
+      "length": 40.0,
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "blend_radius": 12.0
+    }
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "straight_pipe",
+    "params": {
+      "length": 60.0,
+      "direction": "+X",
+      "start_position": [
+        40.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    }
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "junction_pipe",
+    "params": {
+      "branch_count": 2,
+      "branch_angles": [
+        45.0,
+        -45.0
+      ],
+      "length": 40.0,
+      "blend_radius": 10.0,
+      "start_position": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    }
+  },
+  {
+    "action_id": "A4",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out_1",
+    "module": "cap_pipe",
+    "params": {
+      "end_type": "open",
+      "start_position": [
+        28.284271247461902,
+        -28.2842712474619,
+        0.0
+      ],
+      "axis": [
+        0.7071067811865476,
+        -0.7071067811865475,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "cap_thickness": 3.0
+    }
+  }
+]

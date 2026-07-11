@@ -1,0 +1,2958 @@
+[
+  {
+    "name": "primitive_route_default_line",
+    "title": "Route primitive — line, L=80 mm",
+    "note": "Constant-section line route. Increasing length moves the outlet along the authored direction.",
+    "candidate_document": "CadGenCandidate_primitive_route_default_line_1_1_2bbf7b3534a3",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "route"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 80.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            80.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "end_position": [
+          80.0,
+          0.0,
+          0.0
+        ],
+        "out_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_default_line.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_default_line.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_default_line.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_default_line.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_default_line.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "2bbf7b3534a32cc0332681c302522952c38aea3d690696226b38c6d0081f39d9",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "8f862869edce9d68c31530b5130889a775313ae415caad459b934c03147e8e0c",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "default_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 81845,
+      "sha256": "085f2a5edaaa3c3cba146a4a54a705dc0ff818ebe7379058a83e78bac68d3c21"
+    }
+  },
+  {
+    "name": "primitive_route_changed_line_140",
+    "title": "Route primitive — line, L=140 mm",
+    "note": "Increasing L from 80 to 140 mm translates the outlet by 60 mm without changing section or tangent.",
+    "candidate_document": "CadGenCandidate_primitive_route_changed_line_140_1_1_68f57629790d",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "route"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 140.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            140.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "end_position": [
+          140.0,
+          0.0,
+          0.0
+        ],
+        "out_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_line_140.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_line_140.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_line_140.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_line_140.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_line_140.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "68f57629790df56320402e35df6976fc75a89abd71a19de1463b265dec494499",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "e49fc9a1151267e5dc03b261c799ed8eaba5fdf2e67bcd56c6d27d4a34e1db13",
+        "solid_M1": "042edb026b0b43ac9caec505e188d7ec290f5311e06f6e7c9b9fe963ed559e93"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 59591,
+      "sha256": "2f33ea41f74f2a1a6a5b0c0ca39a9e767e0a4b9adc1690718088af9b2ce9f52b"
+    }
+  },
+  {
+    "name": "primitive_route_changed_arc",
+    "title": "Route primitive — circular arc, R=40 mm, 90°",
+    "note": "Changing the route variant and curvature parameters changes both terminal position and tangent.",
+    "candidate_document": "CadGenCandidate_primitive_route_changed_arc_1_1_44b9cc0279aa",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "route"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 40.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            1.9627069730967206,
+            0.0,
+            0.04818175179310202
+          ],
+          [
+            3.920685613182424,
+            0.0,
+            0.19261093311212107
+          ],
+          [
+            5.8692189782144695,
+            0.0,
+            0.4329396014087621
+          ],
+          [
+            7.8036128806451295,
+            0.0,
+            0.7685887838707828
+          ],
+          [
+            9.719207196130554,
+            0.0,
+            1.1987498722182437
+          ],
+          [
+            11.611387090178493,
+            0.0,
+            1.7223865707116488
+          ],
+          [
+            13.475594135688802,
+            0.0,
+            2.3382373926791686
+          ],
+          [
+            15.307337294603592,
+            0.0,
+            3.0448186995485287
+          ],
+          [
+            17.102203737211283,
+            0.0,
+            3.8404282750622656
+          ],
+          [
+            18.855869473039906,
+            0.0,
+            4.723149426065795
+          ],
+          [
+            20.564109767728866,
+            0.0,
+            5.6908555999891135
+          ],
+          [
+            22.222809320784087,
+            0.0,
+            6.74121550789819
+          ],
+          [
+            23.827972179697333,
+            0.0,
+            7.8716987407742
+          ],
+          [
+            25.37573136654582,
+            0.0,
+            9.079581865490521
+          ],
+          [
+            26.862358193880734,
+            0.0,
+            10.361954985801631
+          ],
+          [
+            28.2842712474619,
+            0.0,
+            11.715728752538098
+          ],
+          [
+            29.638045014198365,
+            0.0,
+            13.137641806119266
+          ],
+          [
+            30.92041813450948,
+            0.0,
+            14.624268633454179
+          ],
+          [
+            32.12830125922579,
+            0.0,
+            16.17202782030266
+          ],
+          [
+            33.25878449210181,
+            0.0,
+            17.77719067921591
+          ],
+          [
+            34.30914440001089,
+            0.0,
+            19.435890232271134
+          ],
+          [
+            35.2768505739342,
+            0.0,
+            21.144130526960087
+          ],
+          [
+            36.159571724937734,
+            0.0,
+            22.897796262788713
+          ],
+          [
+            36.95518130045147,
+            0.0,
+            24.69266270539641
+          ],
+          [
+            37.66176260732083,
+            0.0,
+            26.5244058643112
+          ],
+          [
+            38.27761342928835,
+            0.0,
+            28.388612909821507
+          ],
+          [
+            38.801250127781756,
+            0.0,
+            30.28079280386944
+          ],
+          [
+            39.23141121612922,
+            0.0,
+            32.19638711935487
+          ],
+          [
+            39.56706039859124,
+            0.0,
+            34.13078102178553
+          ],
+          [
+            39.80738906688787,
+            0.0,
+            36.07931438681757
+          ],
+          [
+            39.9518182482069,
+            0.0,
+            38.03729302690328
+          ],
+          [
+            40.0,
+            0.0,
+            40.0
+          ]
+        ],
+        "end_position": [
+          40.0,
+          0.0,
+          40.0
+        ],
+        "out_axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_arc.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_arc.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_arc.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_arc.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_route_changed_arc.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "44b9cc0279aa7395b72b9f0e7383b6484db5ef937b9b37b4222fc96047cfc930",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "41ee3ab94c80f450b35387a2e974f389f1b6c59ed046b32625f3ead1cdfeb946",
+        "solid_M1": "bc34014c35965865ef1292a47df5c3225158cf58dbbbb6d8caf53542462b63ee"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 62003,
+      "sha256": "5ea90ad4dc61a7f14eaafcc76068f6c9915fd172c0279d9c17ed00a740f40912"
+    }
+  },
+  {
+    "name": "primitive_transition_default_concentric",
+    "title": "Transition primitive — concentric 20→30 mm",
+    "note": "Concentric loft changes outer and inner radii along the same axis.",
+    "candidate_document": "CadGenCandidate_primitive_transition_default_concentric_1_1_58ff501b28d6",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "transition"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "diameter_out": 30.0,
+        "wall_thickness_out": 2.5,
+        "length": 60.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 20.0,
+        "wall_thickness_in": 2.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null,
+        "end_position": [
+          60.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_default_concentric.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_default_concentric.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_default_concentric.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_default_concentric.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_default_concentric.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "58ff501b28d6d2c6b42af307f66700334b208d9a2d7248665f6cc1e22a16ba4e",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "2cf9c5a5166612855c0c48ce03b0bde225071d17c8df700098d5a4157f2e6058",
+        "solid_M1": "42c2ccebdecf5912f19896a23fb3f799db831bfa08acc6112557878613d396bf"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "default_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 102005,
+      "sha256": "94ee907c0fe29f15e49b22bfae97a7ac0ef3c0a50373cfdb9d941cec88f600b8"
+    }
+  },
+  {
+    "name": "primitive_transition_changed_eccentric",
+    "title": "Transition primitive — eccentric 20→12 mm, offset 6 mm",
+    "note": "A transverse offset produces an eccentric reducer while preserving the inlet tangent frame.",
+    "candidate_document": "CadGenCandidate_primitive_transition_changed_eccentric_1_1_da28bd7c3e2c",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "transition"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 75.0,
+        "offset": [
+          0.0,
+          6.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 20.0,
+        "wall_thickness_in": 2.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null,
+        "end_position": [
+          75.0,
+          6.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_changed_eccentric.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_changed_eccentric.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_changed_eccentric.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_changed_eccentric.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_transition_changed_eccentric.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "da28bd7c3e2c879ceeb481bb16ff4d0c751550858eff5ea2f80372677ccbc8e4",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "4ac7edc505f4a46869b6f3e04b7933b63b07c5ce8d57ef60c21000f6203ad4cc",
+        "solid_M1": "14c4d940348fa68748c268b9feb4bf4edd30da99ab4e4281f08ada48fb49f31a"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 83904,
+      "sha256": "24713beeeb06779035897825e2da9e2abdda8d148a6d4343bac1b9a4cea53d52"
+    }
+  },
+  {
+    "name": "primitive_junction_default_tee",
+    "title": "Junction primitive — one primary + one branch",
+    "note": "The explicit outlet list determines arity, axes, lengths, and sections; this is a T-junction.",
+    "candidate_document": "CadGenCandidate_primitive_junction_default_tee_1_1_a1633f3ab7f3",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "junction"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "outlets": [
+          {
+            "role": "primary",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "length": 65.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              65.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "role": "branch",
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "length": 50.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              0.0,
+              50.0,
+              0.0
+            ]
+          }
+        ],
+        "blend_mode": "hard",
+        "max_hub_radius": 14.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "branch_count": 1,
+        "include_primary_outlet": true,
+        "outlet_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ]
+        ],
+        "trunk_end": [
+          65.0,
+          0.0,
+          0.0
+        ],
+        "branch_1_end": [
+          0.0,
+          50.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_default_tee.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_default_tee.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_default_tee.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_default_tee.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_default_tee.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "a1633f3ab7f3ce193150a8b27a15405e6d11f71706952ab7d2fa0f038256529c",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "8b29c47aa0ef6c72c7c31a0741a7a8954365d8e47772fef6b96341b94c25aafd",
+        "solid_M1": "c4a026bb04fda764527bc36d399b54f305eb9594a44e0cfaa8dbb2c7747cff66"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "default_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 91733,
+      "sha256": "f65b1ea4d5aab62c8ae89eb68cf9b2842a1824c9d86af184e55597be1c965023"
+    }
+  },
+  {
+    "name": "primitive_junction_changed_diagonal_branch",
+    "title": "Junction primitive — branch axis 45° upward, L=70 mm",
+    "note": "Changing only branch axis and length rotates and extends one outlet while preserving 1→2 topology.",
+    "candidate_document": "CadGenCandidate_primitive_junction_changed_diagonal_branch_1_1_dd96f8aa90c8",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "junction"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "outlets": [
+          {
+            "role": "primary",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "length": 65.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              65.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "role": "branch",
+            "axis": [
+              0.0,
+              0.7071067811865476,
+              0.7071067811865476
+            ],
+            "length": 70.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              0.0,
+              49.49747468305833,
+              49.49747468305833
+            ]
+          }
+        ],
+        "blend_mode": "hard",
+        "max_hub_radius": 14.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "branch_count": 1,
+        "include_primary_outlet": true,
+        "outlet_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.7071067811865476,
+            0.7071067811865476
+          ]
+        ],
+        "trunk_end": [
+          65.0,
+          0.0,
+          0.0
+        ],
+        "branch_1_end": [
+          0.0,
+          49.49747468305833,
+          49.49747468305833
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_diagonal_branch.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_diagonal_branch.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_diagonal_branch.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_diagonal_branch.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_diagonal_branch.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "dd96f8aa90c85b8130f92bc15c88dcc00fee0af5ff93833797e7ffa5bbf06fd8",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "918afe23597ab0cc988c2372dbbc929355b5605c0b4c69d7551854fdd9376617",
+        "solid_M1": "53266d1e281de4c849f6cff8a4f71ce15440fa48962584ab659716e7f847d149"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 86660,
+      "sha256": "bb02c58b702a485338d008c38e1c9ce25861763c9ac4add162d344b73ceefadf"
+    }
+  },
+  {
+    "name": "primitive_junction_changed_three_outlets",
+    "title": "Junction primitive — one primary + two branches",
+    "note": "Adding an outlet changes graph arity from 1→2 to 1→3; each outlet owns its own section.",
+    "candidate_document": "CadGenCandidate_primitive_junction_changed_three_outlets_1_1_70f980a37173",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "junction"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "outlets": [
+          {
+            "role": "primary",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "length": 65.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              65.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "role": "branch",
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "length": 50.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              0.0,
+              50.0,
+              0.0
+            ]
+          },
+          {
+            "role": "branch",
+            "axis": [
+              0.0,
+              -1.0,
+              0.0
+            ],
+            "length": 50.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null,
+            "end_position": [
+              0.0,
+              -50.0,
+              0.0
+            ]
+          }
+        ],
+        "blend_mode": "hard",
+        "max_hub_radius": 14.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "branch_count": 2,
+        "include_primary_outlet": true,
+        "outlet_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        ],
+        "trunk_end": [
+          65.0,
+          0.0,
+          0.0
+        ],
+        "branch_1_end": [
+          0.0,
+          50.0,
+          0.0
+        ],
+        "branch_2_end": [
+          0.0,
+          -50.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_three_outlets.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_three_outlets.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_three_outlets.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_three_outlets.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_junction_changed_three_outlets.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "70f980a37173e4f3b0b2ffeba3e8b25eb732fedae556bc453765968b596bbfec",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "5c1b1233fed5c25c632c0595c95558eb9e116b4a48a9719a8220e31c42d42202",
+        "solid_M1": "fa33a1f5ca3315eb71786d2901ba7c69b2d06c46aa9256d3852a299d5887d818"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 90410,
+      "sha256": "50298c8cc2331346389f811d9b2d1c922a1a6920d649f8e964ee335138b2c073"
+    }
+  },
+  {
+    "name": "primitive_connect_ports_default_line",
+    "title": "Connect-ports primitive — direct closure",
+    "note": "Two existing compatible ports are consumed and no new port is produced.",
+    "candidate_document": "CadGenCandidate_primitive_connect_ports_default_line_1_1_82b049febd05",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "connect_ports"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "other_port_id": "P2",
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "waypoints": [],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            100.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_default_line.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_default_line.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_default_line.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_default_line.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_default_line.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "82b049febd05385c44d8b14991e539da9c4eec57c887fd6f5e81e8fddfb0f610",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "7689440e65ecb8b1f82ef7a333331473dd73de58d244b602bb3d5dde6a95a11d",
+        "solid_M1": "66b63e8abe918f586cecf21f195280715a8c8807d03dcf9812d1433d56042178"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "default_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 73416,
+      "sha256": "5b9b42c8870d7c76d88a54ac3ac424af77cbf784b8e4d708161d9bf65728d3fe"
+    }
+  },
+  {
+    "name": "primitive_connect_ports_changed_line_160",
+    "title": "Connect-ports primitive — direct closure, separation 160 mm",
+    "note": "Increasing endpoint separation from 100 to 160 mm lengthens the closure while topology remains 2→0.",
+    "candidate_document": "CadGenCandidate_primitive_connect_ports_changed_line_160_1_1_ed737e088cf7",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "connect_ports"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "other_port_id": "P2",
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          160.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "waypoints": [],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            160.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_line_160.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_line_160.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_line_160.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_line_160.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_line_160.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "ed737e088cf74fd0841ac7b1aaea515498145abc22ba9fb2c7ab39b57d60e0f0",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "322b0e6b74bc96516a2d9e5459d8b6c9d776f34b9b2cbeb2d1d4281ebf4571ff",
+        "solid_M1": "30ffe07c97c755f2f756664e7de28a8768d151b2144ed5dff598f3b77da4fe6f"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 57164,
+      "sha256": "0e5872c1d12779ca877c1f6be04759d7470bddc418d0edcff2a0c6d6a292898a"
+    }
+  },
+  {
+    "name": "primitive_connect_ports_changed_spline",
+    "title": "Connect-ports primitive — B-spline closure",
+    "note": "Waypoints and endpoint tangents bend the closure while the topology remains 2→0.",
+    "candidate_document": "CadGenCandidate_primitive_connect_ports_changed_spline_1_1_984a13c2e2a8",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "connect_ports"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "other_port_id": "P2",
+        "path_kind": "spline",
+        "section_source": "inherit_target",
+        "waypoints": [
+          [
+            25.0,
+            28.0,
+            0.0
+          ],
+          [
+            75.0,
+            28.0,
+            0.0
+          ]
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 20.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "initial_tangent": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "final_tangent": [
+          1.0,
+          -0.0,
+          -0.0
+        ],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.0,
+            28.0,
+            0.0
+          ],
+          [
+            75.0,
+            28.0,
+            0.0
+          ],
+          [
+            100.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_spline.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_spline.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_spline.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_spline.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_connect_ports_changed_spline.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": false,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "984a13c2e2a87a50e065fe277f72a5d759e86ee7ecbb3673933f1bdb5527d192",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "a6820a79b1f8ecdd027019c3b14b1d4c597e24b793ade914e19307e5a175fd7e",
+        "solid_M1": "09779dadf7e9d8363235e2a65602ccfc31c3f0d56701fcdf0e4b3081ce0d8c3a"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "strict_rejection_case",
+    "recommended_for_report": false,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 81557,
+      "sha256": "b03e7a4e295336fb1824aabefe64eea8f2792b9a07279f36942b1b986b70d35d"
+    }
+  },
+  {
+    "name": "primitive_terminate_default_cap",
+    "title": "Terminate primitive — cap, t=4 mm",
+    "note": "A cap grows downstream from the terminal plane; a plug occupies the upstream bore. Both consume one open port and produce none.",
+    "candidate_document": "CadGenCandidate_primitive_terminate_default_cap_2_1_76c4525b852f",
+    "state_id": "S2",
+    "state_version": 2,
+    "module_ids": [
+      "M1",
+      "M2"
+    ],
+    "module_types": [
+      "route",
+      "terminate"
+    ],
+    "target_ids": [
+      "M2"
+    ],
+    "context_ids": [
+      "M1"
+    ],
+    "target_parameters": {
+      "M2": {
+        "section_source": "inherit_target",
+        "termination_type": "cap",
+        "thickness": 4.0,
+        "start_position": [
+          70.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          70.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_default_cap.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_default_cap.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_default_cap.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_default_cap.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_default_cap.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "76c4525b852fd96979fef278870e257e84b7e9699696e4c6405b64fbd85e0fa9",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "6992c43e97f4e1b219dbf6581f39420556a89ffe1c45fea6fd0d38e23a053a9e",
+        "solid_M1": "92726e131617ef25684eff6025c8a3ab1a7a72d2d06f8bd53f377c350b615014",
+        "solid_M2": "c7144d88ca9b8f9333645a7634fe6103d916b0e6a1c408481bdddbdbff98fe95"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "default_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 117393,
+      "sha256": "f0188b9460200aabebf988d658e41c417c05e756959d015a634342b843099fdd"
+    }
+  },
+  {
+    "name": "primitive_terminate_changed_plug",
+    "title": "Terminate primitive — plug, t=8 mm",
+    "note": "A cap grows downstream from the terminal plane; a plug occupies the upstream bore. Both consume one open port and produce none.",
+    "candidate_document": "CadGenCandidate_primitive_terminate_changed_plug_2_1_25f80dcd9705",
+    "state_id": "S2",
+    "state_version": 2,
+    "module_ids": [
+      "M1",
+      "M2"
+    ],
+    "module_types": [
+      "route",
+      "terminate"
+    ],
+    "target_ids": [
+      "M2"
+    ],
+    "context_ids": [
+      "M1"
+    ],
+    "target_parameters": {
+      "M2": {
+        "section_source": "inherit_target",
+        "termination_type": "plug",
+        "thickness": 8.0,
+        "start_position": [
+          70.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          70.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_changed_plug.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_changed_plug.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_changed_plug.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_changed_plug.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_terminate_changed_plug.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "25f80dcd970549a79d327cc3e93c390d9f097fb8545d572f555cb72d959f6b5f",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "2eb7a99c0e9d8987a90b04fc6f289df248d2f2c3d676b90c2ef73da7d4a7f88a",
+        "solid_M1": "d41b93c014e68c57015c736aac233caba3af41ea2c0569e50ee83c618cd6bf95",
+        "solid_M2": "e65c53d8dd3b17a00a1696e59c902c09d0238493ed17886f9c363a0757e1e999"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 130729,
+      "sha256": "c7eba597b02396a3d7bd1ad711fe7fb7a3bda535d64139884c6c387f733f7558"
+    }
+  },
+  {
+    "name": "primitive_inline_default_flange_4bolt",
+    "title": "Inline component — flange, 4 bolts",
+    "note": "The flange subtype exposes collar and bolt-pattern parameters as real cut geometry.",
+    "candidate_document": "CadGenCandidate_primitive_inline_default_flange_4bolt_1_1_f3c0adba6092",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "inline_component"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "component_type": "flange",
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "length": 24.0,
+        "body_outer_diameter": 40.0,
+        "body_start_offset": 0.0,
+        "body_length": 5.0,
+        "flange_bolt_count": 4,
+        "flange_bolt_circle_diameter": 30.0,
+        "flange_bolt_hole_diameter": 4.0,
+        "flange_reference_axis": [
+          0.0,
+          0.9238795325112867,
+          0.3826834323650898
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          24.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_default_flange_4bolt.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_default_flange_4bolt.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_default_flange_4bolt.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_default_flange_4bolt.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_default_flange_4bolt.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "f3c0adba6092888194c2119f9423fa0e59d2f2015926868c8414c97b64be9ff9",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "94ba1e3a384459daa02c51c867dd32690530aef9edcb938d237698f02d75a615",
+        "solid_M1": "613075623bc84355af42a21e7aca149302a59f06630072707890f4de226cc4f0"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "default_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 88429,
+      "sha256": "c6ed9d856f35c7d8e0053c668c1edf121a1ed3cfc54b7b059ed8c6b45ace50c2"
+    }
+  },
+  {
+    "name": "primitive_inline_changed_flange_8bolt",
+    "title": "Inline component — flange, 8 bolts / larger body",
+    "note": "Increasing bolt count and body dimensions changes the annulus and repeated hole geometry.",
+    "candidate_document": "CadGenCandidate_primitive_inline_changed_flange_8bolt_1_1_dc4360c76273",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "inline_component"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "component_type": "flange",
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "length": 28.0,
+        "body_outer_diameter": 50.0,
+        "body_start_offset": 0.0,
+        "body_length": 7.0,
+        "flange_bolt_count": 8,
+        "flange_bolt_circle_diameter": 38.0,
+        "flange_bolt_hole_diameter": 4.0,
+        "flange_reference_axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          28.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_changed_flange_8bolt.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_changed_flange_8bolt.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_changed_flange_8bolt.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_changed_flange_8bolt.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_changed_flange_8bolt.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "dc4360c762738b79b26bd6320986faedcc12cd515eb6db4b1cc5d52d9a9a09a3",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "853d40b765fe441dee6c3e9175c813f9a43a276b2e747546d091d410a7874f2f",
+        "solid_M1": "53a8ce8d715e0746ceeef4e9149492d9f2d81b360857d65c545690b8c30cc8e6"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "changed_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 86642,
+      "sha256": "73cacb95addb480932cd23e62694cc4fb3a24c8e09827034a88547814e4d2f25"
+    }
+  },
+  {
+    "name": "primitive_inline_subtype_coupling",
+    "title": "Inline component subtype — coupling",
+    "note": "A coupling is modeled as a sleeve spanning the full authored axial length.",
+    "candidate_document": "CadGenCandidate_primitive_inline_subtype_coupling_1_1_cf813db076b6",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "inline_component"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "component_type": "coupling",
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "length": 30.0,
+        "body_outer_diameter": 28.0,
+        "body_start_offset": 0.0,
+        "body_length": 30.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          30.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_coupling.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_coupling.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_coupling.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_coupling.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_coupling.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "cf813db076b6d266b3965de1e5e610b7fa252908d01fa770ea2c8986bbed7d4c",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "0c5e92a6aadb315e716eb6a094f1a8ab186a1f7a4b5e1071051846c1726c7ac1",
+        "solid_M1": "0c0c681ec8ce059829d66b07da039eb94bc0311937cbf6ec01db786e4edba1ad"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "inline_subtype_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 105112,
+      "sha256": "cfa30a98e0fffbcdffb7b15bcb7b9107b825fbee74e2829d128a8439be91a261"
+    }
+  },
+  {
+    "name": "primitive_inline_subtype_union",
+    "title": "Inline component subtype — union",
+    "note": "A union has two necks and two explicit end rings around a central body.",
+    "candidate_document": "CadGenCandidate_primitive_inline_subtype_union_1_1_369c8c4ae693",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "inline_component"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "component_type": "union",
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "length": 46.0,
+        "body_outer_diameter": 34.0,
+        "body_start_offset": 9.0,
+        "body_length": 28.0,
+        "union_ring_outer_diameter": 40.0,
+        "union_ring_length": 5.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          46.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_union.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_union.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_union.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_union.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_union.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "369c8c4ae6939ee1e00cdc3e522d0fb071dd3abfb16758707644081270996c6c",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "ac4a9d07a35b6901611f3221dd3105a386850ea929536262bdd4064417810c01",
+        "solid_M1": "2c3d498b9994223ea799fc3a589224d11f66017a6fc54a9456b3cbebbb7dd298"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "inline_subtype_gallery",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 101006,
+      "sha256": "4fa5c767bfa95e724cec3a64b2718b4a2a2f01204aa6ee8dcc2bdc0b9487216a"
+    }
+  },
+  {
+    "name": "primitive_inline_subtype_valve",
+    "title": "Inline component subtype — valve",
+    "note": "A valve adds a perpendicular actuator solid while retaining an axial flow bore.",
+    "candidate_document": "CadGenCandidate_primitive_inline_subtype_valve_1_1_de930b097e31",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "inline_component"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "section_source": "inherit_target",
+        "component_type": "valve",
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "length": 52.0,
+        "body_outer_diameter": 38.0,
+        "body_start_offset": 10.0,
+        "body_length": 32.0,
+        "actuator_diameter": 20.0,
+        "actuator_height": 36.0,
+        "actuator_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          52.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_valve.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_valve.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_valve.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_valve.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/primitive_inline_subtype_valve.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": false,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "de930b097e3164a80826a98c820754bf2788162d14fd25591c235a500041dbb0",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "d9b2c155ab0eba26aeabbad5d41168540935b0019e0c522c19f3661ba3035b1a",
+        "solid_M1": "e39647d337bcac8a5e9c94ffb29e43017095f45758ea6f733b4bd9f8fc6ce68b"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 1,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": [
+        "wall_section_failures: [{\"failures\": [{\"kind\": \"material_outside_outer_radius\", \"sample\": 6}], \"module_id\": \"M1\", \"section\": \"component_body_mid\"}]"
+      ]
+    },
+    "gallery_role": "strict_rejection_case",
+    "recommended_for_report": false,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 83278,
+      "sha256": "386c7303e8f1d8464cdb6e58f241e4fc7a6e1fe35dc28a61044c8d1f3d235a7b"
+    }
+  },
+  {
+    "name": "assembly_step_1",
+    "title": "Sequential assembly — step 1: route",
+    "note": "Natural-language example: straight 80 mm → 30 mm coupling → 20→12 mm reducer → straight 60 mm → cap.",
+    "candidate_document": "CadGenCandidate_assembly_step_1_1_1_2bbf7b3534a3",
+    "state_id": "S1",
+    "state_version": 1,
+    "module_ids": [
+      "M1"
+    ],
+    "module_types": [
+      "route"
+    ],
+    "target_ids": [
+      "M1"
+    ],
+    "context_ids": [],
+    "target_parameters": {
+      "M1": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 80.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            80.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "end_position": [
+          80.0,
+          0.0,
+          0.0
+        ],
+        "out_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_1.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_1.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_1.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_1.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_1.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "2bbf7b3534a32cc0332681c302522952c38aea3d690696226b38c6d0081f39d9",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "8f862869edce9d68c31530b5130889a775313ae415caad459b934c03147e8e0c",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "sequential_example",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 81845,
+      "sha256": "085f2a5edaaa3c3cba146a4a54a705dc0ff818ebe7379058a83e78bac68d3c21"
+    }
+  },
+  {
+    "name": "assembly_step_2",
+    "title": "Sequential assembly — step 2: inline_component",
+    "note": "Natural-language example: straight 80 mm → 30 mm coupling → 20→12 mm reducer → straight 60 mm → cap.",
+    "candidate_document": "CadGenCandidate_assembly_step_2_2_1_cd2d9b00850a",
+    "state_id": "S2",
+    "state_version": 2,
+    "module_ids": [
+      "M1",
+      "M2"
+    ],
+    "module_types": [
+      "route",
+      "inline_component"
+    ],
+    "target_ids": [
+      "M2"
+    ],
+    "context_ids": [
+      "M1"
+    ],
+    "target_parameters": {
+      "M2": {
+        "section_source": "inherit_target",
+        "component_type": "coupling",
+        "length": 30.0,
+        "body_outer_diameter": 28.0,
+        "body_start_offset": 0.0,
+        "body_length": 30.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "start_position": [
+          80.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          110.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_2.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_2.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_2.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_2.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_2.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "cd2d9b00850ad332b45179da53f645ada6261b0415e7bad3c8ea3fbb618af1ba",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "6de45c691e47320cb6304b9a7b633719549529f4d75c4d42320a2cf20344df11",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32",
+        "solid_M2": "be2cff031f36ccc642f442fc4c8c5f18e10541aa3e8fd398574f3b76d2efc50b"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "sequential_example",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 96193,
+      "sha256": "cccec66e2188ccd35d91b72cae01b3bbf0e1ea1b1287381c9e3bcdab13c2920d"
+    }
+  },
+  {
+    "name": "assembly_step_3",
+    "title": "Sequential assembly — step 3: transition",
+    "note": "Natural-language example: straight 80 mm → 30 mm coupling → 20→12 mm reducer → straight 60 mm → cap.",
+    "candidate_document": "CadGenCandidate_assembly_step_3_3_1_e7cc54a807dd",
+    "state_id": "S3",
+    "state_version": 3,
+    "module_ids": [
+      "M1",
+      "M2",
+      "M3"
+    ],
+    "module_types": [
+      "route",
+      "inline_component",
+      "transition"
+    ],
+    "target_ids": [
+      "M3"
+    ],
+    "context_ids": [
+      "M1",
+      "M2"
+    ],
+    "target_parameters": {
+      "M3": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 40.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          110.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 20.0,
+        "wall_thickness_in": 2.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null,
+        "end_position": [
+          150.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_3.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_3.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_3.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_3.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_3.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "e7cc54a807dd50f4591e4ab38aa24f3fccf2e70f1a76ac5758a08e94e6834c31",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "f93406908d19eba04209926d184434413479428d90f38baf2c2b96ac0e38124f",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32",
+        "solid_M2": "be2cff031f36ccc642f442fc4c8c5f18e10541aa3e8fd398574f3b76d2efc50b",
+        "solid_M3": "70b920bafbe427f796afc058b14bd0e59fa49c61938aff04501f16c433284d33"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "sequential_example",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 87107,
+      "sha256": "be45a5c6199d9f7b6e83685a46630b15fbe205f6c1c6084015fd87fa7a16a7f8"
+    }
+  },
+  {
+    "name": "assembly_step_4",
+    "title": "Sequential assembly — step 4: route",
+    "note": "Natural-language example: straight 80 mm → 30 mm coupling → 20→12 mm reducer → straight 60 mm → cap.",
+    "candidate_document": "CadGenCandidate_assembly_step_4_4_1_1697585c5d56",
+    "state_id": "S4",
+    "state_version": 4,
+    "module_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4"
+    ],
+    "module_types": [
+      "route",
+      "inline_component",
+      "transition",
+      "route"
+    ],
+    "target_ids": [
+      "M4"
+    ],
+    "context_ids": [
+      "M1",
+      "M2",
+      "M3"
+    ],
+    "target_parameters": {
+      "M4": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 60.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          150.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 1.5,
+        "path_points": [
+          [
+            150.0,
+            0.0,
+            0.0
+          ],
+          [
+            210.0,
+            0.0,
+            0.0
+          ]
+        ],
+        "end_position": [
+          210.0,
+          0.0,
+          0.0
+        ],
+        "out_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed",
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_4.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_4.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_4.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_4.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_4.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "1697585c5d565a7891eb94c44fc9af6430722ffeceb09e8decdd7126672e86c5",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "1898d50f297b685ce28b3fadb42e3b5e96b94124f7860896c0c5767a8f0ddc6e",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32",
+        "solid_M2": "be2cff031f36ccc642f442fc4c8c5f18e10541aa3e8fd398574f3b76d2efc50b",
+        "solid_M3": "70b920bafbe427f796afc058b14bd0e59fa49c61938aff04501f16c433284d33",
+        "solid_M4": "987b133dd9787e624d1b30865e8156bffd15ee6d11373fd514cc821ecdd18706"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "sequential_example",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 67042,
+      "sha256": "6cfa8d94332814d661abf15a03e81f992fb622d465f26df2e3fad35b1f447178"
+    }
+  },
+  {
+    "name": "assembly_step_5",
+    "title": "Sequential assembly — step 5: terminate",
+    "note": "Natural-language example: straight 80 mm → 30 mm coupling → 20→12 mm reducer → straight 60 mm → cap.",
+    "candidate_document": "CadGenCandidate_assembly_step_5_5_1_b42b0aef9878",
+    "state_id": "S5",
+    "state_version": 5,
+    "module_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5"
+    ],
+    "module_types": [
+      "route",
+      "inline_component",
+      "transition",
+      "route",
+      "terminate"
+    ],
+    "target_ids": [
+      "M5"
+    ],
+    "context_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4"
+    ],
+    "target_parameters": {
+      "M5": {
+        "section_source": "inherit_target",
+        "termination_type": "cap",
+        "thickness": 3.0,
+        "start_position": [
+          210.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 1.5,
+        "end_position": [
+          210.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed",
+      "passed",
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_5.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_5.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_5.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_5.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_5.freecad.py",
+    "keep_open": true,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "b42b0aef98787d0997dd4dc525caa3831431b33a95dcebbd1b6b2059b413e4be",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "f23a04197fd6f5680f1e0ea3648c503bf1d0c0de9b6b647e1680f74d887c75d2",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32",
+        "solid_M2": "be2cff031f36ccc642f442fc4c8c5f18e10541aa3e8fd398574f3b76d2efc50b",
+        "solid_M3": "70b920bafbe427f796afc058b14bd0e59fa49c61938aff04501f16c433284d33",
+        "solid_M4": "987b133dd9787e624d1b30865e8156bffd15ee6d11373fd514cc821ecdd18706",
+        "solid_M5": "c0f026a072c84db0181efb07890ead3f0f99a6626d5d461d0cc6f05105c4566e"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "sequential_example",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 68689,
+      "sha256": "dcd64194d3488c84428b4c6fb3f7c051650254f813223e947ebed3af96c7d117"
+    },
+    "additional_mcp_capture": {
+      "capture_method": "freecad_mcp.get_view",
+      "view": "Isometric",
+      "focus_object": "PipeAssembly",
+      "path": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/assembly_step_5.get_view_raw.png",
+      "bytes": 59716,
+      "sha256": "f1e5f4300a61b0014e4fa2d07d7e55b7f7a339c409b5e6bbc48b0bbebe406b13"
+    }
+  },
+  {
+    "name": "connection_overview_route_to_coupling",
+    "title": "Connection overview — route outlet to coupling inlet",
+    "note": "The shared interface has coincident position, anti-parallel mating axes, and equal OD/ID/wall values.",
+    "candidate_document": "CadGenCandidate_connection_overview_route_to_coupling_2_1_cd2d9b00850a",
+    "state_id": "S2",
+    "state_version": 2,
+    "module_ids": [
+      "M1",
+      "M2"
+    ],
+    "module_types": [
+      "route",
+      "inline_component"
+    ],
+    "target_ids": [
+      "M2"
+    ],
+    "context_ids": [
+      "M1"
+    ],
+    "target_parameters": {
+      "M2": {
+        "section_source": "inherit_target",
+        "component_type": "coupling",
+        "length": 30.0,
+        "body_outer_diameter": 28.0,
+        "body_start_offset": 0.0,
+        "body_length": 30.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "start_position": [
+          80.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          110.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "static_step_statuses": [
+      "passed",
+      "passed"
+    ],
+    "png": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/connection_overview_route_to_coupling.png",
+    "capture_method": "freecad_mcp.execute_code + FreeCADGui.activeView().saveImage",
+    "freecad_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/connection_overview_route_to_coupling.freecad_validation.json",
+    "static_validation": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/connection_overview_route_to_coupling.static_validation.json",
+    "state": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/connection_overview_route_to_coupling.state.json",
+    "script": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/connection_overview_route_to_coupling.freecad.py",
+    "keep_open": false,
+    "mcp_execution_status": "executed",
+    "freecad_result": {
+      "passed": true,
+      "schema_version": 3,
+      "generator_version": "cadgen02-freecad-v17",
+      "freecad_version": [
+        "1",
+        "1",
+        "1",
+        "20260414 (Git shallow)",
+        "Unknown",
+        "2026/04/14 22:09:59",
+        "(HEAD detached at 0108fd4b4)",
+        "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+      ],
+      "payload_digest": "cd2d9b00850ad332b45179da53f645ada6261b0415e7bad3c8ea3fbb618af1ba",
+      "candidate_shape_fingerprints": {
+        "PipeAssembly": "6de45c691e47320cb6304b9a7b633719549529f4d75c4d42320a2cf20344df11",
+        "solid_M1": "d656dbd2fbeaf6aa62fa66d2ff569f69c5d9450e732d33eb223feaa30db0ff32",
+        "solid_M2": "be2cff031f36ccc642f442fc4c8c5f18e10541aa3e8fd398574f3b76d2efc50b"
+      },
+      "assembly_passed": true,
+      "assembly_solid_count": 1,
+      "all_modules_passed": true,
+      "outer_network_passed": true,
+      "bore_network_passed": true,
+      "wall_section_failure_count": 0,
+      "connection_failure_count": 0,
+      "non_adjacent_overlap_count": 0,
+      "failure_reasons": []
+    },
+    "gallery_role": "connection_overview",
+    "recommended_for_report": true,
+    "image": {
+      "width": 1200,
+      "height": 800,
+      "background": "white",
+      "black_bar_postprocess": "FreeCAD PySide QImage crop + white pad",
+      "bytes": 96193,
+      "sha256": "cccec66e2188ccd35d91b72cae01b3bbf0e1ea1b1287381c9e3bcdab13c2920d"
+    },
+    "additional_mcp_capture": {
+      "capture_method": "freecad_mcp.get_view",
+      "view": "Isometric",
+      "focus_object": "PipeAssembly",
+      "path": "/Users/jhkim/Documents/cadgen02/artifacts/notion_report/connection_overview_route_to_coupling.get_view_raw.png",
+      "bytes": 69332,
+      "sha256": "bececed591f5edd39b4016064ac5934958b651e8bdab2c79550cdb8f4ba158d8"
+    }
+  }
+]

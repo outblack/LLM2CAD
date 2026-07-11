@@ -1,0 +1,243 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 5,
+  "warning_count": 0,
+  "expected_open_ports": 0,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "issues": [
+    {
+      "issue_id": "STEP_0001_01_PLANNING_FAILED",
+      "severity": "error",
+      "issue_code": "PLANNING_FAILED",
+      "check_name": "planning",
+      "message": "Planner did not return a usable next action.",
+      "step_index": 1,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {
+        "error": "Gemini structured output failed for step_planner: 32 validation errors for PlannerDecision\nchoice.RouteChoice.params\n  Value error, line route requires length and direction [type=value_error, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error\nchoice.TransitionChoice.module\n  Input should be 'transition' [type=literal_error, input_value='route', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/literal_error\nchoice.TransitionChoice.params.path_kind\n  Extra inputs are not permitted [type=extra_forbidden, input_value='line', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.TransitionChoice.params.waypoints\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[[80.0, 0.0, 0.0]], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.TransitionChoice.params.diameter_out\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.TransitionChoice.params.wall_thickness_out\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.TransitionChoice.params.length\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.TransitionChoice.params.offset\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.JunctionChoice.module\n  Input should be 'junction' [type=literal_error, input_value='route', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/literal_error\nchoice.JunctionChoice.params.path_kind\n  Extra inputs are not permitted [type=extra_forbidden, input_value='line', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.JunctionChoice.params.waypoints\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[[80.0, 0.0, 0.0]], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.JunctionChoice.params.outlets\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.JunctionChoice.params.blend_mode\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.JunctionChoice.params.max_hub_radius\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.ConnectPortsChoice.module\n  Input should be 'connect_ports' [type=literal_error, input_value='route', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/literal_error\nchoice.ConnectPortsChoice.params.other_port_id\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.TerminateChoice.module\n  Input should be 'terminate' [type=literal_error, input_value='route', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/literal_error\nchoice.TerminateChoice.params.path_kind\n  Extra inputs are not permitted [type=extra_forbidden, input_value='line', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.TerminateChoice.params.waypoints\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[[80.0, 0.0, 0.0]], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.TerminateChoice.params.termination_type\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.TerminateChoice.params.thickness\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.module\n  Input should be 'inline_component' [type=literal_error, input_value='route', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/literal_error\nchoice.InlineComponentChoice.params.path_kind\n  Extra inputs are not permitted [type=extra_forbidden, input_value='line', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.InlineComponentChoice.params.waypoints\n  Extra inputs are not permitted [type=extra_forbidden, input_value=[[80.0, 0.0, 0.0]], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/extra_forbidden\nchoice.InlineComponentChoice.params.component_type\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.length\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.body_outer_diameter\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.body_start_offset\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.body_length\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.connector_type_out\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.connector_gender_out\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nchoice.InlineComponentChoice.params.connector_standard_out\n  Field required [type=missing, input_value={'path_kind': 'line', 'se...ts': [[80.0, 0.0, 0.0]]}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing; raw='{   \"catalog_schema_version\": 2,   \"target_port\": \"START\",   \"affected_goal_ids\": [     \"initial_straight_section\"   ],   \"completed_goal_ids\": [     \"initial_straight_section\"   ],   \"choice\": {     \"module\": \"route\",     \"params\": {       \"path_kind\": \"line\",       \"section_source\": \"explicit\",       \"outer_diameter\": 20.0,       \"wall_thickness\": 2.0,       \"waypoints\": [         [           80.0,           0.0,           0.0         ]       ]     }   },   \"rationale\": \"Repairing the route ac'",
+        "raw": "{\n  \"catalog_schema_version\": 2,\n  \"target_port\": \"START\",\n  \"affected_goal_ids\": [\n    \"initial_straight_section\"\n  ],\n  \"completed_goal_ids\": [\n    \"initial_straight_section\"\n  ],\n  \"choice\": {\n    \"module\": \"route\",\n    \"params\": {\n      \"path_kind\": \"line\",\n      \"section_source\": \"explicit\",\n      \"outer_diameter\": 20.0,\n      \"wall_thickness\": 2.0,\n      \"waypoints\": [\n        [\n          80.0,\n          0.0,\n          0.0\n        ]\n      ]\n    }\n  },\n  \"rationale\": \"Repairing the route action: The 'line' variant requires 'length' and 'direction' according to the validation logic, or an explicit endpoint via 'waypoints'. Given the first move goal requires a 80mm straight section in the +X direction from [0,0,0], I specify the path using the explicit target waypoint [80, 0, 0].\"\n}"
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "FINAL_01_REMAINING_GOALS",
+      "severity": "error",
+      "issue_code": "REMAINING_GOALS",
+      "check_name": "final_goal_exhaustion",
+      "message": "Final state still has unconsumed goals.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "remaining_goals": 0
+      },
+      "actual": {
+        "remaining_goals": 5
+      },
+      "suggestion": {
+        "operation": "increase_max_iter_or_replan"
+      }
+    },
+    {
+      "issue_id": "FINAL_02_NO_GEOMETRY_MODULES",
+      "severity": "error",
+      "issue_code": "NO_GEOMETRY_MODULES",
+      "check_name": "final_geometry_presence",
+      "message": "Final state has no module that generates outer pipe geometry.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "geometry_module_count": ">0"
+      },
+      "actual": {
+        "placed_modules": []
+      },
+      "suggestion": {
+        "operation": "add_geometry_module_before_open_end_marker"
+      }
+    },
+    {
+      "issue_id": "FINAL_03_REQUIRED_COMPONENTS_UNSATISFIED",
+      "severity": "error",
+      "issue_code": "REQUIRED_COMPONENTS_UNSATISFIED",
+      "check_name": "final_component_contract",
+      "message": "One or more user-required components have no matching geometry-producing inline component.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "required_components": [
+          "coupling"
+        ]
+      },
+      "actual": {
+        "satisfied_component_counts": {},
+        "missing_components": {
+          "coupling": 1
+        }
+      },
+      "suggestion": {
+        "operation": "replan_required_components"
+      }
+    },
+    {
+      "issue_id": "FINAL_04_OPEN_PORT_COUNT_MISMATCH",
+      "severity": "error",
+      "issue_code": "OPEN_PORT_COUNT_MISMATCH",
+      "check_name": "final_open_port_count",
+      "message": "Final open-port count does not match the intent.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [
+        "START"
+      ],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "expected_open_ports": 0
+      },
+      "actual": {
+        "actual_open_ports": 1
+      },
+      "suggestion": {
+        "operation": "replan_terminal_ports"
+      }
+    }
+  ],
+  "view_requests": [
+    {
+      "view_id": "front",
+      "camera": "front orthographic",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "right",
+      "camera": "right orthographic",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "top",
+      "camera": "top orthographic",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "isometric",
+      "camera": "isometric overview",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    }
+  ],
+  "patch_suggestions": [
+    {
+      "suggestion_id": "PATCH_001_REMAINING_GOALS",
+      "target_module_id": null,
+      "target_port_ids": [],
+      "issue_ids": [
+        "FINAL_01_REMAINING_GOALS"
+      ],
+      "operation": "review_static_issue",
+      "params": {
+        "operation": "increase_max_iter_or_replan"
+      },
+      "rationale": "Final state still has unconsumed goals."
+    },
+    {
+      "suggestion_id": "PATCH_002_NO_GEOMETRY_MODULES",
+      "target_module_id": null,
+      "target_port_ids": [],
+      "issue_ids": [
+        "FINAL_02_NO_GEOMETRY_MODULES"
+      ],
+      "operation": "review_static_issue",
+      "params": {
+        "operation": "add_geometry_module_before_open_end_marker"
+      },
+      "rationale": "Final state has no module that generates outer pipe geometry."
+    },
+    {
+      "suggestion_id": "PATCH_003_REQUIRED_COMPONENTS_UNSATISFIED",
+      "target_module_id": null,
+      "target_port_ids": [],
+      "issue_ids": [
+        "FINAL_03_REQUIRED_COMPONENTS_UNSATISFIED"
+      ],
+      "operation": "review_static_issue",
+      "params": {
+        "operation": "replan_required_components"
+      },
+      "rationale": "One or more user-required components have no matching geometry-producing inline component."
+    },
+    {
+      "suggestion_id": "PATCH_004_OPEN_PORT_COUNT_MISMATCH",
+      "target_module_id": null,
+      "target_port_ids": [
+        "START"
+      ],
+      "issue_ids": [
+        "FINAL_04_OPEN_PORT_COUNT_MISMATCH"
+      ],
+      "operation": "replan_terminal_ports",
+      "params": {
+        "operation": "replan_terminal_ports"
+      },
+      "rationale": "Final open-port count does not match the intent."
+    }
+  ],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Fix PLANNING_FAILED: Planner did not return a usable next action.",
+    "Fix REMAINING_GOALS: Final state still has unconsumed goals.",
+    "Fix NO_GEOMETRY_MODULES: Final state has no module that generates outer pipe geometry.",
+    "Fix REQUIRED_COMPONENTS_UNSATISFIED: One or more user-required components have no matching geometry-producing inline component.",
+    "Fix OPEN_PORT_COUNT_MISMATCH: Final open-port count does not match the intent."
+  ]
+}

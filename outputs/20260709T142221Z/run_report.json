@@ -1,0 +1,19 @@
+{
+  "run_id": "20260709T142221Z",
+  "dry_run": false,
+  "freecad_opened": false,
+  "freecad_mcp_used": true,
+  "freecad_mcp_error": null,
+  "artifacts": {
+    "run_id": "20260709T142221Z",
+    "output_dir": "outputs/20260709T142221Z",
+    "prompt_path": "outputs/20260709T142221Z/prompt.txt",
+    "intent_path": "outputs/20260709T142221Z/intent.json",
+    "actions_path": "outputs/20260709T142221Z/actions.json",
+    "state_path": "outputs/20260709T142221Z/state.json",
+    "freecad_script_path": "outputs/20260709T142221Z/freecad_script.py",
+    "report_path": "outputs/20260709T142221Z/run_report.json",
+    "mcp_result_path": "outputs/20260709T142221Z/mcp_result.json"
+  },
+  "summary": "Generated 4 primitive pipe modules."
+}

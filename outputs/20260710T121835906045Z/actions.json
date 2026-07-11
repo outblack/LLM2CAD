@@ -1,0 +1,40 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 30.0,
+      "direction": [
+        0.7071,
+        0.0,
+        -0.7071
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "route_to_first_junction"
+    ],
+    "completed_goal_ids": [
+      "route_to_first_junction"
+    ],
+    "satisfied_components": []
+  }
+]

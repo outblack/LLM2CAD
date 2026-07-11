@@ -1,0 +1,394 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 5,
+  "warning_count": 0,
+  "expected_open_ports": 4,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "issues": [
+    {
+      "issue_id": "STEP_0001_01_REGISTRY_VALIDATION_FAILED",
+      "severity": "error",
+      "issue_code": "REGISTRY_VALIDATION_FAILED",
+      "check_name": "registry_validation",
+      "message": "Resolved action failed registry validation.",
+      "step_index": 1,
+      "action_id": "A1",
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": "START",
+      "consumed_goal_index": 0,
+      "expected": {
+        "registry_validation": "valid"
+      },
+      "actual": {
+        "errors": [
+          "required_outlet_vectors[0] must be a 3D vector",
+          "required_outlet_vectors[1] must be a 3D vector",
+          "junction_style must be hard_fuse or smooth_hub"
+        ]
+      },
+      "suggestion": {
+        "operation": "repair_action_params"
+      }
+    },
+    {
+      "issue_id": "FINAL_01_REMAINING_GOALS",
+      "severity": "error",
+      "issue_code": "REMAINING_GOALS",
+      "check_name": "final_goal_exhaustion",
+      "message": "Final state still has unconsumed goals.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "remaining_goals": 0
+      },
+      "actual": {
+        "remaining_goals": 3
+      },
+      "suggestion": {
+        "operation": "increase_max_iter_or_replan"
+      }
+    },
+    {
+      "issue_id": "FINAL_02_NO_GEOMETRY_MODULES",
+      "severity": "error",
+      "issue_code": "NO_GEOMETRY_MODULES",
+      "check_name": "final_geometry_presence",
+      "message": "Final state has no module that generates outer pipe geometry.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "geometry_module_count": ">0"
+      },
+      "actual": {
+        "placed_modules": []
+      },
+      "suggestion": {
+        "operation": "add_geometry_module_before_open_end_marker"
+      }
+    },
+    {
+      "issue_id": "FINAL_03_OPEN_PORT_COUNT_MISMATCH",
+      "severity": "error",
+      "issue_code": "OPEN_PORT_COUNT_MISMATCH",
+      "check_name": "final_open_port_count",
+      "message": "Final open-port count does not match the intent.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [
+        "START"
+      ],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "expected_open_ports": 4
+      },
+      "actual": {
+        "actual_open_ports": 1
+      },
+      "suggestion": {
+        "operation": "replan_terminal_ports"
+      }
+    },
+    {
+      "issue_id": "FINAL_04_FINAL_OUTLET_VECTOR_MISMATCH",
+      "severity": "error",
+      "issue_code": "FINAL_OUTLET_VECTOR_MISMATCH",
+      "check_name": "final_terminal_vector_coverage",
+      "message": "Final open terminals do not cover every required outlet vector.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [
+        "START"
+      ],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {
+        "expected_vectors": [
+          [
+            -0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            -0.707107,
+            0.0,
+            -0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            -0.707107
+          ]
+        ],
+        "threshold": 0.98,
+        "distinct_ports": true
+      },
+      "actual": {
+        "expected_vectors": [
+          [
+            -0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            -0.707107,
+            0.0,
+            -0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            -0.707107
+          ]
+        ],
+        "matched_port_ids": [],
+        "matched": [],
+        "missing_vectors": [
+          {
+            "vector_index": 0,
+            "expected_vector": [
+              -0.7071067811865475,
+              0.0,
+              0.7071067811865475
+            ],
+            "best_dot": -0.7071
+          },
+          {
+            "vector_index": 1,
+            "expected_vector": [
+              -0.7071067811865475,
+              0.0,
+              -0.7071067811865475
+            ],
+            "best_dot": -0.7071
+          },
+          {
+            "vector_index": 2,
+            "expected_vector": [
+              0.7071067811865475,
+              0.0,
+              0.7071067811865475
+            ],
+            "best_dot": 0.7071
+          },
+          {
+            "vector_index": 3,
+            "expected_vector": [
+              0.7071067811865475,
+              0.0,
+              -0.7071067811865475
+            ],
+            "best_dot": 0.7071
+          }
+        ],
+        "rejected_ports": [
+          {
+            "port_id": "START",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "best_dot": 0.7071
+          }
+        ],
+        "threshold": 0.98
+      },
+      "suggestion": {
+        "operation": "replan_terminal_vectors",
+        "required_outlet_vectors": [
+          [
+            -0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            -0.707107,
+            0.0,
+            -0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            -0.707107
+          ]
+        ]
+      }
+    }
+  ],
+  "view_requests": [
+    {
+      "view_id": "front",
+      "camera": "front orthographic",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "unavailable",
+      "evidence_path": null,
+      "unavailable_reason": "Current FreeCAD MCP default uses text feedback; screenshot evidence requires a screenshot-producing MCP tool or configuration."
+    },
+    {
+      "view_id": "right",
+      "camera": "right orthographic",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "unavailable",
+      "evidence_path": null,
+      "unavailable_reason": "Current FreeCAD MCP default uses text feedback; screenshot evidence requires a screenshot-producing MCP tool or configuration."
+    },
+    {
+      "view_id": "top",
+      "camera": "top orthographic",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "unavailable",
+      "evidence_path": null,
+      "unavailable_reason": "Current FreeCAD MCP default uses text feedback; screenshot evidence requires a screenshot-producing MCP tool or configuration."
+    },
+    {
+      "view_id": "isometric",
+      "camera": "isometric overview",
+      "target_module_ids": [],
+      "target_port_ids": [
+        "START"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "unavailable",
+      "evidence_path": null,
+      "unavailable_reason": "Current FreeCAD MCP default uses text feedback; screenshot evidence requires a screenshot-producing MCP tool or configuration."
+    }
+  ],
+  "patch_suggestions": [
+    {
+      "suggestion_id": "PATCH_001_REMAINING_GOALS",
+      "target_module_id": null,
+      "target_port_ids": [],
+      "issue_ids": [
+        "FINAL_01_REMAINING_GOALS"
+      ],
+      "operation": "review_static_issue",
+      "params": {
+        "operation": "increase_max_iter_or_replan"
+      },
+      "rationale": "Final state still has unconsumed goals."
+    },
+    {
+      "suggestion_id": "PATCH_002_NO_GEOMETRY_MODULES",
+      "target_module_id": null,
+      "target_port_ids": [],
+      "issue_ids": [
+        "FINAL_02_NO_GEOMETRY_MODULES"
+      ],
+      "operation": "review_static_issue",
+      "params": {
+        "operation": "add_geometry_module_before_open_end_marker"
+      },
+      "rationale": "Final state has no module that generates outer pipe geometry."
+    },
+    {
+      "suggestion_id": "PATCH_003_OPEN_PORT_COUNT_MISMATCH",
+      "target_module_id": null,
+      "target_port_ids": [
+        "START"
+      ],
+      "issue_ids": [
+        "FINAL_03_OPEN_PORT_COUNT_MISMATCH"
+      ],
+      "operation": "replan_terminal_ports",
+      "params": {
+        "operation": "replan_terminal_ports"
+      },
+      "rationale": "Final open-port count does not match the intent."
+    },
+    {
+      "suggestion_id": "PATCH_004_FINAL_OUTLET_VECTOR_MISMATCH",
+      "target_module_id": null,
+      "target_port_ids": [
+        "START"
+      ],
+      "issue_ids": [
+        "FINAL_04_FINAL_OUTLET_VECTOR_MISMATCH"
+      ],
+      "operation": "replan_terminal_vectors",
+      "params": {
+        "operation": "replan_terminal_vectors",
+        "required_outlet_vectors": [
+          [
+            -0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            -0.707107,
+            0.0,
+            -0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            0.707107
+          ],
+          [
+            0.707107,
+            0.0,
+            -0.707107
+          ]
+        ]
+      },
+      "rationale": "Final open terminals do not cover every required outlet vector."
+    }
+  ],
+  "skipped_mcp_reason": "Registry validation failed before MCP.",
+  "next_actions": [
+    "Fix REGISTRY_VALIDATION_FAILED: Resolved action failed registry validation.",
+    "Fix REMAINING_GOALS: Final state still has unconsumed goals.",
+    "Fix NO_GEOMETRY_MODULES: Final state has no module that generates outer pipe geometry.",
+    "Fix OPEN_PORT_COUNT_MISMATCH: Final open-port count does not match the intent.",
+    "Fix FINAL_OUTLET_VECTOR_MISMATCH: Final open terminals do not cover every required outlet vector."
+  ]
+}

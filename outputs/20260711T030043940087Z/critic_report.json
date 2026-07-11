@@ -1,0 +1,314 @@
+{
+  "passed": true,
+  "verification_status": "passed",
+  "error_count": 0,
+  "warning_count": 4,
+  "expected_open_ports": 1,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "derived",
+  "issues": [
+    {
+      "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 2,
+      "action_id": "A2",
+      "module_id": "M2",
+      "port_ids": [],
+      "target_port_id": "M1.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M2",
+              "M1"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                0.03011359487069143,
+                0.0,
+                -1.2266918581854505
+              ],
+              [
+                0.12038183319507567,
+                0.0,
+                -2.450428508239015
+              ]
+            ],
+            "existing_segment": [
+              [
+                0.0,
+                0.0,
+                100.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "centerline_separation": 1.2270614261456145,
+            "required_separation": 20.0,
+            "clearance": -18.772938573854386
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0003_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 3,
+      "action_id": "A3",
+      "module_id": "M3",
+      "port_ids": [],
+      "target_port_id": "M2.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M3",
+              "M2"
+            ],
+            "segments": [
+              "segment_0",
+              "segment_15"
+            ],
+            "candidate_segment": [
+              [
+                25.0,
+                0.0,
+                -25.0
+              ],
+              [
+                165.0,
+                0.0,
+                -25.0
+              ]
+            ],
+            "existing_segment": [
+              [
+                6.476221866126018,
+                0.0,
+                -16.788973871175457
+              ],
+              [
+                7.322330470336311,
+                0.0,
+                -17.677669529663685
+              ]
+            ],
+            "centerline_separation": 19.134171618254488,
+            "required_separation": 20.0,
+            "clearance": -0.8658283817455121
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0004_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 4,
+      "action_id": "A4",
+      "module_id": "M4",
+      "port_ids": [],
+      "target_port_id": "M3.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M4",
+              "M3"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                166.22669185818546,
+                0.0,
+                -24.96988640512931
+              ],
+              [
+                167.450428508239,
+                0.0,
+                -24.879618166804924
+              ]
+            ],
+            "existing_segment": [
+              [
+                25.0,
+                0.0,
+                -25.0
+              ],
+              [
+                165.0,
+                0.0,
+                -25.0
+              ]
+            ],
+            "centerline_separation": 1.2270614261456252,
+            "required_separation": 20.0,
+            "clearance": -18.772938573854375
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0005_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 5,
+      "action_id": "A5",
+      "module_id": "M5",
+      "port_ids": [],
+      "target_port_id": "M4.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M5",
+              "M4"
+            ],
+            "segments": [
+              "segment_0",
+              "segment_15"
+            ],
+            "candidate_segment": [
+              [
+                190.0,
+                0.0,
+                -1.5308084989341915e-15
+              ],
+              [
+                190.0,
+                0.0,
+                100.0
+              ]
+            ],
+            "existing_segment": [
+              [
+                181.78897387117547,
+                0.0,
+                -18.523778133873982
+              ],
+              [
+                182.6776695296637,
+                0.0,
+                -17.67766952966369
+              ]
+            ],
+            "centerline_separation": 19.134171618254488,
+            "required_separation": 20.0,
+            "clearance": -0.8658283817455121
+          }
+        ]
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [
+    {
+      "view_id": "front",
+      "camera": "front orthographic",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M5.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "right",
+      "camera": "right orthographic",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M5.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "top",
+      "camera": "top orthographic",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M5.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "isometric",
+      "camera": "isometric overview",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M5.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    }
+  ],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Proceed to final FreeCAD MCP execution."
+  ]
+}

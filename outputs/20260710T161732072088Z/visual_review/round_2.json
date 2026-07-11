@@ -1,0 +1,24 @@
+{
+  "state_id": "S6",
+  "payload_digest": "61f04a5c0aaa40720f252b96eedcf504ed2e0e67d27de36619311718a2ff58f5",
+  "evidence_sha256": [
+    "b55f717d10c2354b6028420736218a209b841a2560d72ac55c960740c0d3643e",
+    "a37db64899b8452c03fcc5b7d237d8c8efe58f9a3c7467643ebc24d26f48f694",
+    "3ebd3b79cd5e138c27b228b911fa5f2b97f2ba840d01ab7ef23ba3c30e0c0ada",
+    "54d05be6091520afabd9f625922d37e856f7840f8c0fe45afa89545906433ef3",
+    "bf08952b3a705a16ea263e865450f858fc0affa15307ebb140d01c0f2a78cb92",
+    "568a731edf5d5aceceb39a40135c0b96a1818643eeb868bbd570ccde234a4628"
+  ],
+  "passed": false,
+  "issues": [
+    {
+      "issue_code": "tangent_continuity_violation",
+      "module_ids": [
+        "M3",
+        "M4"
+      ],
+      "observation": "A visible loss of tangent continuity occurs at the junction between the rising spiral (M3) and the spatial S-curve (M4); the path exhibits a sharp directional change (kink) instead of a smooth transition, violating the requirement for tangent continuity between sections. This is most prominent in the front and back views.",
+      "target_step": 4
+    }
+  ]
+}

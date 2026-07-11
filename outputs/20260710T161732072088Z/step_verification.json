@@ -1,0 +1,1006 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_start",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": []
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_start",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": []
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "straight_start"
+      ],
+      "completed_goal_ids": [
+        "straight_start"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 2,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "upward_bend",
+        "depends_on_goal_ids": [
+          "straight_start"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": "+Z",
+        "angle": 90.0,
+        "bend_radius": 30.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": []
+      },
+      "affected_goals": [
+        {
+          "goal_id": "upward_bend",
+          "depends_on_goal_ids": [
+            "straight_start"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+Z",
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": []
+        }
+      ],
+      "state_before_id": "S1",
+      "state_after_id": "S2",
+      "action_id": "A2",
+      "module": "route",
+      "target_port_before": {
+        "id": "M1.out",
+        "position": [
+          40.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M2",
+      "produced_port_ids": [
+        "M2.out"
+      ],
+      "removed_port_ids": [
+        "M1.out"
+      ],
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "connection_edge_ids": [
+        "E2"
+      ],
+      "affected_goal_ids": [
+        "upward_bend"
+      ],
+      "completed_goal_ids": [
+        "upward_bend"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M1.out"
+      ],
+      "open_port_ids_after": [
+        "M2.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M2",
+                "M1"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  41.47203022982254,
+                  0.0,
+                  0.036136313844828294
+                ],
+                [
+                  42.94051420988682,
+                  0.0,
+                  0.1444581998340908
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  40.0,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "centerline_separation": 1.4724737113747404,
+              "required_separation": 20.0,
+              "clearance": -18.52752628862526
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260710T161732072088Z/step_mcp/step_2_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260710T161732072088Z/step_mcp/step_2_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 47.123889803846886,
+        "minimum_curvature_radius": 30.0
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        0.0,
+        -10.0,
+        -13.29568801169576
+      ],
+      "maximum": [
+        83.29568801169577,
+        10.0,
+        29.999999999999996
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 3,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "rising_spiral",
+        "depends_on_goal_ids": [
+          "upward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "spline",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [
+          [
+            24.16462,
+            0.0,
+            24.16462
+          ],
+          [
+            48.32924,
+            72.49386,
+            72.49386
+          ],
+          [
+            0.0,
+            120.8231,
+            120.8231
+          ],
+          [
+            -2.41646,
+            72.49386,
+            181.23465
+          ],
+          [
+            24.16462,
+            48.32924,
+            241.6462
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "waypoint_scale_policy": "uniform_expand_for_safety",
+        "waypoint_safety_scale": 2.416462
+      },
+      "affected_goals": [
+        {
+          "goal_id": "rising_spiral",
+          "depends_on_goal_ids": [
+            "upward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "spline",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [
+            [
+              24.16462,
+              0.0,
+              24.16462
+            ],
+            [
+              48.32924,
+              72.49386,
+              72.49386
+            ],
+            [
+              0.0,
+              120.8231,
+              120.8231
+            ],
+            [
+              -2.41646,
+              72.49386,
+              181.23465
+            ],
+            [
+              24.16462,
+              48.32924,
+              241.6462
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "waypoint_scale_policy": "uniform_expand_for_safety",
+          "waypoint_safety_scale": 2.416462
+        }
+      ],
+      "state_before_id": "S2",
+      "state_after_id": "S3",
+      "action_id": "A3",
+      "module": "route",
+      "target_port_before": {
+        "id": "M2.out",
+        "position": [
+          70.0,
+          0.0,
+          29.999999999999996
+        ],
+        "axis": [
+          6.123233995736766e-17,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M3",
+      "produced_port_ids": [
+        "M3.out"
+      ],
+      "removed_port_ids": [
+        "M2.out"
+      ],
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "connection_edge_ids": [
+        "E3"
+      ],
+      "affected_goal_ids": [
+        "rising_spiral"
+      ],
+      "completed_goal_ids": [
+        "rising_spiral"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M2.out"
+      ],
+      "open_port_ids_after": [
+        "M3.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0003_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M3",
+                "M2"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_18"
+              ],
+              "candidate_segment": [
+                [
+                  70.0,
+                  0.0,
+                  29.999999999999996
+                ],
+                [
+                  94.16462,
+                  0.0,
+                  54.16462
+                ]
+              ],
+              "existing_segment": [
+                [
+                  63.19031360088211,
+                  0.0,
+                  10.968201475090634
+                ],
+                [
+                  64.09622594441934,
+                  0.0,
+                  12.129020865226995
+                ]
+              ],
+              "centerline_separation": 18.82090442393349,
+              "required_separation": 20.0,
+              "clearance": -1.1790955760665085
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/step_mcp/step_3_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/step_mcp/step_3_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 47.123889803846886,
+        "minimum_curvature_radius": 30.0
+      },
+      "M3": {
+        "centerline_length": 371.46002836372804,
+        "minimum_curvature_radius": 12.750079451502938
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        0.0,
+        -22.943902053593924,
+        -13.29568801169576
+      ],
+      "maximum": [
+        139.44978993607234,
+        131.34523697958912,
+        280.0258593884993
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 4,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "spatial_s_curve",
+        "depends_on_goal_ids": [
+          "rising_spiral"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "spline",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [
+          [
+            11.88083,
+            0.0,
+            11.88083
+          ],
+          [
+            35.64249,
+            -1.18808,
+            23.76166
+          ],
+          [
+            59.40415,
+            1.18808,
+            35.64249
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "waypoint_scale_policy": "uniform_expand_for_safety",
+        "waypoint_safety_scale": 1.188083
+      },
+      "affected_goals": [
+        {
+          "goal_id": "spatial_s_curve",
+          "depends_on_goal_ids": [
+            "rising_spiral"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "spline",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [
+            [
+              11.88083,
+              0.0,
+              11.88083
+            ],
+            [
+              35.64249,
+              -1.18808,
+              23.76166
+            ],
+            [
+              59.40415,
+              1.18808,
+              35.64249
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "waypoint_scale_policy": "uniform_expand_for_safety",
+          "waypoint_safety_scale": 1.188083
+        }
+      ],
+      "state_before_id": "S3",
+      "state_after_id": "S4",
+      "action_id": "A4",
+      "module": "route",
+      "target_port_before": {
+        "id": "M3.out",
+        "position": [
+          94.16462,
+          48.32924,
+          271.64619999999996
+        ],
+        "axis": [
+          0.37818776590934433,
+          -0.3438070857861404,
+          0.8595177144653511
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M4",
+      "produced_port_ids": [
+        "M4.out"
+      ],
+      "removed_port_ids": [
+        "M3.out"
+      ],
+      "consumed_port_ids": [
+        "M3.out"
+      ],
+      "connection_edge_ids": [
+        "E4"
+      ],
+      "affected_goal_ids": [
+        "spatial_s_curve"
+      ],
+      "completed_goal_ids": [
+        "spatial_s_curve"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M3.out"
+      ],
+      "open_port_ids_after": [
+        "M4.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0004_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 4,
+        "action_id": "A4",
+        "module_id": "M4",
+        "port_ids": [],
+        "target_port_id": "M3.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M4",
+                "M3"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_4"
+              ],
+              "candidate_segment": [
+                [
+                  106.04545,
+                  48.32924,
+                  283.52702999999997
+                ],
+                [
+                  129.80711,
+                  47.14116,
+                  295.40785999999997
+                ]
+              ],
+              "existing_segment": [
+                [
+                  67.58354,
+                  72.49386,
+                  211.23465
+                ],
+                [
+                  94.16462,
+                  48.32924,
+                  271.64619999999996
+                ]
+              ],
+              "centerline_separation": 16.802030918249145,
+              "required_separation": 20.0,
+              "clearance": -3.1979690817508555
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Accepted suffix replay; final FreeCAD validation remains authoritative.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 5,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "outward_bend",
+        "depends_on_goal_ids": [
+          "spatial_s_curve"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "spline",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [
+          [
+            10.0,
+            0.0,
+            5.0
+          ],
+          [
+            40.0,
+            0.0,
+            15.0
+          ]
+        ],
+        "waypoint_frame": "relative_to_target",
+        "waypoint_scale_policy": "uniform_expand_for_safety",
+        "terminal_axis": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "affected_goals": [
+        {
+          "goal_id": "outward_bend",
+          "depends_on_goal_ids": [
+            "spatial_s_curve"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "spline",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [
+            [
+              10.0,
+              0.0,
+              5.0
+            ],
+            [
+              40.0,
+              0.0,
+              15.0
+            ]
+          ],
+          "waypoint_frame": "relative_to_target",
+          "waypoint_scale_policy": "uniform_expand_for_safety",
+          "terminal_axis": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "state_before_id": "S4",
+      "state_after_id": "S5",
+      "action_id": "A5",
+      "module": "route",
+      "target_port_before": {
+        "id": "M4.out",
+        "position": [
+          153.56877,
+          49.51732,
+          307.28869
+        ],
+        "axis": [
+          0.8908708242280322,
+          0.08908685747113969,
+          0.44543541211401627
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M5",
+      "produced_port_ids": [
+        "M5.out"
+      ],
+      "removed_port_ids": [
+        "M4.out"
+      ],
+      "consumed_port_ids": [
+        "M4.out"
+      ],
+      "connection_edge_ids": [
+        "E5"
+      ],
+      "affected_goal_ids": [
+        "outward_bend"
+      ],
+      "completed_goal_ids": [
+        "outward_bend"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M4.out"
+      ],
+      "open_port_ids_after": [
+        "M5.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0005_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 5,
+        "action_id": "A5",
+        "module_id": "M5",
+        "port_ids": [],
+        "target_port_id": "M4.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M5",
+                "M4"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_2"
+              ],
+              "candidate_segment": [
+                [
+                  163.56877,
+                  49.51732,
+                  312.28869
+                ],
+                [
+                  193.56877,
+                  49.51732,
+                  322.28869
+                ]
+              ],
+              "existing_segment": [
+                [
+                  129.80711,
+                  47.14116,
+                  295.40785999999997
+                ],
+                [
+                  153.56877,
+                  49.51732,
+                  307.28869
+                ]
+              ],
+              "centerline_separation": 11.180339887498949,
+              "required_separation": 20.0,
+              "clearance": -8.819660112501051
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Accepted suffix replay; final FreeCAD validation remains authoritative.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 6,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "tapered_outlet",
+        "depends_on_goal_ids": [
+          "outward_bend"
+        ],
+        "allow_parallel": false,
+        "type": "diameter_change",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "diameter_out": 10.0,
+        "transition_length": 30.0,
+        "required_waypoints": []
+      },
+      "affected_goals": [
+        {
+          "goal_id": "tapered_outlet",
+          "depends_on_goal_ids": [
+            "outward_bend"
+          ],
+          "allow_parallel": false,
+          "type": "diameter_change",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "diameter_out": 10.0,
+          "transition_length": 30.0,
+          "required_waypoints": []
+        }
+      ],
+      "state_before_id": "S5",
+      "state_after_id": "S6",
+      "action_id": "A6",
+      "module": "transition",
+      "target_port_before": {
+        "id": "M5.out",
+        "position": [
+          193.56877,
+          49.51732,
+          322.28869
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M6",
+      "produced_port_ids": [
+        "M6.out"
+      ],
+      "removed_port_ids": [
+        "M5.out"
+      ],
+      "consumed_port_ids": [
+        "M5.out"
+      ],
+      "connection_edge_ids": [
+        "E6"
+      ],
+      "affected_goal_ids": [
+        "tapered_outlet"
+      ],
+      "completed_goal_ids": [
+        "tapered_outlet"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M5.out"
+      ],
+      "open_port_ids_after": [
+        "M6.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/mcp_result.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/freecad_validation.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 47.123889803846886,
+        "minimum_curvature_radius": 30.0
+      },
+      "M3": {
+        "centerline_length": 371.46002836372804,
+        "minimum_curvature_radius": 12.750079451502938
+      },
+      "M4": {
+        "centerline_length": 70.59352139028965,
+        "minimum_curvature_radius": 12.750005011724038
+      },
+      "M5": {
+        "centerline_length": 43.06648130419769,
+        "minimum_curvature_radius": 24.029634211894784
+      },
+      "M6": {
+        "centerline_length": 30.0
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        0.0,
+        -22.943902053593924,
+        -13.29568801169576
+      ],
+      "maximum": [
+        223.56877000044216,
+        131.34523697958912,
+        349.382052328623
+      ]
+    }
+  }
+]

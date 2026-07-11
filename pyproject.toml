@@ -1,0 +1,24 @@
+[project]
+name = "cadgen02"
+version = "0.1.0"
+description = "Primitive pipe module based CAD generation with Gemini and FreeCAD MCP."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "google-genai>=2.3.0,<3",
+    "jsonschema>=4.20.0,<5",
+    "mcp>=1.28.0,<2",
+    "pydantic>=2.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+cadgen = "cadgen.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

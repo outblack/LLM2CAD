@@ -1,0 +1,4994 @@
+{
+  "phase": "COMMITTED",
+  "run_id": "20260711T023304541691Z",
+  "intent": {
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "target_behavior": [
+      {
+        "goal_id": "inlet_route",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": "+X",
+        "path_kind": null,
+        "length": 60.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      },
+      {
+        "goal_id": "first_junction",
+        "depends_on_goal_ids": [
+          "inlet_route"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [
+          {
+            "axis": [
+              1.0,
+              1.0,
+              0.0
+            ],
+            "length": 55.0,
+            "outer_diameter": null,
+            "wall_thickness": null
+          }
+        ],
+        "include_primary_outlet": true,
+        "junction_style": null,
+        "blend_radius": 5.0,
+        "inner_blend_radius": 3.0,
+        "max_hub_radius": 24.0,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": "Primary outlet continues along +X."
+      },
+      {
+        "goal_id": "second_junction",
+        "depends_on_goal_ids": [
+          "first_junction"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [
+          {
+            "axis": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "length": 70.0,
+            "outer_diameter": null,
+            "wall_thickness": null
+          },
+          {
+            "axis": [
+              1.0,
+              -1.0,
+              1.0
+            ],
+            "length": 70.0,
+            "outer_diameter": null,
+            "wall_thickness": null
+          }
+        ],
+        "include_primary_outlet": false,
+        "junction_style": null,
+        "blend_radius": 6.0,
+        "inner_blend_radius": 4.0,
+        "max_hub_radius": 26.0,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      }
+    ],
+    "start_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "start_axis": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "expected_open_ports": 3,
+    "expected_open_ports_source": "explicit",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Smooth binary Y junctions with specific hub and blend radii.",
+      "The 3 generated open ports plus the START port total 4 physical openings."
+    ],
+    "prompt_sha256": "26d2d6382ea1378e37e27aea617a8f28e40a9a56d15ae3489aa0c8b48c8d986d",
+    "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904"
+  },
+  "previous_state": {
+    "state_id": "S2",
+    "state_version": 2,
+    "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 3,
+    "expected_open_ports_source": "explicit",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Smooth binary Y junctions with specific hub and blend radii.",
+      "The 3 generated open ports plus the START port total 4 physical openings."
+    ],
+    "module_measurements": {
+      "M1": {
+        "centerline_length": 60.0
+      },
+      "M2": {
+        "centerline_length": 95.0
+      }
+    },
+    "placed_modules": [
+      {
+        "id": "M1",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M1",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 60.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "path_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              60.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "out_axis": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M1.in",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M1.out",
+            "position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "START"
+        }
+      },
+      {
+        "id": "M2",
+        "type": "junction",
+        "schema_version": 2,
+        "geometry_id": "solid_M2",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null,
+              "end_position": [
+                98.89087296526012,
+                38.89087296526011,
+                0.0
+              ]
+            },
+            {
+              "role": "primary",
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "length": 40.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null,
+              "end_position": [
+                100.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "max_hub_radius": 24.0,
+          "blend_mode": "fillet",
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "start_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 1,
+          "include_primary_outlet": true,
+          "outlet_vectors": [
+            [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "branch_1_end": [
+            98.89087296526012,
+            38.89087296526011,
+            0.0
+          ],
+          "trunk_end": [
+            100.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M2.in",
+            "position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out_1": {
+            "id": "M2.out_1",
+            "position": [
+              98.89087296526012,
+              38.89087296526011,
+              0.0
+            ],
+            "axis": [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M2.out",
+            "position": [
+              100.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M1.out"
+        }
+      }
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out_1",
+        "position": [
+          98.89087296526012,
+          38.89087296526011,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      {
+        "id": "M2.out",
+        "position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.in": {
+        "id": "M1.in",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.out": {
+        "id": "M1.out",
+        "position": [
+          60.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.in": {
+        "id": "M2.in",
+        "position": [
+          60.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out_1": {
+        "id": "M2.out_1",
+        "position": [
+          98.89087296526012,
+          38.89087296526011,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out": {
+        "id": "M2.out",
+        "position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "module_incidence_edges": [
+      {
+        "module_id": "M1",
+        "port_id": "M1.in"
+      },
+      {
+        "module_id": "M1",
+        "port_id": "M1.out"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.in"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out_1"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out"
+      }
+    ],
+    "open_port_ids": [
+      "M2.out_1",
+      "M2.out"
+    ],
+    "used_ports": [
+      "START",
+      "M1.out"
+    ],
+    "remaining_goals": [
+      {
+        "goal_id": "second_junction",
+        "depends_on_goal_ids": [
+          "first_junction"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "direction": null,
+        "path_kind": null,
+        "length": null,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [
+          {
+            "axis": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "length": 70.0,
+            "outer_diameter": null,
+            "wall_thickness": null
+          },
+          {
+            "axis": [
+              1.0,
+              -1.0,
+              1.0
+            ],
+            "length": 70.0,
+            "outer_diameter": null,
+            "wall_thickness": null
+          }
+        ],
+        "include_primary_outlet": false,
+        "junction_style": null,
+        "blend_radius": 6.0,
+        "inner_blend_radius": 4.0,
+        "max_hub_radius": 26.0,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "notes": null
+      }
+    ],
+    "action_history": [
+      {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 60.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "inlet_route"
+        ],
+        "completed_goal_ids": [
+          "inlet_route"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            {
+              "role": "primary",
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "length": 40.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          ],
+          "max_hub_radius": 24.0,
+          "blend_mode": "fillet",
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "start_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 1,
+          "include_primary_outlet": true,
+          "outlet_vectors": [
+            [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "first_junction"
+        ],
+        "completed_goal_ids": [
+          "first_junction"
+        ],
+        "satisfied_components": []
+      }
+    ]
+  },
+  "state": {
+    "state_id": "S3",
+    "state_version": 3,
+    "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 3,
+    "expected_open_ports_source": "explicit",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [
+      "Smooth binary Y junctions with specific hub and blend radii.",
+      "The 3 generated open ports plus the START port total 4 physical openings."
+    ],
+    "module_measurements": {
+      "M1": {
+        "centerline_length": 60.0
+      },
+      "M2": {
+        "centerline_length": 95.0
+      },
+      "M3": {
+        "centerline_length": 140.0
+      }
+    },
+    "placed_modules": [
+      {
+        "id": "M1",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M1",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 60.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "path_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              60.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "out_axis": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M1.in",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M1.out",
+            "position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "START"
+        }
+      },
+      {
+        "id": "M2",
+        "type": "junction",
+        "schema_version": 2,
+        "geometry_id": "solid_M2",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null,
+              "end_position": [
+                98.89087296526012,
+                38.89087296526011,
+                0.0
+              ]
+            },
+            {
+              "role": "primary",
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "length": 40.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null,
+              "end_position": [
+                100.0,
+                0.0,
+                0.0
+              ]
+            }
+          ],
+          "max_hub_radius": 24.0,
+          "blend_mode": "fillet",
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "start_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 1,
+          "include_primary_outlet": true,
+          "outlet_vectors": [
+            [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ]
+          ],
+          "branch_1_end": [
+            98.89087296526012,
+            38.89087296526011,
+            0.0
+          ],
+          "trunk_end": [
+            100.0,
+            0.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M2.in",
+            "position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out_1": {
+            "id": "M2.out_1",
+            "position": [
+              98.89087296526012,
+              38.89087296526011,
+              0.0
+            ],
+            "axis": [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M2.out",
+            "position": [
+              100.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M1.out"
+        }
+      },
+      {
+        "id": "M3",
+        "type": "junction",
+        "schema_version": 2,
+        "geometry_id": "solid_M3",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                0.5773502691896258,
+                0.5773502691896258,
+                0.5773502691896258
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null,
+              "end_position": [
+                140.4145188432738,
+                40.41451884327381,
+                40.41451884327381
+              ]
+            },
+            {
+              "role": "branch",
+              "axis": [
+                0.5773502691896258,
+                -0.5773502691896258,
+                0.5773502691896258
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null,
+              "end_position": [
+                140.4145188432738,
+                -40.41451884327381,
+                40.41451884327381
+              ]
+            }
+          ],
+          "max_hub_radius": 26.0,
+          "blend_mode": "fillet",
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "start_position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 2,
+          "include_primary_outlet": false,
+          "outlet_vectors": [
+            [
+              0.5773502691896258,
+              0.5773502691896258,
+              0.5773502691896258
+            ],
+            [
+              0.5773502691896258,
+              -0.5773502691896258,
+              0.5773502691896258
+            ]
+          ],
+          "branch_1_end": [
+            140.4145188432738,
+            40.41451884327381,
+            40.41451884327381
+          ],
+          "branch_2_end": [
+            140.4145188432738,
+            -40.41451884327381,
+            40.41451884327381
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M3.in",
+            "position": [
+              100.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -1.0,
+              -0.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out_1": {
+            "id": "M3.out_1",
+            "position": [
+              140.4145188432738,
+              40.41451884327381,
+              40.41451884327381
+            ],
+            "axis": [
+              0.5773502691896258,
+              0.5773502691896258,
+              0.5773502691896258
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out_2": {
+            "id": "M3.out_2",
+            "position": [
+              140.4145188432738,
+              -40.41451884327381,
+              40.41451884327381
+            ],
+            "axis": [
+              0.5773502691896258,
+              -0.5773502691896258,
+              0.5773502691896258
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M2.out"
+        }
+      }
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out_1",
+        "position": [
+          98.89087296526012,
+          38.89087296526011,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      {
+        "id": "M3.out_1",
+        "position": [
+          140.4145188432738,
+          40.41451884327381,
+          40.41451884327381
+        ],
+        "axis": [
+          0.5773502691896258,
+          0.5773502691896258,
+          0.5773502691896258
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      {
+        "id": "M3.out_2",
+        "position": [
+          140.4145188432738,
+          -40.41451884327381,
+          40.41451884327381
+        ],
+        "axis": [
+          0.5773502691896258,
+          -0.5773502691896258,
+          0.5773502691896258
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.in": {
+        "id": "M1.in",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.out": {
+        "id": "M1.out",
+        "position": [
+          60.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.in": {
+        "id": "M2.in",
+        "position": [
+          60.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out_1": {
+        "id": "M2.out_1",
+        "position": [
+          98.89087296526012,
+          38.89087296526011,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out": {
+        "id": "M2.out",
+        "position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M3.in": {
+        "id": "M3.in",
+        "position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M3.out_1": {
+        "id": "M3.out_1",
+        "position": [
+          140.4145188432738,
+          40.41451884327381,
+          40.41451884327381
+        ],
+        "axis": [
+          0.5773502691896258,
+          0.5773502691896258,
+          0.5773502691896258
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M3.out_2": {
+        "id": "M3.out_2",
+        "position": [
+          140.4145188432738,
+          -40.41451884327381,
+          40.41451884327381
+        ],
+        "axis": [
+          0.5773502691896258,
+          -0.5773502691896258,
+          0.5773502691896258
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "module_incidence_edges": [
+      {
+        "module_id": "M1",
+        "port_id": "M1.in"
+      },
+      {
+        "module_id": "M1",
+        "port_id": "M1.out"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.in"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out_1"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out"
+      },
+      {
+        "module_id": "M3",
+        "port_id": "M3.in"
+      },
+      {
+        "module_id": "M3",
+        "port_id": "M3.out_1"
+      },
+      {
+        "module_id": "M3",
+        "port_id": "M3.out_2"
+      }
+    ],
+    "open_port_ids": [
+      "M2.out_1",
+      "M3.out_1",
+      "M3.out_2"
+    ],
+    "used_ports": [
+      "START",
+      "M1.out",
+      "M2.out"
+    ],
+    "remaining_goals": [],
+    "action_history": [
+      {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 60.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "inlet_route"
+        ],
+        "completed_goal_ids": [
+          "inlet_route"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            {
+              "role": "primary",
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "length": 40.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          ],
+          "max_hub_radius": 24.0,
+          "blend_mode": "fillet",
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "start_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 1,
+          "include_primary_outlet": true,
+          "outlet_vectors": [
+            [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "first_junction"
+        ],
+        "completed_goal_ids": [
+          "first_junction"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A3",
+        "action_type": "ADD_MODULE",
+        "target_port": "M2.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          ],
+          "max_hub_radius": 26.0,
+          "blend_mode": "fillet",
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "start_position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 2,
+          "include_primary_outlet": false,
+          "outlet_vectors": [
+            [
+              0.5773502691896258,
+              0.5773502691896258,
+              0.5773502691896258
+            ],
+            [
+              0.5773502691896258,
+              -0.5773502691896258,
+              0.5773502691896258
+            ]
+          ]
+        },
+        "consumed_port_ids": [
+          "M2.out"
+        ],
+        "affected_goal_ids": [
+          "second_junction"
+        ],
+        "completed_goal_ids": [
+          "second_junction"
+        ],
+        "satisfied_components": []
+      }
+    ]
+  },
+  "state_digest": "cdaf0f095c17d0b6f017b1cade2c05c3ddee67c1b3200fe79591eaeaeda5c0ee",
+  "geometry_digest": "5dc6b02c740fa4a7fc63c5804044a88b27487685685c4eff140c7d260cae9c94",
+  "freecad_verified": true,
+  "committed_states": [
+    {
+      "state_id": "S0",
+      "state_version": 0,
+      "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 3,
+      "expected_open_ports_source": "explicit",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Smooth binary Y junctions with specific hub and blend radii.",
+        "The 3 generated open ports plus the START port total 4 physical openings."
+      ],
+      "module_measurements": {},
+      "placed_modules": [],
+      "open_ports": [
+        {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [],
+      "module_incidence_edges": [],
+      "open_port_ids": [
+        "START"
+      ],
+      "used_ports": [],
+      "remaining_goals": [
+        {
+          "goal_id": "inlet_route",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": "+X",
+          "path_kind": null,
+          "length": 60.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        },
+        {
+          "goal_id": "first_junction",
+          "depends_on_goal_ids": [
+            "inlet_route"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            }
+          ],
+          "include_primary_outlet": true,
+          "junction_style": null,
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "max_hub_radius": 24.0,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Primary outlet continues along +X."
+        },
+        {
+          "goal_id": "second_junction",
+          "depends_on_goal_ids": [
+            "first_junction"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            },
+            {
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            }
+          ],
+          "include_primary_outlet": false,
+          "junction_style": null,
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "max_hub_radius": 26.0,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        }
+      ],
+      "action_history": []
+    },
+    {
+      "state_id": "S1",
+      "state_version": 1,
+      "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 3,
+      "expected_open_ports_source": "explicit",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Smooth binary Y junctions with specific hub and blend radii.",
+        "The 3 generated open ports plus the START port total 4 physical openings."
+      ],
+      "module_measurements": {},
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 60.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                60.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "out_axis": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                60.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M1.out",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        }
+      ],
+      "open_port_ids": [
+        "M1.out"
+      ],
+      "used_ports": [
+        "START"
+      ],
+      "remaining_goals": [
+        {
+          "goal_id": "first_junction",
+          "depends_on_goal_ids": [
+            "inlet_route"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            }
+          ],
+          "include_primary_outlet": true,
+          "junction_style": null,
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "max_hub_radius": 24.0,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": "Primary outlet continues along +X."
+        },
+        {
+          "goal_id": "second_junction",
+          "depends_on_goal_ids": [
+            "first_junction"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            },
+            {
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            }
+          ],
+          "include_primary_outlet": false,
+          "junction_style": null,
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "max_hub_radius": 26.0,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        }
+      ],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 60.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "inlet_route"
+          ],
+          "completed_goal_ids": [
+            "inlet_route"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    },
+    {
+      "state_id": "S2",
+      "state_version": 2,
+      "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 3,
+      "expected_open_ports_source": "explicit",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Smooth binary Y junctions with specific hub and blend radii.",
+        "The 3 generated open ports plus the START port total 4 physical openings."
+      ],
+      "module_measurements": {
+        "M1": {
+          "centerline_length": 60.0
+        },
+        "M2": {
+          "centerline_length": 95.0
+        }
+      },
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 60.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                60.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "out_axis": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                60.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        },
+        {
+          "id": "M2",
+          "type": "junction",
+          "schema_version": 2,
+          "geometry_id": "solid_M2",
+          "params": {
+            "section_source": "inherit_target",
+            "outlets": [
+              {
+                "role": "branch",
+                "axis": [
+                  0.7071067811865475,
+                  0.7071067811865475,
+                  0.0
+                ],
+                "length": 55.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null,
+                "end_position": [
+                  98.89087296526012,
+                  38.89087296526011,
+                  0.0
+                ]
+              },
+              {
+                "role": "primary",
+                "axis": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "length": 40.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null,
+                "end_position": [
+                  100.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            ],
+            "max_hub_radius": 24.0,
+            "blend_mode": "fillet",
+            "blend_radius": 5.0,
+            "inner_blend_radius": 3.0,
+            "start_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "branch_count": 1,
+            "include_primary_outlet": true,
+            "outlet_vectors": [
+              [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "branch_1_end": [
+              98.89087296526012,
+              38.89087296526011,
+              0.0
+            ],
+            "trunk_end": [
+              100.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M2.in",
+              "position": [
+                60.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out_1": {
+              "id": "M2.out_1",
+              "position": [
+                98.89087296526012,
+                38.89087296526011,
+                0.0
+              ],
+              "axis": [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M2.out",
+              "position": [
+                100.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "M1.out"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M2.out_1",
+          "position": [
+            98.89087296526012,
+            38.89087296526011,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.7071067811865475,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "id": "M2.out",
+          "position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.in": {
+          "id": "M2.in",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.out_1": {
+          "id": "M2.out_1",
+          "position": [
+            98.89087296526012,
+            38.89087296526011,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.7071067811865475,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.out": {
+          "id": "M2.out",
+          "position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        },
+        {
+          "edge_id": "E2",
+          "port_a_id": "M1.out",
+          "port_b_id": "M2.in",
+          "action_id": "A2",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.in"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.out_1"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.out"
+        }
+      ],
+      "open_port_ids": [
+        "M2.out_1",
+        "M2.out"
+      ],
+      "used_ports": [
+        "START",
+        "M1.out"
+      ],
+      "remaining_goals": [
+        {
+          "goal_id": "second_junction",
+          "depends_on_goal_ids": [
+            "first_junction"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "direction": null,
+          "path_kind": null,
+          "length": null,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            },
+            {
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": null,
+              "wall_thickness": null
+            }
+          ],
+          "include_primary_outlet": false,
+          "junction_style": null,
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "max_hub_radius": 26.0,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "notes": null
+        }
+      ],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 60.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "inlet_route"
+          ],
+          "completed_goal_ids": [
+            "inlet_route"
+          ],
+          "satisfied_components": []
+        },
+        {
+          "action_id": "A2",
+          "action_type": "ADD_MODULE",
+          "target_port": "M1.out",
+          "module": "junction",
+          "params": {
+            "section_source": "inherit_target",
+            "outlets": [
+              {
+                "role": "branch",
+                "axis": [
+                  1.0,
+                  1.0,
+                  0.0
+                ],
+                "length": 55.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null
+              },
+              {
+                "role": "primary",
+                "axis": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "length": 40.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null
+              }
+            ],
+            "max_hub_radius": 24.0,
+            "blend_mode": "fillet",
+            "blend_radius": 5.0,
+            "inner_blend_radius": 3.0,
+            "start_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "branch_count": 1,
+            "include_primary_outlet": true,
+            "outlet_vectors": [
+              [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "consumed_port_ids": [
+            "M1.out"
+          ],
+          "affected_goal_ids": [
+            "first_junction"
+          ],
+          "completed_goal_ids": [
+            "first_junction"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    },
+    {
+      "state_id": "S3",
+      "state_version": 3,
+      "contract_digest": "d47cba691e012ed67256c748d7d5036c0393072088985a40c0e3fc4dcd215904",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 3,
+      "expected_open_ports_source": "explicit",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [
+        "Smooth binary Y junctions with specific hub and blend radii.",
+        "The 3 generated open ports plus the START port total 4 physical openings."
+      ],
+      "module_measurements": {
+        "M1": {
+          "centerline_length": 60.0
+        },
+        "M2": {
+          "centerline_length": 95.0
+        },
+        "M3": {
+          "centerline_length": 140.0
+        }
+      },
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 60.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                60.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "out_axis": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                60.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        },
+        {
+          "id": "M2",
+          "type": "junction",
+          "schema_version": 2,
+          "geometry_id": "solid_M2",
+          "params": {
+            "section_source": "inherit_target",
+            "outlets": [
+              {
+                "role": "branch",
+                "axis": [
+                  0.7071067811865475,
+                  0.7071067811865475,
+                  0.0
+                ],
+                "length": 55.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null,
+                "end_position": [
+                  98.89087296526012,
+                  38.89087296526011,
+                  0.0
+                ]
+              },
+              {
+                "role": "primary",
+                "axis": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "length": 40.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null,
+                "end_position": [
+                  100.0,
+                  0.0,
+                  0.0
+                ]
+              }
+            ],
+            "max_hub_radius": 24.0,
+            "blend_mode": "fillet",
+            "blend_radius": 5.0,
+            "inner_blend_radius": 3.0,
+            "start_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "branch_count": 1,
+            "include_primary_outlet": true,
+            "outlet_vectors": [
+              [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "branch_1_end": [
+              98.89087296526012,
+              38.89087296526011,
+              0.0
+            ],
+            "trunk_end": [
+              100.0,
+              0.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M2.in",
+              "position": [
+                60.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out_1": {
+              "id": "M2.out_1",
+              "position": [
+                98.89087296526012,
+                38.89087296526011,
+                0.0
+              ],
+              "axis": [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M2.out",
+              "position": [
+                100.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "M1.out"
+          }
+        },
+        {
+          "id": "M3",
+          "type": "junction",
+          "schema_version": 2,
+          "geometry_id": "solid_M3",
+          "params": {
+            "section_source": "inherit_target",
+            "outlets": [
+              {
+                "role": "branch",
+                "axis": [
+                  0.5773502691896258,
+                  0.5773502691896258,
+                  0.5773502691896258
+                ],
+                "length": 70.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null,
+                "end_position": [
+                  140.4145188432738,
+                  40.41451884327381,
+                  40.41451884327381
+                ]
+              },
+              {
+                "role": "branch",
+                "axis": [
+                  0.5773502691896258,
+                  -0.5773502691896258,
+                  0.5773502691896258
+                ],
+                "length": 70.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null,
+                "end_position": [
+                  140.4145188432738,
+                  -40.41451884327381,
+                  40.41451884327381
+                ]
+              }
+            ],
+            "max_hub_radius": 26.0,
+            "blend_mode": "fillet",
+            "blend_radius": 6.0,
+            "inner_blend_radius": 4.0,
+            "start_position": [
+              100.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "branch_count": 2,
+            "include_primary_outlet": false,
+            "outlet_vectors": [
+              [
+                0.5773502691896258,
+                0.5773502691896258,
+                0.5773502691896258
+              ],
+              [
+                0.5773502691896258,
+                -0.5773502691896258,
+                0.5773502691896258
+              ]
+            ],
+            "branch_1_end": [
+              140.4145188432738,
+              40.41451884327381,
+              40.41451884327381
+            ],
+            "branch_2_end": [
+              140.4145188432738,
+              -40.41451884327381,
+              40.41451884327381
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M3.in",
+              "position": [
+                100.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -1.0,
+                -0.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out_1": {
+              "id": "M3.out_1",
+              "position": [
+                140.4145188432738,
+                40.41451884327381,
+                40.41451884327381
+              ],
+              "axis": [
+                0.5773502691896258,
+                0.5773502691896258,
+                0.5773502691896258
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out_2": {
+              "id": "M3.out_2",
+              "position": [
+                140.4145188432738,
+                -40.41451884327381,
+                40.41451884327381
+              ],
+              "axis": [
+                0.5773502691896258,
+                -0.5773502691896258,
+                0.5773502691896258
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "M2.out"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M2.out_1",
+          "position": [
+            98.89087296526012,
+            38.89087296526011,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.7071067811865475,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "id": "M3.out_1",
+          "position": [
+            140.4145188432738,
+            40.41451884327381,
+            40.41451884327381
+          ],
+          "axis": [
+            0.5773502691896258,
+            0.5773502691896258,
+            0.5773502691896258
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "id": "M3.out_2",
+          "position": [
+            140.4145188432738,
+            -40.41451884327381,
+            40.41451884327381
+          ],
+          "axis": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            0.5773502691896258
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.in": {
+          "id": "M2.in",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.out_1": {
+          "id": "M2.out_1",
+          "position": [
+            98.89087296526012,
+            38.89087296526011,
+            0.0
+          ],
+          "axis": [
+            0.7071067811865475,
+            0.7071067811865475,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.out": {
+          "id": "M2.out",
+          "position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M3.in": {
+          "id": "M3.in",
+          "position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M3.out_1": {
+          "id": "M3.out_1",
+          "position": [
+            140.4145188432738,
+            40.41451884327381,
+            40.41451884327381
+          ],
+          "axis": [
+            0.5773502691896258,
+            0.5773502691896258,
+            0.5773502691896258
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M3.out_2": {
+          "id": "M3.out_2",
+          "position": [
+            140.4145188432738,
+            -40.41451884327381,
+            40.41451884327381
+          ],
+          "axis": [
+            0.5773502691896258,
+            -0.5773502691896258,
+            0.5773502691896258
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        },
+        {
+          "edge_id": "E2",
+          "port_a_id": "M1.out",
+          "port_b_id": "M2.in",
+          "action_id": "A2",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        },
+        {
+          "edge_id": "E3",
+          "port_a_id": "M2.out",
+          "port_b_id": "M3.in",
+          "action_id": "A3",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.in"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.out_1"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.out"
+        },
+        {
+          "module_id": "M3",
+          "port_id": "M3.in"
+        },
+        {
+          "module_id": "M3",
+          "port_id": "M3.out_1"
+        },
+        {
+          "module_id": "M3",
+          "port_id": "M3.out_2"
+        }
+      ],
+      "open_port_ids": [
+        "M2.out_1",
+        "M3.out_1",
+        "M3.out_2"
+      ],
+      "used_ports": [
+        "START",
+        "M1.out",
+        "M2.out"
+      ],
+      "remaining_goals": [],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "line",
+            "length": 60.0,
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "inlet_route"
+          ],
+          "completed_goal_ids": [
+            "inlet_route"
+          ],
+          "satisfied_components": []
+        },
+        {
+          "action_id": "A2",
+          "action_type": "ADD_MODULE",
+          "target_port": "M1.out",
+          "module": "junction",
+          "params": {
+            "section_source": "inherit_target",
+            "outlets": [
+              {
+                "role": "branch",
+                "axis": [
+                  1.0,
+                  1.0,
+                  0.0
+                ],
+                "length": 55.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null
+              },
+              {
+                "role": "primary",
+                "axis": [
+                  1.0,
+                  0.0,
+                  0.0
+                ],
+                "length": 40.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null
+              }
+            ],
+            "max_hub_radius": 24.0,
+            "blend_mode": "fillet",
+            "blend_radius": 5.0,
+            "inner_blend_radius": 3.0,
+            "start_position": [
+              60.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "branch_count": 1,
+            "include_primary_outlet": true,
+            "outlet_vectors": [
+              [
+                0.7071067811865475,
+                0.7071067811865475,
+                0.0
+              ],
+              [
+                1.0,
+                0.0,
+                0.0
+              ]
+            ]
+          },
+          "consumed_port_ids": [
+            "M1.out"
+          ],
+          "affected_goal_ids": [
+            "first_junction"
+          ],
+          "completed_goal_ids": [
+            "first_junction"
+          ],
+          "satisfied_components": []
+        },
+        {
+          "action_id": "A3",
+          "action_type": "ADD_MODULE",
+          "target_port": "M2.out",
+          "module": "junction",
+          "params": {
+            "section_source": "inherit_target",
+            "outlets": [
+              {
+                "role": "branch",
+                "axis": [
+                  1.0,
+                  1.0,
+                  1.0
+                ],
+                "length": 70.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null
+              },
+              {
+                "role": "branch",
+                "axis": [
+                  1.0,
+                  -1.0,
+                  1.0
+                ],
+                "length": 70.0,
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "connector_type": "plain",
+                "connector_gender": "neutral",
+                "connector_standard": null
+              }
+            ],
+            "max_hub_radius": 26.0,
+            "blend_mode": "fillet",
+            "blend_radius": 6.0,
+            "inner_blend_radius": 4.0,
+            "start_position": [
+              100.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "branch_count": 2,
+            "include_primary_outlet": false,
+            "outlet_vectors": [
+              [
+                0.5773502691896258,
+                0.5773502691896258,
+                0.5773502691896258
+              ],
+              [
+                0.5773502691896258,
+                -0.5773502691896258,
+                0.5773502691896258
+              ]
+            ]
+          },
+          "consumed_port_ids": [
+            "M2.out"
+          ],
+          "affected_goal_ids": [
+            "second_junction"
+          ],
+          "completed_goal_ids": [
+            "second_junction"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 60.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "inlet_route"
+      ],
+      "completed_goal_ids": [
+        "inlet_route"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "junction",
+      "params": {
+        "section_source": "inherit_target",
+        "outlets": [
+          {
+            "role": "branch",
+            "axis": [
+              1.0,
+              1.0,
+              0.0
+            ],
+            "length": 55.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          {
+            "role": "primary",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "length": 40.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        ],
+        "max_hub_radius": 24.0,
+        "blend_mode": "fillet",
+        "blend_radius": 5.0,
+        "inner_blend_radius": 3.0,
+        "start_position": [
+          60.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "branch_count": 1,
+        "include_primary_outlet": true,
+        "outlet_vectors": [
+          [
+            0.7071067811865475,
+            0.7071067811865475,
+            0.0
+          ],
+          [
+            1.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "first_junction"
+      ],
+      "completed_goal_ids": [
+        "first_junction"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A3",
+      "action_type": "ADD_MODULE",
+      "target_port": "M2.out",
+      "module": "junction",
+      "params": {
+        "section_source": "inherit_target",
+        "outlets": [
+          {
+            "role": "branch",
+            "axis": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "length": 70.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          {
+            "role": "branch",
+            "axis": [
+              1.0,
+              -1.0,
+              1.0
+            ],
+            "length": 70.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        ],
+        "max_hub_radius": 26.0,
+        "blend_mode": "fillet",
+        "blend_radius": 6.0,
+        "inner_blend_radius": 4.0,
+        "start_position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "branch_count": 2,
+        "include_primary_outlet": false,
+        "outlet_vectors": [
+          [
+            0.5773502691896258,
+            0.5773502691896258,
+            0.5773502691896258
+          ],
+          [
+            0.5773502691896258,
+            -0.5773502691896258,
+            0.5773502691896258
+          ]
+        ]
+      },
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "affected_goal_ids": [
+        "second_junction"
+      ],
+      "completed_goal_ids": [
+        "second_junction"
+      ],
+      "satisfied_components": []
+    }
+  ],
+  "step_verifications": [
+    {
+      "transition": {
+        "step_index": 1,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "inlet_route",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "route",
+          "direction": "+X",
+          "length": 60.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": []
+        },
+        "affected_goals": [
+          {
+            "goal_id": "inlet_route",
+            "depends_on_goal_ids": [],
+            "allow_parallel": false,
+            "type": "route",
+            "direction": "+X",
+            "length": 60.0,
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [],
+            "required_waypoints": []
+          }
+        ],
+        "state_before_id": "S0",
+        "state_after_id": "S1",
+        "action_id": "A1",
+        "module": "route",
+        "target_port_before": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M1",
+        "produced_port_ids": [
+          "M1.out"
+        ],
+        "removed_port_ids": [
+          "START"
+        ],
+        "consumed_port_ids": [
+          "START"
+        ],
+        "connection_edge_ids": [
+          "E1"
+        ],
+        "affected_goal_ids": [
+          "inlet_route"
+        ],
+        "completed_goal_ids": [
+          "inlet_route"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "START"
+        ],
+        "open_port_ids_after": [
+          "M1.out"
+        ]
+      },
+      "status": "passed",
+      "issues": [],
+      "mcp_status": "skipped",
+      "mcp_required": false,
+      "mcp_result_path": null,
+      "mcp_error": null,
+      "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+      "freecad_validation_path": null,
+      "mcp_measurements": {},
+      "mcp_assembly_bounds": null
+    },
+    {
+      "transition": {
+        "step_index": 2,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "first_junction",
+          "depends_on_goal_ids": [
+            "inlet_route"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0
+            }
+          ],
+          "include_primary_outlet": true,
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "max_hub_radius": 24.0,
+          "required_waypoints": [],
+          "notes": "Primary outlet continues along +X."
+        },
+        "affected_goals": [
+          {
+            "goal_id": "first_junction",
+            "depends_on_goal_ids": [
+              "inlet_route"
+            ],
+            "allow_parallel": false,
+            "type": "branch",
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [
+              {
+                "axis": [
+                  1.0,
+                  1.0,
+                  0.0
+                ],
+                "length": 55.0
+              }
+            ],
+            "include_primary_outlet": true,
+            "blend_radius": 5.0,
+            "inner_blend_radius": 3.0,
+            "max_hub_radius": 24.0,
+            "required_waypoints": [],
+            "notes": "Primary outlet continues along +X."
+          }
+        ],
+        "state_before_id": "S1",
+        "state_after_id": "S2",
+        "action_id": "A2",
+        "module": "junction",
+        "target_port_before": {
+          "id": "M1.out",
+          "position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M2",
+        "produced_port_ids": [
+          "M2.out_1",
+          "M2.out"
+        ],
+        "removed_port_ids": [
+          "M1.out"
+        ],
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "connection_edge_ids": [
+          "E2"
+        ],
+        "affected_goal_ids": [
+          "first_junction"
+        ],
+        "completed_goal_ids": [
+          "first_junction"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "M1.out"
+        ],
+        "open_port_ids_after": [
+          "M2.out_1",
+          "M2.out"
+        ]
+      },
+      "status": "passed",
+      "issues": [],
+      "mcp_status": "passed",
+      "mcp_required": false,
+      "mcp_result_path": "outputs/e2e/02_branch_tree_v18/20260711T023304541691Z/step_mcp/step_2_attempt_1.json",
+      "mcp_error": null,
+      "skipped_mcp_reason": null,
+      "freecad_validation_path": "outputs/e2e/02_branch_tree_v18/20260711T023304541691Z/step_mcp/step_2_validation_1.json",
+      "mcp_measurements": {
+        "M1": {
+          "centerline_length": 60.0
+        },
+        "M2": {
+          "centerline_length": 95.0
+        }
+      },
+      "mcp_assembly_bounds": {
+        "minimum": [
+          0.0,
+          -15.0,
+          -15.0
+        ],
+        "maximum": [
+          105.96194077712559,
+          45.961940777125584,
+          15.0
+        ]
+      }
+    },
+    {
+      "transition": {
+        "step_index": 3,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "second_junction",
+          "depends_on_goal_ids": [
+            "first_junction"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [
+            {
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0
+            },
+            {
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0
+            }
+          ],
+          "include_primary_outlet": false,
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "max_hub_radius": 26.0,
+          "required_waypoints": []
+        },
+        "affected_goals": [
+          {
+            "goal_id": "second_junction",
+            "depends_on_goal_ids": [
+              "first_junction"
+            ],
+            "allow_parallel": false,
+            "type": "branch",
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [
+              {
+                "axis": [
+                  1.0,
+                  1.0,
+                  1.0
+                ],
+                "length": 70.0
+              },
+              {
+                "axis": [
+                  1.0,
+                  -1.0,
+                  1.0
+                ],
+                "length": 70.0
+              }
+            ],
+            "include_primary_outlet": false,
+            "blend_radius": 6.0,
+            "inner_blend_radius": 4.0,
+            "max_hub_radius": 26.0,
+            "required_waypoints": []
+          }
+        ],
+        "state_before_id": "S2",
+        "state_after_id": "S3",
+        "action_id": "A3",
+        "module": "junction",
+        "target_port_before": {
+          "id": "M2.out",
+          "position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M3",
+        "produced_port_ids": [
+          "M3.out_1",
+          "M3.out_2"
+        ],
+        "removed_port_ids": [
+          "M2.out"
+        ],
+        "consumed_port_ids": [
+          "M2.out"
+        ],
+        "connection_edge_ids": [
+          "E3"
+        ],
+        "affected_goal_ids": [
+          "second_junction"
+        ],
+        "completed_goal_ids": [
+          "second_junction"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "M2.out_1",
+          "M2.out"
+        ],
+        "open_port_ids_after": [
+          "M2.out_1",
+          "M3.out_1",
+          "M3.out_2"
+        ]
+      },
+      "status": "passed",
+      "issues": [],
+      "mcp_status": "passed",
+      "mcp_required": false,
+      "mcp_result_path": "outputs/e2e/02_branch_tree_v18/20260711T023304541691Z/step_mcp/step_3_attempt_1.json",
+      "mcp_error": null,
+      "skipped_mcp_reason": null,
+      "freecad_validation_path": "outputs/e2e/02_branch_tree_v18/20260711T023304541691Z/step_mcp/step_3_validation_1.json",
+      "mcp_measurements": {
+        "M1": {
+          "centerline_length": 60.0
+        },
+        "M2": {
+          "centerline_length": 95.0
+        },
+        "M3": {
+          "centerline_length": 140.0
+        }
+      },
+      "mcp_assembly_bounds": {
+        "minimum": [
+          0.0,
+          -48.57948465255108,
+          -22.0
+        ],
+        "maximum": [
+          148.57948465255106,
+          48.57948465255108,
+          48.57948465255108
+        ]
+      }
+    }
+  ],
+  "attempts": [
+    {
+      "step_index": 1,
+      "attempt_index": 1,
+      "state_id": "S0",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 60.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "inlet_route"
+        ],
+        "completed_goal_ids": [
+          "inlet_route"
+        ],
+        "satisfied_components": [],
+        "rationale": "I will begin the design by satisfying the 'inlet_route' goal. This is a simple linear extension of 60mm along the +X direction from the START port, which establishes the required base for the subsequent binary junction sequence."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "line",
+          "length": 60.0,
+          "direction": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "inlet_route"
+        ],
+        "completed_goal_ids": [
+          "inlet_route"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [],
+      "observations": []
+    },
+    {
+      "step_index": 2,
+      "attempt_index": 1,
+      "state_id": "S1",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "M1.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0
+            },
+            {
+              "role": "primary",
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "length": 40.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0
+            }
+          ],
+          "max_hub_radius": 24.0,
+          "blend_mode": "fillet",
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "first_junction"
+        ],
+        "completed_goal_ids": [
+          "first_junction"
+        ],
+        "satisfied_components": [],
+        "rationale": "I am initiating the first junction goal. The goal requires a primary outlet continuing along the +X axis and one branch outlet along the [1, 1, 0] axis. The target port M1.out provides the inlet at [60, 0, 0] with an axis of [1, 0, 0]. Per the junction requirements, I set role=branch for the required outlet vector and role=primary for the continuation. The dimensions for OD, wall, hub radius, and blend radii are taken directly from the global spec and the goal description."
+      },
+      "resolved": {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                0.0
+              ],
+              "length": 55.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            {
+              "role": "primary",
+              "axis": [
+                1.0,
+                0.0,
+                0.0
+              ],
+              "length": 40.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          ],
+          "max_hub_radius": 24.0,
+          "blend_mode": "fillet",
+          "blend_radius": 5.0,
+          "inner_blend_radius": 3.0,
+          "start_position": [
+            60.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 1,
+          "include_primary_outlet": true,
+          "outlet_vectors": [
+            [
+              0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            [
+              1.0,
+              0.0,
+              0.0
+            ]
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "first_junction"
+        ],
+        "completed_goal_ids": [
+          "first_junction"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [],
+      "observations": []
+    },
+    {
+      "step_index": 3,
+      "attempt_index": 1,
+      "state_id": "S2",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "M2.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0
+            },
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0
+            }
+          ],
+          "max_hub_radius": 26.0,
+          "blend_mode": "fillet",
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "second_junction"
+        ],
+        "completed_goal_ids": [
+          "second_junction"
+        ],
+        "satisfied_components": [],
+        "rationale": "I am completing the 'second_junction' goal by adding a binary junction to the open primary outlet 'M2.out'. The goal specifies two branch outlets (include_primary_outlet: false) with axes [1,1,1] and [1,-1,1], lengths of 70, and specific fillet radii (blend_radius 6, inner_blend_radius 4) and a hub radius of 26. This action satisfies all requirements of the pending branch goal."
+      },
+      "resolved": {
+        "action_id": "A3",
+        "action_type": "ADD_MODULE",
+        "target_port": "M2.out",
+        "module": "junction",
+        "params": {
+          "section_source": "inherit_target",
+          "outlets": [
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            {
+              "role": "branch",
+              "axis": [
+                1.0,
+                -1.0,
+                1.0
+              ],
+              "length": 70.0,
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          ],
+          "max_hub_radius": 26.0,
+          "blend_mode": "fillet",
+          "blend_radius": 6.0,
+          "inner_blend_radius": 4.0,
+          "start_position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "branch_count": 2,
+          "include_primary_outlet": false,
+          "outlet_vectors": [
+            [
+              0.5773502691896258,
+              0.5773502691896258,
+              0.5773502691896258
+            ],
+            [
+              0.5773502691896258,
+              -0.5773502691896258,
+              0.5773502691896258
+            ]
+          ]
+        },
+        "consumed_port_ids": [
+          "M2.out"
+        ],
+        "affected_goal_ids": [
+          "second_junction"
+        ],
+        "completed_goal_ids": [
+          "second_junction"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [],
+      "observations": []
+    }
+  ],
+  "planner_lineage": {
+    "intent": {
+      "interaction_id": "v1_ChdhS3RSYXVDa0pmYU4xZThQb3F6VHVBaxIXYUt0UmF1Q2tKZmFOMWU4UG9xelR1QWs",
+      "turns": 1,
+      "last_input_tokens": 4159
+    }
+  },
+  "planner_schema_profiles": {},
+  "llm_usage": {
+    "calls": 4,
+    "input_tokens": 14352,
+    "cached_tokens": 2803,
+    "output_tokens": 1690,
+    "thought_tokens": 0,
+    "tool_use_tokens": 0,
+    "total_tokens": 16042,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "pending_repair_observations": [],
+  "pending_draft": null,
+  "pending_draft_state_digest": null,
+  "pending_draft_attempt_index": null,
+  "next_attempt_index": 1,
+  "preserved_suffix": null
+}

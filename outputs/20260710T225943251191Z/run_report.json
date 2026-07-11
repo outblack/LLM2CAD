@@ -1,0 +1,159 @@
+{
+  "run_id": "20260710T225943251191Z",
+  "status": "success",
+  "failed_stage": null,
+  "dry_run": false,
+  "freecad_opened": false,
+  "freecad_mcp_used": true,
+  "freecad_mcp_error": null,
+  "verification_status": "passed",
+  "static_error_count": 0,
+  "static_warning_count": 2,
+  "critic_passed": true,
+  "skipped_mcp_reason": null,
+  "top_issues": [],
+  "llm_usage": {
+    "calls": 10,
+    "input_tokens": 63219,
+    "cached_tokens": 0,
+    "output_tokens": 4083,
+    "thought_tokens": 15454,
+    "tool_use_tokens": 0,
+    "total_tokens": 82756,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "repair_attempt_count": 1,
+  "artifacts": {
+    "run_id": "20260710T225943251191Z",
+    "output_dir": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z",
+    "prompt_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/prompt.txt",
+    "intent_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/intent.json",
+    "actions_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/actions.json",
+    "state_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/state.json",
+    "freecad_script_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/freecad_script.py",
+    "report_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/run_report.json",
+    "step_verification_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/step_verification.json",
+    "critic_report_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/critic_report.json",
+    "mcp_result_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/mcp_result.json",
+    "action_attempts_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/action_attempts.json",
+    "checkpoint_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/checkpoint.json",
+    "freecad_validation_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/freecad_validation.json",
+    "freecad_document_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/pipe_v6_9bff0e3806b4.FCStd",
+    "visual_evidence_paths": [
+      "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/views/isometric.png",
+      "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/views/front.png",
+      "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/views/top.png",
+      "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/views/right.png",
+      "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/views/left.png",
+      "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/views/back.png"
+    ]
+  },
+  "artifact_statuses": [
+    {
+      "name": "prompt",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/prompt.txt",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/intent.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "actions",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/actions.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "action_attempts",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/action_attempts.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "state",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/state.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "step_verification",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/step_verification.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "critic_report",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/critic_report.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_script",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/freecad_script.py",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "checkpoint",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/checkpoint.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "run_report",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/run_report.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "mcp_result",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/mcp_result.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_validation",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/freecad_validation.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_document",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T225943251191Z/pipe_v6_9bff0e3806b4.FCStd",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    }
+  ],
+  "summary": "Generated 6 modules with verified FreeCAD evidence."
+}

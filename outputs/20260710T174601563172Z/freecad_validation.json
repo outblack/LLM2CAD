@@ -1,0 +1,542 @@
+{
+  "attempt_id": 1000,
+  "candidate_document": "CadGenCandidate_20260710T174601563172Z_7_1000_d065c12e487e",
+  "candidate_shape_fingerprints": {
+    "PipeAssembly": "88e244e98c2c882d3839f399a6a856211b35780c09e6425c0dd5113f89af6aab",
+    "solid_M1": "106f99d878d0efa8a9ba2e74cfe2f0c6300c4538eba861ccdd296db0746c801b",
+    "solid_M2": "d32659b9d1bf26792f29b430e042044223f995b31882865f41c07f80234770ff",
+    "solid_M3": "7e8c94d9f83276c0329730eb443ab1361d29cebb323727524c20d97f92afdc75",
+    "solid_M4": "4fb29c22261473caa47ba54dcf286deb0eba89d8d15b2d8430acead7ca2171af",
+    "solid_M5": "6657545358a01d6ed5a573d98df7b4d58e7115c6007e5bb03879a1b70342ef6a",
+    "solid_M6": "886bea9d42fec082c80cf5d9c520da18e42a262c9853dc12a6d7fa7c638f27f0",
+    "solid_M7": "ddb84fb39a68eecb4053a5ffe01a1e8a594610869629764cbb06a89d02b6aec7"
+  },
+  "checks": {
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          283.42807,
+          160.66246657981821,
+          584.1869101928106
+        ],
+        "minimum": [
+          0.0,
+          -29.746239484108347,
+          -13.29568801169576
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 121008.4436436676
+    },
+    "assembly_errors": [],
+    "bore_network": {
+      "assembly_intrusion_allowance": 0.002130380030570259,
+      "assembly_intrusion_volume": 0.0,
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          283.42807,
+          157.07284569760455,
+          579.3540521542485
+        ],
+        "minimum": [
+          0.0,
+          -26.166641679314694,
+          -11.130903611110973
+        ]
+      },
+      "intrusion_check_method": "outer_minus_bore_construction_invariant",
+      "intrusion_module_ids": [],
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 213038.00305702587
+    },
+    "centerlines": {
+      "M1": {
+        "curve_length": 50.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M2": {
+        "curvature_method": "dense_piecewise_curve_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+        "curve_length": 47.123889803846886,
+        "endpoint_tangency_passed": true,
+        "endpoint_tangent_dots": null,
+        "minimum_join_tangent_dot": 1.0,
+        "minimum_nonlocal_distance": 30.053122956674432,
+        "minimum_radius": 30.0,
+        "minimum_radius_location": {
+          "edge_parameter": [
+            0,
+            0.030679615757712816
+          ],
+          "position": [
+            50.9202440952991,
+            0.0,
+            0.014117474967211052
+          ],
+          "sample_index": 5
+        },
+        "minimum_radius_nearest_path_point_index": 1,
+        "optimized_handle_factors": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": 20.0001,
+        "sample_count": 257,
+        "self_clearance_closest_pair": {
+          "edge_parameters": [
+            [
+              0,
+              0.11044661672776614
+            ],
+            [
+              0,
+              1.1658253987930869
+            ]
+          ],
+          "intervening_centerline_length": 31.477236388030885,
+          "segment_indices": [
+            18,
+            190
+          ]
+        },
+        "self_clearance_method": "dense_nonlocal_segment_sampling",
+        "self_clearance_passed": true,
+        "tangent_continuity_passed": true,
+        "zero_curvature": false
+      },
+      "M3": {
+        "curvature_method": "dense_piecewise_curve_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curvature_repair_hint": "The curvature peak is near authored path point index 1. Preserve required anchors but spread this direction change over additional, well-separated waypoints before and after it.",
+        "curve_length": 421.64143966009505,
+        "endpoint_tangency_passed": true,
+        "endpoint_tangent_dots": {
+          "final": 1.0000000000000002,
+          "initial": 1.0
+        },
+        "minimum_join_tangent_dot": 1.0,
+        "minimum_nonlocal_distance": 29.986470544086217,
+        "minimum_radius": 20.59878158861231,
+        "minimum_radius_location": {
+          "edge_parameter": [
+            1,
+            0.003125
+          ],
+          "position": [
+            80.04672722003434,
+            0.12328870969912319,
+            77.40426633904787
+          ],
+          "sample_index": 321
+        },
+        "minimum_radius_nearest_path_point_index": 1,
+        "optimized_handle_factors": [
+          0.4,
+          0.55,
+          0.55,
+          0.4,
+          0.4,
+          0.4
+        ],
+        "passed": true,
+        "required_radius": 20.0,
+        "required_self_clearance": 20.0001,
+        "sample_count": 1601,
+        "self_clearance_closest_pair": {
+          "edge_parameters": [
+            [
+              2,
+              0.940625
+            ],
+            [
+              3,
+              0.334375
+            ]
+          ],
+          "intervening_centerline_length": 31.42311741493276,
+          "segment_indices": [
+            941,
+            1067
+          ]
+        },
+        "self_clearance_method": "dense_nonlocal_segment_sampling",
+        "self_clearance_passed": true,
+        "tangent_continuity_passed": true,
+        "zero_curvature": false
+      },
+      "M4": {
+        "curvature_method": "dense_piecewise_curve_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+        "curve_length": 353.4818559312919,
+        "endpoint_tangency_passed": true,
+        "endpoint_tangent_dots": {
+          "final": 1.0000000000000002,
+          "initial": 1.0
+        },
+        "minimum_join_tangent_dot": 1.0,
+        "minimum_nonlocal_distance": 29.252659828082137,
+        "minimum_radius": 20.400003844325322,
+        "minimum_radius_location": {
+          "edge_parameter": [
+            0,
+            0.19921875
+          ],
+          "position": [
+            76.63966392368488,
+            -10.129280176643817,
+            277.4408268039662
+          ],
+          "sample_index": 51
+        },
+        "minimum_radius_nearest_path_point_index": 0,
+        "optimized_handle_factors": [
+          0.5,
+          0.35,
+          0.4,
+          0.4,
+          0.4
+        ],
+        "passed": true,
+        "required_radius": 20.0,
+        "required_self_clearance": 20.0001,
+        "sample_count": 1025,
+        "self_clearance_closest_pair": {
+          "edge_parameters": [
+            [
+              0,
+              0.00390625
+            ],
+            [
+              0,
+              0.44921875
+            ]
+          ],
+          "intervening_centerline_length": 31.454830049550356,
+          "segment_indices": [
+            1,
+            115
+          ]
+        },
+        "self_clearance_method": "dense_nonlocal_segment_sampling",
+        "self_clearance_passed": true,
+        "tangent_continuity_passed": true,
+        "zero_curvature": false
+      },
+      "M5": {
+        "curvature_method": "dense_piecewise_curve_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curvature_repair_hint": "The curvature peak is near the spline inlet. Add one or more smoothing waypoints after the inlet along initial_tangent before turning toward the required anchors; changing only final_tangent cannot repair an inlet-local peak.",
+        "curve_length": 148.8136778195586,
+        "endpoint_tangency_passed": true,
+        "endpoint_tangent_dots": {
+          "final": 1.0,
+          "initial": 1.0000000000000002
+        },
+        "minimum_join_tangent_dot": 1.0000000000000002,
+        "minimum_nonlocal_distance": 29.18149953863613,
+        "minimum_radius": 20.40000639923272,
+        "minimum_radius_location": {
+          "edge_parameter": [
+            0,
+            0.23046875
+          ],
+          "position": [
+            133.1038525062799,
+            111.55813837359885,
+            488.559279987675
+          ],
+          "sample_index": 59
+        },
+        "minimum_radius_nearest_path_point_index": 0,
+        "optimized_handle_factors": [
+          0.5,
+          0.35,
+          0.4
+        ],
+        "passed": true,
+        "required_radius": 20.0,
+        "required_self_clearance": 20.0001,
+        "sample_count": 513,
+        "self_clearance_closest_pair": {
+          "edge_parameters": [
+            [
+              0,
+              0.015625
+            ],
+            [
+              0,
+              0.5546875
+            ]
+          ],
+          "intervening_centerline_length": 31.431315951443157,
+          "segment_indices": [
+            4,
+            142
+          ]
+        },
+        "self_clearance_method": "dense_nonlocal_segment_sampling",
+        "self_clearance_passed": true,
+        "tangent_continuity_passed": true,
+        "zero_curvature": false
+      },
+      "M6": {
+        "curve_length": 40.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M7": {
+        "curve_length": 20.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 1,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            50.0,
+            10.0,
+            10.0
+          ],
+          "minimum": [
+            0.0,
+            -10.0,
+            -10.0
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 5654.866776461629
+      },
+      "M2": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            93.29568801169577,
+            10.0,
+            29.999999999999996
+          ],
+          "minimum": [
+            50.0,
+            -10.0,
+            -13.29568801169576
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 5329.586376588255
+      },
+      "M3": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            129.96535854108402,
+            160.66246657981821,
+            274.31810294337896
+          ],
+          "minimum": [
+            50.25715636504069,
+            -25.08040717367646,
+            29.99999999999999
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 47686.51480062718
+      },
+      "M4": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            221.30954891453922,
+            120.084618623461,
+            492.90305123221
+          ],
+          "minimum": [
+            45.780241797098256,
+            -29.746239484108347,
+            250.1877093224552
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 39977.83385181445
+      },
+      "M5": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            223.42807000000002,
+            131.30965948027185,
+            584.1869101928106
+          ],
+          "minimum": [
+            105.3931195371487,
+            84.1532396734537,
+            459.50436401065116
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 16830.435289252036
+      },
+      "M6": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            263.4280700016069,
+            116.34235904367813,
+            574.0468119071155
+          ],
+          "minimum": [
+            223.42806999731218,
+            90.3644699973467,
+            545.9984281074195
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 3895.574899980643
+      },
+      "M7": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            283.42807,
+            113.38355,
+            567.52262
+          ],
+          "minimum": [
+            263.42807,
+            98.38355,
+            552.52262
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 1633.6281798666919
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          283.42807,
+          160.66246657981821,
+          584.1869101928106
+        ],
+        "minimum": [
+          0.0,
+          -29.746239484108347,
+          -13.29568801169576
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 334046.4469136352
+    },
+    "required_internal_section_module_count": 7,
+    "sampled_internal_section_count": 46,
+    "sampled_internal_sections_by_module": {
+      "M1": 1,
+      "M2": 16,
+      "M3": 7,
+      "M4": 7,
+      "M5": 7,
+      "M6": 7,
+      "M7": 1
+    },
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": []
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v15",
+  "module_ids": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7"
+  ],
+  "passed": true,
+  "payload_digest": "d065c12e487edb5da36700ec415ab0813f520f1814173b9da989826470c002a5",
+  "run_id": "20260710T174601563172Z",
+  "schema_version": 3,
+  "state_id": "S7",
+  "state_version": 7
+}

@@ -1,0 +1,127 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "arc_route",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "circular_arc",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "terminal_position": [
+          40.0,
+          0.0,
+          40.0
+        ],
+        "terminal_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "affected_goals": [
+        {
+          "goal_id": "arc_route",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "circular_arc",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "terminal_position": [
+            40.0,
+            0.0,
+            40.0
+          ],
+          "terminal_axis": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "arc_route"
+      ],
+      "completed_goal_ids": [
+        "arc_route"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260710T125612156582Z/mcp_result.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260710T125612156582Z/freecad_validation.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 62.83185307179588
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -1.3916080627538536e-15,
+        -10.0,
+        -11.95482561403491
+      ],
+      "maximum": [
+        51.95482561403491,
+        10.0,
+        40.000000000000014
+      ]
+    }
+  }
+]

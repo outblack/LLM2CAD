@@ -1,0 +1,355 @@
+[
+  {
+    "step_index": 1,
+    "attempt_index": 1,
+    "state_id": "S0",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 80.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "initial_run"
+      ],
+      "completed_goal_ids": [
+        "initial_run"
+      ],
+      "satisfied_components": [],
+      "rationale": "The first step in the plan is to create the initial run of 80mm in the +X direction starting from the START port. This satisfies the 'initial_run' goal."
+    },
+    "resolved": {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 80.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "initial_run"
+      ],
+      "completed_goal_ids": [
+        "initial_run"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  },
+  {
+    "step_index": 2,
+    "attempt_index": 1,
+    "state_id": "S1",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M1.out",
+      "module": "inline_component",
+      "params": {
+        "section_source": "inherit_target",
+        "component_type": "coupling",
+        "length": 30.0,
+        "body_outer_diameter": 25.0,
+        "body_start_offset": 0.0,
+        "body_length": 30.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "inline_coupling"
+      ],
+      "completed_goal_ids": [
+        "inline_coupling"
+      ],
+      "satisfied_components": [],
+      "rationale": "Following the planning rules, I am placing a 30mm coupling at the current open port M1.out to satisfy the 'inline_coupling' goal. The coupling is modeled as an inline component where the body length matches the total length and starts at the inlet (offset 0), using an outer diameter slightly larger than the pipe's 20mm to represent the sleeve."
+    },
+    "resolved": {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "inline_component",
+      "params": {
+        "section_source": "inherit_target",
+        "component_type": "coupling",
+        "length": 30.0,
+        "body_outer_diameter": 25.0,
+        "body_start_offset": 0.0,
+        "body_length": 30.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "start_position": [
+          80.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "inline_coupling"
+      ],
+      "completed_goal_ids": [
+        "inline_coupling"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  },
+  {
+    "step_index": 3,
+    "attempt_index": 1,
+    "state_id": "S2",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M2.out",
+      "module": "transition",
+      "params": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 40.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "reduction_segment"
+      ],
+      "completed_goal_ids": [
+        "reduction_segment"
+      ],
+      "satisfied_components": [],
+      "rationale": "I am performing the reduction transition from 20.0mm OD to 12.0mm OD over the required 40.0mm length. This satisfies the 'reduction_segment' goal and enables the subsequent 'post_reduction_run' at the new diameter. The offset is zero to maintain a concentric centerline along the X-axis."
+    },
+    "resolved": {
+      "action_id": "A3",
+      "action_type": "ADD_MODULE",
+      "target_port": "M2.out",
+      "module": "transition",
+      "params": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 40.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          110.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 20.0,
+        "wall_thickness_in": 2.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null
+      },
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "affected_goal_ids": [
+        "reduction_segment"
+      ],
+      "completed_goal_ids": [
+        "reduction_segment"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  },
+  {
+    "step_index": 4,
+    "attempt_index": 1,
+    "state_id": "S3",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M3.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 60.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "post_reduction_run"
+      ],
+      "completed_goal_ids": [
+        "post_reduction_run"
+      ],
+      "satisfied_components": [],
+      "rationale": "I am extending the pipe run by 60mm along the +X direction from the M3 outlet to satisfy the post_reduction_run goal. This follows the straight line path dictated by the current port axis."
+    },
+    "resolved": {
+      "action_id": "A4",
+      "action_type": "ADD_MODULE",
+      "target_port": "M3.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 60.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          150.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 1.5
+      },
+      "consumed_port_ids": [
+        "M3.out"
+      ],
+      "affected_goal_ids": [
+        "post_reduction_run"
+      ],
+      "completed_goal_ids": [
+        "post_reduction_run"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  },
+  {
+    "step_index": 5,
+    "attempt_index": 1,
+    "state_id": "S4",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M4.out",
+      "module": "terminate",
+      "params": {
+        "section_source": "inherit_target",
+        "termination_type": "cap",
+        "thickness": 2.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "terminal_cap"
+      ],
+      "completed_goal_ids": [
+        "terminal_cap"
+      ],
+      "satisfied_components": [],
+      "rationale": "The last remaining goal is to seal the end of the reduced-diameter run with a terminal cap. The current open port M4.out is the result of the reduction and the subsequent line route, so I will terminate it using a cap with a standard 2mm thickness."
+    },
+    "resolved": {
+      "action_id": "A5",
+      "action_type": "ADD_MODULE",
+      "target_port": "M4.out",
+      "module": "terminate",
+      "params": {
+        "section_source": "inherit_target",
+        "termination_type": "cap",
+        "thickness": 2.0,
+        "start_position": [
+          210.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 1.5
+      },
+      "consumed_port_ids": [
+        "M4.out"
+      ],
+      "affected_goal_ids": [
+        "terminal_cap"
+      ],
+      "completed_goal_ids": [
+        "terminal_cap"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  }
+]

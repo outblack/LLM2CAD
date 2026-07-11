@@ -1,0 +1,162 @@
+{
+  "run_id": "20260710T112118446602Z",
+  "status": "failed",
+  "failed_stage": "freecad_semantic_validation",
+  "dry_run": false,
+  "freecad_opened": false,
+  "freecad_mcp_used": false,
+  "freecad_mcp_error": "FreeCAD module_errors evidence is not empty",
+  "verification_status": "failed",
+  "static_error_count": 1,
+  "static_warning_count": 0,
+  "critic_passed": false,
+  "skipped_mcp_reason": null,
+  "top_issues": [
+    "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+  ],
+  "llm_usage": {
+    "calls": 4,
+    "input_tokens": 10621,
+    "cached_tokens": 1219,
+    "output_tokens": 1706,
+    "thought_tokens": 0,
+    "tool_use_tokens": 0,
+    "total_tokens": 12327,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "repair_attempt_count": 3,
+  "artifacts": {
+    "run_id": "20260710T112118446602Z",
+    "output_dir": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z",
+    "prompt_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/prompt.txt",
+    "intent_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/intent.json",
+    "actions_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/actions.json",
+    "state_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/state.json",
+    "freecad_script_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/freecad_script.py",
+    "report_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/run_report.json",
+    "step_verification_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/step_verification.json",
+    "critic_report_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/critic_report.json",
+    "mcp_result_path": null,
+    "action_attempts_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/action_attempts.json",
+    "checkpoint_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/checkpoint.json",
+    "freecad_validation_path": null,
+    "freecad_document_path": null,
+    "visual_evidence_paths": []
+  },
+  "artifact_statuses": [
+    {
+      "name": "prompt",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/prompt.txt",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/intent.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "actions",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/actions.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "action_attempts",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/action_attempts.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "state",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/state.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "step_verification",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/step_verification.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "critic_report",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/critic_report.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_script",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/freecad_script.py",
+      "status": "unavailable",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [
+        "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "checkpoint",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/checkpoint.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "run_report",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T112118446602Z/run_report.json",
+      "status": "available",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "mcp_result",
+      "path": null,
+      "status": "unavailable",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [
+        "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "freecad_validation",
+      "path": null,
+      "status": "unavailable",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [
+        "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "freecad_document",
+      "path": null,
+      "status": "unavailable",
+      "producer_stage": "freecad_semantic_validation",
+      "blocking_issue_ids": [
+        "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    }
+  ],
+  "summary": "Step-local LLM repair budget was exhausted."
+}

@@ -1,0 +1,270 @@
+{
+  "global_spec": {
+    "outer_diameter": 24.0,
+    "wall_thickness": 3.5,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "target_behavior": [
+    {
+      "goal_id": "arm_1_route",
+      "depends_on_goal_ids": [],
+      "allow_parallel": false,
+      "type": "route",
+      "direction": null,
+      "path_kind": null,
+      "length": 90.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [
+        [
+          30.0,
+          0.0,
+          0.0
+        ],
+        [
+          60.0,
+          15.0,
+          5.0
+        ],
+        [
+          90.0,
+          30.0,
+          10.0
+        ]
+      ],
+      "waypoint_frame": "relative_to_target",
+      "waypoint_scale_policy": "fixed",
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "minimum_curvature_radius": 35.0,
+      "notes": "First branch terminal: approx 90mm long with asymmetric vertical/lateral offset."
+    },
+    {
+      "goal_id": "junction_start",
+      "depends_on_goal_ids": [
+        "arm_1_route"
+      ],
+      "allow_parallel": false,
+      "type": "branch",
+      "direction": null,
+      "path_kind": null,
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [
+        40.0
+      ],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [
+        [
+          -1.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "required_outlets": [],
+      "include_primary_outlet": true,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": 24.0,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": "Splits into arm_2 (lower-left terminal) and the central passage. Smooth Y-junction."
+    },
+    {
+      "goal_id": "central_straight",
+      "depends_on_goal_ids": [
+        "junction_start"
+      ],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+X",
+      "path_kind": null,
+      "length": 68.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "junction_end",
+      "depends_on_goal_ids": [
+        "central_straight"
+      ],
+      "allow_parallel": false,
+      "type": "branch",
+      "direction": null,
+      "path_kind": null,
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [
+        40.0,
+        40.0
+      ],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [
+        [
+          1.0,
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "required_outlets": [],
+      "include_primary_outlet": false,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": 24.0,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": "Second Y-junction splitting into arms 3 and 4 (upper-right and lower-right terminals)."
+    }
+  ],
+  "start_position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "start_axis": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "expected_open_ports": 3,
+  "expected_open_ports_source": "derived",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [
+    {
+      "constraint_id": "total_width",
+      "type": "max_extent",
+      "axis": "+X",
+      "value": 212.0,
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "constraint_id": "total_height",
+      "type": "max_extent",
+      "axis": "+Z",
+      "value": 110.0,
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "constraint_id": "total_depth",
+      "type": "max_extent",
+      "axis": "+Y",
+      "value": 60.0,
+      "minimum": null,
+      "maximum": null
+    }
+  ],
+  "design_notes": [
+    "Asymmetric four-port manifold",
+    "Continuous internal flow passage",
+    "No spherical nodes or blobs; smooth diagonal Y-junctions",
+    "Matte brushed-metal CAD finish"
+  ],
+  "prompt_sha256": "83f4f05c5835d3d11409595804dccafeb8202c81a323f62e60be0800a66319a7",
+  "contract_digest": "7d22acc086edb9403ff18aa15c1e1c60ca924476fb3d23b87ebcefb0153ab086"
+}

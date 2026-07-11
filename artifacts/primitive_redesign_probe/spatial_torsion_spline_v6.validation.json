@@ -1,0 +1,532 @@
+{
+  "attempt_id": 1,
+  "candidate_document": "CadGenCandidate_spatial_torsion_spline_v6_1_1_c2d4bdfc8369",
+  "candidate_shape_fingerprints": {
+    "PipeAssembly": "54232248d90c7b8cd0116f7d1ab1e0a10212e75c473a460ded6602a2f0078b42",
+    "solid_M1": "54232248d90c7b8cd0116f7d1ab1e0a10212e75c473a460ded6602a2f0078b42"
+  },
+  "checks": {
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [
+        "check_exception: BOP check found the following errors:\n"
+      ],
+      "bounds": {
+        "maximum": [
+          -1.7976931348623157e+308,
+          -1.7976931348623157e+308,
+          -1.7976931348623157e+308
+        ],
+        "minimum": [
+          1.7976931348623157e+308,
+          1.7976931348623157e+308,
+          1.7976931348623157e+308
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": false,
+      "solid_count": 0,
+      "volume": 0.0
+    },
+    "assembly_errors": [],
+    "bore_network": {
+      "assembly_intrusion_allowance": 0.0004863060516481847,
+      "assembly_intrusion_volume": 0.0,
+      "bop_errors": [
+        "check_exception: BOP check found the following errors:\nError in Face: BOPAlgo SelfIntersect\nError in Edge: BOPAlgo GeomAbs_C0\nError in Face: BOPAlgo GeomAbs_C0\n"
+      ],
+      "bounds": {
+        "maximum": [
+          180.0,
+          36.68811310584773,
+          26.228223519611976
+        ],
+        "minimum": [
+          -1.4210854715202004e-14,
+          -22.827876776016193,
+          -25.58637957940866
+        ]
+      },
+      "intrusion_module_ids": [],
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": false,
+      "solid_count": 1,
+      "volume": 48630.605164818466
+    },
+    "centerlines": {
+      "M1": {
+        "curvature_method": "dense_knot_span_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curve_length": 202.42309748340932,
+        "minimum_radius": 0.0025491784840064157,
+        "passed": false,
+        "required_radius": 10.1,
+        "sample_count": 447,
+        "zero_curvature": false
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 1,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [],
+    "modules": {
+      "M1": {
+        "bop_errors": [
+          "check_exception: BOP check found the following errors:\n"
+        ],
+        "bounds": {
+          "maximum": [
+            -1.7976931348623157e+308,
+            -1.7976931348623157e+308,
+            -1.7976931348623157e+308
+          ],
+          "minimum": [
+            1.7976931348623157e+308,
+            1.7976931348623157e+308,
+            1.7976931348623157e+308
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": false,
+        "solid_count": 0,
+        "volume": 0.0
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "bop_errors": [
+        "check_exception: BOP check found the following errors:\nError in Face: BOPAlgo SelfIntersect\nError in Edge: BOPAlgo GeomAbs_C0\nError in Face: BOPAlgo GeomAbs_C0\n"
+      ],
+      "bounds": {
+        "maximum": [
+          180.00000000000006,
+          39.61708944227021,
+          30.269525019457145
+        ],
+        "minimum": [
+          0.0,
+          -28.327903912207308,
+          -29.46438188079001
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": false,
+      "solid_count": 1,
+      "volume": 75999.85597784491
+    },
+    "sampled_internal_section_count": 7,
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": [
+      {
+        "authored_wall_thickness": 2.0,
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "port": "in"
+      },
+      {
+        "authored_wall_thickness": 2.0,
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "port": "out"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_1"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_2"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_3"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_4"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_5"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_6"
+      },
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 0
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 1
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 2
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 3
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 4
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 5
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          },
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 7
+          },
+          {
+            "kind": "blocked_bore",
+            "sample": "center"
+          }
+        ],
+        "module_id": "M1",
+        "section": "spline_sample_7"
+      }
+    ]
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v6",
+  "module_ids": [
+    "M1"
+  ],
+  "passed": false,
+  "payload_digest": "c2d4bdfc83696fcaecc790c8192d1195dc1247a9178dce1220269c7585c9bca3",
+  "run_id": "spatial_torsion_spline_v6",
+  "schema_version": 3,
+  "state_id": "S1",
+  "state_version": 1
+}

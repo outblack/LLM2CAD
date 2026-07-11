@@ -1,0 +1,502 @@
+{
+  "state_id": "S1",
+  "state_version": 1,
+  "contract_digest": "19a0dcbdcb07098ca4e7fe133610b74588511923dd40b006ba21b020bcc4c07e",
+  "modeling_tolerance": 0.0001,
+  "global_spec": {
+    "outer_diameter": 24.0,
+    "wall_thickness": 3.5,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "expected_open_ports": 3,
+  "expected_open_ports_source": "explicit",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [
+    {
+      "constraint_id": "overall_width",
+      "type": "max_extent",
+      "axis": "+X",
+      "value": 212.0,
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "constraint_id": "overall_height",
+      "type": "max_extent",
+      "axis": "+Z",
+      "value": 110.0,
+      "minimum": null,
+      "maximum": null
+    },
+    {
+      "constraint_id": "overall_depth",
+      "type": "max_extent",
+      "axis": "+Y",
+      "value": 60.0,
+      "minimum": null,
+      "maximum": null
+    }
+  ],
+  "design_notes": [
+    "Uniform ID 17 mm maintained via OD 24 and wall 3.5.",
+    "Minimum centerline bend radius of 35 mm applied to the junction transition.",
+    "Junction width 24 mm preserved in max_hub_radius.",
+    "Asymmetric terminal lengths (85, 90, 90, 100 mm) used.",
+    "All branch angles are 45 degrees from the main axis.",
+    "CAD finish: matte brushed-metal."
+  ],
+  "module_measurements": {},
+  "placed_modules": [
+    {
+      "id": "M1",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M1",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 85.0,
+        "direction": [
+          0.7071,
+          0.0,
+          0.7071
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865476,
+          0.0,
+          0.7071067811865476
+        ],
+        "outer_diameter": 24.0,
+        "wall_thickness": 3.5,
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            60.10407640085654,
+            0.0,
+            60.10407640085654
+          ]
+        ],
+        "end_position": [
+          60.10407640085654,
+          0.0,
+          60.10407640085654
+        ],
+        "out_axis": [
+          0.7071067811865476,
+          0.0,
+          0.7071067811865476
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -0.7071067811865476,
+            -0.0,
+            -0.7071067811865476
+          ],
+          "outer_diameter": 24.0,
+          "wall_thickness": 3.5,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M1.out",
+          "position": [
+            60.10407640085654,
+            0.0,
+            60.10407640085654
+          ],
+          "axis": [
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "outer_diameter": 24.0,
+          "wall_thickness": 3.5,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "START"
+      }
+    }
+  ],
+  "open_ports": [
+    {
+      "id": "M1.out",
+      "position": [
+        60.10407640085654,
+        0.0,
+        60.10407640085654
+      ],
+      "axis": [
+        0.7071067811865476,
+        0.0,
+        0.7071067811865476
+      ],
+      "outer_diameter": 24.0,
+      "wall_thickness": 3.5,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    }
+  ],
+  "port_nodes": {
+    "START": {
+      "id": "START",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        0.7071067811865475,
+        0.0,
+        0.7071067811865475
+      ],
+      "outer_diameter": 24.0,
+      "wall_thickness": 3.5,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M1.in": {
+      "id": "M1.in",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -0.7071067811865476,
+        -0.0,
+        -0.7071067811865476
+      ],
+      "outer_diameter": 24.0,
+      "wall_thickness": 3.5,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M1.out": {
+      "id": "M1.out",
+      "position": [
+        60.10407640085654,
+        0.0,
+        60.10407640085654
+      ],
+      "axis": [
+        0.7071067811865476,
+        0.0,
+        0.7071067811865476
+      ],
+      "outer_diameter": 24.0,
+      "wall_thickness": 3.5,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    }
+  },
+  "connection_edges": [
+    {
+      "edge_id": "E1",
+      "port_a_id": "START",
+      "port_b_id": "M1.in",
+      "action_id": "A1",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0000000000000002,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    }
+  ],
+  "module_incidence_edges": [
+    {
+      "module_id": "M1",
+      "port_id": "M1.in"
+    },
+    {
+      "module_id": "M1",
+      "port_id": "M1.out"
+    }
+  ],
+  "open_port_ids": [
+    "M1.out"
+  ],
+  "used_ports": [
+    "START"
+  ],
+  "remaining_goals": [
+    {
+      "goal_id": "left_junction",
+      "depends_on_goal_ids": [
+        "start_arm"
+      ],
+      "allow_parallel": false,
+      "type": "branch",
+      "direction": null,
+      "path_kind": null,
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [
+        {
+          "axis": [
+            -1.0,
+            0.0,
+            -1.0
+          ],
+          "length": 90.0,
+          "outer_diameter": null,
+          "wall_thickness": null
+        }
+      ],
+      "include_primary_outlet": true,
+      "junction_style": "smooth_hub",
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": 24.0,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": "One terminal lower-left (-1,0,-1) at 45 deg from main axis; one continuation to the central passage."
+    },
+    {
+      "goal_id": "central_passage_turn",
+      "depends_on_goal_ids": [
+        "left_junction"
+      ],
+      "allow_parallel": false,
+      "type": "turn",
+      "direction": "+X",
+      "path_kind": null,
+      "length": null,
+      "angle": 45.0,
+      "bend_radius": 35.0,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "central_section",
+      "depends_on_goal_ids": [
+        "central_passage_turn"
+      ],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+X",
+      "path_kind": null,
+      "length": 68.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "right_junction",
+      "depends_on_goal_ids": [
+        "central_section"
+      ],
+      "allow_parallel": false,
+      "type": "branch",
+      "direction": null,
+      "path_kind": null,
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [
+        {
+          "axis": [
+            1.0,
+            0.0,
+            1.0
+          ],
+          "length": 90.0,
+          "outer_diameter": null,
+          "wall_thickness": null
+        },
+        {
+          "axis": [
+            1.0,
+            0.0,
+            -1.0
+          ],
+          "length": 100.0,
+          "outer_diameter": null,
+          "wall_thickness": null
+        }
+      ],
+      "include_primary_outlet": false,
+      "junction_style": "smooth_hub",
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": 24.0,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": "Terminal split into upper-right and lower-right diagonals, both 45 deg from main axis."
+    }
+  ],
+  "action_history": [
+    {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 85.0,
+        "direction": [
+          0.7071,
+          0.0,
+          0.7071
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.7071067811865476,
+          0.0,
+          0.7071067811865476
+        ],
+        "outer_diameter": 24.0,
+        "wall_thickness": 3.5
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "start_arm"
+      ],
+      "completed_goal_ids": [
+        "start_arm"
+      ],
+      "satisfied_components": []
+    }
+  ]
+}

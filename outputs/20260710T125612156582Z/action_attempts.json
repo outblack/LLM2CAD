@@ -1,0 +1,85 @@
+[
+  {
+    "step_index": 1,
+    "attempt_index": 1,
+    "state_id": "S0",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 40.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "terminal_axis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "arc_route"
+      ],
+      "completed_goal_ids": [
+        "arc_route"
+      ],
+      "satisfied_components": [],
+      "rationale": "The user requested a circular arc route on the XZ plane with a radius of 40mm and a sweep of 90 degrees. Starting from [0,0,0] with an axis of [1,0,0], the center of the arc is at [0,0,40]. A sweep of 90 degrees on the XZ plane results in a terminal position of [40,0,40] and a terminal axis of [0,0,1]. The plane normal is set to [0,-1,0] to maintain the right-handed orientation for the 90-degree sweep from the X-axis toward the Z-axis."
+    },
+    "resolved": {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 40.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "terminal_axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "arc_route"
+      ],
+      "completed_goal_ids": [
+        "arc_route"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  }
+]

@@ -1,0 +1,156 @@
+{
+  "run_id": "20260710T122413164017Z",
+  "status": "failed",
+  "failed_stage": "step_mcp",
+  "dry_run": false,
+  "freecad_opened": true,
+  "freecad_mcp_used": true,
+  "freecad_mcp_error": "FreeCAD MCP reported execution failure: Failed to execute code: [Errno 61] Connection refused\nFailed to execute code: [Errno 61] Connection refused",
+  "verification_status": "failed",
+  "static_error_count": 1,
+  "static_warning_count": 0,
+  "critic_passed": false,
+  "skipped_mcp_reason": null,
+  "top_issues": [
+    "STEP_0003_01_REQUIRED_STEP_MCP_FAILED"
+  ],
+  "llm_usage": {
+    "calls": 5,
+    "input_tokens": 12590,
+    "cached_tokens": 1239,
+    "output_tokens": 1809,
+    "thought_tokens": 0,
+    "tool_use_tokens": 0,
+    "total_tokens": 14399,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "repair_attempt_count": 1,
+  "artifacts": {
+    "run_id": "20260710T122413164017Z",
+    "output_dir": "outputs/20260710T122413164017Z",
+    "prompt_path": "outputs/20260710T122413164017Z/prompt.txt",
+    "intent_path": "outputs/20260710T122413164017Z/intent.json",
+    "actions_path": "outputs/20260710T122413164017Z/actions.json",
+    "state_path": "outputs/20260710T122413164017Z/state.json",
+    "freecad_script_path": "outputs/20260710T122413164017Z/freecad_script.py",
+    "report_path": "outputs/20260710T122413164017Z/run_report.json",
+    "step_verification_path": "outputs/20260710T122413164017Z/step_verification.json",
+    "critic_report_path": "outputs/20260710T122413164017Z/critic_report.json",
+    "mcp_result_path": "outputs/20260710T122413164017Z/step_mcp/step_2_attempt_1.json",
+    "action_attempts_path": "outputs/20260710T122413164017Z/action_attempts.json",
+    "checkpoint_path": "outputs/20260710T122413164017Z/checkpoint.json",
+    "freecad_validation_path": "outputs/20260710T122413164017Z/step_mcp/step_2_validation_1.json",
+    "freecad_document_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T122413164017Z/pipe_v2_f7b6dd52e864.FCStd",
+    "visual_evidence_paths": []
+  },
+  "artifact_statuses": [
+    {
+      "name": "prompt",
+      "path": "outputs/20260710T122413164017Z/prompt.txt",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent",
+      "path": "outputs/20260710T122413164017Z/intent.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "actions",
+      "path": "outputs/20260710T122413164017Z/actions.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "action_attempts",
+      "path": "outputs/20260710T122413164017Z/action_attempts.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "state",
+      "path": "outputs/20260710T122413164017Z/state.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "step_verification",
+      "path": "outputs/20260710T122413164017Z/step_verification.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "critic_report",
+      "path": "outputs/20260710T122413164017Z/critic_report.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_script",
+      "path": "outputs/20260710T122413164017Z/freecad_script.py",
+      "status": "unavailable",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [
+        "STEP_0003_01_REQUIRED_STEP_MCP_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "checkpoint",
+      "path": "outputs/20260710T122413164017Z/checkpoint.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "run_report",
+      "path": "outputs/20260710T122413164017Z/run_report.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "mcp_result",
+      "path": "outputs/20260710T122413164017Z/step_mcp/step_2_attempt_1.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_validation",
+      "path": "outputs/20260710T122413164017Z/step_mcp/step_2_validation_1.json",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_document",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T122413164017Z/pipe_v2_f7b6dd52e864.FCStd",
+      "status": "available",
+      "producer_stage": "step_mcp",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    }
+  ],
+  "summary": "Required FreeCAD MCP infrastructure failed; the local LLM repair budget was not exhausted."
+}

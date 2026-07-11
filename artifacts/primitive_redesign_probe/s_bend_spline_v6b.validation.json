@@ -1,0 +1,143 @@
+{
+  "attempt_id": 1,
+  "candidate_document": "CadGenCandidate_s_bend_spline_v6b_1_1_668cc722d214",
+  "candidate_shape_fingerprints": {
+    "PipeAssembly": "21c19880d4224d47b633d4feac3236d69cea32e75cedf6d711fda17d63334d7e",
+    "solid_M1": "805728e1f85762710fdc7d17a757eaf2e8c9c0f932f4339c410d9c686b7d62ee"
+  },
+  "checks": {
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          120.00000000000003,
+          39.56172365010947,
+          15.200899065967784
+        ],
+        "minimum": [
+          -1.4210854715202004e-14,
+          -21.992935368067947,
+          -15.200899065968049
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "solid_count": 1,
+      "volume": 15935.986585065584
+    },
+    "assembly_errors": [],
+    "bore_network": {
+      "assembly_intrusion_allowance": 0.0002833062940103651,
+      "assembly_intrusion_volume": 0.0,
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          120.00000000000003,
+          37.83717408736909,
+          15.200899065967784
+        ],
+        "minimum": [
+          -1.4210854715202004e-14,
+          -21.992935368067947,
+          -15.200899065968049
+        ]
+      },
+      "intrusion_module_ids": [],
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "solid_count": 1,
+      "volume": 28330.629401036505
+    },
+    "centerlines": {
+      "M1": {
+        "curvature_method": "dense_knot_span_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curve_length": 140.9115117902491,
+        "minimum_radius": 17.81846613556539,
+        "passed": true,
+        "required_radius": 10.1,
+        "sample_count": 351,
+        "zero_curvature": false
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 1,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            120.00000000000003,
+            39.56172365010947,
+            9.999997413250334
+          ],
+          "minimum": [
+            -1.4210854715202004e-14,
+            -9.999712142699634,
+            -9.99999741325034
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "solid_count": 1,
+        "volume": 15935.986585065584
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          120.00000000000003,
+          39.56172365010947,
+          12.017000369404174
+        ],
+        "minimum": [
+          -7.105427357601002e-15,
+          -12.017002956153856,
+          -12.017000369404164
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "solid_count": 1,
+      "volume": 44266.65036684324
+    },
+    "sampled_internal_section_count": 7,
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": []
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v6",
+  "module_ids": [
+    "M1"
+  ],
+  "passed": true,
+  "payload_digest": "668cc722d21425a450108c50c4e74b9acf042a9c82584357a1a16f23c5e670d8",
+  "run_id": "s_bend_spline_v6b",
+  "schema_version": 3,
+  "state_id": "S1",
+  "state_version": 1
+}

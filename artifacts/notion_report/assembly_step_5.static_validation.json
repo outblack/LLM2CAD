@@ -1,0 +1,361 @@
+[
+  {
+    "step": 1,
+    "state_before": "S0",
+    "state_after": "S1",
+    "action": {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 80.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "G1"
+      ],
+      "completed_goal_ids": [
+        "G1"
+      ],
+      "satisfied_components": []
+    },
+    "draft_valid": true,
+    "draft_errors": [],
+    "resolved_action_valid": true,
+    "resolved_action_errors": [],
+    "static_step_status": "passed",
+    "static_issue_codes": [],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "open_port_ids": [
+      "M1.out"
+    ]
+  },
+  {
+    "step": 2,
+    "state_before": "S1",
+    "state_after": "S2",
+    "action": {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "inline_component",
+      "params": {
+        "section_source": "inherit_target",
+        "component_type": "coupling",
+        "length": 30.0,
+        "body_outer_diameter": 28.0,
+        "body_start_offset": 0.0,
+        "body_length": 30.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "start_position": [
+          80.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "G2"
+      ],
+      "completed_goal_ids": [
+        "G2"
+      ],
+      "satisfied_components": []
+    },
+    "draft_valid": true,
+    "draft_errors": [],
+    "resolved_action_valid": true,
+    "resolved_action_errors": [],
+    "static_step_status": "passed",
+    "static_issue_codes": [],
+    "connection_edges": [
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "open_port_ids": [
+      "M2.out"
+    ]
+  },
+  {
+    "step": 3,
+    "state_before": "S2",
+    "state_after": "S3",
+    "action": {
+      "action_id": "A3",
+      "action_type": "ADD_MODULE",
+      "target_port": "M2.out",
+      "module": "transition",
+      "params": {
+        "section_source": "inherit_target",
+        "diameter_out": 12.0,
+        "wall_thickness_out": 1.5,
+        "length": 40.0,
+        "offset": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          110.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "diameter_in": 20.0,
+        "wall_thickness_in": 2.0,
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "connector_standard_out": null
+      },
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "affected_goal_ids": [
+        "G3"
+      ],
+      "completed_goal_ids": [
+        "G3"
+      ],
+      "satisfied_components": []
+    },
+    "draft_valid": true,
+    "draft_errors": [],
+    "resolved_action_valid": true,
+    "resolved_action_errors": [],
+    "static_step_status": "passed",
+    "static_issue_codes": [],
+    "connection_edges": [
+      {
+        "edge_id": "E3",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "open_port_ids": [
+      "M3.out"
+    ]
+  },
+  {
+    "step": 4,
+    "state_before": "S3",
+    "state_after": "S4",
+    "action": {
+      "action_id": "A4",
+      "action_type": "ADD_MODULE",
+      "target_port": "M3.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 60.0,
+        "direction": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "start_position": [
+          150.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 1.5
+      },
+      "consumed_port_ids": [
+        "M3.out"
+      ],
+      "affected_goal_ids": [
+        "G4"
+      ],
+      "completed_goal_ids": [
+        "G4"
+      ],
+      "satisfied_components": []
+    },
+    "draft_valid": true,
+    "draft_errors": [],
+    "resolved_action_valid": true,
+    "resolved_action_errors": [],
+    "static_step_status": "passed",
+    "static_issue_codes": [],
+    "connection_edges": [
+      {
+        "edge_id": "E4",
+        "port_a_id": "M3.out",
+        "port_b_id": "M4.in",
+        "action_id": "A4",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "open_port_ids": [
+      "M4.out"
+    ]
+  },
+  {
+    "step": 5,
+    "state_before": "S4",
+    "state_after": "S5",
+    "action": {
+      "action_id": "A5",
+      "action_type": "ADD_MODULE",
+      "target_port": "M4.out",
+      "module": "terminate",
+      "params": {
+        "section_source": "inherit_target",
+        "termination_type": "cap",
+        "thickness": 3.0,
+        "start_position": [
+          210.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 1.5
+      },
+      "consumed_port_ids": [
+        "M4.out"
+      ],
+      "affected_goal_ids": [
+        "G5"
+      ],
+      "completed_goal_ids": [
+        "G5"
+      ],
+      "satisfied_components": []
+    },
+    "draft_valid": true,
+    "draft_errors": [],
+    "resolved_action_valid": true,
+    "resolved_action_errors": [],
+    "static_step_status": "passed",
+    "static_issue_codes": [],
+    "connection_edges": [
+      {
+        "edge_id": "E5",
+        "port_a_id": "M4.out",
+        "port_b_id": "M5.in",
+        "action_id": "A5",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "open_port_ids": []
+  }
+]

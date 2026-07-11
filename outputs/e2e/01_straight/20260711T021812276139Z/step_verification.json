@@ -1,0 +1,111 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_route",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+X",
+        "length": 100.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "notes": "Single straight segment as requested"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_route",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+X",
+          "length": 100.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "notes": "Single straight segment as requested"
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "straight_route"
+      ],
+      "completed_goal_ids": [
+        "straight_route"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/e2e/01_straight/20260711T021812276139Z/mcp_result.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/e2e/01_straight/20260711T021812276139Z/freecad_validation.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 100.0
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        0.0,
+        -10.0,
+        -10.0
+      ],
+      "maximum": [
+        100.0,
+        10.0,
+        10.0
+      ]
+    }
+  }
+]

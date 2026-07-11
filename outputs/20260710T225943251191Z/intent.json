@@ -1,0 +1,418 @@
+{
+  "global_spec": {
+    "outer_diameter": 18.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "target_behavior": [
+    {
+      "goal_id": "inlet_straight",
+      "depends_on_goal_ids": [],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+X",
+      "path_kind": null,
+      "length": 55.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "upward_bend",
+      "depends_on_goal_ids": [
+        "inlet_straight"
+      ],
+      "allow_parallel": false,
+      "type": "turn",
+      "direction": "+Z",
+      "path_kind": null,
+      "length": null,
+      "angle": 90.0,
+      "bend_radius": 45.0,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "rising_coil",
+      "depends_on_goal_ids": [
+        "upward_bend"
+      ],
+      "allow_parallel": false,
+      "type": "route",
+      "direction": null,
+      "path_kind": "spline",
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [
+        [
+          0.0,
+          5.0,
+          20.0
+        ],
+        [
+          0.0,
+          20.0,
+          35.0
+        ],
+        [
+          0.0,
+          40.0,
+          40.0
+        ],
+        [
+          35.0,
+          90.0,
+          45.0
+        ],
+        [
+          70.0,
+          100.0,
+          50.0
+        ],
+        [
+          110.0,
+          80.0,
+          55.0
+        ],
+        [
+          130.0,
+          40.0,
+          60.0
+        ],
+        [
+          110.0,
+          0.0,
+          65.0
+        ],
+        [
+          70.0,
+          -15.0,
+          70.0
+        ],
+        [
+          35.0,
+          0.0,
+          75.0
+        ],
+        [
+          20.0,
+          40.0,
+          80.0
+        ],
+        [
+          35.0,
+          75.0,
+          80.0
+        ],
+        [
+          70.0,
+          90.0,
+          85.0
+        ]
+      ],
+      "waypoint_frame": "relative_to_target",
+      "waypoint_scale_policy": "fixed",
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "s_curve_escape",
+      "depends_on_goal_ids": [
+        "rising_coil"
+      ],
+      "allow_parallel": false,
+      "type": "route",
+      "direction": null,
+      "path_kind": "spline",
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [
+        [
+          35.0,
+          15.0,
+          5.0
+        ],
+        [
+          70.0,
+          50.0,
+          10.0
+        ],
+        [
+          110.0,
+          70.0,
+          20.0
+        ],
+        [
+          150.0,
+          30.0,
+          25.0
+        ],
+        [
+          190.0,
+          -20.0,
+          35.0
+        ]
+      ],
+      "waypoint_frame": "relative_to_target",
+      "waypoint_scale_policy": "fixed",
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "outward_escape",
+      "depends_on_goal_ids": [
+        "s_curve_escape"
+      ],
+      "allow_parallel": false,
+      "type": "route",
+      "direction": null,
+      "path_kind": "spline",
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [
+        [
+          40.0,
+          -50.0,
+          10.0
+        ],
+        [
+          70.0,
+          -70.0,
+          10.0
+        ],
+        [
+          100.0,
+          -60.0,
+          15.0
+        ],
+        [
+          130.0,
+          -30.0,
+          20.0
+        ],
+        [
+          160.0,
+          0.0,
+          25.0
+        ],
+        [
+          200.0,
+          0.0,
+          25.0
+        ]
+      ],
+      "waypoint_frame": "relative_to_target",
+      "waypoint_scale_policy": "fixed",
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "minimum_curvature_radius": null,
+      "notes": null
+    },
+    {
+      "goal_id": "tapered_outlet",
+      "depends_on_goal_ids": [
+        "outward_escape"
+      ],
+      "allow_parallel": false,
+      "type": "diameter_change",
+      "direction": null,
+      "path_kind": null,
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": 12.0,
+      "wall_thickness_out": 1.5,
+      "transition_length": 45.0,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": null
+    }
+  ],
+  "start_position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "start_axis": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "expected_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [],
+  "design_notes": [
+    "Continuous unbranched hollow pipe body.",
+    "Inlet at origin travels in +X.",
+    "Rising coil: ~1.25 turns, rising 85mm, non-uniform profile.",
+    "S-stage: two lateral lobes rising 35mm.",
+    "Escape stage settles to +X horizontal outlet.",
+    "Final transition from 18mm OD/2mm WT to 12mm OD/1.5mm WT."
+  ],
+  "prompt_sha256": "2018c0f34e7816a65bd7c7c699f3ebb3a5611677896067069a9130f9bd0bf198",
+  "contract_digest": "7f497c28c9d526d3c48000d82c589bcde9d9f91b60e7d41e90d0898607a2f1e1"
+}

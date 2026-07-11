@@ -1,0 +1,35 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 1,
+  "warning_count": 0,
+  "expected_open_ports": 3,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "issues": [
+    {
+      "issue_id": "STEP_0001_01_REQUIRED_STEP_MCP_FAILED",
+      "severity": "error",
+      "issue_code": "REQUIRED_STEP_MCP_FAILED",
+      "check_name": "step_mcp",
+      "message": "Required FreeCAD MCP infrastructure failed.",
+      "step_index": 1,
+      "action_id": "A1",
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {
+        "error": "FreeCAD MCP reported execution failure: Failed to execute code: [Errno 61] Connection refused\nFailed to execute code: [Errno 61] Connection refused"
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Fix REQUIRED_STEP_MCP_FAILED: Required FreeCAD MCP infrastructure failed."
+  ]
+}

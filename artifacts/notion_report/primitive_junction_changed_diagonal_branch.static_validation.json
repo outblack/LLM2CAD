@@ -1,0 +1,114 @@
+[
+  {
+    "step": 1,
+    "state_before": "S0",
+    "state_after": "S1",
+    "action": {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "junction",
+      "params": {
+        "section_source": "inherit_target",
+        "outlets": [
+          {
+            "role": "primary",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "length": 65.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          {
+            "role": "branch",
+            "axis": [
+              0.0,
+              0.7071067811865476,
+              0.7071067811865476
+            ],
+            "length": 70.0,
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        ],
+        "blend_mode": "hard",
+        "max_hub_radius": 14.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "branch_count": 1,
+        "include_primary_outlet": true,
+        "outlet_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.7071067811865476,
+            0.7071067811865476
+          ]
+        ]
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "G1"
+      ],
+      "completed_goal_ids": [
+        "G1"
+      ],
+      "satisfied_components": []
+    },
+    "draft_valid": true,
+    "draft_errors": [],
+    "resolved_action_valid": true,
+    "resolved_action_errors": [],
+    "static_step_status": "passed",
+    "static_issue_codes": [],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "open_port_ids": [
+      "M1.out",
+      "M1.out_1"
+    ]
+  }
+]

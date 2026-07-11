@@ -1,0 +1,74 @@
+{
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "millimeters"
+  },
+  "target_behavior": [
+    {
+      "type": "connector",
+      "direction": null,
+      "length": null,
+      "angle": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "diameter_out": null,
+      "end_type": null,
+      "notes": "Start point at the left junction of the manifold"
+    },
+    {
+      "type": "branch",
+      "direction": "-X",
+      "length": null,
+      "angle": null,
+      "branch_count": 2,
+      "branch_angles": [],
+      "diameter_out": null,
+      "end_type": null,
+      "notes": "Asymmetric left-side Y-split: Upper-Left and Lower-Left diagonal branches"
+    },
+    {
+      "type": "move",
+      "direction": null,
+      "length": 80.0,
+      "angle": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "diameter_out": null,
+      "end_type": null,
+      "notes": "Central main passage running from left side toward the right side"
+    },
+    {
+      "type": "branch",
+      "direction": "+X",
+      "length": null,
+      "angle": null,
+      "branch_count": 2,
+      "branch_angles": [],
+      "diameter_out": null,
+      "end_type": null,
+      "notes": "Asymmetric right-side Y-split: Upper-Right and Lower-Right diagonal branches"
+    },
+    {
+      "type": "end",
+      "direction": null,
+      "length": null,
+      "angle": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "diameter_out": null,
+      "end_type": "open",
+      "notes": "All four branch ends are open ports with hollow geometry and visible wall thickness"
+    }
+  ],
+  "expected_open_ports": 4,
+  "design_notes": [
+    "Asymmetric four-port hollow pipe manifold with uniform 20mm outer diameter.",
+    "Smooth Y-shaped blended transitions at all junctions; no bulbous or spherical nodes.",
+    "Central passage is 80mm long connecting the two Y-junctions.",
+    "Left branches extend toward upper-left and lower-left with slight length and angle asymmetry.",
+    "Right branches extend toward upper-right and lower-right with slight length and angle asymmetry.",
+    "Single continuous tubular system with clean brushed metal finish."
+  ]
+}

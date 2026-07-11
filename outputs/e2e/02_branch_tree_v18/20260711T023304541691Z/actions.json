@@ -1,0 +1,198 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 60.0,
+      "direction": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "inlet_route"
+    ],
+    "completed_goal_ids": [
+      "inlet_route"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "junction",
+    "params": {
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "length": 55.0,
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "role": "primary",
+          "axis": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "length": 40.0,
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "max_hub_radius": 24.0,
+      "blend_mode": "fillet",
+      "blend_radius": 5.0,
+      "inner_blend_radius": 3.0,
+      "start_position": [
+        60.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "branch_count": 1,
+      "include_primary_outlet": true,
+      "outlet_vectors": [
+        [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "first_junction"
+    ],
+    "completed_goal_ids": [
+      "first_junction"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "junction",
+    "params": {
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "length": 70.0,
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            -1.0,
+            1.0
+          ],
+          "length": 70.0,
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "max_hub_radius": 26.0,
+      "blend_mode": "fillet",
+      "blend_radius": 6.0,
+      "inner_blend_radius": 4.0,
+      "start_position": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "branch_count": 2,
+      "include_primary_outlet": false,
+      "outlet_vectors": [
+        [
+          0.5773502691896258,
+          0.5773502691896258,
+          0.5773502691896258
+        ],
+        [
+          0.5773502691896258,
+          -0.5773502691896258,
+          0.5773502691896258
+        ]
+      ]
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "second_junction"
+    ],
+    "completed_goal_ids": [
+      "second_junction"
+    ],
+    "satisfied_components": []
+  }
+]

@@ -1,0 +1,37 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 1,
+  "warning_count": 0,
+  "expected_open_ports": 4,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "issues": [
+    {
+      "issue_id": "STEP_0001_01_DRAFT_VALIDATION_FAILED",
+      "severity": "error",
+      "issue_code": "DRAFT_VALIDATION_FAILED",
+      "check_name": "draft_validation",
+      "message": "LLM action violates the authored schema-v2 contract.",
+      "step_index": 1,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": "START",
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {
+        "errors": [
+          "atomic goal left_split (branch) must be completed by the same action that affects it"
+        ]
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Fix DRAFT_VALIDATION_FAILED: LLM action violates the authored schema-v2 contract."
+  ]
+}

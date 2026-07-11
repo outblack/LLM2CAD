@@ -1,0 +1,363 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 2,
+  "warning_count": 4,
+  "expected_open_ports": 1,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "derived",
+  "issues": [
+    {
+      "issue_id": "STEP_0001_01_VISUAL_GEOMETRY_REJECTED_2",
+      "severity": "error",
+      "issue_code": "VISUAL_GEOMETRY_REJECTED_2",
+      "check_name": "visual_validation",
+      "message": "The contract specifies 1 expected open port and the step map indicates that M1.in should be closed (open_now: false), but View 6 clearly shows the inlet port at M1 is open, resulting in an assembly with 2 open ports.",
+      "step_index": 1,
+      "action_id": "A1",
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {
+        "visual_issue_code": "port_count_mismatch",
+        "module_ids": [
+          "M1"
+        ],
+        "target_step": 1,
+        "claimed_target_step": 1
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0002_01_VISUAL_GEOMETRY_REJECTED_1",
+      "severity": "error",
+      "issue_code": "VISUAL_GEOMETRY_REJECTED_1",
+      "check_name": "visual_validation",
+      "message": "A visible kink or sharp transition exists at the junction between the upward bend (M2) and the rising spiral (M3) in the front and back views, violating the design note to maintain smooth tangent continuity between all sections.",
+      "step_index": 2,
+      "action_id": "A2",
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {
+        "visual_issue_code": "tangency_discontinuity",
+        "module_ids": [
+          "M2",
+          "M3"
+        ],
+        "target_step": 2,
+        "claimed_target_step": 3
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 2,
+      "action_id": "A2",
+      "module_id": "M2",
+      "port_ids": [],
+      "target_port_id": "M1.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M2",
+              "M1"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                41.47203022982254,
+                0.0,
+                0.036136313844828294
+              ],
+              [
+                42.94051420988682,
+                0.0,
+                0.1444581998340908
+              ]
+            ],
+            "existing_segment": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                40.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "centerline_separation": 1.4724737113747404,
+            "required_separation": 20.0,
+            "clearance": -18.52752628862526
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0003_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 3,
+      "action_id": "A3",
+      "module_id": "M3",
+      "port_ids": [],
+      "target_port_id": "M2.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M3",
+              "M2"
+            ],
+            "segments": [
+              "segment_0",
+              "segment_18"
+            ],
+            "candidate_segment": [
+              [
+                70.0,
+                0.0,
+                29.999999999999996
+              ],
+              [
+                94.16462,
+                0.0,
+                54.16462
+              ]
+            ],
+            "existing_segment": [
+              [
+                63.19031360088211,
+                0.0,
+                10.968201475090634
+              ],
+              [
+                64.09622594441934,
+                0.0,
+                12.129020865226995
+              ]
+            ],
+            "centerline_separation": 18.82090442393349,
+            "required_separation": 20.0,
+            "clearance": -1.1790955760665085
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0004_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 4,
+      "action_id": "A4",
+      "module_id": "M4",
+      "port_ids": [],
+      "target_port_id": "M3.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M4",
+              "M3"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_4"
+            ],
+            "candidate_segment": [
+              [
+                106.04545,
+                48.32924,
+                283.52702999999997
+              ],
+              [
+                129.80711,
+                47.14116,
+                295.40785999999997
+              ]
+            ],
+            "existing_segment": [
+              [
+                67.58354,
+                72.49386,
+                211.23465
+              ],
+              [
+                94.16462,
+                48.32924,
+                271.64619999999996
+              ]
+            ],
+            "centerline_separation": 16.802030918249145,
+            "required_separation": 20.0,
+            "clearance": -3.1979690817508555
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0005_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 5,
+      "action_id": "A5",
+      "module_id": "M5",
+      "port_ids": [],
+      "target_port_id": "M4.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M5",
+              "M4"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_2"
+            ],
+            "candidate_segment": [
+              [
+                163.56877,
+                49.51732,
+                312.28869
+              ],
+              [
+                193.56877,
+                49.51732,
+                322.28869
+              ]
+            ],
+            "existing_segment": [
+              [
+                129.80711,
+                47.14116,
+                295.40785999999997
+              ],
+              [
+                153.56877,
+                49.51732,
+                307.28869
+              ]
+            ],
+            "centerline_separation": 11.180339887498949,
+            "required_separation": 20.0,
+            "clearance": -8.819660112501051
+          }
+        ]
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [
+    {
+      "view_id": "front",
+      "camera": "front orthographic",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M6.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "available",
+      "evidence_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/views/front.png",
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "right",
+      "camera": "right orthographic",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M6.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "available",
+      "evidence_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/views/right.png",
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "top",
+      "camera": "top orthographic",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M6.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "available",
+      "evidence_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/views/top.png",
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "isometric",
+      "camera": "isometric overview",
+      "target_module_ids": [
+        "M2",
+        "M3",
+        "M4",
+        "M5"
+      ],
+      "target_port_ids": [
+        "M6.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "available",
+      "evidence_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T161732072088Z/views/isometric.png",
+      "unavailable_reason": null
+    }
+  ],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Fix VISUAL_GEOMETRY_REJECTED_2: The contract specifies 1 expected open port and the step map indicates that M1.in should be closed (open_now: false), but View 6 clearly shows the inlet port at M1 is open, resulting in an assembly with 2 open ports.",
+    "Fix VISUAL_GEOMETRY_REJECTED_1: A visible kink or sharp transition exists at the junction between the upward bend (M2) and the rising spiral (M3) in the front and back views, violating the design note to maintain smooth tangent continuity between all sections.",
+    "Proceed to final FreeCAD MCP execution."
+  ]
+}

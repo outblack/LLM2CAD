@@ -1,0 +1,152 @@
+{
+  "run_id": "20260710T090206495018Z",
+  "status": "success",
+  "failed_stage": null,
+  "dry_run": false,
+  "freecad_opened": false,
+  "freecad_mcp_used": true,
+  "freecad_mcp_error": null,
+  "verification_status": "passed",
+  "static_error_count": 0,
+  "static_warning_count": 0,
+  "critic_passed": true,
+  "skipped_mcp_reason": null,
+  "top_issues": [],
+  "llm_usage": {
+    "calls": 6,
+    "input_tokens": 12996,
+    "cached_tokens": 803,
+    "output_tokens": 1648,
+    "thought_tokens": 1355,
+    "tool_use_tokens": 0,
+    "total_tokens": 15999,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "repair_attempt_count": 0,
+  "artifacts": {
+    "run_id": "20260710T090206495018Z",
+    "output_dir": "outputs/20260710T090206495018Z",
+    "prompt_path": "outputs/20260710T090206495018Z/prompt.txt",
+    "intent_path": "outputs/20260710T090206495018Z/intent.json",
+    "actions_path": "outputs/20260710T090206495018Z/actions.json",
+    "state_path": "outputs/20260710T090206495018Z/state.json",
+    "freecad_script_path": "outputs/20260710T090206495018Z/freecad_script.py",
+    "report_path": "outputs/20260710T090206495018Z/run_report.json",
+    "step_verification_path": "outputs/20260710T090206495018Z/step_verification.json",
+    "critic_report_path": "outputs/20260710T090206495018Z/critic_report.json",
+    "mcp_result_path": "outputs/20260710T090206495018Z/step_mcp/step_5_attempt_1.json",
+    "action_attempts_path": "outputs/20260710T090206495018Z/action_attempts.json",
+    "checkpoint_path": "outputs/20260710T090206495018Z/checkpoint.json",
+    "freecad_validation_path": "outputs/20260710T090206495018Z/step_mcp/step_5_validation_1.json",
+    "freecad_document_path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T090206495018Z/pipe_v5_da186a147081.FCStd",
+    "visual_evidence_paths": []
+  },
+  "artifact_statuses": [
+    {
+      "name": "prompt",
+      "path": "outputs/20260710T090206495018Z/prompt.txt",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent",
+      "path": "outputs/20260710T090206495018Z/intent.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "actions",
+      "path": "outputs/20260710T090206495018Z/actions.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "action_attempts",
+      "path": "outputs/20260710T090206495018Z/action_attempts.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "state",
+      "path": "outputs/20260710T090206495018Z/state.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "step_verification",
+      "path": "outputs/20260710T090206495018Z/step_verification.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "critic_report",
+      "path": "outputs/20260710T090206495018Z/critic_report.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_script",
+      "path": "outputs/20260710T090206495018Z/freecad_script.py",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "checkpoint",
+      "path": "outputs/20260710T090206495018Z/checkpoint.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "run_report",
+      "path": "outputs/20260710T090206495018Z/run_report.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "mcp_result",
+      "path": "outputs/20260710T090206495018Z/step_mcp/step_5_attempt_1.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_validation",
+      "path": "outputs/20260710T090206495018Z/step_mcp/step_5_validation_1.json",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_document",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260710T090206495018Z/pipe_v5_da186a147081.FCStd",
+      "status": "available",
+      "producer_stage": "complete",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    }
+  ],
+  "summary": "Generated 5 modules with verified FreeCAD evidence."
+}

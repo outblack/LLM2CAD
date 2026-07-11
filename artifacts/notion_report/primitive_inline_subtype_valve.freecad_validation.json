@@ -1,0 +1,161 @@
+{
+  "attempt_id": 1,
+  "candidate_document": "CadGenCandidate_primitive_inline_subtype_valve_1_1_de930b097e31",
+  "candidate_shape_fingerprints": {
+    "PipeAssembly": "d9b2c155ab0eba26aeabbad5d41168540935b0019e0c522c19f3661ba3035b1a",
+    "solid_M1": "e39647d337bcac8a5e9c94ffb29e43017095f45758ea6f733b4bd9f8fc6ce68b"
+  },
+  "checks": {
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          52.0,
+          19.0,
+          36.0
+        ],
+        "minimum": [
+          0.0,
+          -19.0,
+          -19.0
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 37675.009789831245
+    },
+    "assembly_errors": [],
+    "bore_network": {
+      "assembly_intrusion_allowance": 0.00010456024598866149,
+      "assembly_intrusion_volume": 0.0,
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          52.001999999999995,
+          8.0,
+          8.0
+        ],
+        "minimum": [
+          -0.002,
+          -8.0,
+          -8.0
+        ]
+      },
+      "intrusion_check_method": "outer_minus_bore_construction_invariant",
+      "intrusion_module_ids": [],
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 10456.024598866148
+    },
+    "centerlines": {
+      "M1": {
+        "curve_length": 52.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 1,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            52.0,
+            19.0,
+            36.0
+          ],
+          "minimum": [
+            0.0,
+            -19.0,
+            -19.0
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 37675.009789831245
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          52.0,
+          19.0,
+          36.0
+        ],
+        "minimum": [
+          0.0,
+          -19.0,
+          -19.0
+        ]
+      },
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 48130.23118331155
+    },
+    "required_internal_section_module_count": 1,
+    "sampled_internal_section_count": 1,
+    "sampled_internal_sections_by_module": {
+      "M1": 1
+    },
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": [
+      {
+        "failures": [
+          {
+            "kind": "material_outside_outer_radius",
+            "sample": 6
+          }
+        ],
+        "module_id": "M1",
+        "section": "component_body_mid"
+      }
+    ]
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v17",
+  "module_ids": [
+    "M1"
+  ],
+  "passed": false,
+  "payload_digest": "de930b097e3164a80826a98c820754bf2788162d14fd25591c235a500041dbb0",
+  "run_id": "primitive_inline_subtype_valve",
+  "schema_version": 3,
+  "state_id": "S1",
+  "state_version": 1
+}

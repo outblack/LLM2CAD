@@ -1,0 +1,75 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "straight_pipe",
+    "params": {
+      "length": 100.0,
+      "direction": "+X",
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    }
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "bend_pipe",
+    "params": {
+      "angle": 80.0,
+      "turn_direction": "+Z",
+      "start_position": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "bend_radius": 30.0,
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "out_axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "segment_resolution": 12
+    }
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "straight_pipe",
+    "params": {
+      "length": 80.0,
+      "direction": "+Z",
+      "start_position": [
+        129.54423259036625,
+        0.0,
+        24.790554669992087
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    }
+  }
+]

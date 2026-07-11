@@ -1,0 +1,343 @@
+{
+  "state_id": "S1",
+  "state_version": 1,
+  "contract_digest": "notion-report-live-freecad-experiment",
+  "modeling_tolerance": 0.0001,
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "expected_open_ports": 0,
+  "expected_open_ports_source": "explicit",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [],
+  "design_notes": [],
+  "module_measurements": {},
+  "placed_modules": [
+    {
+      "id": "M1",
+      "type": "connect_ports",
+      "schema_version": 2,
+      "geometry_id": "solid_M1",
+      "params": {
+        "other_port_id": "P2",
+        "path_kind": "spline",
+        "section_source": "inherit_target",
+        "waypoints": [
+          [
+            25.0,
+            28.0,
+            0.0
+          ],
+          [
+            75.0,
+            28.0,
+            0.0
+          ]
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 20.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "initial_tangent": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "final_tangent": [
+          1.0,
+          -0.0,
+          -0.0
+        ],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.0,
+            28.0,
+            0.0
+          ],
+          [
+            75.0,
+            28.0,
+            0.0
+          ],
+          [
+            100.0,
+            0.0,
+            0.0
+          ]
+        ]
+      },
+      "ports": {
+        "in_a": {
+          "id": "M1.in_a",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "in_b": {
+          "id": "M1.in_b",
+          "position": [
+            100.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            -0.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in_a": "START",
+        "in_b": "P2"
+      }
+    }
+  ],
+  "open_ports": [],
+  "port_nodes": {
+    "START": {
+      "id": "START",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "P2": {
+      "id": "P2",
+      "position": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M1.in_a": {
+      "id": "M1.in_a",
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -1.0,
+        -0.0,
+        -0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    },
+    "M1.in_b": {
+      "id": "M1.in_b",
+      "position": [
+        100.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        -0.0,
+        -0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "connector_type": "plain",
+      "connector_gender": "neutral",
+      "connector_standard": null
+    }
+  },
+  "connection_edges": [
+    {
+      "edge_id": "E1",
+      "port_a_id": "START",
+      "port_b_id": "M1.in_a",
+      "action_id": "A1",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    },
+    {
+      "edge_id": "E2",
+      "port_a_id": "P2",
+      "port_b_id": "M1.in_b",
+      "action_id": "A1",
+      "position_error": 0.0,
+      "anti_parallel_axis_dot": 1.0,
+      "axis_angle_error": 0.0,
+      "od_error": 0.0,
+      "id_error": 0.0,
+      "wall_error": 0.0,
+      "outer_rim_error": 0.0,
+      "inner_rim_error": 0.0,
+      "connector_type_match": true,
+      "connector_gender_match": true,
+      "connector_standard_match": true,
+      "engagement": 0.0
+    }
+  ],
+  "module_incidence_edges": [
+    {
+      "module_id": "M1",
+      "port_id": "M1.in_a"
+    },
+    {
+      "module_id": "M1",
+      "port_id": "M1.in_b"
+    }
+  ],
+  "open_port_ids": [],
+  "used_ports": [
+    "START",
+    "P2"
+  ],
+  "remaining_goals": [],
+  "action_history": [
+    {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "connect_ports",
+      "params": {
+        "other_port_id": "P2",
+        "path_kind": "spline",
+        "section_source": "inherit_target",
+        "waypoints": [
+          [
+            25.0,
+            28.0,
+            0.0
+          ],
+          [
+            75.0,
+            28.0,
+            0.0
+          ]
+        ],
+        "interpolation": "bspline",
+        "frenet": false,
+        "minimum_curvature_radius": 20.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          100.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "initial_tangent": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "final_tangent": [
+          1.0,
+          -0.0,
+          -0.0
+        ]
+      },
+      "consumed_port_ids": [
+        "START",
+        "P2"
+      ],
+      "affected_goal_ids": [
+        "G1"
+      ],
+      "completed_goal_ids": [
+        "G1"
+      ],
+      "satisfied_components": []
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 40.0,
+      "direction": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "initial_straight"
+    ],
+    "completed_goal_ids": [
+      "initial_straight"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "bend_radius": 30.0,
+      "sweep_angle": 90.0,
+      "plane_normal": [
+        0.0,
+        -1.0,
+        0.0
+      ],
+      "start_position": [
+        40.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "terminal_axis": [
+        6.123233995736766e-17,
+        0.0,
+        1.0
+      ]
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "initial_upward_bend"
+    ],
+    "completed_goal_ids": [
+      "initial_upward_bend"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "spline",
+      "waypoint_frame": "global",
+      "waypoints": [
+        [
+          88.82225059969824,
+          0.0,
+          48.822250599698236
+        ],
+        [
+          107.64450119939649,
+          37.64450119939649,
+          67.64450119939649
+        ],
+        [
+          70.0,
+          75.28900239879297,
+          86.46675179909472
+        ],
+        [
+          68.11777494003017,
+          37.64450119939649,
+          105.28900239879297
+        ],
+        [
+          88.82225059969824,
+          18.822250599698243,
+          124.11125299849121
+        ]
+      ],
+      "start_position": [
+        70.0,
+        0.0,
+        29.999999999999996
+      ],
+      "axis": [
+        6.123233995736766e-17,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "initial_tangent": [
+        6.123233995736766e-17,
+        0.0,
+        1.0
+      ],
+      "final_tangent": [
+        0.6139601294045424,
+        -0.5581455721859476,
+        0.5581455721859474
+      ],
+      "interpolation": "bspline",
+      "frenet": false,
+      "minimum_curvature_radius": 10.5
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "rising_spiral"
+    ],
+    "completed_goal_ids": [
+      "rising_spiral"
+    ],
+    "satisfied_components": []
+  }
+]

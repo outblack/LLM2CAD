@@ -1,0 +1,88 @@
+{
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "target_behavior": [
+    {
+      "type": "branch",
+      "direction": null,
+      "length": null,
+      "angle": null,
+      "branch_count": 2,
+      "branch_angles": [],
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [
+        [
+          -1.0,
+          0.0,
+          1.0
+        ],
+        [
+          -1.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "diameter_out": null,
+      "end_type": null,
+      "notes": null
+    },
+    {
+      "type": "move",
+      "direction": "+X",
+      "length": 60.0,
+      "angle": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "diameter_out": null,
+      "end_type": null,
+      "notes": "The main passage connecting the left and right branch groups."
+    },
+    {
+      "type": "branch",
+      "direction": null,
+      "length": null,
+      "angle": null,
+      "branch_count": 2,
+      "branch_angles": [],
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [
+        [
+          1.0,
+          0.0,
+          1.0
+        ],
+        [
+          1.0,
+          0.0,
+          -1.0
+        ]
+      ],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "diameter_out": null,
+      "end_type": null,
+      "notes": null
+    }
+  ],
+  "expected_open_ports": 4,
+  "expected_open_ports_source": "explicit",
+  "design_notes": [
+    "One single continuous hollow tubular pipe system.",
+    "Uniform outer diameter for the main passage and all four branches.",
+    "Left side splits into upper-left (-1,0,1) and lower-left (-1,0,-1) ports.",
+    "Right side splits into upper-right (1,0,1) and lower-right (1,0,-1) ports.",
+    "Used smooth_hub for Y-shaped blended transitions to avoid bulbous or spherical nodes.",
+    "Main passage oriented along the X-axis from left to right.",
+    "Matte industrial metal material finish."
+  ]
+}

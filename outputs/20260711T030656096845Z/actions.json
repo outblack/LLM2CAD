@@ -1,0 +1,334 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 130.0,
+      "direction": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "left_vertical_rise"
+    ],
+    "completed_goal_ids": [
+      "left_vertical_rise"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "spline",
+      "waypoint_frame": "global",
+      "waypoints": [
+        [
+          0.0,
+          0.0,
+          -170.0
+        ],
+        [
+          35.0,
+          0.0,
+          -205.0
+        ],
+        [
+          75.0,
+          0.0,
+          -170.0
+        ],
+        [
+          75.0,
+          0.0,
+          -130.0
+        ]
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        -130.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "initial_tangent": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "final_tangent": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "interpolation": "bspline",
+      "frenet": false,
+      "minimum_curvature_radius": 20.0
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "u_bend_bottom"
+    ],
+    "completed_goal_ids": [
+      "u_bend_bottom"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 110.0,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "start_position": [
+        75.0,
+        0.0,
+        -130.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "middle_vertical_pipe"
+    ],
+    "completed_goal_ids": [
+      "middle_vertical_pipe"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A4",
+    "action_type": "ADD_MODULE",
+    "target_port": "M3.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "spline",
+      "waypoint_frame": "global",
+      "waypoints": [
+        [
+          75.0,
+          0.0,
+          20.0
+        ],
+        [
+          100.0,
+          0.0,
+          40.0
+        ],
+        [
+          125.0,
+          0.0,
+          20.0
+        ],
+        [
+          125.0,
+          0.0,
+          -20.0
+        ]
+      ],
+      "start_position": [
+        75.0,
+        0.0,
+        -20.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "initial_tangent": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "final_tangent": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "interpolation": "bspline",
+      "frenet": false,
+      "minimum_curvature_radius": 20.0
+    },
+    "consumed_port_ids": [
+      "M3.out"
+    ],
+    "affected_goal_ids": [
+      "inverted_u_bridge"
+    ],
+    "completed_goal_ids": [
+      "inverted_u_bridge"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A5",
+    "action_type": "ADD_MODULE",
+    "target_port": "M4.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 115.0,
+      "direction": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "start_position": [
+        125.0,
+        0.0,
+        -20.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M4.out"
+    ],
+    "affected_goal_ids": [
+      "right_vertical_pipe"
+    ],
+    "completed_goal_ids": [
+      "right_vertical_pipe"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A6",
+    "action_type": "ADD_MODULE",
+    "target_port": "M5.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "bend_radius": 25.0,
+      "sweep_angle": -90.0,
+      "plane_normal": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "start_position": [
+        125.0,
+        0.0,
+        -135.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "terminal_axis": [
+        1.0,
+        0.0,
+        -6.123233995736766e-17
+      ]
+    },
+    "consumed_port_ids": [
+      "M5.out"
+    ],
+    "affected_goal_ids": [
+      "bottom_right_turn"
+    ],
+    "completed_goal_ids": [
+      "bottom_right_turn"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A7",
+    "action_type": "ADD_MODULE",
+    "target_port": "M6.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 120.0,
+      "direction": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "start_position": [
+        150.0,
+        0.0,
+        -160.0
+      ],
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M6.out"
+    ],
+    "affected_goal_ids": [
+      "horizontal_outlet"
+    ],
+    "completed_goal_ids": [
+      "horizontal_outlet"
+    ],
+    "satisfied_components": []
+  }
+]

@@ -1,0 +1,194 @@
+{
+  "passed": true,
+  "verification_status": "passed",
+  "error_count": 0,
+  "warning_count": 2,
+  "expected_open_ports": 1,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "issues": [
+    {
+      "issue_id": "STEP_0006_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 6,
+      "action_id": "A6",
+      "module_id": "M6",
+      "port_ids": [],
+      "target_port_id": "M5.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M6",
+              "M5"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                125.0301135948707,
+                0.0,
+                -136.22669185818546
+              ],
+              [
+                125.12038183319507,
+                0.0,
+                -137.450428508239
+              ]
+            ],
+            "existing_segment": [
+              [
+                125.0,
+                0.0,
+                -20.0
+              ],
+              [
+                125.0,
+                0.0,
+                -135.0
+              ]
+            ],
+            "centerline_separation": 1.2270614261456254,
+            "required_separation": 20.0,
+            "clearance": -18.772938573854375
+          }
+        ]
+      },
+      "suggestion": {}
+    },
+    {
+      "issue_id": "STEP_0007_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 7,
+      "action_id": "A7",
+      "module_id": "M7",
+      "port_ids": [],
+      "target_port_id": "M6.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M7",
+              "M6"
+            ],
+            "segments": [
+              "segment_0",
+              "segment_15"
+            ],
+            "candidate_segment": [
+              [
+                150.0,
+                0.0,
+                -160.0
+              ],
+              [
+                270.0,
+                0.0,
+                -160.0
+              ]
+            ],
+            "existing_segment": [
+              [
+                131.47622186612602,
+                0.0,
+                -151.78897387117547
+              ],
+              [
+                132.3223304703363,
+                0.0,
+                -152.6776695296637
+              ]
+            ],
+            "centerline_separation": 19.134171618254488,
+            "required_separation": 20.0,
+            "clearance": -0.8658283817455121
+          }
+        ]
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [
+    {
+      "view_id": "front",
+      "camera": "front orthographic",
+      "target_module_ids": [
+        "M6",
+        "M7"
+      ],
+      "target_port_ids": [
+        "M7.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "right",
+      "camera": "right orthographic",
+      "target_module_ids": [
+        "M6",
+        "M7"
+      ],
+      "target_port_ids": [
+        "M7.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "top",
+      "camera": "top orthographic",
+      "target_module_ids": [
+        "M6",
+        "M7"
+      ],
+      "target_port_ids": [
+        "M7.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "isometric",
+      "camera": "isometric overview",
+      "target_module_ids": [
+        "M6",
+        "M7"
+      ],
+      "target_port_ids": [
+        "M7.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    }
+  ],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Proceed to final FreeCAD MCP execution."
+  ]
+}

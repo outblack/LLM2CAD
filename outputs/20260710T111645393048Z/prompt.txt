@@ -1,0 +1,41 @@
+Create a clean technical CAD model of an asymmetric four-port branched hollow pipe manifold.
+
+The model must be one single continuous hollow tubular pipe system, not separate disconnected tubes.
+
+The overall shape should resemble a branching pipe network viewed from a slightly tilted top-view or isometric perspective.
+
+The pipe should have a mostly uniform circular outer diameter throughout the entire model. Keep the diameter consistent across the main pipe and all four branches.
+
+The main passage should run from the left side toward the right side.
+
+On the left side, the main pipe should split smoothly into two diagonal branches:
+- one branch extending toward the upper-left direction,
+- one branch extending toward the lower-left direction.
+
+These two left branches should merge into the main central pipe using smooth Y-shaped blended transitions.
+
+On the right side, the main pipe should split smoothly into two diagonal branches:
+- one branch extending upward and to the right,
+- one branch extending downward and to the right.
+
+The right-side junction should also be a smooth Y-shaped pipe split with only minimal local thickening.
+
+Do not create a bulbous spherical node, oval chamber, collector tank, bead-like swelling, or large rounded blob at any junction.
+
+Junction areas may be slightly thicker only where pipes blend together, but they should remain close to the pipe diameter and should not look like separate balls or chambers.
+
+All four branch ends must be open pipe ports:
+- one open end at the upper-left,
+- one open end at the lower-left,
+- one open end at the upper-right,
+- one open end at the lower-right.
+
+Each open pipe end should clearly show hollow geometry, visible wall thickness, and rim edges.
+
+Use smooth bends and continuous pipe surfaces. Avoid sharp corners, harsh Boolean seams, flat block-like intersections, disconnected parts, or inflated junction bulges.
+
+The model should look mechanically plausible, like a fluid manifold, exhaust manifold, coolant pipe, or branching duct system.
+
+Apply a clean CAD-style brushed metal or matte industrial metal material with a smooth semi-gloss finish.
+
+The final model should appear as one connected hollow tubular manifold with four open ends, two branches on the left, two branches on the right, uniform pipe diameter, and smooth Y-shaped blended junctions without any ball-like or chamber-like swelling

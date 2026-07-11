@@ -1,0 +1,11 @@
+Create one continuous asymmetric four-port hollow pipe manifold.
+
+Use a uniform outer diameter of 24 mm, inner diameter of 17 mm, and wall thickness of 3.5 mm throughout. The overall size should be approximately 212 mm wide, 110 mm tall, and 60 mm deep.
+
+Make the central straight pipe section about 68 mm long. Split both ends into two smooth diagonal branches, forming Y-junctions. Each branch should be approximately 85–100 mm long, with branch angles around 35–45 degrees from the main axis. Use smooth bends with a minimum centerline bend radius of about 35 mm.
+
+Keep the junction width close to the 24 mm pipe diameter, allowing only minimal local thickening. Do not create spherical nodes, chambers, blobs, or sharp Boolean intersections.
+
+All four branch ends must remain open and show the 3.5 mm wall thickness. The result must be one connected hollow solid with a continuous internal flow passage.
+
+Use an asymmetric layout similar to the reference image, with slightly different branch lengths and vertical offsets. Apply a matte brushed-metal CAD finish.

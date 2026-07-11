@@ -1,0 +1,71 @@
+{
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "target_behavior": [
+    {
+      "goal_id": "straight_route",
+      "depends_on_goal_ids": [],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+X",
+      "path_kind": null,
+      "length": 100.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "notes": "Single straight segment as requested"
+    }
+  ],
+  "start_position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "start_axis": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "expected_open_ports": 1,
+  "expected_open_ports_source": "explicit",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [],
+  "design_notes": [
+    "Downstream end left open as a terminal port"
+  ],
+  "prompt_sha256": "6ecb4918721002a7deeec0dcfcc08d59ad2977f2b364dbf45e7eca76ab2aa1b5",
+  "contract_digest": "6beb3795e142cf1225aba70c42d8b3f0b1d7acd02be67c8a07731db28cb604f9"
+}
