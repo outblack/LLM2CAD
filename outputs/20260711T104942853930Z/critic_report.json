@@ -1,0 +1,35 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 1,
+  "warning_count": 0,
+  "expected_open_ports": null,
+  "actual_open_ports": 0,
+  "expected_open_ports_source": "unknown",
+  "issues": [
+    {
+      "issue_id": "FINAL_01_INTENT_EXTRACTION_FAILED",
+      "severity": "error",
+      "issue_code": "INTENT_EXTRACTION_FAILED",
+      "check_name": "intent",
+      "message": "Gemini did not return a usable production intent.",
+      "step_index": null,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {
+        "error": "intent lost or altered explicit millimeter values from the user request: [1000.0, 420.0, 120.0]; intent moved or altered source measurements bound to global_outer_diameter: [1000.0]; star_arc_1 direct required-anchor realization predicts a minimum curvature radius of 3.92718 mm but at least 60 mm is required after deterministic handle optimization (factors [0.4, 0.5, 0.5, 0.4]). Redistribute or add well-separated relative anchors so each direction change is spread over more distance; star_arc_2 relative first waypoint must advance along the incoming tangent before the lateral freeform turn; axial projection is 0 mm for incoming heading [0.707107, 0.707107, 0.0] and first offset [80.0, -80.0, 0.0]. Make that offset a positive parallel multiple of the incoming heading; star_arc_2 relative first waypoint is too close/off-axis for a regular tangent entry: its circular-entry radius is 56.5685 mm but at least 60 mm is required. Move the first anchor farther along the incoming tangent before turning; star_arc_2 relative waypoint chain contains a zero-length tangent or 180-degree cusp; redistribute the anchors"
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Fix INTENT_EXTRACTION_FAILED: Gemini did not return a usable production intent."
+  ]
+}

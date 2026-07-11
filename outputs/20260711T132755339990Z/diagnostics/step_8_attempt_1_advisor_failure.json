@@ -1,0 +1,61 @@
+{
+  "case_id": "5524d778b727bb465f2e568fc790c7c351d093be2e6436b763d9f734ab65926f",
+  "diagnostic_context_digest": "6e4215b37f4aecc1081fee99b50cc4d6121a807d69a44e6489c8d8c96271f53c",
+  "failure_signature": "ec75ee3449b28786ccaac92c578c163c39b83da0001bf5ad58dbee48974eb5ff",
+  "failure_reason": "structured_output_error",
+  "call_attempted": true,
+  "error_type": "StructuredOutputIncompleteError",
+  "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=149, thought_tokens=3933",
+  "advisor_response": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "summary": "The immutable goal requires a bend_radius of 10.0, which exactly equals the outer profile radius (OD 20.0 / 2 = 10.0). This creates a self-intersecting zero-inner-radius sweep, which is rejected by the kernel. The contract cannot be fulfilled.",
+    "causal_chain": [
+      "The immutable goal 'turn_4' prescribes a bend_radius of 10.0.",
+      "The required outer_diameter inherited from the port M7.out is 20.0, resulting in a profile radius of 10.0.",
+      "Sweeping a 10.0 radius profile along a 10.0 radius centerline produces a self-intersecting shape where the inner radius evaluates to 0.0.",
+      "FreeCAD's make_module_shape stage rejects this geometry, citing that the circular arc centerline radius must be larger than the outer profile radius."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E004",
+      "E006"
+    ],
+    "recommendations": [
+      {
+        "path": "/params/bend_radius",
+        "action": "none",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "",
+        "unit": "mm",
+        "classification": "unresolved",
+        "rationale": "The goal explicitly mandates a bend radius of 10.0, making it an immutable constraint that mathematically conflicts with the 20.0 OD profile. No planner adjustment is permitted or physically valid.",
+        "evidence_id": "E006"
+      }
+    ],
+    "strategy_kind": "stop_futile_retry",
+    "strategy_instruction": "Abort the transition. The required bend radius from the immutable contract is physically invalid for the given outer diameter and cannot be repaired.",
+    "verification_checks": [],
+    "missing_evidence": [],
+    "planner_instruction": "Do not attempt a retry. The immutable constraint forcing bend_radius=10.0 is fundamentally incompatible with the 20.0 outer diameter of the current network, causing a hard geometrical kernel failure."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor strategy requires a verification check"
+    },
+    {
+      "error_type": "StructuredOutputIncompleteError",
+      "failure_reason": "structured_output_error",
+      "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=149, thought_tokens=3933"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-11T13:44:21.673882+00:00",
+  "artifact_digest": "bc86133a0bfe30dcfac1f538302dc8a3ea7353d968043491e9b1616fb7ea9dc1"
+}

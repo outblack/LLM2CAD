@@ -1,0 +1,4176 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_1",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_1",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [],
+      "affected_goal_ids": [
+        "straight_1"
+      ],
+      "completed_goal_ids": [
+        "straight_1"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 2,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_1",
+        "depends_on_goal_ids": [
+          "straight_1"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": 120.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_1",
+          "depends_on_goal_ids": [
+            "straight_1"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": 120.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S1",
+      "state_after_id": "S2",
+      "action_id": "A2",
+      "module": "route",
+      "target_port_before": {
+        "id": "M1.out",
+        "position": [
+          20.00000699375367,
+          0.0,
+          34.64101211353104
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M2",
+      "produced_port_ids": [
+        "M2.out"
+      ],
+      "removed_port_ids": [
+        "M1.out"
+      ],
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "turn_1"
+      ],
+      "completed_goal_ids": [
+        "turn_1"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M1.out"
+      ],
+      "open_port_ids_after": [
+        "M2.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M2",
+                "M1"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  20.26000188598796,
+                  0.0,
+                  35.06647469969768
+                ],
+                [
+                  20.5408811435115,
+                  0.0,
+                  35.47844872668063
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ]
+              ],
+              "centerline_separation": 0.498613834761457,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_2_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_2_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -19.999999999999996,
+        -5.000001748438417
+      ],
+      "maximum": [
+        45.98077011674775,
+        10.0,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 3,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_2",
+        "depends_on_goal_ids": [
+          "turn_1"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_2",
+          "depends_on_goal_ids": [
+            "turn_1"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S2",
+      "state_after_id": "S3",
+      "action_id": "A3",
+      "module": "route",
+      "target_port_before": {
+        "id": "M2.out",
+        "position": [
+          37.32051506944208,
+          0.0,
+          34.641008616654
+        ],
+        "axis": [
+          0.4999998251561381,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M3",
+      "produced_port_ids": [
+        "M3.out"
+      ],
+      "removed_port_ids": [
+        "M2.out"
+      ],
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "connection_edge_ids": [
+        "E2"
+      ],
+      "affected_goal_ids": [
+        "straight_2"
+      ],
+      "completed_goal_ids": [
+        "straight_2"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M2.out"
+      ],
+      "open_port_ids_after": [
+        "M3.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0003_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M3",
+                "M1"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ]
+              ],
+              "centerline_separation": 17.320508075688764,
+              "required_separation": 20.0,
+              "clearance": -2.679491924311236
+            },
+            {
+              "module_ids": [
+                "M3",
+                "M2"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ],
+                [
+                  20.26000188598796,
+                  0.0,
+                  35.06647469969768
+                ]
+              ],
+              "centerline_separation": 17.065817632643107,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356893
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_3_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_3_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -19.999999999999996,
+        -5.0000098241300135
+      ],
+      "maximum": [
+        65.98076312299327,
+        10.0,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 4,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_2",
+        "depends_on_goal_ids": [
+          "straight_2"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -120.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_2",
+          "depends_on_goal_ids": [
+            "straight_2"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -120.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S3",
+      "state_after_id": "S4",
+      "action_id": "A4",
+      "module": "route",
+      "target_port_before": {
+        "id": "M3.out",
+        "position": [
+          57.320508075687606,
+          0.0,
+          -1.1572568631379454e-05
+        ],
+        "axis": [
+          0.4999998251561381,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M4",
+      "produced_port_ids": [
+        "M4.out"
+      ],
+      "removed_port_ids": [
+        "M3.out"
+      ],
+      "consumed_port_ids": [
+        "M3.out"
+      ],
+      "connection_edge_ids": [
+        "E3"
+      ],
+      "affected_goal_ids": [
+        "turn_2"
+      ],
+      "completed_goal_ids": [
+        "turn_2"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M3.out"
+      ],
+      "open_port_ids_after": [
+        "M4.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0004_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 4,
+        "action_id": "A4",
+        "module_id": "M4",
+        "port_ids": [],
+        "target_port_id": "M3.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M4",
+                "M3"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  57.580502796126645,
+                  0.0,
+                  -0.425474263717164
+                ],
+                [
+                  57.8613818873014,
+                  0.0,
+                  -0.8374484041147996
+                ]
+              ],
+              "existing_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "centerline_separation": 0.49861383476145715,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_4_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_4_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -19.999999999999996,
+        -15.000013321007259
+      ],
+      "maximum": [
+        83.30126917975879,
+        19.999999999999993,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 5,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_3",
+        "depends_on_goal_ids": [
+          "turn_2"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_3",
+          "depends_on_goal_ids": [
+            "turn_2"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S4",
+      "state_after_id": "S5",
+      "action_id": "A5",
+      "module": "route",
+      "target_port_before": {
+        "id": "M4.out",
+        "position": [
+          74.64101615137602,
+          0.0,
+          -1.5069445669091408e-05
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M5",
+      "produced_port_ids": [
+        "M5.out"
+      ],
+      "removed_port_ids": [
+        "M4.out"
+      ],
+      "consumed_port_ids": [
+        "M4.out"
+      ],
+      "connection_edge_ids": [
+        "E4"
+      ],
+      "affected_goal_ids": [
+        "straight_3"
+      ],
+      "completed_goal_ids": [
+        "straight_3"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M4.out"
+      ],
+      "open_port_ids_after": [
+        "M5.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0005_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 5,
+        "action_id": "A5",
+        "module_id": "M5",
+        "port_ids": [],
+        "target_port_id": "M4.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M5",
+                "M3"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "existing_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "centerline_separation": 17.320508075688767,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112325
+            },
+            {
+              "module_ids": [
+                "M5",
+                "M4"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "existing_segment": [
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ],
+                [
+                  57.580502796126645,
+                  0.0,
+                  -0.425474263717164
+                ]
+              ],
+              "centerline_separation": 17.06581763264311,
+              "required_separation": 20.0,
+              "clearance": -2.9341823673568896
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_5_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_5_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -19.999999999999996,
+        -15.000013321007259
+      ],
+      "maximum": [
+        103.3012761735126,
+        19.999999999999993,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 6,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_3",
+        "depends_on_goal_ids": [
+          "straight_3"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": 120.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_3",
+          "depends_on_goal_ids": [
+            "straight_3"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": 120.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S5",
+      "state_after_id": "S6",
+      "action_id": "A6",
+      "module": "route",
+      "target_port_before": {
+        "id": "M5.out",
+        "position": [
+          94.64102314512968,
+          0.0,
+          34.640997044085374
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M6",
+      "produced_port_ids": [
+        "M6.out"
+      ],
+      "removed_port_ids": [
+        "M5.out"
+      ],
+      "consumed_port_ids": [
+        "M5.out"
+      ],
+      "connection_edge_ids": [
+        "E5"
+      ],
+      "affected_goal_ids": [
+        "turn_3"
+      ],
+      "completed_goal_ids": [
+        "turn_3"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M5.out"
+      ],
+      "open_port_ids_after": [
+        "M6.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0006_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 6,
+        "action_id": "A6",
+        "module_id": "M6",
+        "port_ids": [],
+        "target_port_id": "M5.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M6",
+                "M5"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  94.90101803736397,
+                  0.0,
+                  35.06645963025201
+                ],
+                [
+                  95.1818972948875,
+                  0.0,
+                  35.478433657234966
+                ]
+              ],
+              "existing_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "centerline_separation": 0.4986138347614551,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_6_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_6_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -19.999999999999996,
+        -15.000013321007259
+      ],
+      "maximum": [
+        120.62178626812374,
+        19.999999999999993,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 7,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_4",
+        "depends_on_goal_ids": [
+          "turn_3"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_4",
+          "depends_on_goal_ids": [
+            "turn_3"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S6",
+      "state_after_id": "S7",
+      "action_id": "A7",
+      "module": "route",
+      "target_port_before": {
+        "id": "M6.out",
+        "position": [
+          111.96153122081809,
+          0.0,
+          34.64099354720834
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M7",
+      "produced_port_ids": [
+        "M7.out"
+      ],
+      "removed_port_ids": [
+        "M6.out"
+      ],
+      "consumed_port_ids": [
+        "M6.out"
+      ],
+      "connection_edge_ids": [
+        "E6"
+      ],
+      "affected_goal_ids": [
+        "straight_4"
+      ],
+      "completed_goal_ids": [
+        "straight_4"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M6.out"
+      ],
+      "open_port_ids_after": [
+        "M7.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0007_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 7,
+        "action_id": "A7",
+        "module_id": "M7",
+        "port_ids": [],
+        "target_port_id": "M6.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M7",
+                "M5"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "centerline_separation": 17.32050807568876,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112396
+            },
+            {
+              "module_ids": [
+                "M7",
+                "M6"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ],
+                [
+                  94.90101803736397,
+                  0.0,
+                  35.06645963025201
+                ]
+              ],
+              "centerline_separation": 17.065817632643107,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356893
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_7_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_7_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -19.999999999999996,
+        -15.000013321007259
+      ],
+      "maximum": [
+        140.6217792743693,
+        19.999999999999993,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 8,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_4",
+        "depends_on_goal_ids": [
+          "straight_4"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -120.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_4",
+          "depends_on_goal_ids": [
+            "straight_4"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -120.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S7",
+      "state_after_id": "S8",
+      "action_id": "A8",
+      "module": "route",
+      "target_port_before": {
+        "id": "M7.out",
+        "position": [
+          131.96152422706362,
+          0.0,
+          -2.66420142907009e-05
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M8",
+      "produced_port_ids": [
+        "M8.out"
+      ],
+      "removed_port_ids": [
+        "M7.out"
+      ],
+      "consumed_port_ids": [
+        "M7.out"
+      ],
+      "connection_edge_ids": [
+        "E7"
+      ],
+      "affected_goal_ids": [
+        "turn_4"
+      ],
+      "completed_goal_ids": [
+        "turn_4"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M7.out"
+      ],
+      "open_port_ids_after": [
+        "M8.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0008_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 8,
+        "action_id": "A8",
+        "module_id": "M8",
+        "port_ids": [],
+        "target_port_id": "M7.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M8",
+                "M7"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  132.22151894750266,
+                  0.0,
+                  -0.42548933316282334
+                ],
+                [
+                  132.50239803867743,
+                  0.0,
+                  -0.8374634735604598
+                ]
+              ],
+              "existing_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "centerline_separation": 0.49861383476145715,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_8_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_8_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -15.000028390452933
+      ],
+      "maximum": [
+        157.94228533113483,
+        20.0,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 9,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_5",
+        "depends_on_goal_ids": [
+          "turn_4"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_5",
+          "depends_on_goal_ids": [
+            "turn_4"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S8",
+      "state_after_id": "S9",
+      "action_id": "A9",
+      "module": "route",
+      "target_port_before": {
+        "id": "M8.out",
+        "position": [
+          149.28203230275204,
+          0.0,
+          -3.0138891334630102e-05
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M9",
+      "produced_port_ids": [
+        "M9.out"
+      ],
+      "removed_port_ids": [
+        "M8.out"
+      ],
+      "consumed_port_ids": [
+        "M8.out"
+      ],
+      "connection_edge_ids": [
+        "E8"
+      ],
+      "affected_goal_ids": [
+        "straight_5"
+      ],
+      "completed_goal_ids": [
+        "straight_5"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M8.out"
+      ],
+      "open_port_ids_after": [
+        "M9.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0009_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 9,
+        "action_id": "A9",
+        "module_id": "M9",
+        "port_ids": [],
+        "target_port_id": "M8.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M9",
+                "M7"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "existing_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "centerline_separation": 17.320508075688775,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112254
+            },
+            {
+              "module_ids": [
+                "M9",
+                "M8"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "existing_segment": [
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ],
+                [
+                  132.22151894750266,
+                  0.0,
+                  -0.42548933316282334
+                ]
+              ],
+              "centerline_separation": 17.065817632643117,
+              "required_separation": 20.0,
+              "clearance": -2.9341823673568825
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_9_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_9_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -15.000028390452933
+      ],
+      "maximum": [
+        177.94229232488863,
+        20.0,
+        48.460201831004575
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 10,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_5",
+        "depends_on_goal_ids": [
+          "straight_5"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": 120.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_5",
+          "depends_on_goal_ids": [
+            "straight_5"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": 120.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S9",
+      "state_after_id": "S10",
+      "action_id": "A10",
+      "module": "route",
+      "target_port_before": {
+        "id": "M9.out",
+        "position": [
+          169.2820392965057,
+          0.0,
+          34.64098197463971
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M10",
+      "produced_port_ids": [
+        "M10.out"
+      ],
+      "removed_port_ids": [
+        "M9.out"
+      ],
+      "consumed_port_ids": [
+        "M9.out"
+      ],
+      "connection_edge_ids": [
+        "E9"
+      ],
+      "affected_goal_ids": [
+        "turn_5"
+      ],
+      "completed_goal_ids": [
+        "turn_5"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M9.out"
+      ],
+      "open_port_ids_after": [
+        "M10.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0010_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 10,
+        "action_id": "A10",
+        "module_id": "M10",
+        "port_ids": [],
+        "target_port_id": "M9.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M10",
+                "M9"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  169.54203418874,
+                  0.0,
+                  35.066444560806346
+                ],
+                [
+                  169.82291344626353,
+                  0.0,
+                  35.4784185877893
+                ]
+              ],
+              "existing_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "centerline_separation": 0.4986138347614551,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_10_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_10_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -15.000028390452933
+      ],
+      "maximum": [
+        196.6898773563814,
+        20.0,
+        50.551192966103464
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 11,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_6",
+        "depends_on_goal_ids": [
+          "turn_5"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_6",
+          "depends_on_goal_ids": [
+            "turn_5"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S10",
+      "state_after_id": "S11",
+      "action_id": "A11",
+      "module": "route",
+      "target_port_before": {
+        "id": "M10.out",
+        "position": [
+          186.60254737219412,
+          0.0,
+          34.64097847776267
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M11",
+      "produced_port_ids": [
+        "M11.out"
+      ],
+      "removed_port_ids": [
+        "M10.out"
+      ],
+      "consumed_port_ids": [
+        "M10.out"
+      ],
+      "connection_edge_ids": [
+        "E10"
+      ],
+      "affected_goal_ids": [
+        "straight_6"
+      ],
+      "completed_goal_ids": [
+        "straight_6"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M10.out"
+      ],
+      "open_port_ids_after": [
+        "M11.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0011_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 11,
+        "action_id": "A11",
+        "module_id": "M11",
+        "port_ids": [],
+        "target_port_id": "M10.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M11",
+                "M9"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "centerline_separation": 17.320508075688775,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112254
+            },
+            {
+              "module_ids": [
+                "M11",
+                "M10"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ],
+                [
+                  169.54203418874,
+                  0.0,
+                  35.066444560806346
+                ]
+              ],
+              "centerline_separation": 17.06581763264312,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356879
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_11_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_11_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -15.000028390452933
+      ],
+      "maximum": [
+        215.26279542574565,
+        20.0,
+        50.551192966103464
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 12,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_6",
+        "depends_on_goal_ids": [
+          "straight_6"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -30.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_6",
+          "depends_on_goal_ids": [
+            "straight_6"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -30.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S11",
+      "state_after_id": "S12",
+      "action_id": "A12",
+      "module": "route",
+      "target_port_before": {
+        "id": "M11.out",
+        "position": [
+          206.60254037843964,
+          0.0,
+          -4.171145995712777e-05
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M12",
+      "produced_port_ids": [
+        "M12.out"
+      ],
+      "removed_port_ids": [
+        "M11.out"
+      ],
+      "consumed_port_ids": [
+        "M11.out"
+      ],
+      "connection_edge_ids": [
+        "E11"
+      ],
+      "affected_goal_ids": [
+        "turn_6"
+      ],
+      "completed_goal_ids": [
+        "turn_6"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M11.out"
+      ],
+      "open_port_ids_after": [
+        "M12.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0012_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 12,
+        "action_id": "A12",
+        "module_id": "M12",
+        "port_ids": [],
+        "target_port_id": "M11.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M12",
+                "M11"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  206.87608864670702,
+                  0.0,
+                  -0.44643211683752426
+                ],
+                [
+                  207.17262429530288,
+                  0.0,
+                  -0.877894349480254
+                ]
+              ],
+              "existing_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "centerline_separation": 0.5235389661574668,
+              "required_separation": 20.0,
+              "clearance": -19.476461033842533
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_12_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_12_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -15.000028390452933
+      ],
+      "maximum": [
+        215.26279542574565,
+        20.0,
+        50.551192966103464
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 13,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_7",
+        "depends_on_goal_ids": [
+          "turn_6"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_7",
+          "depends_on_goal_ids": [
+            "turn_6"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S12",
+      "state_after_id": "S13",
+      "action_id": "A13",
+      "module": "route",
+      "target_port_before": {
+        "id": "M12.out",
+        "position": [
+          210.2627936773069,
+          0.0,
+          -3.6602964882813414
+        ],
+        "axis": [
+          0.8660253028382762,
+          0.0,
+          -0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M13",
+      "produced_port_ids": [
+        "M13.out"
+      ],
+      "removed_port_ids": [
+        "M12.out"
+      ],
+      "consumed_port_ids": [
+        "M12.out"
+      ],
+      "connection_edge_ids": [
+        "E12"
+      ],
+      "affected_goal_ids": [
+        "straight_7"
+      ],
+      "completed_goal_ids": [
+        "straight_7"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M12.out"
+      ],
+      "open_port_ids_after": [
+        "M13.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0013_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 13,
+        "action_id": "A13",
+        "module_id": "M13",
+        "port_ids": [],
+        "target_port_id": "M12.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M13",
+                "M11"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "existing_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "centerline_separation": 5.17638090205042,
+              "required_separation": 20.0,
+              "clearance": -14.82361909794958
+            },
+            {
+              "module_ids": [
+                "M13",
+                "M12"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "existing_segment": [
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ],
+                [
+                  206.87608864670702,
+                  0.0,
+                  -0.44643211683752426
+                ]
+              ],
+              "centerline_separation": 4.668907277118109,
+              "required_separation": 20.0,
+              "clearance": -15.331092722881891
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_13_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_13_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -32.32055651041791
+      ],
+      "maximum": [
+        249.9038075392763,
+        20.0,
+        50.551192966103464
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 14,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_7",
+        "depends_on_goal_ids": [
+          "straight_7"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -90.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_7",
+          "depends_on_goal_ids": [
+            "straight_7"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -90.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S13",
+      "state_after_id": "S14",
+      "action_id": "A14",
+      "module": "route",
+      "target_port_before": {
+        "id": "M13.out",
+        "position": [
+          244.90380579083794,
+          0.0,
+          -23.660303482035005
+        ],
+        "axis": [
+          0.8660253028382762,
+          0.0,
+          -0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M14",
+      "produced_port_ids": [
+        "M14.out"
+      ],
+      "removed_port_ids": [
+        "M13.out"
+      ],
+      "consumed_port_ids": [
+        "M13.out"
+      ],
+      "connection_edge_ids": [
+        "E13"
+      ],
+      "affected_goal_ids": [
+        "turn_7"
+      ],
+      "completed_goal_ids": [
+        "turn_7"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M13.out"
+      ],
+      "open_port_ids_after": [
+        "M14.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0014_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 14,
+        "action_id": "A14",
+        "module_id": "M14",
+        "port_ids": [],
+        "target_port_id": "M13.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M14",
+                "M13"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  245.33476698710786,
+                  0.0,
+                  -23.895210285416926
+                ],
+                [
+                  245.77673540226866,
+                  0.0,
+                  -24.108687869640143
+                ]
+              ],
+              "existing_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "centerline_separation": 0.4908245704582368,
+              "required_separation": 20.0,
+              "clearance": -19.509175429541763
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_14_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_14_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M14": {
+        "centerline_length": 15.70796326794896,
+        "minimum_curvature_radius": 10.000000000000014
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -35.910263193554385
+      ],
+      "maximum": [
+        268.6513882002365,
+        20.0,
+        50.551192966103464
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 15,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_8",
+        "depends_on_goal_ids": [
+          "turn_7"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 189.282032,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_8",
+          "depends_on_goal_ids": [
+            "turn_7"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 189.282032,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S14",
+      "state_after_id": "S15",
+      "action_id": "A15",
+      "module": "route",
+      "target_port_before": {
+        "id": "M14.out",
+        "position": [
+          258.5640605676591,
+          0.0,
+          -20.000052202090664
+        ],
+        "axis": [
+          0.5000001748438415,
+          0.0,
+          0.8660253028382762
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M15",
+      "produced_port_ids": [
+        "M15.out"
+      ],
+      "removed_port_ids": [
+        "M14.out"
+      ],
+      "consumed_port_ids": [
+        "M14.out"
+      ],
+      "connection_edge_ids": [
+        "E14"
+      ],
+      "affected_goal_ids": [
+        "straight_8"
+      ],
+      "completed_goal_ids": [
+        "straight_8"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M14.out"
+      ],
+      "open_port_ids_after": [
+        "M15.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0015_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 15,
+        "action_id": "A15",
+        "module_id": "M15",
+        "port_ids": [],
+        "target_port_id": "M14.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M15",
+                "M13"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "existing_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "centerline_separation": 14.14213562373095,
+              "required_separation": 20.0,
+              "clearance": -5.857864376269051
+            },
+            {
+              "module_ids": [
+                "M15",
+                "M14"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "existing_segment": [
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ],
+                [
+                  245.33476698710786,
+                  0.0,
+                  -23.895210285416926
+                ]
+              ],
+              "centerline_separation": 13.790810894741346,
+              "required_separation": 20.0,
+              "clearance": -6.209189105258654
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_15_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_15_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M14": {
+        "centerline_length": 15.70796326794896,
+        "minimum_curvature_radius": 10.000000000000014
+      },
+      "M15": {
+        "centerline_length": 189.28203200000002
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -35.910263193554385
+      ],
+      "maximum": [
+        361.8653626908363,
+        20.0,
+        148.92297863099375
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 16,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_8",
+        "depends_on_goal_ids": [
+          "straight_8"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -90.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_8",
+          "depends_on_goal_ids": [
+            "straight_8"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -90.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S15",
+      "state_after_id": "S16",
+      "action_id": "A16",
+      "module": "route",
+      "target_port_before": {
+        "id": "M15.out",
+        "position": [
+          353.2051096624567,
+          0.0,
+          143.9229768825536
+        ],
+        "axis": [
+          0.5000001748438415,
+          0.0,
+          0.8660253028382762
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M16",
+      "produced_port_ids": [
+        "M16.out"
+      ],
+      "removed_port_ids": [
+        "M15.out"
+      ],
+      "consumed_port_ids": [
+        "M15.out"
+      ],
+      "connection_edge_ids": [
+        "E15"
+      ],
+      "affected_goal_ids": [
+        "turn_8"
+      ],
+      "completed_goal_ids": [
+        "turn_8"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M15.out"
+      ],
+      "open_port_ids_after": [
+        "M16.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0016_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 16,
+        "action_id": "A16",
+        "module_id": "M16",
+        "port_ids": [],
+        "target_port_id": "M15.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M16",
+                "M15"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  353.44001646583865,
+                  0.0,
+                  144.35393807882352
+                ],
+                [
+                  353.65349405006185,
+                  0.0,
+                  144.79590649398432
+                ]
+              ],
+              "existing_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "centerline_separation": 0.4908245704582419,
+              "required_separation": 20.0,
+              "clearance": -19.509175429541756
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_16_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_16_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M14": {
+        "centerline_length": 15.70796326794896,
+        "minimum_curvature_radius": 10.000000000000014
+      },
+      "M15": {
+        "centerline_length": 189.28203200000002
+      },
+      "M16": {
+        "centerline_length": 15.707963267948973,
+        "minimum_curvature_radius": 10.000000000000107
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -35.910263193554385
+      ],
+      "maximum": [
+        365.4550693739761,
+        20.0,
+        167.6705592919522
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 17,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "straight_9",
+        "depends_on_goal_ids": [
+          "turn_8"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "straight_9",
+          "depends_on_goal_ids": [
+            "turn_8"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S16",
+      "state_after_id": "S17",
+      "action_id": "A17",
+      "module": "route",
+      "target_port_before": {
+        "id": "M16.out",
+        "position": [
+          349.54485838251236,
+          0.0,
+          157.5832316593748
+        ],
+        "axis": [
+          -0.8660253028382762,
+          0.0,
+          0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M17",
+      "produced_port_ids": [
+        "M17.out"
+      ],
+      "removed_port_ids": [
+        "M16.out"
+      ],
+      "consumed_port_ids": [
+        "M16.out"
+      ],
+      "connection_edge_ids": [
+        "E16"
+      ],
+      "affected_goal_ids": [
+        "straight_9"
+      ],
+      "completed_goal_ids": [
+        "straight_9"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M16.out"
+      ],
+      "open_port_ids_after": [
+        "M17.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0017_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 17,
+        "action_id": "A17",
+        "module_id": "M17",
+        "port_ids": [],
+        "target_port_id": "M16.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M17",
+                "M15"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "existing_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "centerline_separation": 14.142135623730983,
+              "required_separation": 20.0,
+              "clearance": -5.857864376269017
+            },
+            {
+              "module_ids": [
+                "M17",
+                "M16"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "existing_segment": [
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ],
+                [
+                  353.44001646583865,
+                  0.0,
+                  144.35393807882352
+                ]
+              ],
+              "centerline_separation": 13.790810894741382,
+              "required_separation": 20.0,
+              "clearance": -6.209189105258618
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_17_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_17_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M14": {
+        "centerline_length": 15.70796326794896,
+        "minimum_curvature_radius": 10.000000000000014
+      },
+      "M15": {
+        "centerline_length": 189.28203200000002
+      },
+      "M16": {
+        "centerline_length": 15.707963267948973,
+        "minimum_curvature_radius": 10.000000000000107
+      },
+      "M17": {
+        "centerline_length": 40.00000000000002
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -35.910263193554385
+      ],
+      "maximum": [
+        365.4550693739761,
+        20.0,
+        186.24349168151113
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 18,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_final",
+        "depends_on_goal_ids": [
+          "straight_9"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -30.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_final",
+          "depends_on_goal_ids": [
+            "straight_9"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -30.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S17",
+      "state_after_id": "S18",
+      "action_id": "A18",
+      "module": "route",
+      "target_port_before": {
+        "id": "M17.out",
+        "position": [
+          314.9038462689813,
+          0.0,
+          177.58323865312846
+        ],
+        "axis": [
+          -0.8660253028382762,
+          0.0,
+          0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M18",
+      "produced_port_ids": [
+        "M18.out"
+      ],
+      "removed_port_ids": [
+        "M17.out"
+      ],
+      "consumed_port_ids": [
+        "M17.out"
+      ],
+      "connection_edge_ids": [
+        "E17"
+      ],
+      "affected_goal_ids": [
+        "turn_final"
+      ],
+      "completed_goal_ids": [
+        "turn_final"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M17.out"
+      ],
+      "open_port_ids_after": [
+        "M18.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0018_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 18,
+        "action_id": "A18",
+        "module_id": "M18",
+        "port_ids": [],
+        "target_port_id": "M17.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M18",
+                "M17"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  314.4437513168117,
+                  0.0,
+                  177.8330499500574
+                ],
+                [
+                  313.97121279567864,
+                  0.0,
+                  178.0584393800016
+                ]
+              ],
+              "existing_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "centerline_separation": 0.5235389661574803,
+              "required_separation": 20.0,
+              "clearance": -19.47646103384252
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_18_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_18_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M14": {
+        "centerline_length": 15.70796326794896,
+        "minimum_curvature_radius": 10.000000000000014
+      },
+      "M15": {
+        "centerline_length": 189.28203200000002
+      },
+      "M16": {
+        "centerline_length": 15.707963267948973,
+        "minimum_curvature_radius": 10.000000000000107
+      },
+      "M17": {
+        "centerline_length": 40.00000000000002
+      },
+      "M18": {
+        "centerline_length": 5.235987755983005,
+        "minimum_curvature_radius": 10.000000000000597
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -20.0,
+        -35.910263193554385
+      ],
+      "maximum": [
+        365.4550693739761,
+        20.0,
+        190.5708296305932
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 19,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "close_loop",
+        "depends_on_goal_ids": [
+          "straight_9"
+        ],
+        "allow_parallel": false,
+        "type": "connect",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "start_anchor"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "close_loop",
+          "depends_on_goal_ids": [
+            "straight_9"
+          ],
+          "allow_parallel": false,
+          "type": "connect",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "start_anchor"
+        }
+      ],
+      "state_before_id": "S18",
+      "state_after_id": "S19",
+      "action_id": "A19",
+      "module": "connect_ports",
+      "target_port_before": {
+        "id": "M18.out",
+        "position": [
+          309.90384653946575,
+          0.0,
+          178.9229856247455
+        ],
+        "axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189228977507412e-07
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M19",
+      "produced_port_ids": [],
+      "removed_port_ids": [
+        "M18.out",
+        "M1.in"
+      ],
+      "consumed_port_ids": [
+        "M18.out",
+        "M1.in"
+      ],
+      "connection_edge_ids": [
+        "E18",
+        "E19"
+      ],
+      "affected_goal_ids": [
+        "close_loop"
+      ],
+      "completed_goal_ids": [
+        "close_loop"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M18.out"
+      ],
+      "open_port_ids_after": []
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0019_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 19,
+        "action_id": "A19",
+        "module_id": "M19",
+        "port_ids": [],
+        "target_port_id": "M18.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M19",
+                "M17"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  309.90384653946575,
+                  0.0,
+                  178.9229856247455
+                ],
+                [
+                  -100.0,
+                  0.0,
+                  178.923
+                ]
+              ],
+              "existing_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "centerline_separation": 5.176380902050436,
+              "required_separation": 20.0,
+              "clearance": -14.823619097949564
+            },
+            {
+              "module_ids": [
+                "M19",
+                "M18"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  309.90384653946575,
+                  0.0,
+                  178.9229856247455
+                ],
+                [
+                  -100.0,
+                  0.0,
+                  178.923
+                ]
+              ],
+              "existing_segment": [
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ],
+                [
+                  314.4437513168117,
+                  0.0,
+                  177.8330499500574
+                ]
+              ],
+              "centerline_separation": 4.6689072771181115,
+              "required_separation": 20.0,
+              "clearance": -15.331092722881888
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T161056876004Z/step_mcp/step_19_attempt_2.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T161056876004Z/step_mcp/step_19_validation_2.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M10": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 10.000000000000016
+      },
+      "M11": {
+        "centerline_length": 39.99999999999999
+      },
+      "M12": {
+        "centerline_length": 5.235987755982993,
+        "minimum_curvature_radius": 10.000000000000094
+      },
+      "M13": {
+        "centerline_length": 40.0
+      },
+      "M14": {
+        "centerline_length": 15.70796326794896,
+        "minimum_curvature_radius": 10.000000000000014
+      },
+      "M15": {
+        "centerline_length": 189.28203200000002
+      },
+      "M16": {
+        "centerline_length": 15.707963267948973,
+        "minimum_curvature_radius": 10.000000000000107
+      },
+      "M17": {
+        "centerline_length": 40.00000000000002
+      },
+      "M18": {
+        "centerline_length": 5.235987755983005,
+        "minimum_curvature_radius": 10.000000000000597
+      },
+      "M19": {
+        "centerline_length": 1061.4962842051136,
+        "minimum_curvature_radius": 41.45687681830624
+      },
+      "M2": {
+        "centerline_length": 20.943951023931955,
+        "minimum_curvature_radius": 9.999999999999991
+      },
+      "M3": {
+        "centerline_length": 39.99999999999999
+      },
+      "M4": {
+        "centerline_length": 20.943951023931962,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M5": {
+        "centerline_length": 39.99999999999999
+      },
+      "M6": {
+        "centerline_length": 20.943951023931938,
+        "minimum_curvature_radius": 9.999999999999995
+      },
+      "M7": {
+        "centerline_length": 40.0
+      },
+      "M8": {
+        "centerline_length": 20.943951023931966,
+        "minimum_curvature_radius": 9.999999999999988
+      },
+      "M9": {
+        "centerline_length": 39.99999999999999
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -188.15485740299917,
+        -20.0,
+        -187.19153293264267
+      ],
+      "maximum": [
+        365.4550693739761,
+        20.0,
+        234.08565338388388
+      ]
+    }
+  }
+]

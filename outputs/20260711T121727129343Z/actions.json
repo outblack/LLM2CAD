@@ -1,0 +1,193 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 80.0,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "move_1"
+    ],
+    "completed_goal_ids": [
+      "move_1"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "inline_component",
+    "params": {
+      "section_source": "inherit_target",
+      "length": 30.0,
+      "body_outer_diameter": 30.0,
+      "body_start_offset": 0.0,
+      "body_length": 30.0,
+      "connector_type_out": "plain",
+      "connector_gender_out": "neutral",
+      "component_type": "coupling",
+      "start_position": [
+        0.0,
+        0.0,
+        80.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "connector_1"
+    ],
+    "completed_goal_ids": [
+      "connector_1"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "transition",
+    "params": {
+      "section_source": "inherit_target",
+      "diameter_out": 12.0,
+      "length": 40.0,
+      "start_position": [
+        0.0,
+        0.0,
+        110.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "diameter_in": 20.0,
+      "wall_thickness_in": 2.0,
+      "wall_thickness_out": 2.0,
+      "offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "connector_type_out": "plain",
+      "connector_gender_out": "neutral",
+      "connector_standard_out": null
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "diameter_change_1"
+    ],
+    "completed_goal_ids": [
+      "diameter_change_1"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A4",
+    "action_type": "ADD_MODULE",
+    "target_port": "M3.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 60.0,
+      "direction": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        150.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M3.out"
+    ],
+    "affected_goal_ids": [
+      "move_2"
+    ],
+    "completed_goal_ids": [
+      "move_2"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A5",
+    "action_type": "ADD_MODULE",
+    "target_port": "M4.out",
+    "module": "terminate",
+    "params": {
+      "section_source": "inherit_target",
+      "termination_type": "cap",
+      "thickness": 2.0,
+      "start_position": [
+        0.0,
+        0.0,
+        210.0
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M4.out"
+    ],
+    "affected_goal_ids": [
+      "end_1"
+    ],
+    "completed_goal_ids": [
+      "end_1"
+    ],
+    "satisfied_components": []
+  }
+]

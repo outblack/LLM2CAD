@@ -1,0 +1,43 @@
+[
+  {
+    "attempt_index": 1,
+    "status": "rejected",
+    "phase": "semantic_validation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 0,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "provider_response_received": true,
+    "candidate_digest": "cd412273fb85f7b5d6c1083e0d529008eb1a2c641f73ea6f453c3bad962f9085",
+    "validation_signature": "3d3c482a1e82680a142a51d72913c2a29fc4472d4e633a22a08c87d533fef805",
+    "exact_failure_signature": "d1a948b5406042b123d6d102fa0194d82b2d5b9f443c7572ac5ff52340926461",
+    "validation_signature_repeat_count": 1,
+    "exact_failure_repeat_count": 1,
+    "issue_codes": [
+      "INTENT_SAFETY_CONTRACT"
+    ],
+    "diagnostic": "[\"intent lost or altered explicit millimeter values from the user request: [10.0]\"]",
+    "lineage_reset": false,
+    "will_retry": true,
+    "advisor_status": "complete",
+    "advisor_disposition": "retry_intent",
+    "advisor_protocol_attempts": 1,
+    "advisor_error": null,
+    "advisor_required": true,
+    "advisor_source": "primary_advisor",
+    "advisor_fallback_used": false,
+    "terminal_reason": null
+  },
+  {
+    "attempt_index": 2,
+    "status": "accepted",
+    "phase": "semantic_validation",
+    "scope_validated": true,
+    "semantic_attempt": 2,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "e81e2b398733aa6725aed3626dced40f006eb40ba1edf4892f82087abd7fae5e",
+    "diagnostic": null,
+    "lineage_reset": false
+  }
+]

@@ -1,0 +1,302 @@
+{
+  "attempt_id": 3,
+  "candidate_document": "CadGenCandidate_20260711T083046127633Z_5_3_fdab1cfaf036",
+  "candidate_shape_fingerprints": {
+    "solid_M1": "a391323781db216fb8556b7692642c474efb99d49eea41ce308291d0388a7128",
+    "solid_M2": "f850b2ac24f9cee781bc9172edf0b9b595a73fe29f4e1fb558106ec8781e63ac",
+    "solid_M3": "dc21c1f8a44e924590f2cc57bc1513a084e9395c1ce57b72b1aba500f75acc9b",
+    "solid_M4": "4d09ba1813e6bb01c75f3b52ca3b5745000c45fca3bedf313684b5dda841d806"
+  },
+  "checks": {
+    "adjacent_interface_overlaps": [],
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [
+        "assembly not built"
+      ],
+      "is_closed": false,
+      "is_null": true,
+      "is_valid": false,
+      "passed": false,
+      "solid_count": 0,
+      "volume": 0.0
+    },
+    "assembly_errors": [],
+    "bore_network": {
+      "passed": false,
+      "reason": "bore network not built"
+    },
+    "centerlines": {
+      "M1": {
+        "curve_length": 30.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M2": {
+        "curve_length": 32.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M3": {
+        "curvature_method": "dense_piecewise_curve_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curvature_repair_hint": "The curvature peak is near authored path point index 2. Move or remove nearby implementation points and spread the turn over longer chords. Preserve genuinely required anchors, but do not add clustered points because shorter adjacent chords make this cubic construction tighter.",
+        "curve_length": 111.63865149982004,
+        "endpoint_tangency_passed": true,
+        "endpoint_tangent_dots": {
+          "final": 1.0,
+          "initial": 1.0
+        },
+        "minimum_join_tangent_dot": 1.0,
+        "minimum_nonlocal_distance": 30.121891248654578,
+        "minimum_radius": 22.68451145659292,
+        "minimum_radius_location": {
+          "edge_parameter": [
+            2,
+            0.35546875
+          ],
+          "position": [
+            135.3859274804816,
+            7.365267822542813,
+            24.692963740240806
+          ],
+          "sample_index": 603
+        },
+        "minimum_radius_nearest_path_point_index": 2,
+        "optimized_handle_factors": [
+          0.4,
+          0.55,
+          0.55,
+          0.35
+        ],
+        "passed": true,
+        "required_radius": 20.0,
+        "required_self_clearance": 20.0001,
+        "sample_count": 769,
+        "self_clearance_closest_pair": {
+          "edge_parameters": [
+            [
+              1,
+              0.65234375
+            ],
+            [
+              2,
+              0.69140625
+            ]
+          ],
+          "intervening_centerline_length": 31.443033682231956,
+          "segment_indices": [
+            423,
+            689
+          ]
+        },
+        "self_clearance_method": "dense_nonlocal_segment_sampling",
+        "self_clearance_passed": true,
+        "tangent_continuity_passed": true,
+        "zero_curvature": false
+      },
+      "M4": {
+        "curve_length": 20.000000000000004,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M5": {
+        "curve_length": 50.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 3,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [
+      {
+        "details": {
+          "adjacent_cylinder_radii": [
+            5.5,
+            5.5
+          ],
+          "edge_center": [
+            159.152876042681,
+            -11.344849814108647,
+            41.33429397351845
+          ],
+          "edge_length": 0.015454832089426421,
+          "error": "16Standard_Failure There are no suitable edges for chamfer or fillet",
+          "kernel_code": "NO_SUITABLE_EDGES",
+          "module_type": "junction",
+          "radius": 4.0,
+          "surface": "inner"
+        },
+        "error": "exact compact junction fillet failed: {\"surface\":\"inner\",\"radius\":4.0,\"edge_center\":[159.152876042681,-11.344849814108647,41.33429397351845],\"edge_length\":0.015454832089426421,\"adjacent_cylinder_radii\":[5.5,5.5],\"error\":\"16Standard_Failure There are no suitable edges for chamfer or fillet\"}",
+        "failure_code": "JUNCTION_INNER_FILLET_FAILED",
+        "module_id": "M5",
+        "stage": "fillet_compact_junction_material"
+      }
+    ],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            30.0,
+            10.0,
+            10.0
+          ],
+          "minimum": [
+            0.0,
+            -10.0,
+            -10.0
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 3392.9200658769773
+      },
+      "M2": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            46.0,
+            16.0,
+            10.000000000000343
+          ],
+          "minimum": [
+            20.0,
+            -10.0,
+            -10.0
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 2976.8963855307175
+      },
+      "M3": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            157.18555072134808,
+            21.857110887156914,
+            47.1898838327366
+          ],
+          "minimum": [
+            46.0,
+            -28.695037851328387,
+            -21.458565733209262
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 12626.03496350281
+      },
+      "M4": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            166.66005863748728,
+            10.868123840944852,
+            47.91632169503941
+          ],
+          "minimum": [
+            137.4331115704455,
+            -17.91632169513127,
+            19.131876159018557
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 1947.7874499902605
+      },
+      "M5": {
+        "error": "exact compact junction fillet failed: {\"surface\":\"inner\",\"radius\":4.0,\"edge_center\":[159.152876042681,-11.344849814108647,41.33429397351845],\"edge_length\":0.015454832089426421,\"adjacent_cylinder_radii\":[5.5,5.5],\"error\":\"16Standard_Failure There are no suitable edges for chamfer or fillet\"}",
+        "passed": false
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "passed": false,
+      "reason": "outer network not built"
+    },
+    "required_internal_section_module_count": 5,
+    "sampled_internal_section_count": 19,
+    "sampled_internal_sections_by_module": {
+      "M1": 1,
+      "M2": 4,
+      "M3": 7,
+      "M4": 7
+    },
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": [
+      {
+        "error": "module shape is missing",
+        "module_id": "M5"
+      },
+      {
+        "error": "one or more geometry-bearing modules have no internal wall sample",
+        "module_ids": [
+          "M5"
+        ]
+      }
+    ]
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v21",
+  "module_ids": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "passed": false,
+  "payload_digest": "fdab1cfaf036229c5ccfa3e84d84c8db4f53d6d02939df2f819ca514403c33bd",
+  "run_id": "20260711T083046127633Z",
+  "schema_version": 3,
+  "state_id": "S5",
+  "state_version": 5,
+  "validator_policy": {
+    "generator_version": "cadgen02-freecad-v21",
+    "policy_digest": "287bef99cde36a01250fc736311eaff46a51b6e1b7439dc460a4564e031cfa41",
+    "policy_id": "cadgen02-freecad-validator-v21",
+    "validation_schema_version": 3
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "records": [
+    {
+      "case_id": "ec2ebcbce8a31b488970feec51183392b70e6dba55e79344268ff9227825ed5c",
+      "diagnostic_context_digest": "8af4dcf99cb5773fe0dabce63422b5b62cf6d2e79c0793728d0c3752836281d1",
+      "failure_signature": "3118bf861e200fafb2ccd22cda1a4c90fd225511764d127868e1b55c38f68423",
+      "state_id": "S1",
+      "step_index": 2,
+      "attempt_index": 1,
+      "repair_epoch": 0,
+      "status": "skipped",
+      "artifact_path": "outputs/20260711T083046127633Z/diagnostics/step_2_attempt_1_case.json",
+      "failure_reason": "deduplicated_or_deterministic_fast_path"
+    },
+    {
+      "case_id": "61e0147744f5dee82b1e622c530ddae4e3b29629c399543624589bf8281fd5c7",
+      "diagnostic_context_digest": "94a543976d70cd5dd94180fe6eee9b660bac53ffd9e2098f109bd00872fa3db9",
+      "failure_signature": "3118bf861e200fafb2ccd22cda1a4c90fd225511764d127868e1b55c38f68423",
+      "state_id": "S4",
+      "step_index": 5,
+      "attempt_index": 1,
+      "repair_epoch": 0,
+      "status": "failed",
+      "artifact_path": "outputs/20260711T083046127633Z/diagnostics/step_5_attempt_1_advisor_failure.json",
+      "failure_reason": "provider_error"
+    },
+    {
+      "case_id": "b6178c8c02fab14916408a70892739ab23fe03f6f8328258c775c64bc5d17bd8",
+      "diagnostic_context_digest": "57a10dd610defb8f2fea197a095d07fea1719d0c8909ba9669c3db65405fe29e",
+      "failure_signature": "444ba3ea26557d5bd9b79896a4da352339a68811684120c1c866c2713887b1e8",
+      "state_id": "S4",
+      "step_index": 5,
+      "attempt_index": 2,
+      "repair_epoch": 0,
+      "status": "failed",
+      "artifact_path": "outputs/20260711T083046127633Z/diagnostics/step_5_attempt_2_advisor_failure.json",
+      "failure_reason": "provider_error"
+    },
+    {
+      "case_id": "d174dc425802aacc3b47f738182ad31c7ace6c274a4642ae686fa348babe238c",
+      "diagnostic_context_digest": "31ad4f66c189975d73a01ed10d03600388dd515e6c2066878003280c04c34143",
+      "failure_signature": "3118bf861e200fafb2ccd22cda1a4c90fd225511764d127868e1b55c38f68423",
+      "state_id": "S4",
+      "step_index": 5,
+      "attempt_index": 3,
+      "repair_epoch": 0,
+      "status": "skipped",
+      "artifact_path": "outputs/20260711T083046127633Z/diagnostics/step_5_attempt_3_case.json",
+      "failure_reason": "deduplicated_or_deterministic_fast_path"
+    },
+    {
+      "case_id": "213a1194706667bb73fbfcb2a289b10508e71dd473d2df7ac2456df72aef6636",
+      "diagnostic_context_digest": "d830c7385354a88377a2d0a43a23f4b51bc0d938d144096fae1083121cd3ac8f",
+      "failure_signature": "3118bf861e200fafb2ccd22cda1a4c90fd225511764d127868e1b55c38f68423",
+      "state_id": "S4",
+      "step_index": 5,
+      "attempt_index": 4,
+      "repair_epoch": 0,
+      "status": "skipped",
+      "artifact_path": "outputs/20260711T083046127633Z/diagnostics/step_5_attempt_4_case.json",
+      "failure_reason": "deduplicated_or_deterministic_fast_path"
+    }
+  ],
+  "calls_by_step": {
+    "5:0": 2
+  },
+  "cache_hit_count": 0,
+  "futile_retry_avoided_count": 0
+}

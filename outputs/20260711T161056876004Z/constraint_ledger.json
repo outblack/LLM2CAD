@@ -1,0 +1,828 @@
+{
+  "schema_version": 1,
+  "ledger_digest": "e918d86d1d499b9e87f34ffaa5be33ed41543b79d5738c2ccdf34721495ab1b0",
+  "constraints": [
+    {
+      "constraint_id": "section.outer_diameter",
+      "constraint_type": "circular_section_outer_diameter",
+      "source_goal_id": null,
+      "source_field": "global_spec.outer_diameter",
+      "source_span": "외경 20 mm, 두께 2 mm인 속이 빈 파이프를 사용하여, XY",
+      "priority": "safety",
+      "relation": "exact",
+      "value": 20.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "section.outer_diameter"
+      ]
+    },
+    {
+      "constraint_id": "section.wall_thickness",
+      "constraint_type": "positive_hollow_wall",
+      "source_goal_id": null,
+      "source_field": "global_spec.wall_thickness",
+      "source_span": "외경 20 mm, 두께 2 mm인 속이 빈 파이프를 사용하여, XY 평 면 위에 삼",
+      "priority": "safety",
+      "relation": "exact",
+      "value": 2.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "section.wall_thickness"
+      ]
+    },
+    {
+      "constraint_id": "topology.connected",
+      "constraint_type": "single_connected_pipe_network",
+      "source_goal_id": null,
+      "source_field": null,
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": true,
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "topology.graph"
+      ]
+    },
+    {
+      "constraint_id": "geometry.no_self_intersection",
+      "constraint_type": "positive_swept_envelope_clearance",
+      "source_goal_id": null,
+      "source_field": null,
+      "source_span": null,
+      "priority": "safety",
+      "relation": "minimum",
+      "value": 0.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "centerline.program"
+      ]
+    },
+    {
+      "constraint_id": "topology.expected_open_ports",
+      "constraint_type": "open_port_count",
+      "source_goal_id": null,
+      "source_field": null,
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": 0,
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "topology.open_ports"
+      ]
+    },
+    {
+      "constraint_id": "straight_1.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_1",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_1.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_1.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_1",
+      "source_field": "target_behavior[0].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_1.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_1.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_1",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_1.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_1.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_1",
+      "source_field": "target_behavior[1].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 120.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_1.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_1.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_1",
+      "source_field": "target_behavior[1].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_1.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_2.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_2",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_2.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_2.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_2",
+      "source_field": "target_behavior[2].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_2.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_2.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_2",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_2.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_2.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_2",
+      "source_field": "target_behavior[3].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": -120.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_2.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_2.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_2",
+      "source_field": "target_behavior[3].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_2.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_3.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_3",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_3.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_3.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_3",
+      "source_field": "target_behavior[4].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_3.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_3.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_3",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_3.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_3.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_3",
+      "source_field": "target_behavior[5].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 120.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_3.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_3.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_3",
+      "source_field": "target_behavior[5].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_3.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_4.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_4",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_4.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_4.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_4",
+      "source_field": "target_behavior[6].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_4.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_4.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_4",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_4.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_4.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_4",
+      "source_field": "target_behavior[7].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": -120.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_4.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_4.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_4",
+      "source_field": "target_behavior[7].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_4.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_5.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_5",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_5.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_5.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_5",
+      "source_field": "target_behavior[8].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_5.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_5.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_5",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_5.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_5.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_5",
+      "source_field": "target_behavior[9].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 120.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_5.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_5.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_5",
+      "source_field": "target_behavior[9].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_5.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_6.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_6",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_6.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_6.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_6",
+      "source_field": "target_behavior[10].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_6.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_6.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_6",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_6.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_6.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_6",
+      "source_field": "target_behavior[11].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": -30.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_6.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_6.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_6",
+      "source_field": "target_behavior[11].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_6.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_7.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_7",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_7.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_7.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_7",
+      "source_field": "target_behavior[12].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_7.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_7.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_7",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_7.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_7.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_7",
+      "source_field": "target_behavior[13].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": -90.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_7.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_7.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_7",
+      "source_field": "target_behavior[13].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_7.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_8.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_8",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_8.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_8.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_8",
+      "source_field": "target_behavior[14].length",
+      "source_span": "래로 내려가고, 다시 오른쪽으로 90도 회전한 다음 길이 189.282032 mm의 아래쪽 복귀 직선을 만들어줘. 그 끝에서 오른쪽으",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 189.282032,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_8.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_8.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_8",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_8.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_8.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_8",
+      "source_field": "target_behavior[15].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": -90.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_8.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_8.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_8",
+      "source_field": "target_behavior[15].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_8.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "straight_9.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "straight_9",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "straight_9.primitive"
+      ]
+    },
+    {
+      "constraint_id": "straight_9.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "straight_9",
+      "source_field": "target_behavior[16].length",
+      "source_span": "향은 +X축을 기준으로 60도 위쪽을 향하게 하고, 길이 40 mm의 직선 구간 6개를 순서대로 연결해줘. 앞의 5개",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "straight_9.length"
+      ]
+    },
+    {
+      "constraint_id": "turn_final.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "turn_final",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "turn_final.primitive"
+      ]
+    },
+    {
+      "constraint_id": "turn_final.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_final",
+      "source_field": "target_behavior[17].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": -30.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_final.angle"
+      ]
+    },
+    {
+      "constraint_id": "turn_final.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "turn_final",
+      "source_field": "target_behavior[17].bend_radius",
+      "source_span": "작 구간과 자연스럽게 연결해줘. 모든 회전부는 굽힘 반경 10 mm의 부드러운 원형 곡관으로 만들고, 파이프끼리 교차하",
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "turn_final.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "close_loop.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "close_loop",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "connect",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "close_loop.primitive"
+      ]
+    }
+  ]
+}

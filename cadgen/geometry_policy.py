@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
+from typing import Literal
 
 from cadgen.vector import add, cross, length, mul, normalize, sub, vec
 
@@ -27,6 +28,82 @@ SPLINE_REGULARITY_MARGIN_FRACTION = 1.0
 # route contract, so return it to intent repair instead of silently magnifying it.
 MAX_QUALITATIVE_WAYPOINT_SAFETY_SCALE = 4.0
 
+# Three-point arc reconstruction performs several cross products and divisions
+# before returning a radius.  Treat only a handful of representational ULPs as
+# exact equality; the much larger modeling tolerance must never excuse a real
+# negative profile clearance.
+# A three-point OCC circle fit followed by edge-center/radius extraction crosses
+# several normalized-vector, transform, and square-root operations.  The exact
+# horn boundary has been observed to return roughly 16 binary64 ULPs below the
+# authored radius after that round trip.  Keep a bounded 64-ULP representation
+# band: it covers accumulated floating-point evaluation error while remaining
+# many orders of magnitude smaller than any modeling tolerance or physical
+# clearance, so a genuinely spindle/self-intersecting sweep is still rejected.
+CIRCULAR_SWEEP_EQUALITY_ULPS = 64
+
+
+CircularSweepRadiusClassification = Literal[
+    "regular",
+    "horn_boundary",
+    "self_intersecting",
+]
+
+
+@dataclass(frozen=True)
+class CircularSweepRadiusAssessment:
+    """Classify a circular-profile sweep from its exact radial clearance.
+
+    A circular centerline swept by an outer profile radius forms a ring torus
+    above the boundary, a horn torus at equality, and a self-intersecting
+    spindle torus below it.  Modeling tolerance is deliberately absent here:
+    it must not turn a genuinely negative clearance into accepted geometry.
+    """
+
+    centerline_radius: float
+    outer_profile_radius: float
+    raw_radial_clearance: float
+    radial_clearance: float
+    equality_roundoff_band: float
+    classification: CircularSweepRadiusClassification
+
+    @property
+    def supported_by_analytic_torus(self) -> bool:
+        return self.classification != "self_intersecting"
+
+
+def classify_circular_sweep_radius(
+    centerline_radius: float,
+    outer_profile_radius: float,
+) -> CircularSweepRadiusAssessment:
+    """Return the exact ring/horn/spindle classification for a circular sweep."""
+
+    centerline = float(centerline_radius)
+    profile = float(outer_profile_radius)
+    if not math.isfinite(centerline) or centerline <= 0.0:
+        raise ValueError("centerline_radius must be finite and positive")
+    if not math.isfinite(profile) or profile <= 0.0:
+        raise ValueError("outer_profile_radius must be finite and positive")
+    raw_clearance = centerline - profile
+    equality_roundoff_band = CIRCULAR_SWEEP_EQUALITY_ULPS * max(
+        math.ulp(centerline),
+        math.ulp(profile),
+    )
+    clearance = 0.0 if abs(raw_clearance) <= equality_roundoff_band else raw_clearance
+    if clearance < 0.0:
+        classification: CircularSweepRadiusClassification = "self_intersecting"
+    elif clearance == 0.0:
+        classification = "horn_boundary"
+    else:
+        classification = "regular"
+    return CircularSweepRadiusAssessment(
+        centerline_radius=centerline,
+        outer_profile_radius=profile,
+        raw_radial_clearance=raw_clearance,
+        radial_clearance=clearance,
+        equality_roundoff_band=equality_roundoff_band,
+        classification=classification,
+    )
+
 
 @dataclass(frozen=True)
 class C1SplinePrediction:
@@ -37,6 +114,9 @@ class C1SplinePrediction:
     curve_length: float
     polyline_length: float
     minimum_chord: float
+    critical_span_index: int | None
+    critical_t: float | None
+    critical_position: tuple[float, float, float] | None
 
 
 def predict_c1_spline(
@@ -93,10 +173,19 @@ def predict_c1_spline(
         *,
         samples_per_span: int,
         measure_length: bool = False,
-    ) -> tuple[float, float]:
+    ) -> tuple[
+        float,
+        float,
+        int | None,
+        float | None,
+        tuple[float, float, float] | None,
+    ]:
         handles = [factor * scale for factor, scale in zip(factors, local_scales)]
         maximum_curvature = 0.0
         sampled_length = 0.0
+        critical_span_index: int | None = None
+        critical_t: float | None = None
+        critical_position: tuple[float, float, float] | None = None
         for index in range(len(canonical_points) - 1):
             p0 = canonical_points[index]
             p1 = add(p0, mul(tangents[index], handles[index]))
@@ -117,42 +206,50 @@ def predict_c1_spline(
                     mul(add(sub(p2, mul(p1, 2.0)), p0), 6.0 * complement),
                     mul(add(sub(p3, mul(p2, 2.0)), p1), 6.0 * parameter),
                 )
+                position = add(
+                    add(
+                        mul(p0, complement**3),
+                        mul(p1, 3.0 * complement * complement * parameter),
+                    ),
+                    add(
+                        mul(p2, 3.0 * complement * parameter * parameter),
+                        mul(p3, parameter**3),
+                    ),
+                )
                 speed = length(first_derivative)
                 if speed <= tolerance:
-                    return 0.0, 0.0
+                    return 0.0, 0.0, index, parameter, position
                 curvature = length(cross(first_derivative, second_derivative)) / (
                     speed**3
                 )
-                maximum_curvature = max(maximum_curvature, curvature)
+                if curvature > maximum_curvature:
+                    maximum_curvature = curvature
+                    critical_span_index = index
+                    critical_t = parameter
+                    critical_position = position
                 if measure_length:
-                    position = add(
-                        add(
-                            mul(p0, complement**3),
-                            mul(p1, 3.0 * complement * complement * parameter),
-                        ),
-                        add(
-                            mul(p2, 3.0 * complement * parameter * parameter),
-                            mul(p3, parameter**3),
-                        ),
-                    )
                     if previous_position is not None:
                         sampled_length += length(sub(position, previous_position))
                     previous_position = position
-        minimum_radius = (
-            1.0 / maximum_curvature if maximum_curvature > 1e-12 else 1e30
+        minimum_radius = 1.0 / maximum_curvature if maximum_curvature > 1e-12 else 1e30
+        return (
+            minimum_radius,
+            sampled_length,
+            critical_span_index,
+            critical_t,
+            critical_position,
         )
-        return minimum_radius, sampled_length
 
     factors = [0.4] * len(canonical_points)
     candidates = (0.4, 0.35, 0.45, 0.3, 0.5, 0.25, 0.55)
     for _pass_index in range(2):
         for node_index in range(len(factors)):
             best_factor = factors[node_index]
-            best_score, _unused_length = evaluate(factors, samples_per_span=33)
+            best_score, *_unused = evaluate(factors, samples_per_span=33)
             for candidate_factor in candidates:
                 candidate = list(factors)
                 candidate[node_index] = candidate_factor
-                candidate_score, _unused_length = evaluate(
+                candidate_score, *_unused = evaluate(
                     candidate,
                     samples_per_span=33,
                 )
@@ -161,7 +258,13 @@ def predict_c1_spline(
                     best_factor = candidate_factor
             factors[node_index] = best_factor
 
-    minimum_radius, curve_length = evaluate(
+    (
+        minimum_radius,
+        curve_length,
+        critical_span_index,
+        critical_t,
+        critical_position,
+    ) = evaluate(
         factors,
         samples_per_span=257,
         measure_length=True,
@@ -172,6 +275,9 @@ def predict_c1_spline(
         curve_length=curve_length,
         polyline_length=sum(chords),
         minimum_chord=min(chords),
+        critical_span_index=critical_span_index,
+        critical_t=critical_t,
+        critical_position=critical_position,
     )
 
 

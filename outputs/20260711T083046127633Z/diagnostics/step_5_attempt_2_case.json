@@ -1,0 +1,699 @@
+{
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260711T083046127633Z",
+    "state_id": "S4",
+    "state_digest": "831ef0e23371b84968f5b7ad20d1c5a3650b8ba4cdae44d5f9677868d7ffb732",
+    "contract_digest": "d7a04f4658f7203bd1389426400eded5f5a046519fcbaadbbd8add49e4627714",
+    "step_index": 5,
+    "attempt_index": 2,
+    "action_digest": "2107d1a7200f742fb0f4cbbb20b3062d6beea0fca279c9e1db27ab0a77bf1867",
+    "failure_signature": "444ba3ea26557d5bd9b79896a4da352339a68811684120c1c866c2713887b1e8",
+    "evidence_digest": "516f83261b42680396c599c6c8e1563b8a1e6cf1f96d3238feaed9d78f30272e",
+    "generator_version": "cadgen02-freecad-v21",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "287bef99cde36a01250fc736311eaff46a51b6e1b7439dc460a4564e031cfa41",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0005_01_BRANCH_STYLE_MISMATCH"
+  ],
+  "current_state": {
+    "state_id": "S4",
+    "state_version": 4,
+    "contract_digest": "d7a04f4658f7203bd1389426400eded5f5a046519fcbaadbbd8add49e4627714",
+    "remaining_goal_ids": [
+      "second_junction"
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out_1",
+        "position": [
+          30.0,
+          16.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      {
+        "id": "M4.out",
+        "position": [
+          162.32993161855453,
+          -8.16496580927726,
+          38.16496580927726
+        ],
+        "axis": [
+          0.8164965809277261,
+          -0.4082482904638631,
+          0.4082482904638631
+        ],
+        "outer_diameter": 15.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E4",
+        "port_a_id": "M3.out",
+        "port_b_id": "M4.in",
+        "action_id": "A4",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "d7a04f4658f7203bd1389426400eded5f5a046519fcbaadbbd8add49e4627714",
+    "goal_ids": [
+      "second_junction"
+    ],
+    "goals": [
+      {
+        "goal_id": "second_junction",
+        "depends_on_goal_ids": [
+          "taper_section"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [
+          [
+            1.0,
+            1.0,
+            0.0
+          ],
+          [
+            1.0,
+            -1.0,
+            0.0
+          ]
+        ],
+        "required_outlets": [],
+        "include_primary_outlet": false,
+        "junction_style": "smooth_hub",
+        "required_waypoints": []
+      }
+    ],
+    "expected_open_ports": 3,
+    "expected_open_ports_source": "explicit"
+  },
+  "rejected_draft": {
+    "target_port": "M4.out",
+    "module": "junction",
+    "params": {
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "length": 20.0,
+          "outer_diameter": 15.0,
+          "wall_thickness": 2.0
+        },
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            -1.0,
+            0.0
+          ],
+          "length": 20.0,
+          "outer_diameter": 15.0,
+          "wall_thickness": 2.0
+        }
+      ],
+      "max_hub_radius": 12.0,
+      "blend_mode": "hard"
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "second_junction"
+    ],
+    "completed_goal_ids": [
+      "second_junction"
+    ],
+    "satisfied_components": [],
+    "rationale": "The previous attempt with a filleted junction failed FreeCAD geometry validation, likely due to self-intersection between the complex blend surfaces and the hub geometry at this specific outlet configuration. I am switching to 'hard' blend mode to provide a more robust geometric intersection and increasing the hub radius slightly (to 12mm) to ensure the 15mm diameter branches have a clean transition within the manifold hub while maintaining the required 20mm branch lengths."
+  },
+  "resolved_action": {
+    "action_id": "A5",
+    "action_type": "ADD_MODULE",
+    "target_port": "M4.out",
+    "module": "junction",
+    "params": {
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "length": 20.0,
+          "outer_diameter": 15.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "role": "branch",
+          "axis": [
+            1.0,
+            -1.0,
+            0.0
+          ],
+          "length": 20.0,
+          "outer_diameter": 15.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "max_hub_radius": 12.0,
+      "blend_mode": "hard",
+      "start_position": [
+        162.32993161855453,
+        -8.16496580927726,
+        38.16496580927726
+      ],
+      "axis": [
+        0.8164965809277261,
+        -0.4082482904638631,
+        0.4082482904638631
+      ],
+      "outer_diameter": 15.0,
+      "wall_thickness": 2.0,
+      "branch_count": 2,
+      "include_primary_outlet": false,
+      "outlet_vectors": [
+        [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0
+        ],
+        [
+          0.7071067811865475,
+          -0.7071067811865475,
+          0.0
+        ]
+      ]
+    },
+    "consumed_port_ids": [
+      "M4.out"
+    ],
+    "affected_goal_ids": [
+      "second_junction"
+    ],
+    "completed_goal_ids": [
+      "second_junction"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [],
+  "failed_checks": [
+    {
+      "check_name": "branch_blend_style",
+      "issue_id": "STEP_0005_01_BRANCH_STYLE_MISMATCH",
+      "issue_code": "BRANCH_STYLE_MISMATCH",
+      "expected": {
+        "junction_style": "smooth_hub"
+      },
+      "actual": {
+        "blend_mode": "hard"
+      }
+    }
+  ],
+  "passed_check_summary": [],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S4",
+        "contract_digest": "d7a04f4658f7203bd1389426400eded5f5a046519fcbaadbbd8add49e4627714",
+        "goal_ids": [
+          "second_junction"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "policy_id": "cadgen02-freecad-validator-v21",
+        "policy_digest": "287bef99cde36a01250fc736311eaff46a51b6e1b7439dc460a4564e031cfa41",
+        "generator_version": "cadgen02-freecad-v21",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0005_01_BRANCH_STYLE_MISMATCH",
+        "issue_code": "BRANCH_STYLE_MISMATCH",
+        "check_name": "branch_blend_style",
+        "expected": {
+          "junction_style": "smooth_hub"
+        },
+        "actual": {
+          "blend_mode": "hard"
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check branch_blend_style supplied failure evidence.",
+      "data": {
+        "check_name": "branch_blend_style",
+        "issue_id": "STEP_0005_01_BRANCH_STYLE_MISMATCH",
+        "issue_code": "BRANCH_STYLE_MISMATCH",
+        "expected": {
+          "junction_style": "smooth_hub"
+        },
+        "actual": {
+          "blend_mode": "hard"
+        }
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/blend_mode",
+        "current_path": "/params/blend_mode",
+        "values": [
+          "fillet",
+          "hard"
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/blend_radius",
+          "/params/inner_blend_radius",
+          "/params/max_hub_radius"
+        ],
+        "finding": "not_comparable"
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/blend_radius",
+        "current_path": null,
+        "values": [
+          5.0,
+          null
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/blend_mode",
+          "/params/inner_blend_radius",
+          "/params/max_hub_radius"
+        ],
+        "finding": "not_comparable"
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/inner_blend_radius",
+        "current_path": null,
+        "values": [
+          2.5,
+          null
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/blend_mode",
+          "/params/blend_radius",
+          "/params/max_hub_radius"
+        ],
+        "finding": "not_comparable"
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/max_hub_radius",
+        "current_path": "/params/max_hub_radius",
+        "values": [
+          10.0,
+          12.0
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/blend_mode",
+          "/params/blend_radius",
+          "/params/inner_blend_radius"
+        ],
+        "finding": "not_comparable"
+      }
+    },
+    {
+      "evidence_id": "E009",
+      "kind": "parameter_effect",
+      "statement": "In the v21 hard-junction builder max_hub_radius does not construct the local material or define overlap allowance.",
+      "data": {
+        "policy_id": "resolver-local-interface-band-v1",
+        "generator_version": "cadgen02-freecad-v21",
+        "parameter_path": "/params/max_hub_radius",
+        "construction_effect": "none_in_hard_material_builder",
+        "failed_metric_effect": "none_on_local_interface_allowance"
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/role",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/wall_thickness",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/role",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/wall_thickness",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/max_hub_radius",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/blend_mode",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [
+    {
+      "path": "/params/blend_mode",
+      "current_path": "/params/blend_mode",
+      "values": [
+        "fillet",
+        "hard"
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/blend_radius",
+        "/params/inner_blend_radius",
+        "/params/max_hub_radius"
+      ],
+      "finding": "not_comparable"
+    },
+    {
+      "path": "/params/blend_radius",
+      "current_path": null,
+      "values": [
+        5.0,
+        null
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/blend_mode",
+        "/params/inner_blend_radius",
+        "/params/max_hub_radius"
+      ],
+      "finding": "not_comparable"
+    },
+    {
+      "path": "/params/inner_blend_radius",
+      "current_path": null,
+      "values": [
+        2.5,
+        null
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/blend_mode",
+        "/params/blend_radius",
+        "/params/max_hub_radius"
+      ],
+      "finding": "not_comparable"
+    },
+    {
+      "path": "/params/max_hub_radius",
+      "current_path": "/params/max_hub_radius",
+      "values": [
+        10.0,
+        12.0
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/blend_mode",
+        "/params/blend_radius",
+        "/params/inner_blend_radius"
+      ],
+      "finding": "not_comparable"
+    }
+  ],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

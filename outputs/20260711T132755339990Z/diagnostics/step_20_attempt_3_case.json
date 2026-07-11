@@ -1,0 +1,1298 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260711T132755339990Z",
+    "state_id": "S19",
+    "state_digest": "c9afb0fc09db9673ea5dfc27ce00f0a033380590610b5f1be6687acee3e0554b",
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "step_index": 20,
+    "attempt_index": 3,
+    "action_digest": "1331f940adb45a6a7dab8dce31d33b7b1c2e8e46cbc1b79596c4013d5ba69e1b",
+    "failure_signature": "59cf54d7fabd3cf8832d1632ebb8ea5185e545519f441ff6fcfe2773b213523b",
+    "evidence_digest": "5e109179ed89ac27ea15a58de8d02e5a4d4ea7745f22d5512db6f5ddc8b2931e",
+    "generator_version": "cadgen02-freecad-v23",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0020_01_GOAL_TURN_ANGLE_MISMATCH",
+    "STEP_0020_02_GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+    "STEP_0020_03_GOAL_BEND_RADIUS_MISMATCH",
+    "STEP_0020_04_ROUTE_START_TANGENT_MISMATCH",
+    "STEP_0020_05_CONNECT_END_TANGENT_MISMATCH",
+    "STEP_0020_06_STATIC_COLLISION_REQUIRES_FREECAD"
+  ],
+  "current_state": {
+    "state_id": "S19",
+    "state_version": 19,
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "remaining_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "open_ports": [
+      {
+        "id": "M19.out",
+        "position": [
+          6.9098300562505415,
+          -9.51056516295155,
+          0.0
+        ],
+        "axis": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6",
+      "M7",
+      "M8",
+      "M9",
+      "M10",
+      "M11",
+      "M12",
+      "M13",
+      "M14",
+      "M15",
+      "M16",
+      "M17",
+      "M18",
+      "M19"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M3.out",
+        "port_b_id": "M4.in",
+        "action_id": "A4",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E4",
+        "port_a_id": "M4.out",
+        "port_b_id": "M5.in",
+        "action_id": "A5",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E5",
+        "port_a_id": "M5.out",
+        "port_b_id": "M6.in",
+        "action_id": "A6",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E6",
+        "port_a_id": "M6.out",
+        "port_b_id": "M7.in",
+        "action_id": "A7",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E7",
+        "port_a_id": "M7.out",
+        "port_b_id": "M8.in",
+        "action_id": "A8",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E8",
+        "port_a_id": "M8.out",
+        "port_b_id": "M9.in",
+        "action_id": "A9",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E9",
+        "port_a_id": "M9.out",
+        "port_b_id": "M10.in",
+        "action_id": "A10",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E10",
+        "port_a_id": "M10.out",
+        "port_b_id": "M11.in",
+        "action_id": "A11",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E11",
+        "port_a_id": "M11.out",
+        "port_b_id": "M12.in",
+        "action_id": "A12",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E12",
+        "port_a_id": "M12.out",
+        "port_b_id": "M13.in",
+        "action_id": "A13",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E13",
+        "port_a_id": "M13.out",
+        "port_b_id": "M14.in",
+        "action_id": "A14",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E14",
+        "port_a_id": "M14.out",
+        "port_b_id": "M15.in",
+        "action_id": "A15",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E15",
+        "port_a_id": "M15.out",
+        "port_b_id": "M16.in",
+        "action_id": "A16",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E16",
+        "port_a_id": "M16.out",
+        "port_b_id": "M17.in",
+        "action_id": "A17",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E17",
+        "port_a_id": "M17.out",
+        "port_b_id": "M18.in",
+        "action_id": "A18",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E18",
+        "port_a_id": "M18.out",
+        "port_b_id": "M19.in",
+        "action_id": "A19",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "goal_ids": [
+      "close_loop",
+      "turn_10"
+    ],
+    "goals": [
+      {
+        "goal_id": "turn_10",
+        "depends_on_goal_ids": [
+          "move_10"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -72.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      {
+        "goal_id": "close_loop",
+        "depends_on_goal_ids": [
+          "turn_10"
+        ],
+        "allow_parallel": false,
+        "type": "connect",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "start_anchor"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "explicit"
+  },
+  "rejected_draft": {
+    "target_port": "M19.out",
+    "module": "connect_ports",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "other_port_id": "M1.in",
+      "waypoints": [
+        [
+          1.9193,
+          -5.871,
+          0.0
+        ]
+      ]
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "completed_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "satisfied_components": [],
+    "rationale": "Slightly shift the midpoint outwards along the perpendicular bisector to target a 10.05mm bend radius instead of exactly 10.0mm. This resolves the micro-tolerance under-run (where numerical roundoff yielded a 9.9997mm radius, violating the 10.0mm minimum curvature radius constraint) while keeping the arc fully compatible with both target ports."
+  },
+  "resolved_action": {
+    "action_id": "A20",
+    "action_type": "ADD_MODULE",
+    "target_port": "M19.out",
+    "module": "connect_ports",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "other_port_id": "M1.in",
+      "waypoints": [
+        [
+          1.9193,
+          -5.871,
+          0.0
+        ]
+      ],
+      "start_position": [
+        6.9098300562505415,
+        -9.51056516295155,
+        0.0
+      ],
+      "axis": [
+        -0.9510565162951534,
+        0.309016994374948,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "end_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "end_axis": [
+        -0.0,
+        -1.0,
+        -0.0
+      ],
+      "bend_radius": 10.049856987682844,
+      "plane_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sweep_angle": -71.58751018911238,
+      "minimum_curvature_radius": 10.0
+    },
+    "consumed_port_ids": [
+      "M19.out",
+      "M1.in"
+    ],
+    "affected_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "completed_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [],
+  "failed_checks": [
+    {
+      "check_name": "goal_completion",
+      "issue_id": "STEP_0020_01_GOAL_TURN_ANGLE_MISMATCH",
+      "issue_code": "GOAL_TURN_ANGLE_MISMATCH",
+      "expected": {
+        "angle": 72.0,
+        "tolerance": 0.1
+      },
+      "actual": {
+        "angle": 71.58751018911238,
+        "goal_id": "turn_10"
+      }
+    },
+    {
+      "check_name": "goal_completion",
+      "issue_id": "STEP_0020_02_GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+      "issue_code": "GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+      "expected": {
+        "signed_angle": -72.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "tolerance": 0.1
+      },
+      "actual": {
+        "signed_angle": -71.58751018911238,
+        "goal_id": "turn_10"
+      }
+    },
+    {
+      "check_name": "goal_completion",
+      "issue_id": "STEP_0020_03_GOAL_BEND_RADIUS_MISMATCH",
+      "issue_code": "GOAL_BEND_RADIUS_MISMATCH",
+      "expected": {
+        "bend_radius": 10.0
+      },
+      "actual": {
+        "bend_radius": 10.049856987682844
+      }
+    },
+    {
+      "check_name": "route_continuity",
+      "issue_id": "STEP_0020_04_ROUTE_START_TANGENT_MISMATCH",
+      "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+      "expected": {
+        "dot": 0.9999,
+        "maximum_rim_error": 0.0001
+      },
+      "actual": {
+        "dot": 0.999993521257,
+        "outer_rim_error": 0.035996507220434834
+      }
+    },
+    {
+      "check_name": "route_continuity",
+      "issue_id": "STEP_0020_05_CONNECT_END_TANGENT_MISMATCH",
+      "issue_code": "CONNECT_END_TANGENT_MISMATCH",
+      "expected": {
+        "dot": 0.9999,
+        "maximum_rim_error": 0.0001
+      },
+      "actual": {
+        "dot": 0.999993521257,
+        "outer_rim_error": 0.035996507220434834
+      }
+    },
+    {
+      "check_name": "conservative_collision",
+      "issue_id": "STEP_0020_06_STATIC_COLLISION_REQUIRES_FREECAD",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M20",
+              "M1"
+            ],
+            "segments": [
+              "segment_0",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                6.9098300562505415,
+                -9.51056516295155,
+                0.0
+              ],
+              [
+                1.9193,
+                -5.871,
+                0.0
+              ]
+            ],
+            "existing_segment": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                40.0,
+                0.0
+              ]
+            ],
+            "centerline_separation": 6.1767591413297,
+            "required_separation": 20.0,
+            "clearance": -13.8232408586703
+          },
+          {
+            "module_ids": [
+              "M20",
+              "M19"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                1.9193,
+                -5.871,
+                0.0
+              ],
+              [
+                0.0,
+                0.0,
+                0.0
+              ]
+            ],
+            "existing_segment": [
+              [
+                44.95209070805668,
+                -21.87124493794947,
+                0.0
+              ],
+              [
+                6.9098300562505415,
+                -9.51056516295155,
+                0.0
+              ]
+            ],
+            "centerline_separation": 6.176716345900188,
+            "required_separation": 20.0,
+            "clearance": -13.82328365409981
+          }
+        ]
+      }
+    }
+  ],
+  "passed_check_summary": [],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S19",
+        "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+        "goal_ids": [
+          "close_loop",
+          "turn_10"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "policy_id": "cadgen02-freecad-validator-v23",
+        "policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+        "generator_version": "cadgen02-freecad-v23",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_01_GOAL_TURN_ANGLE_MISMATCH",
+        "issue_code": "GOAL_TURN_ANGLE_MISMATCH",
+        "check_name": "goal_completion",
+        "expected": {
+          "angle": 72.0,
+          "tolerance": 0.1
+        },
+        "actual": {
+          "angle": 71.58751018911238,
+          "goal_id": "turn_10"
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_02_GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+        "issue_code": "GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+        "check_name": "goal_completion",
+        "expected": {
+          "signed_angle": -72.0,
+          "plane_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tolerance": 0.1
+        },
+        "actual": {
+          "signed_angle": -71.58751018911238,
+          "goal_id": "turn_10"
+        }
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_03_GOAL_BEND_RADIUS_MISMATCH",
+        "issue_code": "GOAL_BEND_RADIUS_MISMATCH",
+        "check_name": "goal_completion",
+        "expected": {
+          "bend_radius": 10.0
+        },
+        "actual": {
+          "bend_radius": 10.049856987682844
+        }
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_04_ROUTE_START_TANGENT_MISMATCH",
+        "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+        "check_name": "route_continuity",
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.999993521257,
+          "outer_rim_error": 0.035996507220434834
+        }
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_05_CONNECT_END_TANGENT_MISMATCH",
+        "issue_code": "CONNECT_END_TANGENT_MISMATCH",
+        "check_name": "route_continuity",
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.999993521257,
+          "outer_rim_error": 0.035996507220434834
+        }
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_06_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M20",
+                "M1"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  6.9098300562505415,
+                  -9.51056516295155,
+                  0.0
+                ],
+                [
+                  1.9193,
+                  -5.871,
+                  0.0
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  40.0,
+                  0.0
+                ]
+              ],
+              "centerline_separation": 6.1767591413297,
+              "required_separation": 20.0,
+              "clearance": -13.8232408586703
+            },
+            {
+              "module_ids": [
+                "M20",
+                "M19"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  1.9193,
+                  -5.871,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "existing_segment": [
+                [
+                  44.95209070805668,
+                  -21.87124493794947,
+                  0.0
+                ],
+                [
+                  6.9098300562505415,
+                  -9.51056516295155,
+                  0.0
+                ]
+              ],
+              "centerline_separation": 6.176716345900188,
+              "required_separation": 20.0,
+              "clearance": -13.82328365409981
+            }
+          ]
+        }
+      }
+    },
+    {
+      "evidence_id": "E009",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check goal_completion supplied failure evidence.",
+      "data": {
+        "check_name": "goal_completion",
+        "issue_id": "STEP_0020_01_GOAL_TURN_ANGLE_MISMATCH",
+        "issue_code": "GOAL_TURN_ANGLE_MISMATCH",
+        "expected": {
+          "angle": 72.0,
+          "tolerance": 0.1
+        },
+        "actual": {
+          "angle": 71.58751018911238,
+          "goal_id": "turn_10"
+        }
+      }
+    },
+    {
+      "evidence_id": "E010",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check goal_completion supplied failure evidence.",
+      "data": {
+        "check_name": "goal_completion",
+        "issue_id": "STEP_0020_02_GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+        "issue_code": "GOAL_TURN_SIGNED_ANGLE_MISMATCH",
+        "expected": {
+          "signed_angle": -72.0,
+          "plane_normal": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "tolerance": 0.1
+        },
+        "actual": {
+          "signed_angle": -71.58751018911238,
+          "goal_id": "turn_10"
+        }
+      }
+    },
+    {
+      "evidence_id": "E011",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check goal_completion supplied failure evidence.",
+      "data": {
+        "check_name": "goal_completion",
+        "issue_id": "STEP_0020_03_GOAL_BEND_RADIUS_MISMATCH",
+        "issue_code": "GOAL_BEND_RADIUS_MISMATCH",
+        "expected": {
+          "bend_radius": 10.0
+        },
+        "actual": {
+          "bend_radius": 10.049856987682844
+        }
+      }
+    },
+    {
+      "evidence_id": "E012",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check route_continuity supplied failure evidence.",
+      "data": {
+        "check_name": "route_continuity",
+        "issue_id": "STEP_0020_04_ROUTE_START_TANGENT_MISMATCH",
+        "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.999993521257,
+          "outer_rim_error": 0.035996507220434834
+        }
+      }
+    },
+    {
+      "evidence_id": "E013",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check route_continuity supplied failure evidence.",
+      "data": {
+        "check_name": "route_continuity",
+        "issue_id": "STEP_0020_05_CONNECT_END_TANGENT_MISMATCH",
+        "issue_code": "CONNECT_END_TANGENT_MISMATCH",
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.999993521257,
+          "outer_rim_error": 0.035996507220434834
+        }
+      }
+    },
+    {
+      "evidence_id": "E014",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check conservative_collision supplied failure evidence.",
+      "data": {
+        "check_name": "conservative_collision",
+        "issue_id": "STEP_0020_06_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M20",
+                "M1"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  6.9098300562505415,
+                  -9.51056516295155,
+                  0.0
+                ],
+                [
+                  1.9193,
+                  -5.871,
+                  0.0
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  0.0,
+                  40.0,
+                  0.0
+                ]
+              ],
+              "centerline_separation": 6.1767591413297,
+              "required_separation": 20.0,
+              "clearance": -13.8232408586703
+            },
+            {
+              "module_ids": [
+                "M20",
+                "M19"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  1.9193,
+                  -5.871,
+                  0.0
+                ],
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              ],
+              "existing_segment": [
+                [
+                  44.95209070805668,
+                  -21.87124493794947,
+                  0.0
+                ],
+                [
+                  6.9098300562505415,
+                  -9.51056516295155,
+                  0.0
+                ]
+              ],
+              "centerline_separation": 6.176716345900188,
+              "required_separation": 20.0,
+              "clearance": -13.82328365409981
+            }
+          ]
+        }
+      }
+    },
+    {
+      "evidence_id": "E015",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/path_kind",
+        "current_path": "/params/path_kind",
+        "values": [
+          "spline",
+          "circular_arc",
+          "circular_arc"
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/waypoints/@optional/0/0/0",
+          "/params/waypoints/@optional/0/0/1"
+        ],
+        "finding": "not_comparable"
+      }
+    },
+    {
+      "evidence_id": "E016",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/waypoints/@optional/0/0/0",
+        "current_path": "/params/waypoints/0/0",
+        "values": [
+          0.0,
+          1.9098,
+          1.9193
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/path_kind",
+          "/params/waypoints/@optional/0/0/1"
+        ],
+        "finding": "not_comparable"
+      }
+    },
+    {
+      "evidence_id": "E017",
+      "kind": "attempt_delta",
+      "statement": "Rejected attempts expose an observed parameter/metric response.",
+      "data": {
+        "path": "/params/waypoints/@optional/0/0/1",
+        "current_path": "/params/waypoints/0/1",
+        "values": [
+          -10.0,
+          -5.8779,
+          -5.871
+        ],
+        "metric_id": null,
+        "metric_values": [],
+        "metric_span": null,
+        "aligned_samples": [],
+        "jointly_changed_paths": [
+          "/params/path_kind",
+          "/params/waypoints/@optional/0/0/0"
+        ],
+        "finding": "not_comparable"
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/waypoints/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This smoothing waypoint was inserted by the planner."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/path_kind",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/other_port_id",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/waypoints/0/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/waypoints/0/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/waypoints/0/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [
+    {
+      "path": "/params/path_kind",
+      "current_path": "/params/path_kind",
+      "values": [
+        "spline",
+        "circular_arc",
+        "circular_arc"
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/waypoints/@optional/0/0/0",
+        "/params/waypoints/@optional/0/0/1"
+      ],
+      "finding": "not_comparable"
+    },
+    {
+      "path": "/params/waypoints/@optional/0/0/0",
+      "current_path": "/params/waypoints/0/0",
+      "values": [
+        0.0,
+        1.9098,
+        1.9193
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/path_kind",
+        "/params/waypoints/@optional/0/0/1"
+      ],
+      "finding": "not_comparable"
+    },
+    {
+      "path": "/params/waypoints/@optional/0/0/1",
+      "current_path": "/params/waypoints/0/1",
+      "values": [
+        -10.0,
+        -5.8779,
+        -5.871
+      ],
+      "metric_id": null,
+      "metric_values": [],
+      "metric_span": null,
+      "aligned_samples": [],
+      "jointly_changed_paths": [
+        "/params/path_kind",
+        "/params/waypoints/@optional/0/0/0"
+      ],
+      "finding": "not_comparable"
+    }
+  ],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

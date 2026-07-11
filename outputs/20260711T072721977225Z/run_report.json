@@ -1,0 +1,224 @@
+{
+  "run_id": "20260711T072721977225Z",
+  "status": "failed",
+  "failed_stage": "registry_validation",
+  "dry_run": false,
+  "freecad_opened": true,
+  "freecad_mcp_used": true,
+  "freecad_mcp_error": null,
+  "verification_status": "failed",
+  "static_error_count": 1,
+  "static_warning_count": 0,
+  "critic_passed": false,
+  "skipped_mcp_reason": null,
+  "top_issues": [
+    "STEP_0003_01_REGISTRY_VALIDATION_FAILED"
+  ],
+  "llm_usage": {
+    "calls": 12,
+    "input_tokens": 84918,
+    "cached_tokens": 14697,
+    "output_tokens": 7729,
+    "thought_tokens": 59959,
+    "tool_use_tokens": 0,
+    "total_tokens": 152606,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "llm_policy": {
+    "models": {
+      "text": "gemini-3-flash-preview",
+      "intent": "gemini-3-flash-preview",
+      "step_planner": "gemini-3-flash-preview",
+      "step_repair_advisor": "gemini-3-flash-preview",
+      "parameter": "gemini-3-flash-preview",
+      "visual_validator": "gemini-3-flash-preview",
+      "patch": "gemini-3-flash-preview",
+      "mcp": "gemini-3-flash-preview"
+    },
+    "default_model": "gemini-3-flash-preview"
+  },
+  "intent_attempt_count": 2,
+  "intent_repair_count": 1,
+  "intent_protocol_retry_count": 0,
+  "action_repair_count": 7,
+  "repair_attempt_count": 7,
+  "step_repair_advisor_count": 1,
+  "advisor_call_count": 1,
+  "advisor_success_count": 0,
+  "advisor_failure_count": 1,
+  "advisor_cache_hit_count": 0,
+  "advisor_artifact_paths": [
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_1_case.json",
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_2_advisor_failure.json",
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_2_case.json",
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_3_case.json",
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_4_case.json",
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_5_case.json",
+    "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_6_case.json"
+  ],
+  "futile_retry_avoided_count": 0,
+  "artifacts": {
+    "run_id": "20260711T072721977225Z",
+    "output_dir": "outputs/20260711T072721977225Z",
+    "prompt_path": "outputs/20260711T072721977225Z/prompt.txt",
+    "intent_path": "outputs/20260711T072721977225Z/intent.json",
+    "intent_attempts_path": "outputs/20260711T072721977225Z/intent_attempts.json",
+    "actions_path": "outputs/20260711T072721977225Z/actions.json",
+    "state_path": "outputs/20260711T072721977225Z/state.json",
+    "freecad_script_path": "outputs/20260711T072721977225Z/freecad_script.py",
+    "report_path": "outputs/20260711T072721977225Z/run_report.json",
+    "step_verification_path": "outputs/20260711T072721977225Z/step_verification.json",
+    "critic_report_path": "outputs/20260711T072721977225Z/critic_report.json",
+    "mcp_result_path": "outputs/20260711T072721977225Z/step_mcp/step_2_attempt_1.json",
+    "action_attempts_path": "outputs/20260711T072721977225Z/action_attempts.json",
+    "repair_advice_path": "outputs/20260711T072721977225Z/repair_advice.json",
+    "diagnostics_index_path": "outputs/20260711T072721977225Z/diagnostics/index.json",
+    "advisor_artifact_paths": [
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_1_case.json",
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_2_advisor_failure.json",
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_2_case.json",
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_3_case.json",
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_4_case.json",
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_5_case.json",
+      "outputs/20260711T072721977225Z/diagnostics/step_3_attempt_6_case.json"
+    ],
+    "checkpoint_path": "outputs/20260711T072721977225Z/checkpoint.json",
+    "freecad_validation_path": "outputs/20260711T072721977225Z/step_mcp/step_2_validation_1.json",
+    "freecad_document_path": "/Users/jhkim/Documents/cadgen02/outputs/20260711T072721977225Z/pipe_v2_0e30955a213d.FCStd",
+    "visual_evidence_paths": []
+  },
+  "artifact_statuses": [
+    {
+      "name": "prompt",
+      "path": "outputs/20260711T072721977225Z/prompt.txt",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent",
+      "path": "outputs/20260711T072721977225Z/intent.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent_attempts",
+      "path": "outputs/20260711T072721977225Z/intent_attempts.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "actions",
+      "path": "outputs/20260711T072721977225Z/actions.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "action_attempts",
+      "path": "outputs/20260711T072721977225Z/action_attempts.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "repair_advice",
+      "path": "outputs/20260711T072721977225Z/repair_advice.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "diagnostics_index",
+      "path": "outputs/20260711T072721977225Z/diagnostics/index.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "state",
+      "path": "outputs/20260711T072721977225Z/state.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "step_verification",
+      "path": "outputs/20260711T072721977225Z/step_verification.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "critic_report",
+      "path": "outputs/20260711T072721977225Z/critic_report.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_script",
+      "path": "outputs/20260711T072721977225Z/freecad_script.py",
+      "status": "unavailable",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [
+        "STEP_0003_01_REGISTRY_VALIDATION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "checkpoint",
+      "path": "outputs/20260711T072721977225Z/checkpoint.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "run_report",
+      "path": "outputs/20260711T072721977225Z/run_report.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "mcp_result",
+      "path": "outputs/20260711T072721977225Z/step_mcp/step_2_attempt_1.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_validation",
+      "path": "outputs/20260711T072721977225Z/step_mcp/step_2_validation_1.json",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_document",
+      "path": "/Users/jhkim/Documents/cadgen02/outputs/20260711T072721977225Z/pipe_v2_0e30955a213d.FCStd",
+      "status": "available",
+      "producer_stage": "registry_validation",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    }
+  ],
+  "summary": "Step-local LLM repair budget was exhausted."
+}

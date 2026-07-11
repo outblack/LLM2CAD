@@ -28,6 +28,29 @@ from cadgen.artifact_store import (
     _write_progress,
 )
 from cadgen.config import Settings
+from cadgen.conflict_kernel import (
+    append_search_event,
+    candidate_digest,
+    duplicate_candidate_certificate,
+    issue_certificate,
+    pipe_state_digest,
+    rejected_candidate_match,
+)
+from cadgen.contract_core import (
+    preflight_and_realize_intent,
+    structural_intent_issues,
+)
+from cadgen.diagnostics import (
+    DiagnosticValidationError,
+    bind_advisor_response,
+    bind_diagnosis,
+    build_diagnostic_case,
+    diagnostic_case_digest,
+    diagnostic_case_id,
+    planner_directive_from_diagnosis,
+    should_call_advisor,
+    validate_diagnosis,
+)
 from cadgen.freecad_app import FreeCADLaunchError, ensure_freecad_open
 from cadgen.freecad_mcp import (
     FreeCADMCPError,
@@ -41,8 +64,10 @@ from cadgen.freecad_mcp import (
 )
 from cadgen.freecad_script import (
     GENERATOR_VERSION,
-    build_freecad_candidate_cleanup_script,
-    build_freecad_publish_script,
+    _build_freecad_candidate_cleanup_script,
+    _build_freecad_publish_script,
+    _candidate_document_name,
+    anchored_inlet_count,
     build_freecad_script,
     candidate_document_name,
     geometry_payload_digest,
@@ -59,23 +84,32 @@ from cadgen.gemini_client import (
     GeminiInvalidRequestError,
     GeminiLineageError,
     GeminiRequestError,
+    HostContractValidationError,
     MAX_STRUCTURED_NUMBER_LITERAL_BYTES,
     MAX_STRUCTURED_NUMBER_LITERALS,
     StructuredOutputError,
     StructuredOutputIncompleteError,
+    _strict_json_loads,
 )
 from cadgen.local_heuristic import infer_intent, plan_next_action
 from cadgen.prompts import (
     compact_planner_payload,
     compact_visual_module_map,
     final_repair_prompt,
+    intent_repair_advisor_prompt,
+    intent_repair_advisor_system_instruction,
+    intent_repair_reviewer_prompt,
+    intent_repair_reviewer_system_instruction,
     intent_prompt,
     intent_system_instruction,
     step_lineage_repair_prompt,
+    step_repair_advisor_prompt,
+    step_repair_advisor_system_instruction,
     step_planner_prompt,
     step_planner_system_instruction,
     realized_terminal_topology,
 )
+from cadgen.primitive_compiler import compile_next_action
 from cadgen.registry import (
     SUPPORTED_INLINE_COMPONENTS,
     filter_draft_params,
@@ -86,21 +120,36 @@ from cadgen.schemas import (
     ActionAttempt,
     ActionDraft,
     AgendaRepairDirective,
+    AgendaRepairDirectiveWire,
     AssemblyBounds,
     CriticReport,
+    DiagnosticJournal,
+    DiagnosticRecordRef,
     CorePlannerDecision,
+    CorePlannerDecisionWire,
     GenerationArtifacts,
+    GeometryValidationAdvisorResponse,
+    Goal,
+    IntentRepairAdvice,
+    IntentRepairAdviceWire,
     IntentResult,
+    LLMIntentJSONEnvelope,
     LLMProductionIntent,
     LLMUsage,
     PipeState,
     PlannerDecision,
+    PlannerDecisionWire,
     ProductionIntent,
     ResolvedAction,
     RunReport,
     StaticIssue,
+    StepRepairAdvice,
+    StepRepairAdviceWire,
+    StepRepairDiagnosis,
+    StepRepairDiagnosisBody,
     StepVerification,
     VisualCriticResult,
+    VisualCriticResultWire,
 )
 from cadgen.state import StateEngine
 from cadgen.static_validation import (
@@ -116,10 +165,13 @@ from cadgen.static_validation import (
 )
 from cadgen.stream import ThinkingStream
 from cadgen.vector import (
+    add,
     canonical_circular_arc_frame,
+    choose_perpendicular_axis,
     direction_to_vector,
     dot,
     length,
+    mul,
     normalize,
     rotate,
     sub,
@@ -221,6 +273,7 @@ class _ResumeContext:
     planner_schema_profiles: dict[str, str]
     llm_usage: LLMUsage
     pending_repair_observations: list[dict[str, Any]]
+    diagnostic_journal: DiagnosticJournal
     pending_draft: ActionDraft | None = None
     pending_draft_attempt_index: int | None = None
     preserved_suffix: _PreservedSuffix | None = None
@@ -249,14 +302,232 @@ class _PlannerStagnationError(RuntimeError):
     """동일한 검증 실패가 전략 전환 뒤에도 반복되어 조기 중단되었음을 뜻한다."""
 
 
-# The 96-item/512-byte limits are hard guards for authored mandatory values.
-# Optional construction conveniences stay well below them so provider grammar
-# compilation has headroom for value spelling and surrounding schema structure.
+class PipelinePausedError(StaticValidationError):
+    """A recoverable run was checkpointed instead of being declared failed."""
+
+    paused = True
+
+    def __init__(
+        self,
+        stage: str,
+        artifact_path: str,
+        issues: list[StaticIssue],
+        resume_command: str,
+    ) -> None:
+        self.resume_command = resume_command
+        super().__init__(stage, artifact_path, issues)
+        self.args = (
+            f"{stage} paused after bounded recovery. Report: {artifact_path}. "
+            f"Resume: {resume_command}",
+        )
+
+
+class _IntentSafetyValidationError(ValueError):
+    """A parsed intent failed one or more deterministic semantic checks."""
+
+    def __init__(self, diagnostics: list[str]):
+        self.diagnostics = list(diagnostics)
+        super().__init__("; ".join(self.diagnostics))
+
+
+class _IntentScopeValidationError(ValueError):
+    """A parsed intent failed a pre-planning catalog/scope contract."""
+
+    def __init__(self, issues: list[StaticIssue]):
+        if not issues:
+            raise ValueError("intent scope failure requires at least one issue")
+        self.issues = [issue.model_copy(deep=True) for issue in issues]
+        super().__init__(
+            "; ".join(f"{issue.issue_code}: {issue.message}" for issue in issues)
+        )
+
+
+class _IntentAdvisorAuthorityError(ValueError):
+    """An advisor response requested authority the current issue does not grant."""
+
+    def __init__(
+        self, code: str, message: str, *, details: dict[str, Any] | None = None
+    ):
+        self.code = code
+        self.details = details or {}
+        super().__init__(message)
+
+
+class _IntentSemanticValidationExhausted(RuntimeError):
+    """A bounded intent loop ended after a deterministic semantic rejection."""
+
+    def __init__(
+        self,
+        validation_details: list[dict[str, Any]],
+        cause: Exception,
+        *,
+        terminal_reason: str,
+    ) -> None:
+        self.validation_details = [dict(item) for item in validation_details]
+        self.cause = cause
+        self.terminal_reason = terminal_reason
+        super().__init__(
+            "intent semantic validation exhausted: "
+            f"{terminal_reason}: {type(cause).__name__}: {cause}"
+        )
+
+
+@dataclass
+class _IntentAdvisorOutcome:
+    advice: IntentRepairAdvice | None
+    call_count: int
+    error: str | None
+    attempts: list[dict[str, Any]]
+    source: str
+    fallback_used: bool
+
+
+@dataclass(frozen=True)
+class _RunWorkspace:
+    """한 pipeline 실행에 고정되는 경로와 시작 journal을 묶는다."""
+
+    prompt: str
+    run_id: str
+    run_dir: Path
+    paths: dict[str, Path]
+    artifacts: GenerationArtifacts
+    intent_attempts: list[dict[str, Any]]
+    intent_diagnostics: list[dict[str, Any]]
+
+
+# 96개/512바이트 제한은 사용자가 작성한 필수 값을 지키는 강제 상한이다.
+# 선택적인 구성 편의 값은 이보다 작게 유지해 provider grammar가 숫자 표기와
+# 주변 schema를 컴파일할 여유를 남긴다.
 PLANNER_PREFERRED_NUMBER_LITERALS = 64
 PLANNER_PREFERRED_NUMBER_LITERAL_BYTES = 384
 _PLANNER_SCHEMA_PROFILES = {"preferred", "mandatory", "encoded"}
 _PLANNER_SCHEMA_PROFILE_ATTR = "_cadgen_step_planner_schema_profiles"
 MAX_IDENTICAL_VALIDATOR_FAILURES = 6
+MAX_IDENTICAL_INTENT_FAILURES = 3
+
+
+def _prepare_run_workspace(
+    prompt: str,
+    settings: Settings,
+    *,
+    resume_dir: Path | None,
+    stream: ThinkingStream,
+) -> _RunWorkspace:
+    """새 실행 또는 재개 실행의 디렉터리와 기본 journal을 준비한다."""
+
+    if resume_dir is None and not prompt.strip():
+        raise ValueError("Prompt must contain a non-whitespace pipe design request")
+
+    if resume_dir is None:
+        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        run_dir = settings.output_dir / run_id
+        run_dir.mkdir(parents=True, exist_ok=True)
+    else:
+        run_dir = Path(resume_dir).expanduser().resolve()
+        if not run_dir.is_dir():
+            raise ValueError(f"Resume run directory does not exist: {run_dir}")
+        prompt_path = run_dir / "prompt.txt"
+        if not prompt_path.is_file():
+            raise ValueError(f"Resume prompt artifact is missing: {prompt_path}")
+        prompt = prompt_path.read_text(encoding="utf-8")
+        run_id = run_dir.name
+
+    paths = _artifact_paths(run_dir)
+    append_search_event(
+        paths["search_events"],
+        {
+            "event_type": "run_started" if resume_dir is None else "run_resumed",
+            "run_id": run_id,
+            "prompt_sha256": hashlib.sha256(prompt.encode("utf-8")).hexdigest(),
+        },
+    )
+    stream.emit(
+        f"Run directory: {run_dir}. If externally interrupted, resume with "
+        f"--resume {run_dir}.",
+        force=True,
+    )
+    _initialize_run_journals(paths, prompt=prompt, is_resume=resume_dir is not None)
+
+    return _RunWorkspace(
+        prompt=prompt,
+        run_id=run_id,
+        run_dir=run_dir,
+        paths=paths,
+        artifacts=_new_generation_artifacts(run_id, run_dir, paths),
+        intent_attempts=_load_dict_journal(paths["intent_attempts"]),
+        intent_diagnostics=_load_dict_journal(paths["intent_diagnostics"]),
+    )
+
+
+def _initialize_run_journals(
+    paths: dict[str, Path],
+    *,
+    prompt: str,
+    is_resume: bool,
+) -> None:
+    """신규 실행과 재개 실행에 필요한 최소 영속 파일을 보장한다."""
+
+    if not is_resume:
+        _atomic_write_text(paths["prompt"], prompt)
+        _atomic_write_json(paths["intent_attempts"], [])
+        _atomic_write_json(paths["intent_diagnostics"], [])
+    elif not paths["intent_diagnostics"].is_file():
+        _atomic_write_json(paths["intent_diagnostics"], [])
+
+    if not paths["repair_advice"].is_file():
+        _atomic_write_json(paths["repair_advice"], [])
+    if not paths["diagnostics_index"].is_file():
+        _atomic_write_json(
+            paths["diagnostics_index"],
+            DiagnosticJournal().model_dump(mode="json"),
+        )
+
+
+def _new_generation_artifacts(
+    run_id: str,
+    run_dir: Path,
+    paths: dict[str, Path],
+) -> GenerationArtifacts:
+    """표준 실행 경로를 보고서용 아티팩트 manifest 모델로 변환한다."""
+
+    return GenerationArtifacts(
+        run_id=run_id,
+        output_dir=str(run_dir),
+        prompt_path=str(paths["prompt"]),
+        intent_path=str(paths["intent"]),
+        intent_attempts_path=str(paths["intent_attempts"]),
+        intent_diagnostics_path=str(paths["intent_diagnostics"]),
+        actions_path=str(paths["actions"]),
+        state_path=str(paths["state"]),
+        freecad_script_path=str(paths["script"]),
+        report_path=str(paths["report"]),
+        step_verification_path=str(paths["steps"]),
+        critic_report_path=str(paths["critic"]),
+        mcp_result_path=None,
+        action_attempts_path=str(paths["attempts"]),
+        repair_advice_path=str(paths["repair_advice"]),
+        diagnostics_index_path=str(paths["diagnostics_index"]),
+        constraint_ledger_path=str(paths["constraint_ledger"]),
+        global_preflight_path=str(paths["global_preflight"]),
+        search_events_path=str(paths["search_events"]),
+        checkpoint_path=str(paths["checkpoint"]),
+        freecad_validation_path=None,
+        freecad_document_path=None,
+    )
+
+
+def _load_dict_journal(path: Path) -> list[dict[str, Any]]:
+    """손상되거나 비목록인 JSON journal을 안전한 빈 목록으로 읽는다."""
+
+    if not path.is_file():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(payload, list):
+        return []
+    return [dict(item) for item in payload if isinstance(item, dict)]
 
 
 def run_pipeline(
@@ -270,44 +541,17 @@ def run_pipeline(
     """새 실행 또는 checkpoint 재개를 끝까지 처리하고 감사 가능한 보고서를 반환한다."""
 
     stream = stream or ThinkingStream(settings.stream_thinking_summary)
-    if resume_dir is None and not prompt.strip():
-        raise ValueError("Prompt must contain a non-whitespace pipe design request")
-    if resume_dir is not None:
-        run_dir = Path(resume_dir).expanduser().resolve()
-        if not run_dir.is_dir():
-            raise ValueError(f"Resume run directory does not exist: {run_dir}")
-        prompt_path = run_dir / "prompt.txt"
-        if not prompt_path.is_file():
-            raise ValueError(f"Resume prompt artifact is missing: {prompt_path}")
-        prompt = prompt_path.read_text(encoding="utf-8")
-        run_id = run_dir.name
-    else:
-        run_id = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-        run_dir = settings.output_dir / run_id
-        run_dir.mkdir(parents=True, exist_ok=True)
-    paths = _artifact_paths(run_dir)
-    if resume_dir is None:
-        _atomic_write_text(paths["prompt"], prompt)
-        _atomic_write_json(paths["intent_attempts"], [])
-
-    artifacts = GenerationArtifacts(
-        run_id=run_id,
-        output_dir=str(run_dir),
-        prompt_path=str(paths["prompt"]),
-        intent_path=str(paths["intent"]),
-        intent_attempts_path=str(paths["intent_attempts"]),
-        actions_path=str(paths["actions"]),
-        state_path=str(paths["state"]),
-        freecad_script_path=str(paths["script"]),
-        report_path=str(paths["report"]),
-        step_verification_path=str(paths["steps"]),
-        critic_report_path=str(paths["critic"]),
-        mcp_result_path=None,
-        action_attempts_path=str(paths["attempts"]),
-        checkpoint_path=str(paths["checkpoint"]),
-        freecad_validation_path=None,
-        freecad_document_path=None,
+    workspace = _prepare_run_workspace(
+        prompt,
+        settings,
+        resume_dir=resume_dir,
+        stream=stream,
     )
+    prompt = workspace.prompt
+    run_id = workspace.run_id
+    run_dir = workspace.run_dir
+    paths = workspace.paths
+    artifacts = workspace.artifacts
 
     actions: list[dict[str, Any]] = []
     attempts: list[ActionAttempt] = []
@@ -322,22 +566,13 @@ def run_pipeline(
     visual_paths: list[str] = []
     visual_reviewed_digest: str | None = None
     pending_repair_observations: list[dict[str, Any]] = []
+    diagnostic_journal = DiagnosticJournal()
     pending_draft: ActionDraft | None = None
     pending_draft_attempt_index: int | None = None
     preserved_suffix: _PreservedSuffix | None = None
     next_attempt_index = 1
-    intent_attempts: list[dict[str, Any]] = []
-    if paths["intent_attempts"].is_file():
-        try:
-            loaded_intent_attempts = json.loads(
-                paths["intent_attempts"].read_text(encoding="utf-8")
-            )
-            if isinstance(loaded_intent_attempts, list):
-                intent_attempts = [
-                    dict(item) for item in loaded_intent_attempts if isinstance(item, dict)
-                ]
-        except (OSError, json.JSONDecodeError):
-            intent_attempts = []
+    intent_attempts = workspace.intent_attempts
+    intent_diagnostics = workspace.intent_diagnostics
 
     if (
         not dry_run
@@ -563,6 +798,7 @@ def run_pipeline(
         mcp_used = context.mcp_used
         mcp_error = context.mcp_error
         pending_repair_observations = context.pending_repair_observations
+        diagnostic_journal = context.diagnostic_journal
         pending_draft = context.pending_draft
         pending_draft_attempt_index = context.pending_draft_attempt_index
         preserved_suffix = context.preserved_suffix
@@ -582,6 +818,10 @@ def run_pipeline(
         if gemini is not None and hasattr(gemini, "restore_usage"):
             gemini.restore_usage(context.llm_usage)
         _atomic_write_json(paths["intent"], intent.model_dump(mode="json"))
+        _atomic_write_json(
+            paths["diagnostics_index"],
+            diagnostic_journal.model_dump(mode="json"),
+        )
         _write_progress(paths, actions, attempts, state, step_verifications, critic)
         _write_checkpoint(
             paths["checkpoint"],
@@ -601,6 +841,7 @@ def run_pipeline(
             pending_draft_attempt_index=pending_draft_attempt_index,
             preserved_suffix=preserved_suffix,
             next_attempt_index=next_attempt_index,
+            diagnostic_journal=diagnostic_journal,
         )
     else:
         stream.emit(
@@ -614,7 +855,124 @@ def run_pipeline(
                 gemini=gemini,
                 attempt_journal=intent_attempts,
                 attempt_journal_path=paths["intent_attempts"],
+                diagnostic_journal=intent_diagnostics,
+                diagnostic_journal_path=paths["intent_diagnostics"],
+                stream=stream,
             )
+        except _IntentSafetyValidationError as exc:
+            issue = _issue(
+                0,
+                "INTENT_SAFETY_CONTRACT",
+                (
+                    "Intent candidates exhausted the bounded repair loop without "
+                    "satisfying deterministic semantic validation."
+                ),
+                phase="intent_semantic_validation",
+                expected={"semantic_validation": "passed"},
+                actual={"diagnostics": exc.diagnostics},
+                suggestion={"operation": "review_intent_attempts_and_advisor_chain"},
+            )
+            _fail_run(
+                run_id,
+                paths,
+                artifacts,
+                dry_run,
+                freecad_opened,
+                mcp_used,
+                mcp_error,
+                actions,
+                attempts,
+                state,
+                step_verifications,
+                _critic_with_issue(None, issue),
+                "intent_semantic_validation",
+                "Stopped only after the bounded intent repair loop was exhausted.",
+                gemini,
+            )
+            raise AssertionError("unreachable")
+        except _IntentSemanticValidationExhausted as exc:
+            semantic_critic: CriticReport | None = None
+            for detail in reversed(exc.validation_details):
+                semantic_issue = _issue(
+                    0,
+                    str(
+                        detail.get("issue_code") or "INTENT_STRUCTURED_OR_HOST_CONTRACT"
+                    ),
+                    str(
+                        detail.get("message")
+                        or "Intent failed deterministic semantic validation."
+                    ),
+                    phase=str(detail.get("check_name") or "intent_semantic_validation"),
+                    expected=(
+                        dict(detail.get("expected"))
+                        if isinstance(detail.get("expected"), dict)
+                        else {}
+                    ),
+                    actual=(
+                        dict(detail.get("actual"))
+                        if isinstance(detail.get("actual"), dict)
+                        else {"value": detail.get("actual")}
+                    ),
+                    suggestion=(
+                        dict(detail.get("suggestion"))
+                        if isinstance(detail.get("suggestion"), dict)
+                        else {}
+                    ),
+                )
+                semantic_critic = _critic_with_issue(
+                    semantic_critic,
+                    semantic_issue,
+                )
+            if semantic_critic is None:  # pragma: no cover - constructor guards it.
+                raise AssertionError("semantic exhaustion lost its validator issue")
+            _fail_run(
+                run_id,
+                paths,
+                artifacts,
+                dry_run,
+                freecad_opened,
+                mcp_used,
+                mcp_error,
+                actions,
+                attempts,
+                state,
+                step_verifications,
+                semantic_critic,
+                "intent_semantic_validation",
+                (
+                    "Stopped only after the bounded intent repair loop ended: "
+                    f"{exc.terminal_reason}."
+                ),
+                gemini,
+            )
+            raise AssertionError("unreachable")
+        except _IntentScopeValidationError as exc:
+            scope_critic: CriticReport | None = None
+            for scope_issue in reversed(exc.issues):
+                scope_critic = _critic_with_issue(scope_critic, scope_issue)
+            if scope_critic is None:  # pragma: no cover - constructor forbids it.
+                raise AssertionError("intent scope failure lost its issues")
+            _fail_run(
+                run_id,
+                paths,
+                artifacts,
+                dry_run,
+                freecad_opened,
+                mcp_used,
+                mcp_error,
+                actions,
+                attempts,
+                state,
+                step_verifications,
+                scope_critic,
+                "intent_scope",
+                (
+                    "Stopped before planning after bounded intent diagnosis and "
+                    "repair could not produce a scope-valid immutable contract."
+                ),
+                gemini,
+            )
+            raise AssertionError("unreachable")
         except Exception as exc:
             issue = _issue(
                 0,
@@ -642,121 +1000,43 @@ def run_pipeline(
             )
             raise AssertionError("unreachable")
 
-        nonbinary_branches = _nonbinary_branch_goal_ids(intent)
-        if not dry_run and nonbinary_branches:
-            issue = _issue(
-                0,
-                "NON_BINARY_BRANCH_CONTRACT",
-                "Production branch goals must each describe one binary junction.",
-                phase="intent_scope",
-                expected={"total_outlets_per_branch_goal": 2},
-                actual={"nonbinary_branch_goal_ids": nonbinary_branches},
-            )
-            _fail_run(
-                run_id,
-                paths,
-                artifacts,
-                dry_run,
-                freecad_opened,
-                mcp_used,
-                mcp_error,
-                actions,
-                attempts,
-                state,
-                step_verifications,
-                _critic_with_issue(None, issue),
-                "intent_scope",
-                "Stopped before planning because an atomic branch goal is not binary.",
-                gemini,
-            )
-            raise AssertionError("unreachable")
-
-        unsupported_components = _unsupported_required_components(intent)
-        if unsupported_components:
-            issue = _issue(
-                0,
-                "UNSUPPORTED_REQUIRED_COMPONENT",
-                "The LLM intent contains an accessory outside the explicit geometry catalog.",
-                phase="intent_scope",
-                expected={"supported_components": list(SUPPORTED_INLINE_COMPONENTS)},
-                actual={"unsupported_components": unsupported_components},
-            )
-            _fail_run(
-                run_id,
-                paths,
-                artifacts,
-                dry_run,
-                freecad_opened,
-                mcp_used,
-                mcp_error,
-                actions,
-                attempts,
-                state,
-                step_verifications,
-                _critic_with_issue(None, issue),
-                "intent_scope",
-                "Stopped before planning because a required accessory has no geometry primitive.",
-                gemini,
-            )
-            raise AssertionError("unreachable")
-
-        component_contract_error = _component_contract_error(intent)
-        if component_contract_error is not None:
-            issue = _issue(
-                0,
-                "INCONSISTENT_COMPONENT_CONTRACT",
-                "Required accessory multiplicity must match distinct connector goals.",
-                phase="intent_scope",
-                expected=component_contract_error["expected"],
-                actual=component_contract_error["actual"],
-            )
-            _fail_run(
-                run_id,
-                paths,
-                artifacts,
-                dry_run,
-                freecad_opened,
-                mcp_used,
-                mcp_error,
-                actions,
-                attempts,
-                state,
-                step_verifications,
-                _critic_with_issue(None, issue),
-                "intent_scope",
-                "Stopped before planning because the LLM component contract is inconsistent.",
-                gemini,
-            )
-            raise AssertionError("unreachable")
-
-        if intent.hard_constraints:
-            issue = _issue(
-                0,
-                "UNSUPPORTED_HARD_CONSTRAINT",
-                "The LLM preserved a hard constraint that has no deterministic predicate.",
-                phase="intent_scope",
-                expected={"hard_constraints": []},
-                actual={"hard_constraints": intent.hard_constraints},
-            )
-            _fail_run(
-                run_id,
-                paths,
-                artifacts,
-                dry_run,
-                freecad_opened,
-                mcp_used,
-                mcp_error,
-                actions,
-                attempts,
-                state,
-                step_verifications,
-                _critic_with_issue(None, issue),
-                "intent_scope",
-                "Stopped before planning because a hard constraint is not measurable.",
-                gemini,
-            )
-            raise AssertionError("unreachable")
-
+        intent, constraint_ledger, global_preflight = preflight_and_realize_intent(
+            prompt,
+            intent,
+            modeling_tolerance=settings.modeling_tolerance,
+            feasibility_mode=settings.feasibility_mode,  # type: ignore[arg-type]
+            max_uniform_scale=settings.max_uniform_centerline_scale,
+        )
+        _atomic_write_json(
+            paths["constraint_ledger"],
+            constraint_ledger.model_dump(mode="json"),
+        )
+        _atomic_write_json(
+            paths["global_preflight"],
+            global_preflight.model_dump(mode="json"),
+        )
+        append_search_event(
+            paths["search_events"],
+            {
+                "event_type": "global_preflight_completed",
+                "run_id": run_id,
+                "status": global_preflight.status,
+                "ledger_digest": constraint_ledger.ledger_digest,
+                "authored_program_digest": global_preflight.authored_program_digest,
+                "realized_program_digest": global_preflight.realized_program_digest,
+                "deviation_count": len(global_preflight.deviations),
+                "conflict_ids": [
+                    item.certificate_id for item in global_preflight.conflicts
+                ],
+            },
+        )
+        stream.emit(
+            "Global centerline preflight status="
+            f"{global_preflight.status}, deviations="
+            f"{len(global_preflight.deviations)}, conflicts="
+            f"{len(global_preflight.conflicts)}.",
+            force=True,
+        )
         intent = _bind_contract(prompt, intent)
         _atomic_write_json(paths["intent"], intent.model_dump(mode="json"))
         state = engine.initial_state(intent)
@@ -775,12 +1055,84 @@ def run_pipeline(
             gemini=gemini,
             committed_states=checkpoints,
             freecad_verified=False,
+            diagnostic_journal=diagnostic_journal,
+        )
+
+    configured_action_limit = settings.max_iter
+    action_limit_ceiling = (
+        settings.max_iter
+        if settings.max_iter_is_hard_limit
+        else settings.max_iter_hard_ceiling
+    )
+    initial_required_actions = len(actions) + _exclusive_goal_action_lower_bound(state)
+    effective_action_limit = min(
+        action_limit_ceiling,
+        max(configured_action_limit, initial_required_actions),
+    )
+    action_budget_policy: dict[str, Any] = {
+        "configured_soft_baseline": configured_action_limit,
+        "deterministic_required_actions": initial_required_actions,
+        "effective_action_limit": effective_action_limit,
+        "hard_ceiling": action_limit_ceiling,
+        "explicit_hard_limit": settings.max_iter_is_hard_limit,
+        "expanded": effective_action_limit > configured_action_limit,
+        "expansion_history": [],
+    }
+    if effective_action_limit > configured_action_limit:
+        action_budget_policy["expansion_history"].append(
+            {
+                "state_id": state.state_id,
+                "accepted_actions": len(actions),
+                "from": configured_action_limit,
+                "to": effective_action_limit,
+                "reason": "validated_goal_agenda_lower_bound",
+            }
+        )
+    if gemini is not None:
+        setattr(gemini, "_cadgen_action_budget_policy", action_budget_policy)
+    if effective_action_limit != settings.max_iter:
+        settings = replace(settings, max_iter=effective_action_limit)
+        stream.emit(
+            "Accepted-action budget expanded from "
+            f"{configured_action_limit} to {effective_action_limit} from the "
+            "validated goal agenda "
+            f"(deterministic minimum {initial_required_actions}, hard ceiling "
+            f"{action_limit_ceiling}).",
+            force=True,
         )
 
     final_repair_round = 0
+    causal_backjump_fingerprints: set[str] = set()
     while True:
         while state.remaining_goals:
             atomic_lower_bound = _exclusive_goal_action_lower_bound(state)
+            required_total = len(actions) + atomic_lower_bound
+            if (
+                not settings.max_iter_is_hard_limit
+                and required_total > settings.max_iter
+                and settings.max_iter < action_limit_ceiling
+            ):
+                previous_limit = settings.max_iter
+                effective_action_limit = min(action_limit_ceiling, required_total)
+                settings = replace(settings, max_iter=effective_action_limit)
+                action_budget_policy["effective_action_limit"] = effective_action_limit
+                action_budget_policy["expanded"] = True
+                action_budget_policy["expansion_history"].append(
+                    {
+                        "state_id": state.state_id,
+                        "accepted_actions": len(actions),
+                        "from": previous_limit,
+                        "to": effective_action_limit,
+                        "reason": "runtime_remaining_action_lower_bound",
+                    }
+                )
+                stream.emit(
+                    "Accepted-action budget expanded from "
+                    f"{previous_limit} to {effective_action_limit} after a committed "
+                    "state exposed a larger deterministic remaining-action lower "
+                    f"bound (hard ceiling {action_limit_ceiling}).",
+                    force=True,
+                )
             remaining_action_budget = settings.max_iter - len(actions)
             if (
                 not dry_run
@@ -900,6 +1252,90 @@ def run_pipeline(
                     pending_repair_observations=repair_observations,
                     preserved_suffix=preserved_suffix,
                     next_attempt_index=following_attempt_index,
+                    diagnostic_journal=diagnostic_journal,
+                )
+                # Checkpoint is the recovery authority; user-facing projections
+                # follow it so a crash can at worst leave a stale journal, never
+                # a journal that claims an uncommitted recovery state.
+                _write_progress(
+                    paths,
+                    actions,
+                    attempts,
+                    state,
+                    step_verifications,
+                    critic,
+                )
+                if attempts:
+                    latest_attempt = attempts[-1]
+                    append_search_event(
+                        paths["search_events"],
+                        {
+                            "event_type": "candidate_rejected",
+                            "run_id": run_id,
+                            "state_id": state.state_id,
+                            "step_index": step_index,
+                            "attempt_index": latest_attempt.attempt_index,
+                            "phase": latest_attempt.phase,
+                            "issue_codes": latest_attempt.issue_codes,
+                            "candidate_digest": (
+                                candidate_digest(latest_attempt.resolved)
+                                if isinstance(latest_attempt.resolved, dict)
+                                else None
+                            ),
+                            "conflict_certificate": (
+                                issue_certificate(
+                                    last_issue,
+                                    candidate=(
+                                        ResolvedAction.model_validate(
+                                            latest_attempt.resolved
+                                        )
+                                        if isinstance(latest_attempt.resolved, dict)
+                                        else None
+                                    ),
+                                ).model_dump(mode="json")
+                                if last_issue is not None
+                                else None
+                            ),
+                        },
+                    )
+                    stream.emit(
+                        f"Step {step_index} attempt {latest_attempt.attempt_index} "
+                        f"rejected in {latest_attempt.phase}: "
+                        + ", ".join(latest_attempt.issue_codes[:4]),
+                        force=True,
+                    )
+
+            def persist_diagnostic_state(
+                repair_observations: list[dict[str, Any]],
+                journal: DiagnosticJournal,
+                in_flight_operation: str | None,
+            ) -> None:
+                """Make the advisor journal authoritative before any paid call."""
+
+                nonlocal diagnostic_journal
+                diagnostic_journal = journal
+                _write_checkpoint(
+                    paths["checkpoint"],
+                    phase="COMMITTED",
+                    run_id=run_id,
+                    intent=intent,
+                    state=state,
+                    previous_state=(checkpoints[-2] if len(checkpoints) > 1 else None),
+                    actions=actions,
+                    step_verifications=step_verifications,
+                    attempts=attempts,
+                    gemini=gemini,
+                    committed_states=checkpoints,
+                    freecad_verified=previous_freecad_verified,
+                    pending_repair_observations=repair_observations,
+                    preserved_suffix=preserved_suffix,
+                    next_attempt_index=next_attempt_index,
+                    in_flight_operation=in_flight_operation,
+                    diagnostic_journal=diagnostic_journal,
+                )
+                _atomic_write_json(
+                    paths["diagnostics_index"],
+                    diagnostic_journal.model_dump(mode="json"),
                 )
 
             max_attempt_index = settings.step_repair_attempts + 1
@@ -907,11 +1343,46 @@ def run_pipeline(
                 next_attempt_index,
                 max_attempt_index + 1,
             ):
+                stream.emit(
+                    f"Step {step_index} attempt {attempt_index}/"
+                    f"{max_attempt_index} started.",
+                    force=True,
+                )
                 draft: ActionDraft | None = None
                 resolved: ResolvedAction | None = None
                 speculative: PipeState | None = None
                 planner_repair_context: list[dict[str, Any]] = []
                 if pending_draft is None:
+                    observations, diagnostic_journal = _run_step_geometry_diagnostician(
+                        run_id=run_id,
+                        run_dir=run_dir,
+                        paths=paths,
+                        state=state,
+                        step_index=step_index,
+                        observations=observations,
+                        attempts=attempts,
+                        settings=settings,
+                        gemini=gemini,
+                        journal=diagnostic_journal,
+                        stream=stream,
+                        persist=persist_diagnostic_state,
+                    )
+                    terminal_diagnosis = _terminal_geometry_diagnosis(observations)
+                    if terminal_diagnosis is not None:
+                        diagnostic_journal = diagnostic_journal.model_copy(
+                            update={
+                                "futile_retry_avoided_count": (
+                                    diagnostic_journal.futile_retry_avoided_count + 1
+                                )
+                            }
+                        )
+                        persist_diagnostic_state(
+                            observations,
+                            diagnostic_journal,
+                            None,
+                        )
+                        terminal_step_summary = terminal_diagnosis
+                        break
                     try:
                         planner_repair_context = _planner_repair_context(
                             observations,
@@ -927,7 +1398,7 @@ def run_pipeline(
                             "LLM calls were stopped to protect the token budget."
                         )
                         break
-                if observations:
+                if observations or pending_draft is None:
                     _write_checkpoint(
                         paths["checkpoint"],
                         phase="COMMITTED",
@@ -948,6 +1419,10 @@ def run_pipeline(
                         pending_draft_attempt_index=pending_draft_attempt_index,
                         preserved_suffix=preserved_suffix,
                         next_attempt_index=next_attempt_index,
+                        in_flight_operation=(
+                            "step_planner" if pending_draft is None else None
+                        ),
+                        diagnostic_journal=diagnostic_journal,
                     )
                 try:
                     if pending_draft is not None:
@@ -961,6 +1436,7 @@ def run_pipeline(
                             state,
                             dry_run=dry_run,
                             gemini=gemini,
+                            host_compiler_enabled=(settings.primitive_compiler_enabled),
                             repair_observations=planner_repair_context,
                             reusable_suffix_context=_suffix_rejoin_context(
                                 preserved_suffix,
@@ -992,6 +1468,7 @@ def run_pipeline(
                             pending_draft_attempt_index=(pending_draft_attempt_index),
                             preserved_suffix=preserved_suffix,
                             next_attempt_index=next_attempt_index,
+                            diagnostic_journal=diagnostic_journal,
                         )
                 except Exception as exc:
                     last_phase = "planning"
@@ -1017,7 +1494,13 @@ def run_pipeline(
                             "error_type": type(exc).__name__,
                             "diagnostic": (
                                 _intent_repair_diagnostic(exc)
-                                if isinstance(exc, StructuredOutputError)
+                                if isinstance(
+                                    exc,
+                                    (
+                                        StructuredOutputError,
+                                        HostContractValidationError,
+                                    ),
+                                )
                                 else str(exc)[:1200]
                             ),
                             "planner_lineage_reset": lineage_reset,
@@ -1144,6 +1627,15 @@ def run_pipeline(
                 action_check = validate_action(resolved, state)
                 if not action_check.valid:
                     last_phase = "registry_validation"
+                    quantitative_diagnostics = [
+                        item.model_dump(mode="json")
+                        for item in action_check.diagnostics
+                    ]
+                    primary_diagnostic = (
+                        quantitative_diagnostics[0]
+                        if quantitative_diagnostics
+                        else None
+                    )
                     last_issue = _issue(
                         step_index,
                         "REGISTRY_VALIDATION_FAILED",
@@ -1151,13 +1643,90 @@ def run_pipeline(
                         phase=last_phase,
                         target_port=resolved.target_port,
                         action_id=resolved.action_id,
-                        actual={"errors": action_check.errors},
+                        expected=(
+                            {
+                                "metric": primary_diagnostic["metric"],
+                                "comparator": primary_diagnostic["comparator"],
+                                "required": primary_diagnostic["required"],
+                                "units": primary_diagnostic.get("units"),
+                            }
+                            if primary_diagnostic is not None
+                            else {}
+                        ),
+                        actual={
+                            "errors": action_check.errors,
+                            "validation_diagnostics": quantitative_diagnostics,
+                        },
                         suggestion={
                             "operation": "revise_resolved_geometry_inputs",
                             "parameter_errors": action_check.errors[:12],
+                            "quantitative_constraints": quantitative_diagnostics,
                             "instruction": (
-                                "Use the reported bounds/invariants to select new "
-                                "LLM-authored values; the system will not patch them."
+                                "Use the structured metric gap, critical location, "
+                                "implicated paths, and prior trial response to select "
+                                "new LLM-authored values. Change a path only when it "
+                                "can influence the critical span; the system will not "
+                                "patch or commit a recommended value."
+                            ),
+                        },
+                    )
+                    observations = [_repair_observation(last_issue)]
+                    attempts.append(
+                        _attempt(
+                            step_index,
+                            attempt_index,
+                            state,
+                            last_phase,
+                            "rejected",
+                            draft,
+                            resolved,
+                            [last_issue],
+                        )
+                    )
+                    persist_rejected_attempt(observations, attempt_index + 1)
+                    continue
+
+                prior_rejection = (
+                    rejected_candidate_match(
+                        resolved,
+                        attempts,
+                        state_id=state.state_id,
+                        state_digest=pipe_state_digest(state),
+                    )
+                    if settings.conflict_search_enabled
+                    else None
+                )
+                if prior_rejection is not None:
+                    certificate = duplicate_candidate_certificate(
+                        resolved,
+                        prior_rejection,
+                    )
+                    last_phase = "conflict_routing"
+                    last_issue = _issue(
+                        step_index,
+                        "DUPLICATE_REJECTED_CANDIDATE",
+                        "An identical state-bound geometry candidate was already rejected.",
+                        phase=last_phase,
+                        target_port=resolved.target_port,
+                        action_id=resolved.action_id,
+                        expected={
+                            "progress_witness": (
+                                "new primitive, changed causal field, changed prefix, or new evidence"
+                            )
+                        },
+                        actual={
+                            "candidate_digest": certificate.candidate_digest,
+                            "prior_attempt": prior_rejection.attempt_index,
+                            "prior_phase": prior_rejection.phase,
+                            "conflict_certificate": certificate.model_dump(mode="json"),
+                        },
+                        suggestion={
+                            "operation": "change_primitive_or_backjump",
+                            "forbidden_candidate_digest": certificate.candidate_digest,
+                            "allowed_routes": certificate.allowed_routes,
+                            "instruction": (
+                                "Do not replay this geometry. Change a causally relevant "
+                                "primitive/variant or request a checkpoint backjump."
                             ),
                         },
                     )
@@ -1306,6 +1875,12 @@ def run_pipeline(
                     break
 
                 if run_step_mcp:
+                    stream.emit(
+                        f"Step {step_index} attempt {attempt_index} is entering "
+                        f"FreeCAD validation (timeout "
+                        f"{settings.freecad_mcp_timeout_sec:g}s).",
+                        force=True,
+                    )
                     prepared = _prepared_manifest(
                         run_id,
                         intent,
@@ -1322,6 +1897,7 @@ def run_pipeline(
                         gemini,
                         previous_freecad_verified=previous_freecad_verified,
                         preserved_suffix=preserved_suffix,
+                        diagnostic_journal=diagnostic_journal,
                     )
                     _atomic_write_json(paths["checkpoint"], prepared)
                     try:
@@ -1375,19 +1951,62 @@ def run_pipeline(
                             evidence_holder["state"] = measured_state
                             evidence_holder["step"] = measured_step
 
-                        raw, evidence, publish_raw = _validate_and_publish_freecad(
-                            settings,
-                            speculative,
-                            run_id=run_id,
-                            attempt_id=attempt_index,
-                            raw_result_path=run_dir
+                        selected_raw_path = (
+                            run_dir
                             / "step_mcp"
-                            / f"step_{step_index}_attempt_{attempt_index}.json",
-                            validation_path=run_dir
-                            / "step_mcp"
-                            / f"step_{step_index}_validation_{attempt_index}.json",
-                            evidence_validator=validate_candidate_evidence,
+                            / f"step_{step_index}_attempt_{attempt_index}.json"
                         )
+                        selected_validation_path = (
+                            run_dir
+                            / "step_mcp"
+                            / f"step_{step_index}_validation_{attempt_index}.json"
+                        )
+                        for kernel_retry in range(2):
+                            if kernel_retry:
+                                selected_raw_path = (
+                                    run_dir
+                                    / "step_mcp"
+                                    / (
+                                        f"step_{step_index}_attempt_{attempt_index}"
+                                        f"_kernel_retry_{kernel_retry}.json"
+                                    )
+                                )
+                                selected_validation_path = (
+                                    run_dir
+                                    / "step_mcp"
+                                    / (
+                                        f"step_{step_index}_validation_{attempt_index}"
+                                        f"_kernel_retry_{kernel_retry}.json"
+                                    )
+                                )
+                            try:
+                                raw, evidence, publish_raw = (
+                                    _validate_and_publish_freecad(
+                                        settings,
+                                        speculative,
+                                        run_id=run_id,
+                                        attempt_id=attempt_index,
+                                        raw_result_path=selected_raw_path,
+                                        validation_path=selected_validation_path,
+                                        evidence_validator=(
+                                            validate_candidate_evidence
+                                        ),
+                                    )
+                                )
+                                break
+                            except _FreeCADSemanticError as kernel_exc:
+                                if kernel_retry == 0 and _is_transient_occ_failure(
+                                    kernel_exc.evidence
+                                ):
+                                    stream.emit(
+                                        f"Step {step_index} attempt {attempt_index} "
+                                        "hit a potentially transient OCC kernel "
+                                        "failure; retrying the identical candidate "
+                                        "once before involving the LLM.",
+                                        force=True,
+                                    )
+                                    continue
+                                raise
                         del raw, publish_raw
                         speculative = evidence_holder["state"]
                         step = evidence_holder["step"]
@@ -1400,15 +2019,9 @@ def run_pipeline(
                         step = step.model_copy(
                             update={
                                 "mcp_status": "passed",
-                                "mcp_result_path": str(
-                                    run_dir
-                                    / "step_mcp"
-                                    / f"step_{step_index}_attempt_{attempt_index}.json"
-                                ),
+                                "mcp_result_path": str(selected_raw_path),
                                 "freecad_validation_path": str(
-                                    run_dir
-                                    / "step_mcp"
-                                    / f"step_{step_index}_validation_{attempt_index}.json"
+                                    selected_validation_path
                                 ),
                                 "skipped_mcp_reason": None,
                                 "mcp_measurements": _freecad_measurements(evidence),
@@ -1460,6 +2073,15 @@ def run_pipeline(
                                     )
                                     for module in speculative.placed_modules
                                 },
+                                module_params={
+                                    module.id: dict(module.params)
+                                    for module in speculative.placed_modules
+                                },
+                            )
+                            candidate_module_id = (
+                                speculative.placed_modules[-1].id
+                                if speculative.placed_modules
+                                else None
                             )
                             last_issue = _issue(
                                 step_index,
@@ -1468,14 +2090,16 @@ def run_pipeline(
                                 phase=last_phase,
                                 action_id=resolved.action_id,
                                 target_port=resolved.target_port,
-                                module_id=(
-                                    evidence_summary["module_ids"][0]
-                                    if evidence_summary["module_ids"]
-                                    else None
-                                ),
+                                module_id=candidate_module_id,
                                 expected=repair_expected,
                                 actual={
                                     "error": str(exc),
+                                    "evidence_artifact_path": str(
+                                        selected_validation_path
+                                    ),
+                                    "evidence_digest": _canonical_json_digest(
+                                        exc.evidence
+                                    ),
                                     **repair_actual,
                                     "evidence": evidence_summary,
                                 },
@@ -1584,9 +2208,152 @@ def run_pipeline(
                     )
                 )
                 accepted = (resolved, speculative, step)
+                append_search_event(
+                    paths["search_events"],
+                    {
+                        "event_type": "candidate_accepted",
+                        "run_id": run_id,
+                        "state_before_id": state.state_id,
+                        "state_after_id": speculative.state_id,
+                        "step_index": step_index,
+                        "attempt_index": attempt_index,
+                        "candidate_digest": candidate_digest(resolved),
+                        "module": resolved.module,
+                    },
+                )
                 break
 
             if accepted is None:
+                backjumpable_phases = {
+                    "draft_validation",
+                    "action_resolution",
+                    "registry_validation",
+                    "state_application",
+                    "static_step_validation",
+                    "freecad_semantic_validation",
+                    "conflict_routing",
+                }
+                backjump_payload = {
+                    "state_id": state.state_id,
+                    "step_index": step_index,
+                    "phase": last_phase,
+                    "issue_code": last_issue.issue_code if last_issue else None,
+                    "module_id": last_issue.module_id if last_issue else None,
+                    "observation_digest": _canonical_json_digest(observations),
+                }
+                backjump_fingerprint = _canonical_json_digest(backjump_payload)
+                if (
+                    settings.conflict_search_enabled
+                    and step_index > 1
+                    and last_phase in backjumpable_phases
+                    and len(causal_backjump_fingerprints)
+                    < settings.max_causal_backjumps
+                    and backjump_fingerprint not in causal_backjump_fingerprints
+                ):
+                    causal_backjump_fingerprints.add(backjump_fingerprint)
+                    module_steps = {
+                        module.id: index
+                        for index, module in enumerate(state.placed_modules, start=1)
+                    }
+                    implicated_step = (
+                        module_steps.get(last_issue.module_id)
+                        if last_issue is not None and last_issue.module_id is not None
+                        else None
+                    )
+                    rollback_step = max(
+                        1,
+                        min(
+                            step_index - 1,
+                            int(implicated_step or (step_index - 1)),
+                        ),
+                    )
+                    rollback_index = rollback_step - 1
+                    restored = checkpoints[rollback_index].model_copy(deep=True)
+                    certificate = (
+                        issue_certificate(last_issue)
+                        if last_issue is not None
+                        else None
+                    )
+                    pending_repair_observations = [
+                        *observations,
+                        {
+                            "context_type": "causal_backjump",
+                            "rollback_step": rollback_step,
+                            "failed_step": step_index,
+                            "failed_state_id": state.state_id,
+                            "instruction": (
+                                "Select a different primitive/variant at the restored "
+                                "causal decision. The rejected suffix is a nogood."
+                            ),
+                            "conflict_certificate": (
+                                certificate.model_dump(mode="json")
+                                if certificate is not None
+                                else None
+                            ),
+                        },
+                    ]
+                    append_search_event(
+                        paths["search_events"],
+                        {
+                            "event_type": "causal_backjump_scheduled",
+                            "run_id": run_id,
+                            "failed_step": step_index,
+                            "rollback_step": rollback_step,
+                            "state_before_id": state.state_id,
+                            "state_after_id": restored.state_id,
+                            "fingerprint": backjump_fingerprint,
+                            "conflict_certificate": (
+                                certificate.model_dump(mode="json")
+                                if certificate is not None
+                                else None
+                            ),
+                        },
+                    )
+                    state = restored
+                    actions = actions[:rollback_index]
+                    step_verifications = step_verifications[:rollback_index]
+                    checkpoints = checkpoints[: rollback_index + 1]
+                    preserved_suffix = None
+                    pending_draft = None
+                    pending_draft_attempt_index = None
+                    next_attempt_index = 1
+                    semantic_mcp_passed = False
+                    artifacts = _clear_state_bound_evidence(artifacts)
+                    if gemini is not None and hasattr(gemini, "reset_lineage"):
+                        gemini.reset_lineage("step_planner")
+                    _write_progress(
+                        paths,
+                        actions,
+                        attempts,
+                        state,
+                        step_verifications,
+                        critic,
+                    )
+                    _write_checkpoint(
+                        paths["checkpoint"],
+                        phase="COMMITTED",
+                        run_id=run_id,
+                        intent=intent,
+                        state=state,
+                        previous_state=(
+                            checkpoints[-2] if len(checkpoints) > 1 else None
+                        ),
+                        actions=actions,
+                        step_verifications=step_verifications,
+                        attempts=attempts,
+                        gemini=gemini,
+                        committed_states=checkpoints,
+                        freecad_verified=False,
+                        pending_repair_observations=pending_repair_observations,
+                        next_attempt_index=next_attempt_index,
+                        diagnostic_journal=diagnostic_journal,
+                    )
+                    stream.emit(
+                        f"Step {step_index} exhausted local candidates; conflict-directed "
+                        f"backjump restored step {rollback_step} for a different primitive.",
+                        force=True,
+                    )
+                    continue
                 if last_issue is None:
                     last_issue = _issue(
                         step_index,
@@ -1627,6 +2394,7 @@ def run_pipeline(
                     terminal_step_summary
                     or "Step-local LLM repair budget was exhausted.",
                     gemini,
+                    pause=settings.conflict_search_enabled,
                 )
 
             resolved, state, accepted_step = accepted
@@ -1699,6 +2467,7 @@ def run_pipeline(
                 freecad_verified=semantic_mcp_passed,
                 preserved_suffix=preserved_suffix,
                 next_attempt_index=next_attempt_index,
+                diagnostic_journal=diagnostic_journal,
             )
 
         critic = build_final_critic_report(
@@ -1816,12 +2585,14 @@ def run_pipeline(
                     module.id: index
                     for index, module in enumerate(state.placed_modules, start=1)
                 }
-                failed_steps = [
-                    module_steps[module_id]
-                    for module_id in evidence_summary["module_ids"]
-                    if module_id in module_steps
-                ]
-                target_step = min(failed_steps) if failed_steps else len(actions)
+                causal_module_id = _freecad_causal_repair_module(
+                    evidence_summary, module_steps
+                )
+                target_step = (
+                    module_steps[causal_module_id]
+                    if causal_module_id in module_steps
+                    else len(actions)
+                )
                 (
                     repair_expected,
                     repair_actual,
@@ -1829,9 +2600,11 @@ def run_pipeline(
                 ) = _freecad_repair_contract(
                     evidence_summary,
                     module_path_kinds={
-                        module.id: str(
-                            module.params.get("path_kind") or module.type
-                        )
+                        module.id: str(module.params.get("path_kind") or module.type)
+                        for module in state.placed_modules
+                    },
+                    module_params={
+                        module.id: dict(module.params)
                         for module in state.placed_modules
                     },
                 )
@@ -1842,14 +2615,12 @@ def run_pipeline(
                         "FREECAD_GEOMETRY_VALIDATION_FAILED",
                         "FreeCAD rejected the final B-Rep geometry.",
                         phase="final_mcp",
-                        module_id=(
-                            evidence_summary["module_ids"][0]
-                            if evidence_summary["module_ids"]
-                            else None
-                        ),
+                        module_id=causal_module_id,
                         expected=repair_expected,
                         actual={
                             "error": str(exc),
+                            "evidence_artifact_path": str(paths["freecad_validation"]),
+                            "evidence_digest": _canonical_json_digest(exc.evidence),
                             **repair_actual,
                             "evidence": evidence_summary,
                         },
@@ -1911,11 +2682,20 @@ def run_pipeline(
                     skipped_mcp_reason="FreeCAD MCP evidence unavailable.",
                 )
 
+        # 같은 최종 상태의 visual 조건, capture 요청과 review 결합에 동일한
+        # geometry digest를 사용한다. 큰 상태를 세 번 직렬화하지 않는다.
+        visual_candidate_digest = (
+            geometry_payload_digest(state)
+            if (
+                critic.passed
+                and not dry_run
+                and settings.visual_validation_mode == "final_required"
+            )
+            else None
+        )
         if (
-            critic.passed
-            and not dry_run
-            and settings.visual_validation_mode == "final_required"
-            and visual_reviewed_digest != geometry_payload_digest(state)
+            visual_candidate_digest is not None
+            and visual_reviewed_digest != visual_candidate_digest
         ):
             try:
                 if not semantic_mcp_passed:
@@ -1927,7 +2707,7 @@ def run_pipeline(
                         settings,
                         run_dir / "views",
                         document_name=published_document_name(state, run_id=run_id),
-                        payload_digest=geometry_payload_digest(state),
+                        payload_digest=visual_candidate_digest,
                     )
                 )
                 critic = _attach_view_evidence(critic, visual_paths)
@@ -1947,7 +2727,7 @@ def run_pipeline(
                     visual_result.model_dump(mode="json"),
                 )
                 if visual_result.passed:
-                    visual_reviewed_digest = geometry_payload_digest(state)
+                    visual_reviewed_digest = visual_candidate_digest
                 else:
                     module_steps = {
                         module.id: step_index
@@ -2087,10 +2867,14 @@ def run_pipeline(
                     directive = _call_structured(
                         gemini,
                         repair_request,
-                        AgendaRepairDirective,
+                        AgendaRepairDirectiveWire,
                         part="patch",
                         thinking_level="high",
                     )
+                    if isinstance(directive, AgendaRepairDirectiveWire):
+                        directive = AgendaRepairDirective.model_validate(
+                            directive.model_dump(mode="python")
+                        )
                     validated_repair = _validate_agenda_repair_directive(
                         directive,
                         state=state,
@@ -2102,6 +2886,7 @@ def run_pipeline(
                 except (
                     GeminiLineageError,
                     StructuredOutputError,
+                    HostContractValidationError,
                     TypeError,
                     ValueError,
                 ) as exc:
@@ -2130,6 +2915,41 @@ def run_pipeline(
                 checkpoints=checkpoints,
                 repair_hint=directive.repair_hint,
             )
+            source_attempt = next(
+                (
+                    attempt
+                    for attempt in reversed(attempts)
+                    if attempt.step_index == directive.rollback_step
+                    and attempt.status == "accepted"
+                ),
+                None,
+            )
+            repair_issues = [
+                issue
+                for issue in critic.issues
+                if issue.issue_id in set(directive.target_issue_ids)
+            ]
+            if source_attempt is not None and repair_issues:
+                attempts.append(
+                    _attempt(
+                        directive.rollback_step,
+                        0,
+                        restored,
+                        "final_repair_replan",
+                        "rejected",
+                        (
+                            ActionDraft.model_validate(source_attempt.draft)
+                            if source_attempt.draft is not None
+                            else None
+                        ),
+                        (
+                            ResolvedAction.model_validate(source_attempt.resolved)
+                            if source_attempt.resolved is not None
+                            else None
+                        ),
+                        repair_issues,
+                    )
+                )
             state = restored
             actions = actions[:rollback_index]
             step_verifications = step_verifications[:rollback_index]
@@ -2197,6 +3017,7 @@ def run_pipeline(
                 pending_repair_observations=pending_repair_observations,
                 preserved_suffix=preserved_suffix,
                 next_attempt_index=next_attempt_index,
+                diagnostic_journal=diagnostic_journal,
             )
             _write_progress(paths, actions, attempts, state, step_verifications, critic)
         except Exception as exc:
@@ -2283,6 +3104,11 @@ def run_pipeline(
                     gemini,
                 )
 
+    # 게시가 확인된 최종 상태의 digest는 view, 문서 경로와 최종 상태 판정이
+    # 함께 사용하므로 한 번만 계산한다.
+    final_geometry_digest = (
+        geometry_payload_digest(state) if semantic_mcp_passed else None
+    )
     if (
         semantic_mcp_passed
         and settings.freecad_capture_views
@@ -2295,7 +3121,7 @@ def run_pipeline(
                     settings,
                     run_dir / "views",
                     document_name=published_document_name(state, run_id=run_id),
-                    payload_digest=geometry_payload_digest(state),
+                    payload_digest=final_geometry_digest,
                 )
             )
             critic = _attach_view_evidence(critic, visual_paths)
@@ -2314,7 +3140,11 @@ def run_pipeline(
         artifacts = artifacts.model_copy(
             update={
                 "freecad_document_path": str(
-                    _freecad_document_path(current_mcp_result_path, state)
+                    _freecad_document_path(
+                        current_mcp_result_path,
+                        state,
+                        payload_digest=final_geometry_digest,
+                    )
                 )
             }
         )
@@ -2333,10 +3163,11 @@ def run_pipeline(
         committed_states=checkpoints,
         freecad_verified=semantic_mcp_passed,
         preserved_suffix=preserved_suffix,
+        diagnostic_journal=diagnostic_journal,
     )
     verified = semantic_mcp_passed and (
         settings.visual_validation_mode != "final_required"
-        or visual_reviewed_digest == geometry_payload_digest(state)
+        or visual_reviewed_digest == final_geometry_digest
     )
     status = "success" if verified else "partial"
     verification_status = "passed" if verified else "partial"
@@ -2376,14 +3207,16 @@ def _extract_intent(
     gemini: GeminiClient | None,
     attempt_journal: list[dict[str, Any]] | None = None,
     attempt_journal_path: Path | None = None,
+    diagnostic_journal: list[dict[str, Any]] | None = None,
+    diagnostic_journal_path: Path | None = None,
+    stream: ThinkingStream | None = None,
 ) -> IntentResult:
     """사용자 요청을 불변 설계 계약으로 변환하고 의미 검증까지 완료한다.
 
-    프로덕션에서는 Gemini가 반환한 구조화 객체만 허용한다. 공급자가 숫자
-    enum 스키마 자체를 거절한 경우에는 모델 초안이 생성되지 않았으므로,
-    정확한 decimal-object 스키마로 바꾸되 의미 교정 횟수는 소비하지 않는다.
-    불완전/형식 오류는 별도의 작은 structured retry 예산을 쓰고, 완전한
-    Intent가 의미 검증에 실패한 경우에만 의미 교정 예산을 쓴다.
+    프로덕션에서는 Gemini가 반환한 JSON만 허용한다. 전체 typed grammar가
+    provider에서 거절되면 작은 JSON-string envelope로 한 번 재협상한 뒤에도
+    동일한 strict JSON, Pydantic, safety, scope 검증을 모두 적용한다. 스키마
+    협상, 불완전 출력, 의미 교정은 서로 독립된 제한 예산을 사용한다.
     """
 
     def record_attempt(payload: dict[str, Any]) -> None:
@@ -2398,10 +3231,39 @@ def _extract_intent(
         if attempt_journal_path is not None:
             _atomic_write_json(attempt_journal_path, attempt_journal)
 
+    def update_last_attempt(payload: dict[str, Any]) -> None:
+        if attempt_journal is None or not attempt_journal:
+            return
+        attempt_journal[-1].update(payload)
+        if attempt_journal_path is not None:
+            _atomic_write_json(attempt_journal_path, attempt_journal)
+
+    def record_diagnostic(payload: dict[str, Any]) -> int | None:
+        if diagnostic_journal is None:
+            return None
+        diagnostic_journal.append(
+            {
+                "diagnostic_index": len(diagnostic_journal) + 1,
+                "recorded_at": datetime.now(timezone.utc).isoformat(),
+                **payload,
+            }
+        )
+        if diagnostic_journal_path is not None:
+            _atomic_write_json(diagnostic_journal_path, diagnostic_journal)
+        return len(diagnostic_journal) - 1
+
+    def update_diagnostic(index: int | None, payload: dict[str, Any]) -> None:
+        if diagnostic_journal is None or index is None:
+            return
+        diagnostic_journal[index].update(payload)
+        if diagnostic_journal_path is not None:
+            _atomic_write_json(diagnostic_journal_path, diagnostic_journal)
+
     if dry_run:
         result = infer_intent(prompt, settings)
         result = _canonicalize_dependent_intent_geometry(result, settings)
         _validate_intent_safety(prompt, result, settings)
+        _validate_intent_scope(result, dry_run=True, prompt=prompt)
         record_attempt(
             {
                 "status": "accepted",
@@ -2419,8 +3281,21 @@ def _extract_intent(
     explicit_mm_values = _explicit_mm_values(prompt)
     exact_mm_values = _exact_mm_contract_values(prompt)
     explicit_mm_ranges = _explicit_mm_ranges(prompt)
-    numeric_literals = _intent_numeric_literals(prompt, settings)
-    encoded_numeric_schema = not _numeric_literal_schema_fits(numeric_literals)
+    # Gemini's Interactions API accepts the native-number intent schema but can
+    # reject schemas which replace every number with a shared string/decimal
+    # $ref.  Native JSON numbers are therefore the production default. Exact
+    # authored measurements remain protected by deterministic intent safety and
+    # the advisor-backed semantic repair loop after a candidate is returned.
+    schema_profiles: list[tuple[str, str, list[str] | None, type[Any]]] = [
+        ("preferred_plain_numeric", "plain", None, LLMProductionIntent),
+        (
+            "host_validated_json_envelope",
+            "plain",
+            None,
+            LLMIntentJSONEnvelope,
+        ),
+    ]
+    schema_profile_index = 0
     base_prompt = intent_prompt(
         prompt,
         defaults={
@@ -2453,35 +3328,91 @@ def _extract_intent(
                 "Inclusive millimeter ranges: "
                 f"{json.dumps([[item.minimum, item.maximum] for item in explicit_mm_ranges], ensure_ascii=False)}.\n"
             )
-    if encoded_numeric_schema:
-        base_prompt = _encoded_intent_request(base_prompt, numeric_literals)
-    request = base_prompt
+    (
+        schema_profile,
+        schema_numeric_mode,
+        schema_numeric_literals,
+        schema_response_model,
+    ) = schema_profiles[schema_profile_index]
+    request = (
+        _intent_json_envelope_request(base_prompt)
+        if schema_response_model is LLMIntentJSONEnvelope
+        else base_prompt
+    )
     last_error: Exception | None = None
+    last_semantic_validation_details: list[dict[str, Any]] = []
     diagnostic_history: list[str] = []
     intent_thinking_level = "low"
     last_semantic_diagnostic: str | None = None
     semantic_diagnostic_repeat_count = 0
-    # 스키마 프로토콜 재협상과 LLM 의미 교정은 서로 다른 실패 종류다.
-    # 별도의 카운터를 사용해야 교정 예산이 0인 경우에도 enum 거절 뒤
-    # encoded-decimal 요청을 정확히 한 번 실행할 수 있다.
+    # Provider schema negotiation, malformed output retries, and semantic
+    # correction are distinct failure classes and must not consume one
+    # another's bounded retry budgets.
     semantic_attempt = 0
+    schema_retry_attempt = 0
     structured_retry_attempt = 0
+    validation_signature_counts: Counter[str] = Counter()
+    exact_failure_counts: Counter[str] = Counter()
     # Incomplete/malformed structured output is not a correction of a parsed
     # design. Give that transport/schema class its own small bounded retry pool
     # so one truncated response cannot consume the remaining semantic repairs.
     max_structured_retries = 2
+    max_schema_retries = max(0, len(schema_profiles) - 1)
     while True:
+        if stream is not None:
+            if structured_retry_attempt:
+                stream.emit(
+                    f"Intent protocol retry {structured_retry_attempt}/"
+                    f"{max_structured_retries} for semantic attempt "
+                    f"{semantic_attempt + 1}, schema={schema_profile} started.",
+                    force=True,
+                )
+            elif schema_retry_attempt:
+                stream.emit(
+                    f"Intent schema retry {schema_retry_attempt}/"
+                    f"{max_schema_retries} for semantic attempt "
+                    f"{semantic_attempt + 1}, schema={schema_profile} started.",
+                    force=True,
+                )
+            else:
+                stream.emit(
+                    f"Intent attempt {semantic_attempt + 1}/"
+                    f"{settings.intent_repair_attempts + 1} started "
+                    f"with schema={schema_profile}.",
+                    force=True,
+                )
         parsed_intent: IntentResult | None = None
+        provider_response_received = False
         try:
             result = _call_structured(
                 gemini,
                 request,
-                LLMProductionIntent,
+                schema_response_model,
                 part="intent",
                 thinking_level=intent_thinking_level,
-                numeric_literals=None if encoded_numeric_schema else numeric_literals,
+                numeric_literals=schema_numeric_literals,
+                numeric_schema_mode=schema_numeric_mode,
                 system_instruction=intent_system_instruction(),
             )
+            if isinstance(result, LLMIntentJSONEnvelope):
+                try:
+                    envelope_payload = _strict_json_loads(result.intent_json)
+                except ValueError as exc:
+                    raise StructuredOutputError(
+                        "intent",
+                        result.intent_json,
+                        exc,
+                    ) from exc
+                try:
+                    result = LLMProductionIntent.model_validate(envelope_payload)
+                except (TypeError, ValueError) as exc:
+                    provider_response_received = True
+                    raise HostContractValidationError(
+                        "intent",
+                        envelope_payload,
+                        exc,
+                    ) from exc
+            provider_response_received = True
             if isinstance(result, LLMProductionIntent):
                 intent = result.to_intent_result()
             elif isinstance(result, ProductionIntent):
@@ -2493,98 +3424,357 @@ def _extract_intent(
                 raise TypeError(
                     f"Unexpected intent result type: {type(result).__name__}"
                 )
-            parsed_intent = intent
             intent = _canonicalize_dependent_intent_geometry(intent, settings)
+            parsed_intent = intent
             _validate_intent_safety(prompt, intent, settings)
+            _validate_intent_scope(intent, dry_run=False, prompt=prompt)
             record_attempt(
                 {
                     "status": "accepted",
                     "phase": "semantic_validation",
+                    "scope_validated": True,
                     "semantic_attempt": semantic_attempt + 1,
+                    "schema_retry_attempt": schema_retry_attempt,
                     "consumes_semantic_budget": True,
                     "parsed_intent": True,
                     "candidate_digest": _intent_candidate_digest(intent),
+                    "schema_profile": schema_profile,
                     "diagnostic": None,
                     "lineage_reset": False,
                 }
             )
+            if stream is not None:
+                stream.emit(
+                    f"Intent attempt {semantic_attempt + 1} passed deterministic "
+                    "semantic and scope validation.",
+                    force=True,
+                )
             return intent
         except GeminiInvalidRequestError as exc:
             # A provider-side grammar rejection happened before any model draft
-            # existed. Switch once from the finite enum to the exact bounded
-            # decimal representation instead of spending semantic repair turns
-            # on the identical un-compilable schema.
-            if encoded_numeric_schema or not _is_invalid_planner_request(exc):
+            # existed.  Negotiate progressively smaller, value-independent
+            # schemas without spending semantic repair turns.
+            if not _is_invalid_planner_request(exc):
                 raise
-            encoded_numeric_schema = True
-            if hasattr(gemini, "reset_lineage"):
+            next_profile_index = schema_profile_index + 1
+            will_retry_schema = (
+                next_profile_index < len(schema_profiles)
+                and schema_retry_attempt < max_schema_retries
+            )
+            if will_retry_schema and hasattr(gemini, "reset_lineage"):
                 gemini.reset_lineage("intent")
             record_attempt(
                 {
-                    "status": "schema_retry",
+                    "status": (
+                        "schema_retry" if will_retry_schema else "schema_rejected"
+                    ),
                     "phase": "provider_schema_negotiation",
                     "semantic_attempt": semantic_attempt + 1,
-                    "structured_retry_attempt": structured_retry_attempt + 1,
+                    "schema_retry_attempt": schema_retry_attempt + 1,
+                    "structured_retry_attempt": structured_retry_attempt,
                     "consumes_semantic_budget": False,
                     "parsed_intent": False,
                     "candidate_digest": None,
                     "diagnostic": str(exc)[:1200],
-                    "lineage_reset": True,
+                    "schema_profile": schema_profile,
+                    "next_schema_profile": (
+                        schema_profiles[next_profile_index][0]
+                        if will_retry_schema
+                        else None
+                    ),
+                    "lineage_reset": will_retry_schema,
+                    "will_retry": will_retry_schema,
                 }
             )
-            base_prompt = _encoded_intent_request(base_prompt, numeric_literals)
-            request = base_prompt
+            if not will_retry_schema:
+                raise
+            schema_profile_index = next_profile_index
+            (
+                schema_profile,
+                schema_numeric_mode,
+                schema_numeric_literals,
+                schema_response_model,
+            ) = schema_profiles[schema_profile_index]
+            schema_retry_attempt += 1
+            if schema_response_model is LLMIntentJSONEnvelope:
+                request = _intent_json_envelope_request(request)
             continue
+        except (GeminiBudgetError, GeminiConfigError) as exc:
+            if last_semantic_validation_details:
+                raise _IntentSemanticValidationExhausted(
+                    last_semantic_validation_details,
+                    exc,
+                    terminal_reason="llm_budget_or_configuration_exhausted",
+                ) from exc
+            raise
         except (
             GeminiLineageError,
             StructuredOutputError,
+            HostContractValidationError,
             TypeError,
             ValueError,
         ) as exc:
             last_error = exc
             diagnostic = _intent_repair_diagnostic(exc)
-            semantic_repair = parsed_intent is not None
+            semantic_repair = (
+                parsed_intent is not None
+                or provider_response_received
+                or isinstance(exc, HostContractValidationError)
+            )
             if semantic_repair:
                 if diagnostic == last_semantic_diagnostic:
                     semantic_diagnostic_repeat_count += 1
                 else:
                     last_semantic_diagnostic = diagnostic
                     semantic_diagnostic_repeat_count = 1
+            validation_details = (
+                _intent_validation_details(exc, diagnostic) if semantic_repair else []
+            )
+            if semantic_repair:
+                last_semantic_validation_details = [
+                    dict(item) for item in validation_details
+                ]
+            issue_codes = list(
+                dict.fromkeys(
+                    str(item.get("issue_code"))
+                    for item in validation_details
+                    if item.get("issue_code")
+                )
+            )
+            candidate_digest = (
+                _intent_candidate_digest(parsed_intent)
+                if parsed_intent is not None
+                else None
+            )
+            validation_signature = (
+                _intent_validation_signature(validation_details, diagnostic)
+                if semantic_repair
+                else None
+            )
+            exact_failure_signature = (
+                hashlib.sha256(
+                    f"{candidate_digest}:{validation_signature}".encode("utf-8")
+                ).hexdigest()
+                if candidate_digest is not None and validation_signature is not None
+                else None
+            )
+            signature_repeat_count = 0
+            exact_repeat_count = 0
+            if validation_signature is not None:
+                validation_signature_counts[validation_signature] += 1
+                signature_repeat_count = validation_signature_counts[
+                    validation_signature
+                ]
+            if exact_failure_signature is not None:
+                exact_failure_counts[exact_failure_signature] += 1
+                exact_repeat_count = exact_failure_counts[exact_failure_signature]
             will_retry = (
                 semantic_attempt < settings.intent_repair_attempts
                 if semantic_repair
                 else structured_retry_attempt < max_structured_retries
             )
+            phase = (
+                "intent_scope"
+                if isinstance(exc, _IntentScopeValidationError)
+                else ("semantic_validation" if semantic_repair else "structured_output")
+            )
+            record_attempt(
+                {
+                    "status": "rejected",
+                    "phase": phase,
+                    "semantic_attempt": semantic_attempt + 1,
+                    "schema_retry_attempt": schema_retry_attempt,
+                    "structured_retry_attempt": (
+                        structured_retry_attempt
+                        if semantic_repair
+                        else structured_retry_attempt + 1
+                    ),
+                    "consumes_semantic_budget": semantic_repair,
+                    "parsed_intent": parsed_intent is not None,
+                    "provider_response_received": provider_response_received
+                    or isinstance(exc, HostContractValidationError),
+                    "candidate_digest": candidate_digest,
+                    "validation_signature": validation_signature,
+                    "exact_failure_signature": exact_failure_signature,
+                    "validation_signature_repeat_count": signature_repeat_count,
+                    "exact_failure_repeat_count": exact_repeat_count,
+                    "issue_codes": issue_codes,
+                    "diagnostic": diagnostic,
+                    "lineage_reset": False,
+                    "will_retry": will_retry,
+                }
+            )
+            diagnostic_record_index = (
+                record_diagnostic(
+                    {
+                        "intent_attempt": semantic_attempt + 1,
+                        "phase": phase,
+                        "candidate_digest": candidate_digest,
+                        "validation_signature": validation_signature,
+                        "exact_failure_signature": exact_failure_signature,
+                        "validation_signature_repeat_count": signature_repeat_count,
+                        "exact_failure_repeat_count": exact_repeat_count,
+                        "issue_codes": issue_codes,
+                        "deterministic_issues": validation_details,
+                        "rejected_candidate": (
+                            parsed_intent.model_dump(mode="json")
+                            if parsed_intent is not None
+                            else None
+                        ),
+                        "advisor_required": settings.intent_repair_advisor_required,
+                        "advisor_status": "pending",
+                        "advisor_protocol_attempts": 0,
+                        "advisor": None,
+                        "advisor_error": None,
+                        "terminal_reason": None,
+                        "will_retry": will_retry,
+                    }
+                )
+                if semantic_repair
+                else None
+            )
+
+            advisor: IntentRepairAdvice | None = None
+            advisor_error: str | None = None
+            advisor_protocol_attempts = 0
+            advisor_attempts: list[dict[str, Any]] = []
+            advisor_source = "not_applicable"
+            advisor_fallback_used = False
+            advisor_status = "not_applicable"
+            terminal_reason: str | None = None
+            if exact_repeat_count >= MAX_IDENTICAL_INTENT_FAILURES:
+                will_retry = False
+                terminal_reason = "identical_intent_failure_stagnation"
+            elif semantic_repair and not will_retry:
+                terminal_reason = "intent_repair_budget_exhausted"
+            if semantic_repair and parsed_intent is not None:
+                if not will_retry:
+                    advisor_status = "skipped_no_author_repair_budget"
+                    advisor_source = (
+                        "host_stagnation"
+                        if terminal_reason == "identical_intent_failure_stagnation"
+                        else "host_repair_budget_exhausted"
+                    )
+                elif not settings.intent_repair_advisor_enabled:
+                    advisor_status = "disabled"
+                    advisor_source = "deterministic_evidence_only"
+                    advisor_fallback_used = True
+                elif not getattr(gemini, "supports_intent_repair_advisor", False):
+                    advisor_status = "unsupported_by_client"
+                    advisor_source = "deterministic_evidence_only"
+                    advisor_fallback_used = True
+                else:
+                    if stream is not None:
+                        stream.emit(
+                            "Intent validation advisor is tracing the rejected "
+                            "contract before the next authoring attempt.",
+                            force=True,
+                        )
+                    advisor_outcome = _request_intent_repair_advice(
+                        gemini,
+                        settings=settings,
+                        prompt=prompt,
+                        candidate=parsed_intent,
+                        validation_details=validation_details,
+                        candidate_digest=candidate_digest or "",
+                        validation_signature=validation_signature or "",
+                        prior_diagnostics=(diagnostic_journal or [])[:-1][-4:],
+                    )
+                    advisor = advisor_outcome.advice
+                    advisor_protocol_attempts = advisor_outcome.call_count
+                    advisor_error = advisor_outcome.error
+                    advisor_attempts = advisor_outcome.attempts
+                    advisor_source = advisor_outcome.source
+                    advisor_fallback_used = advisor_outcome.fallback_used
+                    advisor_status = (
+                        "complete" if advisor is not None else "degraded_fallback"
+                    )
+                    if advisor is not None:
+                        host_terminal_reason = _host_authorized_intent_terminal_reason(
+                            advisor,
+                            validation_details,
+                        )
+                        if host_terminal_reason is not None:
+                            will_retry = False
+                            terminal_reason = host_terminal_reason
+                        if stream is not None:
+                            stream.emit(
+                                "Intent advisor: "
+                                f"{advisor.diagnosis_class}/{advisor.disposition} — "
+                                f"{advisor.summary[:320]}",
+                                force=True,
+                            )
+                    elif stream is not None:
+                        stream.emit(
+                            "Intent advisors did not produce host-valid advice; "
+                            "continuing with deterministic validation evidence.",
+                            force=True,
+                        )
+
             will_reset_lineage = (
                 will_retry
                 and hasattr(gemini, "reset_lineage")
                 and (
                     not semantic_repair
                     or semantic_diagnostic_repeat_count == 2
+                    or exact_repeat_count == 2
                 )
             )
-            record_attempt(
+            update_last_attempt(
                 {
-                    "status": "rejected",
-                    "phase": (
-                        "semantic_validation"
-                        if parsed_intent is not None
-                        else "structured_output"
+                    "advisor_status": advisor_status,
+                    "advisor_disposition": (
+                        advisor.disposition if advisor is not None else None
                     ),
-                    "semantic_attempt": semantic_attempt + 1,
-                    "structured_retry_attempt": structured_retry_attempt + 1,
-                    "consumes_semantic_budget": semantic_repair,
-                    "parsed_intent": parsed_intent is not None,
-                    "candidate_digest": (
-                        _intent_candidate_digest(parsed_intent)
-                        if parsed_intent is not None
-                        else None
-                    ),
-                    "diagnostic": diagnostic,
+                    "advisor_protocol_attempts": advisor_protocol_attempts,
+                    "advisor_error": advisor_error,
+                    "advisor_required": settings.intent_repair_advisor_required,
+                    "advisor_source": advisor_source,
+                    "advisor_fallback_used": advisor_fallback_used,
+                    "terminal_reason": terminal_reason,
                     "lineage_reset": will_reset_lineage,
                     "will_retry": will_retry,
                 }
             )
+            update_diagnostic(
+                diagnostic_record_index,
+                {
+                    "advisor_status": advisor_status,
+                    "advisor_protocol_attempts": advisor_protocol_attempts,
+                    "advisor": (
+                        advisor.model_dump(mode="json") if advisor is not None else None
+                    ),
+                    "advisor_error": advisor_error,
+                    "advisor_attempts": advisor_attempts,
+                    "advisor_source": advisor_source,
+                    "advisor_fallback_used": advisor_fallback_used,
+                    "retry_decision_source": (
+                        "host_stagnation"
+                        if terminal_reason == "identical_intent_failure_stagnation"
+                        else (
+                            "host_repair_budget_exhausted"
+                            if terminal_reason == "intent_repair_budget_exhausted"
+                            else (
+                                "host_authorized_advisor_terminal"
+                                if terminal_reason is not None
+                                else advisor_source
+                            )
+                        )
+                    ),
+                    "terminal_authority": (
+                        "host" if terminal_reason is not None else None
+                    ),
+                    "terminal_reason": terminal_reason,
+                    "lineage_reset": will_reset_lineage,
+                    "will_retry": will_retry,
+                },
+            )
+            if stream is not None:
+                stream.emit(
+                    f"Intent attempt {semantic_attempt + 1} rejected in {phase}: "
+                    + (", ".join(issue_codes[:4]) or diagnostic[:320]),
+                    force=True,
+                )
             if not will_retry:
                 break
             if semantic_repair:
@@ -2594,7 +3784,9 @@ def _extract_intent(
             if diagnostic not in diagnostic_history:
                 diagnostic_history.append(diagnostic)
             diagnostic_history = diagnostic_history[-4:]
-            if _is_spline_intent_safety_diagnostic(diagnostic):
+            if _is_spline_intent_safety_diagnostic(diagnostic) or isinstance(
+                exc, HostContractValidationError
+            ):
                 intent_thinking_level = "medium"
             if will_reset_lineage:
                 # Malformed output has no trustworthy object to edit. A second
@@ -2602,6 +3794,41 @@ def _extract_intent(
                 # call sees the complete request instead of repeating one draft.
                 gemini.reset_lineage("intent")
             targeted_guidance = _intent_repair_guidance(diagnostic)
+            repair_envelope = {
+                "context_type": "intent_recursive_repair",
+                "failed_attempt": semantic_attempt,
+                "rejected_candidate": (
+                    parsed_intent.model_dump(mode="json")
+                    if parsed_intent is not None
+                    else None
+                ),
+                "deterministic_issues": validation_details,
+                "validation_history": diagnostic_history,
+                "validation_signature": validation_signature,
+                "signature_repeat_count": signature_repeat_count,
+                "exact_failure_repeat_count": exact_repeat_count,
+                "independent_advisor": (
+                    advisor.model_dump(mode="json") if advisor is not None else None
+                ),
+                "advisor_source": advisor_source,
+                "advisor_fallback_used": advisor_fallback_used,
+                "advisor_attempts": advisor_attempts,
+                "advisor_required": settings.intent_repair_advisor_required,
+                "targeted_repair_rule": targeted_guidance or None,
+                "authority": (
+                    "The advisor only diagnoses. Return a new complete intent; "
+                    "the deterministic semantic and scope validators must both "
+                    "accept it. Never delete or weaken a user-authored requirement."
+                ),
+                "fallback_instruction": (
+                    "No advisor response has acceptance authority. If independent "
+                    "advice is absent, repair the exact deterministic_issues using "
+                    "the targeted rule and rejected candidate. Preserve unrelated "
+                    "fields byte-for-byte in meaning and return a complete object."
+                    if advisor is None
+                    else None
+                ),
+            }
             request = (
                 base_prompt
                 + "\n\n"
@@ -2619,29 +3846,550 @@ def _extract_intent(
                 )
                 + "Every validation diagnostic in this bounded history must be "
                 + "fixed simultaneously; do not regress an earlier correction. "
-                + "Validation diagnostic history: "
-                + json.dumps(diagnostic_history, ensure_ascii=False)
-                + (
-                    " Targeted repair rule: " + targeted_guidance
-                    if targeted_guidance
-                    else ""
+                + "Validation diagnostic history and current typed evidence are "
+                + "contained in the following envelope. "
+                + "Use this complete typed repair envelope, including the rejected "
+                + "candidate when one exists: "
+                + json.dumps(
+                    repair_envelope,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                    separators=(",", ":"),
                 )
             )
+            if schema_response_model is LLMIntentJSONEnvelope:
+                request = _intent_json_envelope_request(request)
     if last_error is not None:
+        if last_semantic_validation_details and not isinstance(
+            last_error,
+            (_IntentSafetyValidationError, _IntentScopeValidationError),
+        ):
+            raise _IntentSemanticValidationExhausted(
+                last_semantic_validation_details,
+                last_error,
+                terminal_reason="intent_repair_budget_exhausted",
+            ) from last_error
         raise last_error
     raise RuntimeError("Intent extraction failed without a diagnostic")
+
+
+def _intent_validation_details(
+    exc: Exception,
+    diagnostic: str,
+) -> list[dict[str, Any]]:
+    """Preserve every deterministic intent failure as structured advisor input."""
+
+    if isinstance(exc, _IntentScopeValidationError):
+        return [issue.model_dump(mode="json") for issue in exc.issues]
+    if isinstance(exc, _IntentSafetyValidationError):
+        return [
+            {
+                "issue_id": f"INTENT_SAFETY_{index:02d}",
+                "issue_code": "INTENT_SAFETY_CONTRACT",
+                "check_name": "intent_semantic_validation",
+                "message": message,
+                "expected": {},
+                "actual": {},
+                "suggestion": {},
+            }
+            for index, message in enumerate(exc.diagnostics, start=1)
+        ]
+    return [
+        {
+            "issue_code": "INTENT_STRUCTURED_OR_HOST_CONTRACT",
+            "check_name": "intent_semantic_validation",
+            "message": diagnostic,
+            "expected": {},
+            "actual": {"error_type": type(exc).__name__},
+            "suggestion": {},
+        }
+    ]
+
+
+def _intent_validation_signature(
+    validation_details: list[dict[str, Any]],
+    diagnostic: str,
+) -> str:
+    """Hash the validator facts independently from a particular candidate."""
+
+    facts = [
+        {
+            "issue_code": item.get("issue_code"),
+            "check_name": item.get("check_name"),
+            "message": item.get("message"),
+            "expected": item.get("expected") or {},
+            "actual": item.get("actual") or {},
+        }
+        for item in validation_details
+    ]
+    payload = json.dumps(
+        {"facts": facts, "fallback_diagnostic": diagnostic if not facts else None},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _request_intent_repair_advice(
+    gemini: Any,
+    *,
+    settings: Settings,
+    prompt: str,
+    candidate: IntentResult,
+    validation_details: list[dict[str, Any]],
+    candidate_digest: str,
+    validation_signature: str,
+    prior_diagnostics: list[dict[str, Any]],
+) -> _IntentAdvisorOutcome:
+    """Run feedback-aware diagnosis, then a separate repair-only reviewer.
+
+    The result is advice only.  The intent author must still return a complete
+    replacement and every deterministic gate remains authoritative.
+    """
+
+    compact_history = [
+        {
+            "candidate_digest": item.get("candidate_digest"),
+            "validation_signature": item.get("validation_signature"),
+            "issue_codes": item.get("issue_codes") or [],
+            "advisor_status": item.get("advisor_status"),
+            "advisor_disposition": (
+                (item.get("advisor") or {}).get("disposition")
+                if isinstance(item.get("advisor"), dict)
+                else None
+            ),
+            "terminal_reason": item.get("terminal_reason"),
+        }
+        for item in prior_diagnostics[-4:]
+    ]
+    allowed_dispositions = _allowed_intent_advisor_dispositions(validation_details)
+    context: dict[str, Any] = {
+        "protocol_version": 1,
+        "source_request": prompt,
+        "candidate_digest": candidate_digest,
+        "validation_signature": validation_signature,
+        "rejected_candidate": candidate.model_dump(mode="json"),
+        "deterministic_issues": validation_details,
+        "allowed_dispositions": allowed_dispositions,
+        "current_blocker_policy": (
+            "repair_only"
+            if allowed_dispositions == ["retry_intent"]
+            else "bounded_host_authority"
+        ),
+        "current_blocker_instruction": (
+            "Diagnose and repair only deterministic_issues from the current "
+            "validator phase. Do not stop for latent candidate fields that have "
+            "not produced a supplied issue."
+        ),
+        "prior_attempts": compact_history,
+        "prior_advisor_rejections": [],
+        "catalog_contract": {
+            "supported_inline_components": list(SUPPORTED_INLINE_COMPONENTS),
+            "initial_open_construction_fronts": 1,
+            "connect_goal_consumes_distinct_open_fronts": 2,
+            "hard_constraints_require_deterministic_predicates": True,
+            "advisor_may_author_or_accept_intent": False,
+        },
+    }
+    last_error: Exception | None = None
+    attempt_records: list[dict[str, Any]] = []
+    call_count = 0
+    for protocol_attempt in range(1, 3):
+        response_payload: dict[str, Any] | None = None
+        if not _intent_advisor_call_preserves_author_reserve(gemini):
+            attempt_records.append(
+                {
+                    "role": "intent_repair_advisor",
+                    "protocol_attempt": protocol_attempt,
+                    "status": "skipped_author_call_reserve",
+                    "response": None,
+                    "host_rejection": {
+                        "code": "AUTHOR_CALL_RESERVE",
+                        "message": (
+                            "advisor call skipped to reserve one remaining "
+                            "Gemini call for the intent author"
+                        ),
+                    },
+                }
+            )
+            return _IntentAdvisorOutcome(
+                advice=None,
+                call_count=call_count,
+                error="advisor skipped to preserve the intent author call reserve",
+                attempts=attempt_records,
+                source="deterministic_evidence_only",
+                fallback_used=True,
+            )
+        try:
+            call_count += 1
+            result = _call_structured(
+                gemini,
+                intent_repair_advisor_prompt(context),
+                IntentRepairAdviceWire,
+                part="intent_repair_advisor",
+                thinking_level="high",
+                system_instruction=intent_repair_advisor_system_instruction(),
+            )
+            response_payload = _intent_advisor_response_payload(result)
+            advice = _coerce_intent_repair_advice(result)
+            _validate_intent_repair_advice_authority(advice, validation_details)
+            attempt_records.append(
+                {
+                    "role": "intent_repair_advisor",
+                    "protocol_attempt": protocol_attempt,
+                    "status": "accepted",
+                    "response": response_payload,
+                    "host_rejection": None,
+                }
+            )
+            return _IntentAdvisorOutcome(
+                advice=advice,
+                call_count=call_count,
+                error=None,
+                attempts=attempt_records,
+                source="primary_advisor",
+                fallback_used=False,
+            )
+        except (GeminiBudgetError, GeminiConfigError) as exc:
+            last_error = exc
+            attempt_records.append(
+                {
+                    "role": "intent_repair_advisor",
+                    "protocol_attempt": protocol_attempt,
+                    "status": "provider_failed",
+                    "response": response_payload,
+                    "host_rejection": {
+                        "code": type(exc).__name__,
+                        "message": str(exc)[:2000],
+                    },
+                }
+            )
+            return _IntentAdvisorOutcome(
+                advice=None,
+                call_count=call_count,
+                error=f"{type(exc).__name__}: {exc}"[:2000],
+                attempts=attempt_records,
+                source="deterministic_evidence_only",
+                fallback_used=True,
+            )
+        except (
+            GeminiRequestError,
+            StructuredOutputError,
+            HostContractValidationError,
+            TypeError,
+            ValueError,
+        ) as exc:
+            last_error = exc
+            rejection = _intent_advisor_host_rejection(exc)
+            record = {
+                "role": "intent_repair_advisor",
+                "protocol_attempt": protocol_attempt,
+                "status": "host_rejected",
+                "response": response_payload,
+                "host_rejection": rejection,
+            }
+            attempt_records.append(record)
+            context["prior_advisor_rejections"] = [
+                {
+                    "role": item["role"],
+                    "rejected_response": item.get("response"),
+                    "host_rejection": item.get("host_rejection"),
+                }
+                for item in attempt_records
+                if item["status"] != "accepted"
+            ]
+
+    if settings.intent_repair_reviewer_enabled and getattr(
+        gemini, "supports_intent_repair_reviewer", False
+    ):
+        reviewer_context = {
+            **context,
+            "reviewer_role": "repair_only_secondary_review",
+            "allowed_dispositions": ["retry_intent"],
+            "current_blocker_policy": "repair_only",
+            "primary_attempts": attempt_records,
+        }
+        response_payload = None
+        if not _intent_advisor_call_preserves_author_reserve(gemini):
+            attempt_records.append(
+                {
+                    "role": "intent_repair_reviewer",
+                    "protocol_attempt": 1,
+                    "status": "skipped_author_call_reserve",
+                    "response": None,
+                    "host_rejection": {
+                        "code": "AUTHOR_CALL_RESERVE",
+                        "message": (
+                            "reviewer call skipped to reserve one remaining "
+                            "Gemini call for the intent author"
+                        ),
+                    },
+                }
+            )
+            return _IntentAdvisorOutcome(
+                advice=None,
+                call_count=call_count,
+                error="reviewer skipped to preserve the intent author call reserve",
+                attempts=attempt_records,
+                source="deterministic_evidence_only",
+                fallback_used=True,
+            )
+        try:
+            call_count += 1
+            result = _call_structured(
+                gemini,
+                intent_repair_reviewer_prompt(reviewer_context),
+                IntentRepairAdviceWire,
+                part="intent_repair_reviewer",
+                thinking_level="high",
+                system_instruction=intent_repair_reviewer_system_instruction(),
+            )
+            response_payload = _intent_advisor_response_payload(result)
+            advice = _coerce_intent_repair_advice(result)
+            _validate_intent_repair_advice_authority(advice, validation_details)
+            if advice.disposition != "retry_intent":
+                raise _IntentAdvisorAuthorityError(
+                    "REVIEWER_MUST_REPAIR",
+                    "secondary intent reviewer may only return retry_intent",
+                    details={"actual_disposition": advice.disposition},
+                )
+            attempt_records.append(
+                {
+                    "role": "intent_repair_reviewer",
+                    "protocol_attempt": 1,
+                    "status": "accepted",
+                    "response": response_payload,
+                    "host_rejection": None,
+                }
+            )
+            return _IntentAdvisorOutcome(
+                advice=advice,
+                call_count=call_count,
+                error=None,
+                attempts=attempt_records,
+                source="secondary_reviewer",
+                fallback_used=True,
+            )
+        except (
+            GeminiBudgetError,
+            GeminiConfigError,
+            GeminiRequestError,
+            StructuredOutputError,
+            HostContractValidationError,
+            TypeError,
+            ValueError,
+        ) as exc:
+            last_error = exc
+            attempt_records.append(
+                {
+                    "role": "intent_repair_reviewer",
+                    "protocol_attempt": 1,
+                    "status": "failed",
+                    "response": response_payload,
+                    "host_rejection": _intent_advisor_host_rejection(exc),
+                }
+            )
+
+    return _IntentAdvisorOutcome(
+        advice=None,
+        call_count=call_count,
+        error=(
+            f"{type(last_error).__name__}: {last_error}"[:2000]
+            if last_error is not None
+            else "intent validation advisors failed without an exception"
+        ),
+        attempts=attempt_records,
+        source="deterministic_evidence_only",
+        fallback_used=True,
+    )
+
+
+def _intent_advisor_response_payload(result: Any) -> dict[str, Any] | None:
+    """Capture provider-wire JSON before stricter host semantic coercion."""
+
+    if isinstance(result, (IntentRepairAdviceWire, IntentRepairAdvice)):
+        return result.model_dump(mode="json")
+    return None
+
+
+def _intent_advisor_call_preserves_author_reserve(gemini: Any) -> bool:
+    """Use an advisor only when one Gemini call remains for intent authoring."""
+
+    remaining = getattr(gemini, "remaining_call_budget", None)
+    if not callable(remaining):
+        return True
+    try:
+        return int(remaining()) > 1
+    except (TypeError, ValueError):
+        return True
+
+
+def _coerce_intent_repair_advice(result: Any) -> IntentRepairAdvice:
+    if isinstance(result, IntentRepairAdviceWire):
+        return IntentRepairAdvice.model_validate(result.model_dump(mode="python"))
+    if isinstance(result, IntentRepairAdvice):
+        return result
+    raise TypeError(
+        "Intent validation advisor returned an unexpected type: "
+        f"{type(result).__name__}"
+    )
+
+
+def _intent_advisor_host_rejection(exc: Exception) -> dict[str, Any]:
+    if isinstance(exc, _IntentAdvisorAuthorityError):
+        return {
+            "code": exc.code,
+            "type": type(exc).__name__,
+            "message": str(exc)[:2000],
+            "details": exc.details,
+        }
+    payload: dict[str, Any] = {
+        "code": type(exc).__name__,
+        "type": type(exc).__name__,
+        "message": str(exc)[:2000],
+    }
+    if isinstance(exc, HostContractValidationError):
+        payload["provider_payload"] = exc.payload
+    return payload
+
+
+def _allowed_intent_advisor_dispositions(
+    validation_details: list[dict[str, Any]],
+) -> list[str]:
+    issue_codes = {
+        str(item.get("issue_code"))
+        for item in validation_details
+        if item.get("issue_code")
+    }
+    capability_issue_codes = {
+        "UNSUPPORTED_REQUIRED_COMPONENT",
+        "UNSUPPORTED_HARD_CONSTRAINT",
+    }
+    capability_terminal_proven = bool(
+        issue_codes
+        and issue_codes.issubset(capability_issue_codes)
+        and all(
+            isinstance(item.get("actual"), dict)
+            and item["actual"].get("source_provenance_complete") is True
+            for item in validation_details
+        )
+    )
+    if capability_terminal_proven:
+        return ["retry_intent", "stop_contract_infeasible"]
+    if issue_codes and all("VALIDATOR_POLICY" in code for code in issue_codes):
+        return ["retry_intent", "escalate_validator_review"]
+    return ["retry_intent"]
+
+
+def _host_authorized_intent_terminal_reason(
+    advice: IntentRepairAdvice,
+    validation_details: list[dict[str, Any]],
+) -> str | None:
+    """Convert an advisor proposal into a terminal host decision, if proven."""
+
+    if advice.disposition == "retry_intent":
+        return None
+    if advice.disposition in _allowed_intent_advisor_dispositions(validation_details):
+        return advice.disposition
+    return None
+
+
+def _validate_intent_repair_advice_authority(
+    advice: IntentRepairAdvice,
+    validation_details: list[dict[str, Any]],
+) -> None:
+    """Reject advice that tries to turn an obviously repairable miss terminal."""
+
+    issue_codes = {
+        str(item.get("issue_code"))
+        for item in validation_details
+        if item.get("issue_code")
+    }
+    allowed_dispositions = _allowed_intent_advisor_dispositions(validation_details)
+    if advice.disposition in allowed_dispositions:
+        return
+    capability_codes = {
+        "UNSUPPORTED_REQUIRED_COMPONENT",
+        "UNSUPPORTED_HARD_CONSTRAINT",
+    }
+    if advice.disposition == "stop_contract_infeasible":
+        only_capability_issues = bool(
+            issue_codes and issue_codes.issubset(capability_codes)
+        )
+        code = (
+            "TERMINAL_SOURCE_PROVENANCE_REQUIRED"
+            if only_capability_issues
+            else "CURRENT_BLOCKER_REQUIRES_REPAIR"
+        )
+        raise _IntentAdvisorAuthorityError(
+            code,
+            (
+                "stop_contract_infeasible requires only current unsupported "
+                "capability issues with deterministic source provenance"
+            ),
+            details={
+                "issue_codes": sorted(issue_codes),
+                "actual_disposition": advice.disposition,
+                "allowed_dispositions": allowed_dispositions,
+            },
+        )
+    if advice.disposition == "stop_futile_retry":
+        raise _IntentAdvisorAuthorityError(
+            "STAGNATION_IS_HOST_OWNED",
+            "stop_futile_retry is authorized only by the host repeat counter",
+            details={"issue_codes": sorted(issue_codes)},
+        )
+    if advice.disposition == "escalate_validator_review" and not any(
+        "VALIDATOR_POLICY" in code for code in issue_codes
+    ):
+        raise _IntentAdvisorAuthorityError(
+            "VALIDATOR_ESCALATION_NOT_CORROBORATED",
+            "validator escalation requires a current validator-policy issue",
+            details={"issue_codes": sorted(issue_codes)},
+        )
+    raise _IntentAdvisorAuthorityError(
+        "CURRENT_BLOCKER_REQUIRES_REPAIR",
+        "the supplied deterministic issues authorize only retry_intent",
+        details={
+            "issue_codes": sorted(issue_codes),
+            "actual_disposition": advice.disposition,
+            "allowed_dispositions": allowed_dispositions,
+        },
+    )
 
 
 def _intent_repair_diagnostic(exc: Exception) -> str:
     """Return actionable validation facts without re-anchoring malformed JSON."""
 
+    if isinstance(exc, _IntentScopeValidationError):
+        return json.dumps(
+            [
+                {
+                    "issue_code": issue.issue_code,
+                    "check_name": issue.check_name,
+                    "message": issue.message,
+                    "expected": issue.expected,
+                    "actual": issue.actual,
+                }
+                for issue in exc.issues
+            ],
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )[:8000]
+    if isinstance(exc, _IntentSafetyValidationError):
+        return json.dumps(
+            exc.diagnostics,
+            ensure_ascii=False,
+            separators=(",", ":"),
+        )[:8000]
     if isinstance(exc, StructuredOutputIncompleteError):
         return (
             "provider structured generation was incomplete: "
             f"status={exc.status}, output_limit={exc.output_limit}, "
             f"output_tokens={exc.output_tokens}, thought_tokens={exc.thought_tokens}"
         )[:1200]
-    if isinstance(exc, StructuredOutputError):
+    if isinstance(exc, (StructuredOutputError, HostContractValidationError)):
         cause = exc.cause
         if hasattr(cause, "errors"):
             try:
@@ -2679,6 +4427,50 @@ def _intent_repair_guidance(diagnostic: str) -> str:
 
     normalized = diagnostic.lower()
     guidance: list[str] = []
+    if "sequential heading contradiction" in normalized:
+        guidance.append(
+            "Re-simulate the serial tangent after every turn. A move has a "
+            "global cardinal direction and may be used only when that direction "
+            "already matches the incoming tangent. For a straight run following "
+            "a non-cardinal signed-plane turn, use type=route, path_kind=line, "
+            "with a length-only geometry_contract and omit direction and "
+            "terminal_axis so it inherits the incoming tangent. Preserve every "
+            "authored length and turn; do not reset later segments to start_axis."
+        )
+    if "max_extent requires axis and value" in normalized:
+        guidance.append(
+            "For each max_extent constraint return exactly constraint_id, "
+            "type=max_extent, one cardinal axis, and one scalar value. Do not "
+            "attach minimum/maximum vectors. If the requirement is an exact "
+            "shape diameter rather than an upper bound, realize it in the route "
+            "geometry instead of inventing max_extent."
+        )
+    if "bounding_box requires minimum and maximum" in normalized:
+        guidance.append(
+            "For each bounding_box constraint return exactly constraint_id, "
+            "type=bounding_box, minimum XYZ, and maximum XYZ. Do not use axis "
+            "or scalar value fields."
+        )
+    if "bounding_box minimum must be below maximum" in normalized:
+        guidance.append(
+            "For a user-authored bounding box, every minimum XYZ component must "
+            "be strictly lower than its matching maximum component. A planar "
+            "pipe solid still needs a non-zero normal-axis interval. If the user "
+            "only gave an exact shape diameter/width and did not request an "
+            "envelope or box, remove the invented bounding_box and realize that "
+            "dimension solely in the route geometry."
+        )
+    if "expected_open_ports conflicts with target_behavior topology" in normalized:
+        guidance.append(
+            "Recompute expected_open_ports from the returned goal sequence. "
+            "Ordinary serial route/turn/transition/connector goals preserve one "
+            "open construction front, end consumes one, and connect consumes two "
+            "distinct currently-open fronts. Never force zero merely because the "
+            "requested shape is described as closed. If a single unbranched "
+            "closed loop cannot be represented from the anchored START, keep the "
+            "realizable derived count and preserve the explicit closed-loop demand "
+            "as an unsupported: hard constraint so scope validation fails honestly."
+        )
     if any(
         marker in normalized
         for marker in (
@@ -3243,8 +5035,12 @@ def _canonicalize_dependent_intent_geometry(
                 current = final_tangent
                 continue
 
-            if goal.path_kind == "line" and goal.direction is not None:
-                current = direction_to_vector(goal.direction)
+            if goal.path_kind == "line":
+                if goal.direction is not None:
+                    current = direction_to_vector(goal.direction)
+                # A length-only line inherits the incoming tangent.  It is the
+                # general representation for a straight after a non-cardinal
+                # signed turn; do not stop heading propagation here.
                 continue
             if goal.terminal_axis is not None:
                 try:
@@ -3282,7 +5078,11 @@ def _validate_intent_safety(
     # 갑자기 spline이 선택되어, 고칠 수 없는 불변 좌표를 반복 재시도하게 된다.
     # 이 모순은 후보 상태를 만들기 전에 Intent 작성자에게 돌려보낸다.
     for goal_index, goal in enumerate(intent.target_behavior):
-        if goal.type == "route" and goal.required_waypoints and goal.path_kind != "spline":
+        if (
+            goal.type == "route"
+            and goal.required_waypoints
+            and goal.path_kind != "spline"
+        ):
             goal_label = goal.goal_id or f"target_behavior[{goal_index}]"
             issues.append(
                 f"{goal_label} required_waypoints require path_kind=spline; "
@@ -3402,11 +5202,7 @@ def _validate_intent_safety(
         outside_angles = [
             {"arm_index": index, "angle_degrees": angle}
             for index, angle in enumerate(actual_angles)
-            if not (
-                angle_range.minimum - 1e-6
-                <= angle
-                <= angle_range.maximum + 1e-6
-            )
+            if not (angle_range.minimum - 1e-6 <= angle <= angle_range.maximum + 1e-6)
         ]
         if outside_angles:
             issues.append(
@@ -3497,6 +5293,8 @@ def _validate_intent_safety(
         )
 
     issues.extend(_sequential_heading_issues(intent, settings))
+    issues.extend(_branch_successor_spline_issues(intent, settings))
+    issues.extend(_sequential_position_issues(intent, settings))
     issues.extend(_branch_angle_vector_issues(intent))
 
     if _EXPLICIT_FOUR_PORT.search(prompt):
@@ -3584,8 +5382,22 @@ def _validate_intent_safety(
                     "downstream outlet contracts"
                 )
 
+    # Whole-program structural mistakes are intent-authoring errors, not
+    # step-local numeric repair problems.  Only conflicts that continuous host
+    # relaxation cannot fix (wrong source plane or coincident non-adjacent
+    # centerlines) are returned to the LLM here.  Curvature, ordinary clearance
+    # deficits and closure dimensions are solved after intent acceptance by the
+    # deterministic ContractCore.
+    issues.extend(
+        structural_intent_issues(
+            prompt,
+            intent,
+            modeling_tolerance=settings.modeling_tolerance,
+        )
+    )
+
     if issues:
-        raise ValueError("; ".join(issues))
+        raise _IntentSafetyValidationError(issues)
 
 
 def _predicted_c1_spline_minimum_radius(
@@ -3731,10 +5543,7 @@ def _sequential_heading_issues(
             continue
 
         if goal.type == "route":
-            if (
-                goal.waypoint_frame == "relative_to_target"
-                and goal.required_waypoints
-            ):
+            if goal.waypoint_frame == "relative_to_target" and goal.required_waypoints:
                 first_offset = vec(goal.required_waypoints[0])
                 axial = dot(first_offset, current)
                 total = length(first_offset)
@@ -3833,7 +5642,10 @@ def _sequential_heading_issues(
                     and predicted_radius + settings.modeling_tolerance < required_radius
                 ):
                     natural_radius: float | None = None
-                    if goal.terminal_axis is not None and len(goal.required_waypoints) >= 2:
+                    if (
+                        goal.terminal_axis is not None
+                        and len(goal.required_waypoints) >= 2
+                    ):
                         try:
                             natural_radius, _natural_factors = (
                                 _predicted_c1_spline_minimum_radius(
@@ -3848,7 +5660,8 @@ def _sequential_heading_issues(
                     natural_hint = ""
                     if (
                         natural_radius is not None
-                        and natural_radius + settings.modeling_tolerance >= required_radius
+                        and natural_radius + settings.modeling_tolerance
+                        >= required_radius
                     ):
                         natural_hint = (
                             " The same anchors with no terminal_axis contract use "
@@ -3865,8 +5678,7 @@ def _sequential_heading_issues(
                         f"deterministic handle optimization (factors "
                         f"{[round(value, 3) for value in handle_factors]}). "
                         "Redistribute or add well-separated relative anchors so each "
-                        "direction change is spread over more distance"
-                        + natural_hint
+                        "direction change is spread over more distance" + natural_hint
                     )
                 # With no explicit terminal-axis contract, the supported spline
                 # uses the final waypoint chord as its natural downstream heading.
@@ -3926,6 +5738,354 @@ def _sequential_heading_issues(
         if goal.type in {"branch", "connect", "end"}:
             break
 
+    return issues
+
+
+def _branch_outlet_heading_candidates(
+    incoming: tuple[float, float, float],
+    goal: Goal,
+) -> list[tuple[float, float, float]]:
+    """Return every heading a branch contract may expose to its successors.
+
+    This mirrors the authored outlet surface without deciding which outlet a
+    later planner action must consume.  A successor contract is rejected only
+    when *all* of these candidates fail, so the preflight cannot silently make
+    a topology choice on the LLM's behalf.
+    """
+
+    candidates: list[tuple[float, float, float]] = []
+
+    def append(raw: tuple[float, float, float]) -> None:
+        try:
+            candidate = normalize(vec(raw))
+        except ValueError:
+            return
+        if not any(dot(candidate, existing) >= 1.0 - 1e-9 for existing in candidates):
+            candidates.append(candidate)
+
+    if goal.include_primary_outlet is not False:
+        append(incoming)
+    for raw in goal.required_outlet_vectors:
+        append(vec(raw))
+    for outlet in goal.required_outlets:
+        append(vec(outlet.axis))
+    for direction in goal.required_outlet_directions:
+        append(direction_to_vector(direction))
+
+    # Some legacy branch contracts express their outlet fan with only signed
+    # angles.  Reproduce that generic construction so those candidates receive
+    # the same feasibility check as explicit outlet vectors.
+    if not candidates and goal.branch_angles:
+        base = (
+            direction_to_vector(goal.direction)
+            if goal.direction is not None
+            else incoming
+        )
+        try:
+            base = normalize(base)
+            if goal.branch_plane_normal is not None:
+                normal = normalize(vec(goal.branch_plane_normal))
+                for angle in goal.branch_angles:
+                    append(rotate(base, normal, math.radians(float(angle))))
+            else:
+                side = choose_perpendicular_axis(base)
+                for angle in goal.branch_angles:
+                    radians = math.radians(float(angle))
+                    append(
+                        add(
+                            mul(base, math.cos(radians)),
+                            mul(side, math.sin(radians)),
+                        )
+                    )
+        except ValueError:
+            pass
+    return candidates
+
+
+def _serial_heading_before_goal(
+    intent: IntentResult,
+    stop_index: int,
+) -> tuple[float, float, float] | None:
+    """Propagate only the unambiguous serial heading before ``stop_index``."""
+
+    try:
+        current = normalize(vec(intent.start_axis))
+    except ValueError:
+        return None
+    for index, goal in enumerate(intent.target_behavior[:stop_index]):
+        if index > 0:
+            previous_id = intent.target_behavior[index - 1].goal_id
+            if goal.allow_parallel or (
+                goal.depends_on_goal_ids and previous_id not in goal.depends_on_goal_ids
+            ):
+                return None
+        try:
+            if goal.type == "move" and goal.direction is not None:
+                current = direction_to_vector(goal.direction)
+            elif goal.type == "turn" and goal.angle is not None:
+                if goal.direction is not None:
+                    current = direction_to_vector(goal.direction)
+                elif goal.plane_normal is not None:
+                    current = normalize(
+                        rotate(
+                            current,
+                            normalize(vec(goal.plane_normal)),
+                            math.radians(float(goal.angle)),
+                        )
+                    )
+                else:
+                    return None
+            elif goal.type == "route":
+                if goal.terminal_axis is not None:
+                    current = normalize(vec(goal.terminal_axis))
+                elif len(goal.required_waypoints) >= 2:
+                    current = normalize(
+                        sub(
+                            vec(goal.required_waypoints[-1]),
+                            vec(goal.required_waypoints[-2]),
+                        )
+                    )
+                elif goal.direction is not None:
+                    current = direction_to_vector(goal.direction)
+                elif goal.path_kind != "line":
+                    return None
+            elif goal.type in {"diameter_change", "connector"}:
+                if goal.direction is not None:
+                    current = direction_to_vector(goal.direction)
+            elif goal.type in {"branch", "connect", "end"}:
+                return None
+        except ValueError:
+            return None
+    return normalize(current)
+
+
+def _branch_successor_spline_issues(
+    intent: IntentResult,
+    settings: Settings,
+) -> list[str]:
+    """Preflight fixed spline anchors immediately downstream of a branch.
+
+    The ordinary sequential simulator intentionally stops at a fork because it
+    must not guess an outlet.  That previously let an infeasible immutable
+    spline contract reach the step retry loop.  Here every authored outlet is
+    evaluated independently and the contract is returned to the Intent LLM
+    only when no possible successor heading can satisfy it.
+    """
+
+    goals_by_id = {
+        goal.goal_id: (index, goal)
+        for index, goal in enumerate(intent.target_behavior)
+        if goal.goal_id is not None
+    }
+    issues: list[str] = []
+    current_outer_diameter = float(intent.global_spec.outer_diameter)
+    diameter_by_index: list[float] = []
+    for goal in intent.target_behavior:
+        diameter_by_index.append(current_outer_diameter)
+        if goal.type == "diameter_change" and goal.diameter_out is not None:
+            current_outer_diameter = float(goal.diameter_out)
+
+    for route_index, route in enumerate(intent.target_behavior):
+        if not (
+            route.type == "route"
+            and route.path_kind == "spline"
+            and route.waypoint_frame == "relative_to_target"
+            and route.required_waypoints
+        ):
+            continue
+        branch_refs = [
+            goals_by_id[goal_id]
+            for goal_id in route.depends_on_goal_ids
+            if goal_id in goals_by_id and goals_by_id[goal_id][1].type == "branch"
+        ]
+        if len(branch_refs) != 1:
+            continue
+        branch_index, branch = branch_refs[0]
+        incoming = _serial_heading_before_goal(intent, branch_index)
+        if incoming is None:
+            continue
+        headings = _branch_outlet_heading_candidates(incoming, branch)
+        if not headings:
+            continue
+
+        required_radius = minimum_spline_curvature_radius(
+            diameter_by_index[route_index],
+            settings.modeling_tolerance,
+            route.minimum_curvature_radius,
+        )
+        points = [
+            (0.0, 0.0, 0.0),
+            *[vec(point) for point in route.required_waypoints],
+        ]
+        try:
+            final_tangent = (
+                normalize(vec(route.terminal_axis))
+                if route.terminal_axis is not None
+                else normalize(sub(points[-1], points[-2]))
+            )
+        except ValueError:
+            continue
+
+        evaluations: list[dict[str, Any]] = []
+        any_feasible = False
+        for heading in headings:
+            first_offset = points[1]
+            axial = dot(first_offset, heading)
+            try:
+                prediction = predict_c1_spline(
+                    points,
+                    heading,
+                    final_tangent,
+                    modeling_tolerance=settings.modeling_tolerance,
+                )
+                radius = float(prediction.minimum_radius)
+            except ValueError:
+                radius = 0.0
+            feasible = (
+                axial > settings.modeling_tolerance
+                and radius + settings.modeling_tolerance >= required_radius
+            )
+            any_feasible = any_feasible or feasible
+            evaluations.append(
+                {
+                    "incoming_heading": [round(value, 6) for value in heading],
+                    "first_waypoint_axial_projection": round(axial, 6),
+                    "predicted_minimum_radius": round(radius, 6),
+                    "feasible": feasible,
+                }
+            )
+        if any_feasible:
+            continue
+        route_label = route.goal_id or f"target_behavior[{route_index}]"
+        branch_label = branch.goal_id or f"target_behavior[{branch_index}]"
+        issues.append(
+            f"{route_label} fixed required-anchor spline is infeasible after every "
+            f"authored outlet of {branch_label}: required minimum curvature radius "
+            f"is {required_radius:.6g} mm; outlet evaluations={evaluations}. The "
+            "system will not choose an outlet or patch coordinates. Re-author the "
+            "LLM-inferred relative waypoint contract so at least one permitted "
+            "branch heading has positive entry advance and passes the calculated "
+            "curvature bound; preserve any coordinates explicitly supplied by the user"
+        )
+    return issues
+
+
+def _sequential_position_issues(
+    intent: IntentResult,
+    settings: Settings,
+) -> list[str]:
+    """Integrate the uniquely serial linear prefix and reject impossible poses.
+
+    A line with a fixed inlet, heading and length has exactly one endpoint.  If
+    Intent also freezes a different terminal_position, no amount of step-level
+    replanning can satisfy it.  This preflight returns that contradiction to the
+    Intent author before the contract becomes immutable.
+    """
+
+    try:
+        position = vec(intent.start_position)
+        heading = normalize(vec(intent.start_axis))
+    except ValueError:
+        return ["start_position/start_axis must define a finite serial pose"]
+
+    issues: list[str] = []
+    for index, goal in enumerate(intent.target_behavior):
+        if index > 0:
+            previous_goal_id = intent.target_behavior[index - 1].goal_id
+            if goal.allow_parallel or (
+                goal.depends_on_goal_ids
+                and previous_goal_id not in goal.depends_on_goal_ids
+            ):
+                break
+        label = goal.goal_id or f"target_behavior[{index}]"
+        if goal.type == "move":
+            if goal.direction is not None:
+                heading = direction_to_vector(goal.direction)
+            if goal.length is not None:
+                position = add(position, mul(heading, float(goal.length)))
+            continue
+        if goal.type == "route" and goal.path_kind == "line":
+            route_heading = (
+                direction_to_vector(goal.direction)
+                if goal.direction is not None
+                else heading
+            )
+            if goal.terminal_axis is not None:
+                try:
+                    terminal_heading = normalize(vec(goal.terminal_axis))
+                except ValueError:
+                    terminal_heading = route_heading
+            else:
+                terminal_heading = route_heading
+            predicted = (
+                add(position, mul(route_heading, float(goal.length)))
+                if goal.length is not None
+                else None
+            )
+            if goal.terminal_position is not None:
+                terminal = vec(goal.terminal_position)
+                delta = sub(terminal, position)
+                distance = length(delta)
+                tolerance = max(
+                    settings.modeling_tolerance * 10.0,
+                    max(distance, float(goal.length or 0.0), 1.0) * 1e-6,
+                )
+                if predicted is not None:
+                    endpoint_error = length(sub(predicted, terminal))
+                    if endpoint_error > tolerance:
+                        issues.append(
+                            f"{label} line pose is over-constrained: start "
+                            f"{[round(value, 6) for value in position]} + length "
+                            f"{float(goal.length):.6g} * heading "
+                            f"{[round(value, 6) for value in route_heading]} gives "
+                            f"{[round(value, 6) for value in predicted]}, not "
+                            f"terminal_position {[round(value, 6) for value in terminal]} "
+                            f"(error {endpoint_error:.6g} mm). Revise the Intent's "
+                            "length/heading/terminal position together"
+                        )
+                if distance > tolerance:
+                    alignment = dot(normalize(delta), route_heading)
+                    if alignment < 0.9999:
+                        issues.append(
+                            f"{label} terminal_position lies off its line heading: "
+                            f"displacement {[round(value, 6) for value in delta]} has "
+                            f"alignment {alignment:.6g} with heading "
+                            f"{[round(value, 6) for value in route_heading]}"
+                        )
+                position = terminal
+            elif predicted is not None:
+                position = predicted
+            heading = terminal_heading
+            continue
+        if (
+            goal.type == "route"
+            and goal.path_kind == "spline"
+            and goal.required_waypoints
+        ):
+            endpoint = vec(goal.required_waypoints[-1])
+            if goal.waypoint_frame == "relative_to_target":
+                endpoint = add(position, endpoint)
+            if goal.terminal_position is not None:
+                terminal = vec(goal.terminal_position)
+                tolerance = max(settings.modeling_tolerance * 10.0, 1e-6)
+                endpoint_error = length(sub(endpoint, terminal))
+                if endpoint_error > tolerance:
+                    issues.append(
+                        f"{label} final required waypoint and terminal_position "
+                        f"differ by {endpoint_error:.6g} mm"
+                    )
+                position = terminal
+            else:
+                position = endpoint
+            if goal.terminal_axis is not None:
+                try:
+                    heading = normalize(vec(goal.terminal_axis))
+                except ValueError:
+                    pass
+            continue
+        # Circular arcs, turns and branches need additional topology/frame
+        # choices. Stop at that boundary instead of guessing a downstream pose.
+        break
     return issues
 
 
@@ -4127,8 +6287,11 @@ def _explicit_branch_length_ranges(text: str) -> list[_ExplicitMMRange]:
         ]
         right = min(sentence_end_candidates) if sentence_end_candidates else len(text)
         context = text[left + 1 : right]
-        if re.search(r"\b(?:each|every|all)\s+branch(?:es)?\b", context, re.IGNORECASE) and re.search(
-            r"\b(?:long|lengths?)\b", context,
+        if re.search(
+            r"\b(?:each|every|all)\s+branch(?:es)?\b", context, re.IGNORECASE
+        ) and re.search(
+            r"\b(?:long|lengths?)\b",
+            context,
             re.IGNORECASE,
         ):
             result.append(source_range)
@@ -4199,7 +6362,9 @@ def _main_axis_terminal_arm_angles(intent: IntentResult) -> list[float]:
         main_axis = normalize(vec(intent.start_axis))
 
     arm_axes: list[tuple[float, float, float]] = []
-    first_branch_index = branch_indexes[0] if branch_indexes else len(intent.target_behavior)
+    first_branch_index = (
+        branch_indexes[0] if branch_indexes else len(intent.target_behavior)
+    )
     prefix = intent.target_behavior[:first_branch_index]
     root_axis: tuple[float, float, float] | None = None
     for goal in reversed(prefix):
@@ -4783,28 +6948,34 @@ def _numeric_literal_schema_fits(literals: list[str]) -> bool:
     return payload_bytes <= MAX_STRUCTURED_NUMBER_LITERAL_BYTES
 
 
-def _encoded_intent_request(request: str, source_literals: list[str]) -> str:
-    bounded_examples = source_literals[:32]
+def _intent_json_envelope_request(request: str) -> str:
+    """Wrap an intent request for the minimal provider-schema fallback."""
+
     return (
-        request + "\n\nThe finite numeric-enum grammar is too large for this request. "
-        "Use the bounded decimal-object representation required by the response "
-        "schema: encode each value as c*10^(-p), for example 1.5 as "
-        '{"k":"d","c":15,"p":1}. Preserve all user-authored values exactly. '
-        "Representative source/default values: "
-        + json.dumps(
-            bounded_examples,
-            ensure_ascii=False,
-            separators=(",", ":"),
-        )
+        request + "\n\nThe provider could not compile the full typed response grammar. "
+        "Use the minimal envelope required by the active response schema. Set "
+        "intent_json to a JSON-encoded string containing one complete intent "
+        "root object. The inner object must still obey every field, topology, "
+        "measurement, dependency, and safety requirement above; it will be "
+        "strictly parsed and validated by the host. Do not put commentary or "
+        "Markdown inside or outside intent_json."
     )
 
 
-def _planner_numeric_literals(
+@dataclass(frozen=True)
+class _PlannerNumericLiteralBundle:
+    """한 번의 상태 순회로 만든 필수 및 선호 숫자 리터럴 묶음이다."""
+
+    mandatory_literals: list[str]
+    preferred_literals: list[str]
+
+
+def _build_planner_numeric_literal_bundle(
     state: PipeState,
     *,
     include_optional: bool = True,
-) -> list[str]:
-    """Build a finite action vocabulary from the immutable contract and ``S_t``."""
+) -> _PlannerNumericLiteralBundle:
+    """불변 계약과 ``S_t``를 한 번 순회해 숫자 어휘 묶음을 만든다."""
 
     exact: list[float] = []
 
@@ -4854,11 +7025,9 @@ def _planner_numeric_literals(
         360.0,
     ]
 
-    # Conservatively preserve every dependency-ready goal, not only the first
-    # pending goal. A later sequential goal can sometimes share an action that
-    # completes earlier compatible goals, while allow_parallel goals can be
-    # selected directly. Restricting this set further would silently make that
-    # LLM choice impossible at the schema boundary.
+    # 첫 미완료 목표뿐 아니라 의존성이 준비된 모든 목표를 보수적으로 보존한다.
+    # 뒤쪽 순차 목표가 앞 목표와 한 행동을 공유하거나 병렬 목표가 직접 선택될 수
+    # 있으므로, 여기서 범위를 더 줄이면 schema 경계에서 가능한 선택을 잃는다.
     completed_history = {
         goal_id
         for action in state.action_history
@@ -4897,17 +7066,16 @@ def _planner_numeric_literals(
     for port in state.open_ports:
         section_seeds.extend((float(port.outer_diameter), float(port.wall_thickness)))
 
-    # Derived construction conveniences are secondary.  They may be truncated,
-    # but no authored eligible-goal or targetable-port value may be dropped.
+    # 파생된 구성 편의 값은 부차적이므로 잘릴 수 있지만, 작성된 목표 값과
+    # 선택 가능한 포트 값은 누락하면 안 된다.
     priority_seeds = list(dict.fromkeys([*section_seeds, *eligible_goal_values]))[:12]
     priority_derived: list[float] = []
     for value in priority_seeds:
         for factor in (0.25, 0.5, 0.75, 1.25, 1.5, 2.0, 3.0):
             priority_derived.append(value * factor)
 
-    # Every value in every eligible goal, immutable geometric constraint, and
-    # targetable port plus the basis is mandatory. Secondary historical/derived
-    # candidates use only the remaining slots in the provider-safe vocabulary.
+    # 모든 선택 가능 목표, 불변 형상 제약, 대상 포트 및 기초 값은 필수다.
+    # 이력 및 파생 후보는 provider-safe 어휘에서 남은 자리만 사용한다.
     mandatory_candidates = [*mandatory_active, *required_basis]
 
     def literal_for(value: float, *, preserve: bool) -> str | None:
@@ -4965,7 +7133,10 @@ def _planner_numeric_literals(
             "must be simplified before planning"
         )
     if not include_optional:
-        return mandatory_literals
+        return _PlannerNumericLiteralBundle(
+            mandatory_literals=mandatory_literals,
+            preferred_literals=list(mandatory_literals),
+        )
 
     literal_limit = max(
         len(mandatory_literals),
@@ -5008,7 +7179,43 @@ def _planner_numeric_literals(
             if payload_bytes > optional_byte_limit:
                 continue
             literals.append(literal)
-    return literals
+    return _PlannerNumericLiteralBundle(
+        mandatory_literals=mandatory_literals,
+        preferred_literals=literals,
+    )
+
+
+def _planner_numeric_literals(
+    state: PipeState,
+    *,
+    include_optional: bool = True,
+) -> list[str]:
+    """기존 호출 계약에 맞춰 유한한 planner 숫자 어휘를 반환한다."""
+
+    bundle = _build_planner_numeric_literal_bundle(
+        state,
+        include_optional=include_optional,
+    )
+    return bundle.preferred_literals if include_optional else bundle.mandatory_literals
+
+
+_DEFAULT_PLANNER_NUMERIC_LITERALS = _planner_numeric_literals
+
+
+def _planner_numeric_literal_lists_for_action(
+    state: PipeState,
+) -> tuple[list[str], list[str]]:
+    """일반 실행은 한 번 계산하고 monkeypatch된 기존 함수는 그대로 호출한다."""
+
+    if _planner_numeric_literals is not _DEFAULT_PLANNER_NUMERIC_LITERALS:
+        # 테스트가 기존 진입점을 대체한 경우에는 이전과 같은 호출 순서와
+        # 인자를 유지해 테스트 더블의 동작을 바꾸지 않는다.
+        return (
+            _planner_numeric_literals(state, include_optional=False),
+            _planner_numeric_literals(state),
+        )
+    bundle = _build_planner_numeric_literal_bundle(state)
+    return bundle.mandatory_literals, bundle.preferred_literals
 
 
 def _intent_metric_values(intent: IntentResult) -> list[float]:
@@ -5063,30 +7270,39 @@ def _plan_action(
     *,
     dry_run: bool,
     gemini: GeminiClient | None,
+    host_compiler_enabled: bool = False,
     repair_observations: list[dict[str, Any]] | None = None,
     reusable_suffix_context: dict[str, Any] | None = None,
 ) -> ActionDraft:
     if dry_run:
         return plan_next_action(state)
+    if host_compiler_enabled and not repair_observations:
+        compiled = compile_next_action(state)
+        if compiled is not None:
+            return compiled
     if gemini is None:
         raise RuntimeError("Gemini client is required outside dry-run mode.")
     schema_profile_before = _planner_schema_profile(gemini, state.state_id)
-    force_geometry_decimals = any(
-        goal.type == "route" and goal.path_kind == "spline"
-        for goal in state.remaining_goals
-    ) or any(
-        str(item.get("check_name", ""))
-        in {
-            "route_continuity",
-            "route_curvature",
-            "intra_module_clearance",
-            "freecad_semantic_validation",
-            "freecad_geometry",
-        }
-        or "centerline_context"
-        in json.dumps(item.get("actual") or {}, ensure_ascii=False)
-        for item in (repair_observations or [])
-        if isinstance(item, dict)
+    force_geometry_decimals = (
+        any(
+            goal.type == "route" and goal.path_kind == "spline"
+            for goal in state.remaining_goals
+        )
+        or any(
+            str(item.get("check_name", ""))
+            in {
+                "route_continuity",
+                "route_curvature",
+                "intra_module_clearance",
+                "freecad_semantic_validation",
+                "freecad_geometry",
+            }
+            or "centerline_context"
+            in json.dumps(item.get("actual") or {}, ensure_ascii=False)
+            for item in (repair_observations or [])
+            if isinstance(item, dict)
+        )
+        or _contains_numeric_diagnostic(repair_observations or [])
     )
     stagnation = next(
         (
@@ -5116,8 +7332,7 @@ def _plan_action(
         # retry also resets lineage before changing its response grammar.
         if (
             geometry_grammar_changed
-            and
-            hasattr(gemini, "has_previous")
+            and hasattr(gemini, "has_previous")
             and gemini.has_previous("step_planner")
             and hasattr(gemini, "reset_lineage")
         ):
@@ -5136,11 +7351,10 @@ def _plan_action(
     mandatory_numeric_literals: list[str] = []
     if schema_profile != "encoded":
         try:
-            mandatory_numeric_literals = _planner_numeric_literals(
-                state,
-                include_optional=False,
-            )
-            numeric_literals = _planner_numeric_literals(state)
+            (
+                mandatory_numeric_literals,
+                numeric_literals,
+            ) = _planner_numeric_literal_lists_for_action(state)
         except _PlannerSchemaCapacityError:
             # The finite enum is an optimization, not a limit on authored CAD
             # complexity. Preserve the immutable state/goal values in the
@@ -5159,9 +7373,9 @@ def _plan_action(
         else numeric_literals
     )
     planner_schema = (
-        PlannerDecision
+        PlannerDecisionWire
         if _needs_inline_component_planner(state)
-        else CorePlannerDecision
+        else CorePlannerDecisionWire
     )
     planner_thinking_level = (
         "medium"
@@ -5177,6 +7391,7 @@ def _plan_action(
                 "route_curvature",
                 "intra_module_clearance",
                 "freecad_geometry",
+                "freecad_semantic_validation",
                 "visual_validation",
             }
             for item in (repair_observations or [])
@@ -5230,6 +7445,21 @@ def _plan_action(
 
     try:
         result = call_planner(selected_request, selected_literals)
+    except StructuredOutputError as exc:
+        # A malformed/incomplete schema response did not create a candidate and
+        # therefore must not consume one of the semantic validation-repair
+        # slots. Retry the same logical attempt once with fresh lineage and the
+        # full state/catalog; a second protocol failure is journaled by the
+        # outer loop as the terminal planning failure for this attempt.
+        if hasattr(gemini, "reset_lineage"):
+            gemini.reset_lineage("step_planner")
+        protocol_request = selected_full_request + (
+            "\n\nPLANNING_FAILED protocol diagnostic: the previous response did "
+            "not satisfy the structured action schema. Return one complete "
+            "replacement object; do not repeat partial or malformed JSON. "
+            "Diagnostic: " + _intent_repair_diagnostic(exc)[:1000]
+        )
+        result = call_planner(protocol_request, selected_literals)
     except GeminiLineageError:
         try:
             result = call_planner(selected_full_request, selected_literals)
@@ -5255,7 +7485,15 @@ def _plan_action(
             mandatory_literals=mandatory_numeric_literals,
             attempted_profile=schema_profile,
         )
-    if isinstance(result, (PlannerDecision, CorePlannerDecision)):
+    if isinstance(
+        result,
+        (
+            PlannerDecision,
+            CorePlannerDecision,
+            PlannerDecisionWire,
+            CorePlannerDecisionWire,
+        ),
+    ):
         return result.to_action_draft()
     if isinstance(result, ActionDraft):
         # 테스트 더블이 이미 변환된 draft를 반환하는 경우에도 production과
@@ -5270,6 +7508,20 @@ def _plan_action(
             )
         return result
     raise TypeError(f"Unexpected planner result type: {type(result).__name__}")
+
+
+def _contains_numeric_diagnostic(value: Any) -> bool:
+    """Whether repair evidence needs values beyond the finite numeric enum."""
+
+    if isinstance(value, bool) or value is None:
+        return False
+    if isinstance(value, (int, float)):
+        return True
+    if isinstance(value, dict):
+        return any(_contains_numeric_diagnostic(item) for item in value.values())
+    if isinstance(value, (list, tuple)):
+        return any(_contains_numeric_diagnostic(item) for item in value)
+    return False
 
 
 def _retry_planner_with_reduced_schemas(
@@ -5343,7 +7595,9 @@ def _encoded_planner_request(
     return (
         request + "\n\nThe provider could not compile the enum-constrained numeric "
         "response grammar. Use the bounded decimal-object representation in "
-        "the current response schema." + grounding
+        "the current response schema. Preserve every value's decimal scale: "
+        "increase p to retain fractional digits and never shift a decimal point "
+        "to satisfy the coefficient field." + grounding
     )
 
 
@@ -5410,8 +7664,26 @@ def _call_structured(
     part: str,
     thinking_level: str,
     numeric_literals: list[str] | None = None,
+    numeric_schema_mode: str | None = None,
     system_instruction: str | None = None,
 ) -> Any:
+    provider_wire_parts = {
+        "intent",
+        "intent_repair_advisor",
+        "intent_repair_reviewer",
+        "step_planner",
+        "patch",
+        "visual_validator",
+        "step_repair_advisor",
+        "parameter",
+    }
+    if part in provider_wire_parts and not getattr(
+        schema, "provider_wire_contract", False
+    ):
+        raise GeminiConfigError(
+            f"Structured part {part} must use a ProviderWireModel; "
+            f"received {schema.__name__}"
+        )
     if getattr(gemini, "supports_interaction_controls", False):
         kwargs: dict[str, Any] = {
             "part": part,
@@ -5421,12 +7693,159 @@ def _call_structured(
             gemini, "supports_numeric_literals", False
         ):
             kwargs["numeric_literals"] = numeric_literals
+        if numeric_schema_mode is not None and getattr(
+            gemini, "supports_numeric_schema_modes", False
+        ):
+            kwargs["numeric_schema_mode"] = numeric_schema_mode
         if system_instruction is not None and getattr(
             gemini, "supports_system_instruction", False
         ):
             kwargs["system_instruction"] = system_instruction
         return gemini.stream_structured(prompt, schema, **kwargs)
     return gemini.stream_structured(prompt, schema, part=part)
+
+
+def _normalized_source_fragment(value: str) -> str:
+    """Normalize a verbatim source fragment without translating or paraphrasing."""
+
+    return " ".join(str(value).casefold().split())
+
+
+def _intent_source_provenance(
+    prompt: str | None,
+    values: list[str],
+    *,
+    strip_unsupported_prefix: bool = False,
+) -> tuple[list[dict[str, Any]], bool]:
+    """Return deterministic verbatim provenance for terminal scope evidence."""
+
+    normalized_prompt = _normalized_source_fragment(prompt or "")
+    records: list[dict[str, Any]] = []
+    for raw_value in values:
+        source_fragment = str(raw_value)
+        if strip_unsupported_prefix and source_fragment.startswith("unsupported:"):
+            source_fragment = source_fragment.split(":", 1)[1]
+        normalized_fragment = _normalized_source_fragment(source_fragment)
+        source_authored = bool(
+            normalized_fragment
+            and normalized_prompt
+            and re.search(
+                rf"(?<!\w){re.escape(normalized_fragment)}(?!\w)",
+                normalized_prompt,
+            )
+        )
+        records.append(
+            {
+                "value": str(raw_value),
+                "source_fragment": source_fragment,
+                "source_authored": source_authored,
+            }
+        )
+    return records, bool(records) and all(
+        item["source_authored"] is True for item in records
+    )
+
+
+def _intent_scope_issues(
+    intent: IntentResult,
+    *,
+    dry_run: bool,
+    prompt: str | None = None,
+) -> list[StaticIssue]:
+    """Return every catalog/scope rejection before an intent is accepted."""
+
+    issues: list[StaticIssue] = []
+    nonbinary_branches = _nonbinary_branch_goal_ids(intent)
+    if not dry_run and nonbinary_branches:
+        issues.append(
+            _issue(
+                0,
+                "NON_BINARY_BRANCH_CONTRACT",
+                "Production branch goals must each describe one binary junction.",
+                phase="intent_scope",
+                expected={"total_outlets_per_branch_goal": 2},
+                actual={"nonbinary_branch_goal_ids": nonbinary_branches},
+            )
+        )
+
+    unsupported_components = _unsupported_required_components(intent)
+    if unsupported_components:
+        component_provenance, component_provenance_complete = _intent_source_provenance(
+            prompt, unsupported_components
+        )
+        issues.append(
+            _issue(
+                0,
+                "UNSUPPORTED_REQUIRED_COMPONENT",
+                (
+                    "The LLM intent contains an accessory outside the explicit "
+                    "geometry catalog."
+                ),
+                phase="intent_scope",
+                expected={"supported_components": list(SUPPORTED_INLINE_COMPONENTS)},
+                actual={
+                    "unsupported_components": unsupported_components,
+                    "source_provenance": component_provenance,
+                    "source_provenance_complete": (component_provenance_complete),
+                },
+            )
+        )
+
+    component_contract_error = _component_contract_error(intent)
+    if component_contract_error is not None:
+        issues.append(
+            _issue(
+                0,
+                "INCONSISTENT_COMPONENT_CONTRACT",
+                (
+                    "Required accessory multiplicity must match distinct "
+                    "connector goals."
+                ),
+                phase="intent_scope",
+                expected=component_contract_error["expected"],
+                actual=component_contract_error["actual"],
+            )
+        )
+
+    if intent.hard_constraints:
+        hard_constraint_provenance, hard_constraint_provenance_complete = (
+            _intent_source_provenance(
+                prompt,
+                list(intent.hard_constraints),
+                strip_unsupported_prefix=True,
+            )
+        )
+        issues.append(
+            _issue(
+                0,
+                "UNSUPPORTED_HARD_CONSTRAINT",
+                (
+                    "The LLM preserved a hard constraint that has no "
+                    "deterministic predicate."
+                ),
+                phase="intent_scope",
+                expected={"hard_constraints": []},
+                actual={
+                    "hard_constraints": list(intent.hard_constraints),
+                    "source_provenance": hard_constraint_provenance,
+                    "source_provenance_complete": (hard_constraint_provenance_complete),
+                },
+            )
+        )
+    return issues
+
+
+def _validate_intent_scope(
+    intent: IntentResult,
+    *,
+    dry_run: bool,
+    prompt: str | None = None,
+) -> None:
+    """Raise a structured, repair-loop-aware failure for scope-invalid intent."""
+
+    issues = _intent_scope_issues(intent, dry_run=dry_run, prompt=prompt)
+    if issues:
+        raise _IntentScopeValidationError(issues)
 
 
 def _bind_contract(prompt: str, intent: IntentResult) -> IntentResult:
@@ -5574,12 +7993,18 @@ def _validate_agenda_repair_directive(
             "Final repair referenced unknown module IDs: "
             + ", ".join(unknown_module_ids)
         )
-    localized_steps = [
+    issue_localized_steps = [
         issue.step_index
         for issue_id in directive.target_issue_ids
         for issue in [errors_by_id[issue_id]]
         if issue.step_index is not None and issue.step_index > 0
-    ] + [module_steps[module_id] for module_id in directive.target_module_ids]
+    ]
+    # Issue localization is host-derived from failure adapters.  Implicated
+    # module IDs may include an already-valid parent in an overlap pair and are
+    # evidence labels, not authority to force an earlier rollback.
+    localized_steps = issue_localized_steps or [
+        module_steps[module_id] for module_id in directive.target_module_ids
+    ]
     if localized_steps and directive.rollback_step > min(localized_steps):
         raise ValueError(
             "rollback_step is later than the earliest localized defect step"
@@ -6045,6 +8470,8 @@ def _validate_and_publish_freecad(
     validation_path: Path,
     evidence_validator: Any = None,
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+    """후보 B-Rep을 생성ㆍ검증한 뒤 digest가 같은 문서만 게시한다."""
+
     try:
         raw_result_path.parent.mkdir(parents=True, exist_ok=True)
         validation_path.parent.mkdir(parents=True, exist_ok=True)
@@ -6058,78 +8485,104 @@ def _validate_and_publish_freecad(
         _atomic_write_json(raw_result_path, raw)
         digest = geometry_payload_digest(state)
         try:
+            geometry_modules = [
+                module
+                for module in state.placed_modules
+                if not (
+                    module.type == "connect_ports"
+                    and module.params.get("path_kind") == "seam"
+                )
+            ]
             evidence = assess_freecad_validation(
                 raw,
                 expected_digest=digest,
                 expected_state_id=state.state_id,
-                expected_module_ids=[module.id for module in state.placed_modules],
+                expected_module_ids=[module.id for module in geometry_modules],
                 expected_internal_section_module_count=sum(
                     module.type not in {"terminate", "cap_pipe"}
-                    for module in state.placed_modules
+                    for module in geometry_modules
                 ),
                 expected_open_port_count=len(state.open_ports),
-                expected_anchored_inlet_count=(
-                    1
-                    if state.placed_modules
-                    and state.placed_modules[0].type not in {"terminate", "cap_pipe"}
-                    else 0
-                ),
+                expected_anchored_inlet_count=(anchored_inlet_count(state)),
                 expected_generator_version=GENERATOR_VERSION,
                 expected_run_id=run_id,
                 expected_state_version=state.state_version,
                 expected_attempt_id=attempt_id,
-                expected_candidate_document=candidate_document_name(
+                expected_candidate_document=_candidate_document_name(
                     state,
                     run_id=run_id,
                     attempt_id=attempt_id,
+                    digest=digest,
                 ),
             )
         except FreeCADMCPError as exc:
             if isinstance(
                 exc, FreeCADValidationError
             ) or _is_semantic_freecad_validation_error(str(exc)):
+                rejected_evidence = getattr(exc, "evidence", None)
+                if isinstance(rejected_evidence, dict):
+                    # 거절된 B-Rep도 유효한 진단 근거다. 중단 시 transport 수준
+                    # MCP envelope만 남지 않도록 cleanup 전에 먼저 저장한다.
+                    _atomic_write_json(validation_path, rejected_evidence)
                 try:
-                    cleanup_script = build_freecad_candidate_cleanup_script(
+                    cleanup_script = _build_freecad_candidate_cleanup_script(
                         state,
                         run_id=run_id,
                         attempt_id=attempt_id,
+                        payload_digest=digest,
                     )
                     asyncio.run(execute_freecad_code(settings, cleanup_script))
                 except Exception:
                     pass
                 raise _FreeCADSemanticError(
                     str(exc),
-                    getattr(exc, "evidence", None),
+                    rejected_evidence,
                 ) from exc
             raise
         if evidence_validator is not None:
             try:
                 evidence_validator(evidence)
-            except Exception:
+            except Exception as exc:
+                rejected_evidence = (
+                    exc.evidence
+                    if isinstance(exc, _FreeCADSemanticError) and exc.evidence
+                    else evidence
+                )
+                # host 결정론 검사는 FreeCAD 근거에 추가 반례를 붙일 수 있다.
+                # resume과 diagnostician이 축약된 ActionAttempt에서 손실된 case를
+                # 재구성하지 않도록 cleanup 전에 보강 payload를 그대로 저장한다.
+                _atomic_write_json(validation_path, rejected_evidence)
                 try:
-                    cleanup_script = build_freecad_candidate_cleanup_script(
+                    cleanup_script = _build_freecad_candidate_cleanup_script(
                         state,
                         run_id=run_id,
                         attempt_id=attempt_id,
+                        payload_digest=digest,
                     )
                     asyncio.run(execute_freecad_code(settings, cleanup_script))
                 except Exception:
                     pass
                 raise
         _atomic_write_json(validation_path, evidence)
-        publish_script = build_freecad_publish_script(
+        document_path = _freecad_document_path(
+            raw_result_path,
+            state,
+            payload_digest=digest,
+        )
+        publish_script = _build_freecad_publish_script(
             state,
             run_id=run_id,
             attempt_id=attempt_id,
-            fcstd_path=str(_freecad_document_path(raw_result_path, state)),
+            fcstd_path=str(document_path),
             candidate_shape_fingerprints=evidence["candidate_shape_fingerprints"],
+            payload_digest=digest,
         )
         publish_raw = asyncio.run(execute_freecad_code(settings, publish_script))
         assess_freecad_publish(
             publish_raw,
             expected_digest=digest,
             expected_document=published_document_name(state, run_id=run_id),
-            expected_fcstd_path=str(_freecad_document_path(raw_result_path, state)),
+            expected_fcstd_path=str(document_path),
         )
         _atomic_write_json(
             _freecad_artifact_manifest_path(raw_result_path),
@@ -6137,7 +8590,7 @@ def _validate_and_publish_freecad(
                 "state_id": state.state_id,
                 "state_version": state.state_version,
                 "payload_digest": digest,
-                "fcstd_path": str(_freecad_document_path(raw_result_path, state)),
+                "fcstd_path": str(document_path),
             },
         )
         return raw, evidence, publish_raw
@@ -6273,6 +8726,13 @@ def _compact_freecad_failure_evidence(
         "module_ids": sorted(module_ids),
         "failed_checks": _bounded_diagnostic(failed_checks),
     }
+    validator_policy = evidence.get("validator_policy")
+    if isinstance(validator_policy, dict):
+        summary["validator_policy"] = _bounded_diagnostic(validator_policy)
+    if evidence.get("generator_version") is not None:
+        summary["generator_version"] = evidence.get("generator_version")
+    if evidence.get("schema_version") is not None:
+        summary["validation_schema_version"] = evidence.get("schema_version")
     if centerline_context:
         # Already whitelisted and bounded above; a second generic truncation
         # would again drop late priority keys such as the measured location.
@@ -6285,7 +8745,112 @@ def _compact_freecad_failure_evidence(
             "diagnostic_prefix": encoded[:7000],
             "truncated": True,
         }
+        if isinstance(validator_policy, dict):
+            summary["validator_policy"] = _bounded_diagnostic(validator_policy)
     return summary
+
+
+def _freecad_causal_repair_module(
+    evidence_summary: dict[str, Any], module_steps: dict[str, int]
+) -> str | None:
+    """Localize repair to the candidate/child, not the innocent parent module."""
+
+    failed_checks = evidence_summary.get("failed_checks")
+    if isinstance(failed_checks, dict):
+        overlaps = failed_checks.get("non_adjacent_overlaps")
+        if isinstance(overlaps, list):
+            for overlap in overlaps:
+                if not isinstance(overlap, dict):
+                    continue
+                child = overlap.get("child_module_id")
+                if isinstance(child, str) and child in module_steps:
+                    return child
+                pair = [
+                    module_id
+                    for module_id in overlap.get("module_ids") or []
+                    if isinstance(module_id, str) and module_id in module_steps
+                ]
+                if pair:
+                    return max(pair, key=module_steps.__getitem__)
+        for check_name in ("module_errors", "centerlines", "modules"):
+            values = failed_checks.get(check_name)
+            candidates: list[str] = []
+            if isinstance(values, dict):
+                candidates.extend(
+                    module_id for module_id in values if module_id in module_steps
+                )
+            elif isinstance(values, list):
+                candidates.extend(
+                    str(item.get("module_id"))
+                    for item in values
+                    if isinstance(item, dict)
+                    and str(item.get("module_id")) in module_steps
+                )
+            if candidates:
+                return max(candidates, key=module_steps.__getitem__)
+    candidates = [
+        module_id
+        for module_id in evidence_summary.get("module_ids") or []
+        if isinstance(module_id, str) and module_id in module_steps
+    ]
+    return max(candidates, key=module_steps.__getitem__) if candidates else None
+
+
+def _is_transient_occ_failure(evidence: dict[str, Any]) -> bool:
+    """Classify opaque OCC construction exceptions eligible for one replay.
+
+    Measured contract failures (curvature, overlap, connection, wall probes,
+    etc.) are deterministic candidate evidence and must go directly to repair.
+    Only an opaque kernel exception gets one identical-digest retry, which does
+    not consume a planner attempt.
+    """
+
+    checks = evidence.get("checks") if isinstance(evidence, dict) else None
+    if not isinstance(checks, dict):
+        return False
+    for name in (
+        "non_adjacent_overlaps",
+        "connection_failures",
+        "terminal_bore_failures",
+        "anchored_inlet_bore_failures",
+        "termination_seal_failures",
+        "wall_section_failures",
+        "deterministic_constraint_failures",
+    ):
+        if checks.get(name):
+            return False
+    messages: list[str] = []
+    for name in ("module_errors", "assembly_errors"):
+        values = checks.get(name)
+        if not isinstance(values, list):
+            continue
+        for value in values:
+            if isinstance(value, dict) and value.get("error") is not None:
+                messages.append(str(value["error"]).lower())
+    if not messages:
+        return False
+    deterministic_markers = (
+        "no suitable edges",
+        "exceeds max_hub_radius",
+        "left unresolved",
+        "made no topology progress",
+        "must be",
+    )
+    if any(
+        marker in message for marker in deterministic_markers for message in messages
+    ):
+        return False
+    transient_markers = (
+        "brep_api",
+        "standard_failure",
+        "command not done",
+        "bnd_box is void",
+        "makepipeshell",
+        "ncollection",
+    )
+    return all(
+        any(marker in message for marker in transient_markers) for message in messages
+    )
 
 
 def _compact_centerline_repair_context(values: dict[str, Any]) -> dict[str, Any]:
@@ -6328,6 +8893,7 @@ def _freecad_repair_contract(
     evidence_summary: dict[str, Any],
     *,
     module_path_kinds: dict[str, str] | None = None,
+    module_params: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any], list[dict[str, Any]]]:
     """FreeCAD 증거에서 LLM이 바로 사용할 expected/actual/추천을 만든다."""
 
@@ -6389,6 +8955,92 @@ def _freecad_repair_contract(
 
     failed_checks = evidence_summary.get("failed_checks")
     if isinstance(failed_checks, dict):
+        overlaps = failed_checks.get("non_adjacent_overlaps")
+        if isinstance(overlaps, list):
+            overlap_residuals: list[dict[str, Any]] = []
+            for item in overlaps:
+                if not isinstance(item, dict):
+                    continue
+                try:
+                    common_volume = float(item["common_volume"])
+                    allowed_volume = float(item["allowed_volume"])
+                except (KeyError, TypeError, ValueError):
+                    common_volume = allowed_volume = 0.0
+                module_ids = [
+                    str(value)
+                    for value in item.get("module_ids") or []
+                    if isinstance(value, str)
+                ]
+                junction_id = next(
+                    (
+                        module_id
+                        for module_id in module_ids
+                        if (module_path_kinds or {}).get(module_id) == "junction"
+                    ),
+                    None,
+                )
+                residual = max(0.0, common_volume - allowed_volume)
+                overlap_residuals.append(
+                    {
+                        "module_ids": module_ids,
+                        "adjacent": item.get("adjacent") is True,
+                        "common_volume": common_volume,
+                        "allowed_volume": allowed_volume,
+                        "excess_volume": residual,
+                    }
+                )
+                if item.get("adjacent") is True:
+                    recommendations.append(
+                        {
+                            "module_id": junction_id,
+                            "classification": "adjacent_interface_overlap",
+                            "parameters": [
+                                "outlets[*].axis",
+                                "blend_mode",
+                                "blend_radius",
+                                "inner_blend_radius",
+                            ],
+                            "non_causal_parameters": [
+                                "outlets[*].length",
+                                "max_hub_radius",
+                            ],
+                            "excess_volume": residual,
+                            "instruction": (
+                                "Preserve the junction primitive, target and goal "
+                                "claims. Outlet length and a hard junction's "
+                                "max_hub_radius do not change its local mating "
+                                "intersection. If evidence says the overlap extends "
+                                "outside the permitted local interface, change the "
+                                "offending outlet axis or supported blend geometry; "
+                                "otherwise classify repeated invariant evidence as "
+                                "a validator/kernel conflict rather than random-walk "
+                                "unrelated values."
+                            ),
+                        }
+                    )
+                else:
+                    recommendations.append(
+                        {
+                            "module_id": junction_id
+                            or (module_ids[-1] if module_ids else None),
+                            "classification": "nonlocal_module_overlap",
+                            "parameters": [
+                                "waypoints",
+                                "direction",
+                                "bend_radius",
+                                "outlets[*].axis",
+                            ],
+                            "excess_volume": residual,
+                            "instruction": (
+                                "Move the implicated path or outlet away from the "
+                                "non-adjacent module while preserving immutable "
+                                "terminal contracts."
+                            ),
+                        }
+                    )
+            if overlap_residuals:
+                expected["unexpected_overlap_excess_volume"] = 0.0
+                actual["unexpected_overlap_residuals"] = overlap_residuals
         module_errors = failed_checks.get("module_errors")
         if isinstance(module_errors, list):
             hub_pattern = re.compile(
@@ -6402,6 +9054,56 @@ def _freecad_repair_contract(
                 message = str(item.get("error") or "")
                 match = hub_pattern.search(message)
                 if match is None:
+                    lower_message = message.lower()
+                    if "junction fillet" in lower_message or (
+                        "chamfer or fillet" in lower_message
+                    ):
+                        recommendations.append(
+                            {
+                                "module_id": item.get("module_id"),
+                                "classification": "junction_fillet_construction",
+                                "parameters": [
+                                    "blend_mode",
+                                    "blend_radius",
+                                    "inner_blend_radius",
+                                ],
+                                "current_params": (module_params or {}).get(
+                                    str(item.get("module_id")), {}
+                                ),
+                                "instruction": (
+                                    "Keep the junction/target/goals fixed. Select a "
+                                    "different authored fillet radius only when the "
+                                    "Intent permits it; if a smooth hub is not "
+                                    "immutable, hard blend_mode is an admissible "
+                                    "topology change. Repeating outlet length or "
+                                    "max_hub_radius cannot repair an unsuitable seam."
+                                ),
+                            }
+                        )
+                    elif any(
+                        marker in lower_message
+                        for marker in (
+                            "brep_api",
+                            "standard_failure",
+                            "command not done",
+                            "bnd_box is void",
+                            "makepipeshell",
+                        )
+                    ):
+                        recommendations.append(
+                            {
+                                "module_id": item.get("module_id"),
+                                "classification": "occ_kernel_construction",
+                                "parameters": [],
+                                "instruction": (
+                                    "First retry the identical digest in a fresh "
+                                    "candidate document. If the OCC exception is "
+                                    "persistent, classify it as generator/kernel "
+                                    "failure before asking the planner to perturb "
+                                    "unrelated geometry."
+                                ),
+                            }
+                        )
                     continue
                 required = _metric_number(match.group(1))
                 maximum = _metric_number(match.group(2))
@@ -6426,7 +9128,7 @@ def _freecad_repair_contract(
 
 
 def _bounded_diagnostic(value: Any, depth: int = 0) -> Any:
-    if depth >= 4:
+    if depth >= 6:
         return "<depth-truncated>"
     if isinstance(value, dict):
         return {
@@ -6467,14 +9169,16 @@ def _freecad_assembly_bounds(evidence: dict[str, Any]) -> AssemblyBounds | None:
     return AssemblyBounds(minimum=numeric_minimum, maximum=numeric_maximum)
 
 
-def _freecad_document_path(raw_result_path: Path, state: PipeState) -> Path:
-    parent = raw_result_path.parent
-    run_dir = (
-        parent.parent
-        if parent.name in {"step_mcp", "recovery_mcp", "rollback_mcp"}
-        else parent
-    )
-    digest = geometry_payload_digest(state)
+def _freecad_document_path(
+    raw_result_path: Path,
+    state: PipeState,
+    *,
+    payload_digest: str | None = None,
+) -> Path:
+    """MCP 결과 위치와 상태 identity로 게시된 FCStd 경로를 계산한다."""
+
+    run_dir = _freecad_run_dir(raw_result_path)
+    digest = payload_digest or geometry_payload_digest(state)
     return (
         (run_dir / f"pipe_v{state.state_version}_{digest[:12]}.FCStd")
         .expanduser()
@@ -6483,13 +9187,20 @@ def _freecad_document_path(raw_result_path: Path, state: PipeState) -> Path:
 
 
 def _freecad_artifact_manifest_path(raw_result_path: Path) -> Path:
+    """MCP 결과 파일에서 실행 단위 FreeCAD manifest 경로를 찾는다."""
+
+    return _freecad_run_dir(raw_result_path) / "freecad_artifact.json"
+
+
+def _freecad_run_dir(raw_result_path: Path) -> Path:
+    """일반ㆍ단계ㆍ복구 MCP 결과가 속한 최상위 실행 디렉터리를 반환한다."""
+
     parent = raw_result_path.parent
-    run_dir = (
+    return (
         parent.parent
         if parent.name in {"step_mcp", "recovery_mcp", "rollback_mcp"}
         else parent
     )
-    return run_dir / "freecad_artifact.json"
 
 
 def _is_semantic_freecad_validation_error(message: str) -> bool:
@@ -6625,10 +9336,12 @@ def _visual_review(
     result = _call_structured(
         gemini,
         inputs,
-        VisualCriticResult,
+        VisualCriticResultWire,
         part="visual_validator",
         thinking_level="medium",
     )
+    if isinstance(result, VisualCriticResultWire):
+        result = VisualCriticResult.model_validate(result.model_dump(mode="python"))
     if not isinstance(result, VisualCriticResult):
         raise TypeError("Visual validator returned the wrong schema")
     if result.state_id != state.state_id or result.payload_digest != digest:
@@ -6636,6 +9349,28 @@ def _visual_review(
     if result.evidence_sha256 != evidence_hashes:
         raise ValueError("Visual critic evidence hash mismatch")
     return result
+
+
+def _freecad_attempt_generator_version(attempt: ActionAttempt) -> str | None:
+    """Recover the generator binding from a rejected attempt when available."""
+
+    for observation in reversed(attempt.observations):
+        actual = observation.get("actual")
+        if not isinstance(actual, dict):
+            continue
+        candidates = [actual, actual.get("evidence")]
+        for candidate in candidates:
+            if not isinstance(candidate, dict):
+                continue
+            version = candidate.get("generator_version")
+            if isinstance(version, str) and version:
+                return version
+            policy = candidate.get("validator_policy")
+            if isinstance(policy, dict):
+                version = policy.get("generator_version")
+                if isinstance(version, str) and version:
+                    return version
+    return None
 
 
 def _load_resume_context(
@@ -6710,6 +9445,9 @@ def _load_resume_context(
         str(state_id): str(profile) for state_id, profile in raw_profiles.items()
     }
     llm_usage = LLMUsage.model_validate(payload.get("llm_usage") or {})
+    diagnostic_journal = DiagnosticJournal.model_validate(
+        payload.get("diagnostic_journal") or {}
+    )
     raw_pending_observations = payload.get("pending_repair_observations") or []
     if not isinstance(raw_pending_observations, list) or any(
         not isinstance(item, dict) for item in raw_pending_observations
@@ -6781,6 +9519,54 @@ def _load_resume_context(
             raise ValueError(
                 "Checkpoint next_attempt_index is outside the retry journal"
             )
+        if (
+            pending_draft is None
+            and next_attempt_index <= settings.step_repair_attempts + 1
+        ):
+            latest_rejected = next(
+                (
+                    item
+                    for item in reversed(attempts)
+                    if item.step_index == current_step_index
+                    and item.status == "rejected"
+                ),
+                None,
+            )
+            if (
+                latest_rejected is not None
+                and latest_rejected.phase == "freecad_semantic_validation"
+                and latest_rejected.draft is not None
+                and _freecad_attempt_generator_version(latest_rejected)
+                != GENERATOR_VERSION
+            ):
+                legacy_draft = ActionDraft.model_validate(latest_rejected.draft)
+                pending_draft = legacy_draft.model_copy(
+                    deep=True,
+                    update={
+                        "params": filter_draft_params(
+                            legacy_draft.module,
+                            copy.deepcopy(legacy_draft.params),
+                        )
+                    },
+                )
+                pending_draft_attempt_index = next_attempt_index
+                pending_draft_state_digest = _pipe_state_digest(state)
+                pending_repair_observations = [
+                    *pending_repair_observations,
+                    {
+                        "context_type": "generator_migration_replay",
+                        "from_generator_version": (
+                            _freecad_attempt_generator_version(latest_rejected)
+                            or "unversioned_legacy_evidence"
+                        ),
+                        "to_generator_version": GENERATOR_VERSION,
+                        "instruction": (
+                            "Revalidate the exact rejected draft with the current "
+                            "generator and validator policy before another paid "
+                            "planner or diagnostician call."
+                        ),
+                    },
+                ]
         if pending_draft is None:
             if (
                 pending_draft_attempt_index is not None
@@ -6873,6 +9659,7 @@ def _load_resume_context(
             planner_schema_profiles=planner_schema_profiles,
             llm_usage=llm_usage,
             pending_repair_observations=pending_repair_observations,
+            diagnostic_journal=diagnostic_journal,
             pending_draft=pending_draft,
             pending_draft_attempt_index=pending_draft_attempt_index,
             preserved_suffix=preserved_suffix,
@@ -6896,7 +9683,13 @@ def _load_resume_context(
         )
     _validate_checkpoint_state(previous, intent, None, actions)
     candidate_digest = geometry_payload_digest(candidate)
-    if payload.get("candidate_digest") != candidate_digest:
+    stored_candidate_digest = payload.get("candidate_digest")
+    generator_migration = stored_candidate_digest != candidate_digest
+    if generator_migration and not (
+        isinstance(stored_candidate_digest, str)
+        and re.fullmatch(r"[0-9a-f]{64}", stored_candidate_digest)
+        and payload.get("candidate_state_digest") == _pipe_state_digest(candidate)
+    ):
         raise ValueError("Prepared candidate digest does not match candidate_state")
     action = ResolvedAction.model_validate(payload.get("action"))
     _validate_checkpoint_state(
@@ -6911,13 +9704,17 @@ def _load_resume_context(
     ):
         raise ValueError("Prepared checkpoint attempt_id is outside the retry budget")
     attempt_id = raw_attempt_id
-    if payload.get("candidate_document") != candidate_document_name(
+    if not generator_migration and payload.get(
+        "candidate_document"
+    ) != candidate_document_name(
         candidate,
         run_id=expected_run_id,
         attempt_id=attempt_id,
     ):
         raise ValueError("Prepared candidate document name mismatch")
-    if payload.get("published_document") != published_document_name(
+    if not generator_migration and payload.get(
+        "published_document"
+    ) != published_document_name(
         candidate,
         run_id=expected_run_id,
     ):
@@ -6945,10 +9742,14 @@ def _load_resume_context(
     _validate_checkpoint_history(intent, actions, steps, checkpoints)
     mcp_used = False
     mcp_error: str | None = None
-    roll_forward = phase == "PUBLISHED"
+    # A valid old digest with an unchanged candidate state means generator or
+    # validator policy code changed. Never trust the old document/evidence;
+    # execute the current generator and all gates before deciding roll-forward.
+    roll_forward = phase == "PUBLISHED" and not generator_migration
     roll_forward_verified = False
     semantic_rejection = False
     semantic_rejection_evidence: dict[str, Any] = {}
+    semantic_rejection_evidence_digest: str | None = None
     recovery_measurements: dict[str, dict[str, float]] = {}
     recovery_bounds: dict[str, Any] | None = None
     recovery_holder: dict[str, Any] = {}
@@ -6997,11 +9798,19 @@ def _load_resume_context(
         recovery_holder["measurements"] = measurements
         recovery_holder["bounds"] = _freecad_assembly_bounds(recovery_evidence)
 
-    if phase == "PUBLISHED":
+    if phase == "PUBLISHED" and not generator_migration:
         evidence = payload.get("evidence")
         if not isinstance(evidence, dict):
             raise ValueError("Published checkpoint is missing validation evidence")
         try:
+            geometry_modules = [
+                module
+                for module in candidate.placed_modules
+                if not (
+                    module.type == "connect_ports"
+                    and module.params.get("path_kind") == "seam"
+                )
+            ]
             assess_freecad_validation(
                 {
                     "content": [
@@ -7014,19 +9823,13 @@ def _load_resume_context(
                 },
                 expected_digest=candidate_digest,
                 expected_state_id=candidate.state_id,
-                expected_module_ids=[module.id for module in candidate.placed_modules],
+                expected_module_ids=[module.id for module in geometry_modules],
                 expected_internal_section_module_count=sum(
                     module.type not in {"terminate", "cap_pipe"}
-                    for module in candidate.placed_modules
+                    for module in geometry_modules
                 ),
                 expected_open_port_count=len(candidate.open_ports),
-                expected_anchored_inlet_count=(
-                    1
-                    if candidate.placed_modules
-                    and candidate.placed_modules[0].type
-                    not in {"terminate", "cap_pipe"}
-                    else 0
-                ),
+                expected_anchored_inlet_count=(anchored_inlet_count(candidate)),
                 expected_generator_version=GENERATOR_VERSION,
                 expected_run_id=expected_run_id,
                 expected_state_version=candidate.state_version,
@@ -7105,6 +9908,7 @@ def _load_resume_context(
             mcp_used = True
             mcp_error = str(exc)
             semantic_rejection = True
+            semantic_rejection_evidence_digest = _canonical_json_digest(exc.evidence)
             semantic_rejection_evidence = _compact_freecad_failure_evidence(
                 exc.evidence
             )
@@ -7173,6 +9977,7 @@ def _load_resume_context(
             planner_schema_profiles=planner_schema_profiles,
             llm_usage=llm_usage,
             pending_repair_observations=[],
+            diagnostic_journal=diagnostic_journal,
             preserved_suffix=preserved_suffix,
             next_attempt_index=1,
             semantic_mcp_passed=roll_forward_verified,
@@ -7214,6 +10019,14 @@ def _load_resume_context(
         actual={
             "reason": mcp_error or _step_mcp_skip_reason(settings, dry_run),
             "evidence": semantic_rejection_evidence,
+            "evidence_artifact_path": (
+                str(recovery_validation_path)
+                if recovery_validation_path is not None
+                else None
+            ),
+            "evidence_digest": semantic_rejection_evidence_digest,
+            "original_failure_phase": "freecad_semantic_validation",
+            "generator_version": GENERATOR_VERSION,
         },
     )
     attempts.append(
@@ -7242,6 +10055,7 @@ def _load_resume_context(
             *pending_repair_observations,
             _repair_observation(rollback_issue),
         ],
+        diagnostic_journal=diagnostic_journal,
         preserved_suffix=preserved_suffix,
         next_attempt_index=attempt_id + 1,
         semantic_mcp_passed=False,
@@ -7251,9 +10065,23 @@ def _load_resume_context(
 
 
 def _exclusive_goal_action_lower_bound(state: PipeState) -> int:
-    """Necessary action count from non-double-counting rules, never a plan."""
+    """Necessary action count from claim exclusivity and the goal DAG.
+
+    This remains a lower bound rather than a generated plan.  Claim groups catch
+    parallel goals that cannot share one physical measurement.  The weighted DAG
+    catches serial agendas whose different primitive families were previously
+    hidden by ``max(group_counts)``.  Only the statically proved final-turn /
+    START-anchor circular closure may occupy the same dependency transition.
+    """
 
     groups: Counter[str] = Counter()
+    goals_by_id = {
+        str(goal.goal_id): goal
+        for goal in state.remaining_goals
+        if goal.goal_id is not None
+    }
+    longest_path: dict[str, int] = {}
+    previous_goal: Goal | None = None
     for goal in state.remaining_goals:
         if goal.type in {"move", "route", "connector"} and goal.length is not None:
             groups["linear_length"] += 1
@@ -7269,7 +10097,39 @@ def _exclusive_goal_action_lower_bound(state: PipeState) -> int:
             groups["end_topology"] += 1
         if goal.type == "connector" and goal.component is not None:
             groups["component_instance"] += 1
-    return max(groups.values(), default=0)
+
+        goal_id = str(goal.goal_id) if goal.goal_id is not None else ""
+        dependencies = [
+            goals_by_id[dependency_id]
+            for dependency_id in goal.depends_on_goal_ids
+            if dependency_id in goals_by_id
+        ]
+        # A non-parallel ordered agenda cannot bypass an earlier pending goal
+        # even when the author omitted a redundant explicit dependency edge.
+        if not goal.allow_parallel and not dependencies and previous_goal is not None:
+            dependencies = [previous_goal]
+        path_length = 1
+        for dependency in dependencies:
+            dependency_id = str(dependency.goal_id)
+            dependency_length = longest_path.get(dependency_id, 1)
+            shares_transition = bool(
+                goal.type == "connect"
+                and goal.connection_target == "start_anchor"
+                and dependency.type == "turn"
+                and dependency.angle is not None
+            )
+            path_length = max(
+                path_length,
+                dependency_length + (0 if shares_transition else 1),
+            )
+        if goal_id:
+            longest_path[goal_id] = path_length
+        previous_goal = goal
+
+    return max(
+        max(groups.values(), default=0),
+        max(longest_path.values(), default=0),
+    )
 
 
 def _validate_checkpoint_state(
@@ -7373,8 +10233,14 @@ def _validate_checkpoint_history(
 
 
 def _pipe_state_digest(state: PipeState) -> str:
+    return _canonical_json_digest(state.model_dump(mode="json"))
+
+
+def _canonical_json_digest(value: Any) -> str:
+    """Return the stable SHA-256 used by diagnostic and checkpoint bindings."""
+
     raw = json.dumps(
-        state.model_dump(mode="json"),
+        value,
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,
@@ -7399,6 +10265,7 @@ def _prepared_manifest(
     *,
     previous_freecad_verified: bool,
     preserved_suffix: _PreservedSuffix | None = None,
+    diagnostic_journal: DiagnosticJournal | None = None,
 ) -> dict[str, Any]:
     return {
         "phase": "PREPARED",
@@ -7424,6 +10291,12 @@ def _prepared_manifest(
         "planner_lineage": _lineage_snapshot(gemini),
         "planner_schema_profiles": _planner_schema_profiles_snapshot(gemini),
         "llm_usage": _usage_snapshot(gemini).model_dump(mode="json"),
+        "action_budget_policy": copy.deepcopy(
+            getattr(gemini, "_cadgen_action_budget_policy", None)
+        ),
+        "diagnostic_journal": (diagnostic_journal or DiagnosticJournal()).model_dump(
+            mode="json"
+        ),
         "preserved_suffix": (
             preserved_suffix.to_payload() if preserved_suffix is not None else None
         ),
@@ -7449,7 +10322,10 @@ def _write_checkpoint(
     pending_draft_attempt_index: int | None = None,
     preserved_suffix: _PreservedSuffix | None = None,
     next_attempt_index: int = 1,
+    in_flight_operation: str | None = None,
+    diagnostic_journal: DiagnosticJournal | None = None,
 ) -> None:
+    diagnostic_journal = diagnostic_journal or DiagnosticJournal()
     if next_attempt_index < 1:
         raise ValueError("next_attempt_index must be positive")
     if (pending_draft is None) != (pending_draft_attempt_index is None):
@@ -7459,6 +10335,15 @@ def _write_checkpoint(
         and pending_draft_attempt_index != next_attempt_index
     ):
         raise ValueError("Pending draft attempt must equal next_attempt_index")
+    if pending_draft is not None and any(
+        record.status == "pending"
+        and record.state_id == state.state_id
+        and record.step_index == len(actions) + 1
+        for record in diagnostic_journal.records
+    ):
+        raise ValueError(
+            "A pending planner draft cannot coexist with a pending geometry diagnosis"
+        )
     _atomic_write_json(
         path,
         {
@@ -7483,6 +10368,10 @@ def _write_checkpoint(
             "planner_lineage": _lineage_snapshot(gemini),
             "planner_schema_profiles": _planner_schema_profiles_snapshot(gemini),
             "llm_usage": _usage_snapshot(gemini).model_dump(mode="json"),
+            "action_budget_policy": copy.deepcopy(
+                getattr(gemini, "_cadgen_action_budget_policy", None)
+            ),
+            "diagnostic_journal": (diagnostic_journal).model_dump(mode="json"),
             "pending_repair_observations": pending_repair_observations or [],
             "pending_draft": (
                 pending_draft.model_dump(mode="json") if pending_draft else None
@@ -7492,6 +10381,12 @@ def _write_checkpoint(
             ),
             "pending_draft_attempt_index": pending_draft_attempt_index,
             "next_attempt_index": next_attempt_index,
+            "in_flight_operation": in_flight_operation,
+            "in_flight_started_at": (
+                datetime.now(timezone.utc).isoformat()
+                if in_flight_operation is not None
+                else None
+            ),
             "preserved_suffix": (
                 preserved_suffix.to_payload() if preserved_suffix is not None else None
             ),
@@ -7536,6 +10431,7 @@ def _attempt(
         step_index=step_index,
         attempt_index=attempt_index,
         state_id=state.state_id,
+        state_digest=pipe_state_digest(state),
         phase=phase,
         status=status,  # type: ignore[arg-type]
         draft=draft.model_dump(mode="json") if draft else None,
@@ -7543,6 +10439,785 @@ def _attempt(
         issue_codes=[issue.issue_code for issue in issues],
         observations=[_repair_observation(issue) for issue in issues],
     )
+
+
+def _record_repair_advice(
+    path: Path,
+    *,
+    step_index: int,
+    attempt_index: int,
+    state_id: str,
+    context: dict[str, Any],
+) -> None:
+    """Append one advisor decision to a durable, user-visible audit journal."""
+
+    history: list[Any] = []
+    if path.is_file():
+        try:
+            loaded = json.loads(path.read_text(encoding="utf-8"))
+            if isinstance(loaded, list):
+                history = loaded
+        except (OSError, json.JSONDecodeError):
+            history = []
+    history.append(
+        {
+            "step_index": step_index,
+            "attempt_index": attempt_index,
+            "state_id": state_id,
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
+            **context,
+        }
+    )
+    _atomic_write_json(path, history)
+
+
+_DIAGNOSABLE_REJECTION_PHASES = {
+    "draft_validation",
+    "action_resolution",
+    "registry_validation",
+    "state_application",
+    "static_step_validation",
+    "freecad_semantic_validation",
+    "final_repair_replan",
+    "checkpoint_recovery",
+}
+
+
+def _diagnostic_repair_epoch(attempts: list[ActionAttempt], step_index: int) -> int:
+    """Accepted versions of one step delimit rollback repair epochs."""
+
+    return sum(
+        attempt.step_index == step_index and attempt.status == "accepted"
+        for attempt in attempts
+    )
+
+
+def _diagnostic_attempt_history(
+    attempts: list[ActionAttempt], step_index: int, repair_epoch: int
+) -> list[ActionAttempt]:
+    accepted_seen = 0
+    result: list[ActionAttempt] = []
+    for attempt in attempts:
+        if attempt.step_index != step_index:
+            continue
+        if attempt.status == "accepted":
+            accepted_seen += 1
+            continue
+        if accepted_seen == repair_epoch:
+            result.append(attempt)
+    return result
+
+
+def _diagnostic_evidence_from_observations(
+    observations: list[dict[str, Any]], run_dir: Path
+) -> tuple[dict[str, Any], str | None]:
+    """Prefer the full digest-bound evidence artifact over lossy observations."""
+
+    run_root = run_dir.resolve()
+    for observation in reversed(observations):
+        actual = observation.get("actual")
+        if not isinstance(actual, dict):
+            continue
+        path_value = actual.get("evidence_artifact_path")
+        expected_digest = actual.get("evidence_digest")
+        if not isinstance(path_value, str) or not path_value:
+            continue
+        try:
+            evidence_path = Path(path_value).expanduser().resolve()
+            if not evidence_path.is_relative_to(run_root):
+                raise ValueError("evidence artifact escapes the run directory")
+            payload = json.loads(evidence_path.read_text(encoding="utf-8"))
+            if not isinstance(payload, dict):
+                raise ValueError("evidence artifact must contain a JSON object")
+            if (
+                isinstance(expected_digest, str)
+                and _canonical_json_digest(payload) != expected_digest
+            ):
+                raise ValueError("evidence artifact digest mismatch")
+            return payload, None
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            return {"observations": observations}, str(exc)
+
+    merged: dict[str, Any] = {"observations": observations}
+    compact_checks: dict[str, Any] = {}
+    for observation in observations:
+        actual = observation.get("actual")
+        if not isinstance(actual, dict):
+            continue
+        compact = actual.get("evidence")
+        if not isinstance(compact, dict):
+            continue
+        if isinstance(compact.get("failed_checks"), dict):
+            compact_checks.update(compact["failed_checks"])
+        if isinstance(compact.get("validator_policy"), dict):
+            merged["validator_policy"] = compact["validator_policy"]
+        for key, value in compact.items():
+            merged.setdefault(str(key), value)
+    if compact_checks:
+        merged["checks"] = compact_checks
+    return merged, None
+
+
+def _diagnostic_recommendations(
+    observations: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    recommendations: list[dict[str, Any]] = []
+    for observation in observations:
+        suggestion = observation.get("suggestion")
+        if not isinstance(suggestion, dict):
+            continue
+        changes = suggestion.get("recommended_changes")
+        if isinstance(changes, list):
+            recommendations.extend(
+                dict(item) for item in changes if isinstance(item, dict)
+            )
+        elif any(
+            suggestion.get(key)
+            for key in ("parameter_errors", "operation", "instruction")
+        ):
+            recommendations.append(dict(suggestion))
+    return recommendations[:24]
+
+
+def _diagnostic_artifact_paths(paths: dict[str, Path], case: Any) -> dict[str, Path]:
+    binding = case.binding
+    stem = f"step_{binding.step_index}_attempt_{binding.attempt_index}"
+    if binding.repair_epoch:
+        stem += f"_epoch_{binding.repair_epoch}"
+    directory = paths["diagnostics_dir"]
+    primary_case_path = directory / f"{stem}_case.json"
+    if primary_case_path.is_file():
+        try:
+            prior_case = json.loads(primary_case_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            prior_case = None
+        if not isinstance(prior_case, dict) or _canonical_json_digest(
+            prior_case
+        ) != diagnostic_case_digest(case):
+            stem += f"_{diagnostic_case_id(case)[:12]}"
+    return {
+        "case": directory / f"{stem}_case.json",
+        "diagnosis": directory / f"{stem}_diagnosis.json",
+        "failure": directory / f"{stem}_advisor_failure.json",
+    }
+
+
+def _upsert_diagnostic_record(
+    journal: DiagnosticJournal,
+    record: DiagnosticRecordRef,
+    *,
+    increment_call: bool = False,
+    increment_cache_hit: bool = False,
+    increment_futile_avoided: bool = False,
+) -> DiagnosticJournal:
+    records = [item for item in journal.records if item.case_id != record.case_id]
+    records.append(record)
+    calls = dict(journal.calls_by_step)
+    if increment_call:
+        key = f"{record.step_index}:{record.repair_epoch}"
+        calls[key] = calls.get(key, 0) + 1
+    return journal.model_copy(
+        update={
+            "records": records,
+            "calls_by_step": calls,
+            "cache_hit_count": journal.cache_hit_count + int(increment_cache_hit),
+            "futile_retry_avoided_count": journal.futile_retry_avoided_count
+            + int(increment_futile_avoided),
+        }
+    )
+
+
+def _diagnostic_record(
+    case: Any,
+    *,
+    status: str,
+    artifact_path: Path | None = None,
+    failure_reason: str | None = None,
+) -> DiagnosticRecordRef:
+    return DiagnosticRecordRef(
+        case_id=diagnostic_case_id(case),
+        diagnostic_context_digest=diagnostic_case_digest(case),
+        failure_signature=case.binding.failure_signature,
+        state_id=case.binding.state_id,
+        step_index=case.binding.step_index,
+        attempt_index=case.binding.attempt_index,
+        repair_epoch=case.binding.repair_epoch,
+        status=status,
+        artifact_path=str(artifact_path) if artifact_path is not None else None,
+        failure_reason=failure_reason,
+    )
+
+
+def _diagnostic_artifact_payload_digest(payload: dict[str, Any]) -> str:
+    return _canonical_json_digest(
+        {key: value for key, value in payload.items() if key != "artifact_digest"}
+    )
+
+
+def _load_diagnostic_artifact(
+    path: Path,
+    *,
+    case: Any,
+) -> tuple[StepRepairDiagnosis, dict[str, Any]] | None:
+    if not path.is_file():
+        return None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("diagnosis artifact must be a JSON object")
+    if payload.get("artifact_digest") != _diagnostic_artifact_payload_digest(payload):
+        raise ValueError("diagnosis artifact digest mismatch")
+    if payload.get("case_id") != diagnostic_case_id(case):
+        raise ValueError("diagnosis artifact case binding mismatch")
+    diagnosis = StepRepairDiagnosis.model_validate(payload.get("diagnosis"))
+    usage_delta = payload.get("usage_delta")
+    return validate_diagnosis(case, diagnosis), (
+        dict(usage_delta) if isinstance(usage_delta, dict) else {}
+    )
+
+
+def _load_diagnostic_failure(path: Path, *, case: Any) -> tuple[str, bool] | None:
+    if not path.is_file():
+        return None
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("advisor failure artifact must be a JSON object")
+    if payload.get("artifact_digest") != _diagnostic_artifact_payload_digest(payload):
+        raise ValueError("advisor failure artifact digest mismatch")
+    if payload.get("case_id") != diagnostic_case_id(case):
+        raise ValueError("advisor failure artifact case binding mismatch")
+    return (
+        str(payload.get("failure_reason") or "advisor_failure"),
+        payload.get("call_attempted") is True,
+    )
+
+
+def _llm_usage_delta(before: LLMUsage, after: LLMUsage) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, before_value in before.model_dump(mode="json").items():
+        after_value = after.model_dump(mode="json").get(key)
+        if isinstance(before_value, int) and isinstance(after_value, int):
+            result[key] = max(0, after_value - before_value)
+    result["accounting_complete"] = after.accounting_complete
+    return result
+
+
+def _roll_forward_diagnostic_usage(gemini: Any, delta: dict[str, Any]) -> None:
+    """Recover usage lost between diagnosis artifact and checkpoint writes."""
+
+    if gemini is None or not hasattr(gemini, "restore_usage"):
+        return
+    current = _usage_snapshot(gemini).model_dump(mode="json")
+    for key, value in delta.items():
+        if key == "accounting_complete":
+            current[key] = bool(current.get(key, True)) and bool(value)
+        elif isinstance(value, int) and isinstance(current.get(key), int):
+            current[key] += max(0, value)
+    gemini.restore_usage(LLMUsage.model_validate(current))
+
+
+def _advisor_failure_reason(exc: Exception) -> str:
+    if isinstance(exc, GeminiBudgetError):
+        return "budget_exhausted"
+    if isinstance(exc, StructuredOutputError):
+        return "structured_output_error"
+    if isinstance(exc, HostContractValidationError):
+        return "host_contract_validation_error"
+    if isinstance(exc, GeminiRequestError):
+        return "provider_error"
+    message = str(exc).lower()
+    if "binding" in message:
+        return "binding_mismatch"
+    if "evidence" in message:
+        return "unknown_evidence_reference"
+    if "cannot change" in message or "field" in message:
+        return "forbidden_field_recommendation"
+    return "host_validation_error"
+
+
+def _advisor_unavailable_observation(
+    case: Any,
+    *,
+    reason: str,
+    protocol_attempt_count: int,
+) -> dict[str, Any]:
+    """Record degraded diagnosis while preserving deterministic planner repair.
+
+    This observation never supplies replacement parameters.  It exists solely
+    to make the missing independent diagnosis auditable.  The ordinary planner
+    still receives the exact validator evidence and may use its remaining
+    bounded semantic attempts; an advisor provider/schema failure is not
+    authority to terminate repair.
+    """
+
+    return {
+        "context_type": "geometry_validation_advisor_unavailable",
+        "terminal": False,
+        "fallback": "deterministic_evidence_only",
+        "state_id": case.binding.state_id,
+        "diagnostic_context_digest": diagnostic_case_digest(case),
+        "failure_signature": case.binding.failure_signature,
+        "failure_reason": reason,
+        "protocol_attempt_count": protocol_attempt_count,
+        "instruction": (
+            "The independent advisor is unavailable. Replan only from the last "
+            "deterministic validator rejection, preserve unrelated fields, and "
+            "run the replacement through every existing validation gate."
+        ),
+    }
+
+
+def _required_advisor_capacity_failure(
+    case: Any,
+    journal: DiagnosticJournal,
+    settings: Settings,
+) -> str | None:
+    """Explain a policy-cap skip that must terminate rather than replan."""
+
+    key = f"{case.binding.step_index}:{case.binding.repair_epoch}"
+    if (
+        journal.calls_by_step.get(key, 0)
+        >= settings.step_repair_advisor_max_calls_per_step
+    ):
+        return "advisor_call_cap_exhausted"
+
+    records = [
+        record
+        for record in journal.records
+        if record.step_index == case.binding.step_index
+        and record.repair_epoch == case.binding.repair_epoch
+        and record.status in {"pending", "complete"}
+    ]
+    signatures = {record.failure_signature for record in records}
+    if (
+        case.binding.failure_signature not in signatures
+        and len(signatures) >= settings.step_repair_advisor_max_signatures_per_step
+    ):
+        return "advisor_failure_family_cap_exhausted"
+    return None
+
+
+def _run_step_geometry_diagnostician(
+    *,
+    run_id: str,
+    run_dir: Path,
+    paths: dict[str, Path],
+    state: PipeState,
+    step_index: int,
+    observations: list[dict[str, Any]],
+    attempts: list[ActionAttempt],
+    settings: Settings,
+    gemini: Any,
+    journal: DiagnosticJournal,
+    stream: ThinkingStream,
+    persist: Any,
+) -> tuple[list[dict[str, Any]], DiagnosticJournal]:
+    """Run or recover one candidate-bound advisor episode before replanning."""
+
+    step_attempts = [
+        attempt for attempt in attempts if attempt.step_index == step_index
+    ]
+    if not observations or not step_attempts:
+        return observations, journal
+    latest = step_attempts[-1]
+    if latest.status != "rejected" or latest.phase not in _DIAGNOSABLE_REJECTION_PHASES:
+        return observations, journal
+    advisor_runtime_enabled = bool(
+        settings.step_repair_advisor_enabled
+        and gemini is not None
+        and getattr(gemini, "supports_step_repair_advisor", False)
+    )
+    advisor_required = bool(
+        advisor_runtime_enabled and settings.step_repair_advisor_required
+    )
+
+    repair_epoch = _diagnostic_repair_epoch(attempts, step_index)
+    evidence, evidence_error = _diagnostic_evidence_from_observations(
+        observations, run_dir
+    )
+    case = build_diagnostic_case(
+        run_id=run_id,
+        state=state,
+        step_index=step_index,
+        attempt_index=latest.attempt_index,
+        repair_epoch=repair_epoch,
+        draft=latest.draft or {},
+        resolved_action=latest.resolved,
+        issues=latest.observations or observations,
+        evidence=evidence,
+        attempt_history=_diagnostic_attempt_history(attempts, step_index, repair_epoch),
+        deterministic_recommendations=_diagnostic_recommendations(observations),
+    )
+    context_digest = diagnostic_case_digest(case)
+    if any(
+        item.get("context_type") == "step_geometry_diagnosis"
+        and item.get("diagnostic_context_digest") == context_digest
+        for item in observations
+    ):
+        return observations, journal
+    # Candidate-specific advice must never bleed into a new digest, even when
+    # the family signature is intentionally the same for call deduplication.
+    observations = [
+        item
+        for item in observations
+        if item.get("context_type") != "step_geometry_diagnosis"
+    ]
+
+    artifact_paths = _diagnostic_artifact_paths(paths, case)
+    _atomic_write_json(artifact_paths["case"], case.model_dump(mode="json"))
+    case_id = diagnostic_case_id(case)
+    existing = next(
+        (record for record in journal.records if record.case_id == case_id),
+        None,
+    )
+
+    # Artifact-before-checkpoint crash: validate and roll forward without a
+    # second paid call.  Never trust the record's arbitrary artifact_path.
+    try:
+        cached_artifact = _load_diagnostic_artifact(
+            artifact_paths["diagnosis"], case=case
+        )
+        cached_failure_artifact = _load_diagnostic_failure(
+            artifact_paths["failure"], case=case
+        )
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        cached_artifact = None
+        cached_failure_artifact = (f"cached_artifact_invalid: {exc}", False)
+
+    if cached_artifact is not None:
+        cached, cached_usage_delta = cached_artifact
+        rolled_forward = existing is None or existing.status == "pending"
+        if rolled_forward:
+            _roll_forward_diagnostic_usage(gemini, cached_usage_delta)
+        directive = planner_directive_from_diagnosis(cached, case)
+        observations = [*observations, directive]
+        journal = _upsert_diagnostic_record(
+            journal,
+            _diagnostic_record(
+                case,
+                status="complete",
+                artifact_path=artifact_paths["diagnosis"],
+            ),
+            increment_call=rolled_forward,
+            increment_cache_hit=True,
+        )
+        persist(observations, journal, None)
+        stream.emit(
+            f"Step {step_index} reused a digest-bound inverse geometry diagnosis.",
+            force=True,
+        )
+        return observations, journal
+
+    if cached_failure_artifact is not None:
+        cached_failure, cached_call_attempted = cached_failure_artifact
+        if not artifact_paths["failure"].is_file():
+            failure_payload = {
+                "case_id": case_id,
+                "diagnostic_context_digest": context_digest,
+                "failure_signature": case.binding.failure_signature,
+                "failure_reason": cached_failure[:1000],
+                "call_attempted": False,
+                "error_type": "CachedArtifactValidationError",
+                "error": cached_failure[:2000],
+                "model_part": "step_repair_advisor",
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
+            failure_payload["artifact_digest"] = _diagnostic_artifact_payload_digest(
+                failure_payload
+            )
+            _atomic_write_json(artifact_paths["failure"], failure_payload)
+        journal = _upsert_diagnostic_record(
+            journal,
+            _diagnostic_record(
+                case,
+                status="failed",
+                artifact_path=artifact_paths["failure"],
+                failure_reason=cached_failure[:1000],
+            ),
+            increment_call=(
+                cached_call_attempted
+                and (existing is None or existing.status == "pending")
+            ),
+        )
+        if advisor_required:
+            observations = [
+                *observations,
+                _advisor_unavailable_observation(
+                    case,
+                    reason=cached_failure[:1000],
+                    protocol_attempt_count=int(cached_call_attempted),
+                ),
+            ]
+        persist(observations, journal, None)
+        return observations, journal
+
+    if existing is not None and existing.status in {"complete", "failed", "skipped"}:
+        # Complete-without-artifact is never silently trusted.  It degrades to
+        # generic deterministic feedback without another call.
+        if existing.status == "complete":
+            replacement = _diagnostic_record(
+                case,
+                status="failed",
+                artifact_path=artifact_paths["case"],
+                failure_reason="complete diagnosis artifact is missing",
+            )
+            journal = _upsert_diagnostic_record(journal, replacement)
+        if advisor_required and existing.status in {"complete", "failed"}:
+            observations = [
+                *observations,
+                _advisor_unavailable_observation(
+                    case,
+                    reason=(
+                        existing.failure_reason or "validated_advisor_artifact_missing"
+                    ),
+                    protocol_attempt_count=0,
+                ),
+            ]
+        if existing.status in {"complete", "failed"}:
+            persist(observations, journal, None)
+        return observations, journal
+
+    if evidence_error is not None:
+        journal = _upsert_diagnostic_record(
+            journal,
+            _diagnostic_record(
+                case,
+                status="skipped",
+                artifact_path=artifact_paths["case"],
+                failure_reason=f"evidence_artifact_invalid: {evidence_error}"[:1000],
+            ),
+        )
+        if advisor_required:
+            observations = [
+                *observations,
+                _advisor_unavailable_observation(
+                    case,
+                    reason="evidence_artifact_invalid",
+                    protocol_attempt_count=0,
+                ),
+            ]
+        persist(observations, journal, None)
+        return observations, journal
+
+    decision_journal = journal
+    if existing is not None and existing.status == "pending":
+        decision_journal = journal.model_copy(
+            update={
+                "records": [
+                    record for record in journal.records if record.case_id != case_id
+                ]
+            }
+        )
+    call_advisor = should_call_advisor(
+        case,
+        decision_journal,
+        enabled=advisor_runtime_enabled,
+        dry_run=False,
+        freecad_enabled=settings.freecad_mcp_enabled,
+        trigger_attempt=settings.step_repair_advisor_trigger_attempt,
+        max_calls_per_step=settings.step_repair_advisor_max_calls_per_step,
+        max_signatures_per_step=(settings.step_repair_advisor_max_signatures_per_step),
+    )
+    if not call_advisor:
+        reason = (
+            "disabled"
+            if not advisor_runtime_enabled
+            else "deduplicated_or_deterministic_fast_path"
+        )
+        journal = _upsert_diagnostic_record(
+            journal,
+            _diagnostic_record(
+                case,
+                status="skipped",
+                artifact_path=artifact_paths["case"],
+                failure_reason=reason,
+            ),
+        )
+        capacity_failure = (
+            _required_advisor_capacity_failure(case, decision_journal, settings)
+            if advisor_required
+            else None
+        )
+        if capacity_failure is not None:
+            observations = [
+                *observations,
+                _advisor_unavailable_observation(
+                    case,
+                    reason=capacity_failure,
+                    protocol_attempt_count=0,
+                ),
+            ]
+        persist(observations, journal, None)
+        return observations, journal
+
+    journal = _upsert_diagnostic_record(
+        journal,
+        _diagnostic_record(
+            case,
+            status="pending",
+            artifact_path=artifact_paths["case"],
+        ),
+    )
+    # This checkpoint is deliberately before the optional paid call.
+    persist(observations, journal, "step_repair_advisor")
+    before_usage = _usage_snapshot(gemini)
+    advisor_response_payload: dict[str, Any] | None = None
+    protocol_errors: list[dict[str, str]] = []
+    protocol_attempt_count = 0
+    try:
+        diagnosis: StepRepairDiagnosis | None = None
+        for protocol_attempt_count in range(1, 3):
+            if hasattr(gemini, "reset_lineage"):
+                gemini.reset_lineage("step_repair_advisor")
+            retry_note = ""
+            if protocol_errors:
+                previous = protocol_errors[-1]
+                retry_note = (
+                    "\n\nThe previous independent-advisor response was rejected "
+                    "at the protocol/host-validation boundary. Re-evaluate the "
+                    "same typed case from scratch and return one complete object. "
+                    f"error_type={previous['error_type']}; "
+                    f"failure_reason={previous['failure_reason']}."
+                )
+            try:
+                advisor_response = _call_structured(
+                    gemini,
+                    step_repair_advisor_prompt(case),
+                    GeometryValidationAdvisorResponse,
+                    part="step_repair_advisor",
+                    thinking_level=(
+                        "medium" if protocol_attempt_count == 1 else "high"
+                    ),
+                    system_instruction=(
+                        step_repair_advisor_system_instruction() + retry_note
+                    ),
+                )
+                if isinstance(advisor_response, GeometryValidationAdvisorResponse):
+                    advisor_response_payload = advisor_response.model_dump(mode="json")
+                    diagnosis = bind_advisor_response(case, advisor_response)
+                elif isinstance(
+                    advisor_response, StepRepairDiagnosisBody
+                ) and not isinstance(advisor_response, StepRepairDiagnosis):
+                    advisor_response_payload = advisor_response.model_dump(mode="json")
+                    diagnosis = bind_diagnosis(case, advisor_response)
+                elif isinstance(advisor_response, StepRepairDiagnosis):
+                    # Compatibility for existing test doubles and resumable v1
+                    # integrations. Real calls use the provider-safe wire DTO.
+                    advisor_response_payload = advisor_response.model_dump(mode="json")
+                    diagnosis = validate_diagnosis(case, advisor_response)
+                else:
+                    raise TypeError("step repair advisor returned the wrong schema")
+                break
+            except (
+                GeminiRequestError,
+                StructuredOutputError,
+                HostContractValidationError,
+                TypeError,
+                ValueError,
+            ) as protocol_exc:
+                protocol_errors.append(
+                    {
+                        "error_type": type(protocol_exc).__name__,
+                        "failure_reason": _advisor_failure_reason(protocol_exc),
+                        "error": str(protocol_exc)[:1000],
+                    }
+                )
+                if protocol_attempt_count >= 2:
+                    raise
+                stream.emit(
+                    f"Step {step_index} geometry diagnostician protocol response "
+                    "was rejected; retrying the same diagnostic episode once.",
+                    force=True,
+                )
+        if diagnosis is None:
+            raise DiagnosticValidationError(
+                "advisor protocol completed without a validated diagnosis"
+            )
+        directive = planner_directive_from_diagnosis(diagnosis, case)
+        after_usage = _usage_snapshot(gemini)
+        artifact_payload = {
+            "case_id": case_id,
+            "binding": case.binding.model_dump(mode="json"),
+            "advisor_response_body": advisor_response_payload,
+            "diagnosis": diagnosis.model_dump(mode="json"),
+            "validated": True,
+            "model_part": "step_repair_advisor",
+            "model": settings.model_for("step_repair_advisor"),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "usage_delta": _llm_usage_delta(before_usage, after_usage),
+            "protocol_attempt_count": protocol_attempt_count,
+            "protocol_errors": protocol_errors,
+            "planner_directive": directive,
+        }
+        artifact_payload["artifact_digest"] = _diagnostic_artifact_payload_digest(
+            artifact_payload
+        )
+        _atomic_write_json(artifact_paths["diagnosis"], artifact_payload)
+        observations = [*observations, directive]
+        journal = _upsert_diagnostic_record(
+            journal,
+            _diagnostic_record(
+                case,
+                status="complete",
+                artifact_path=artifact_paths["diagnosis"],
+            ),
+            increment_call=True,
+        )
+        # Journal completion and planner directive become durable together.
+        persist(observations, journal, None)
+        stream.emit(
+            f"Step {step_index} received one evidence-bound inverse geometry "
+            "parameter diagnosis before replanning.",
+            force=True,
+        )
+    except Exception as exc:
+        reason = _advisor_failure_reason(exc)
+        failure_payload = {
+            "case_id": case_id,
+            "diagnostic_context_digest": context_digest,
+            "failure_signature": case.binding.failure_signature,
+            "failure_reason": reason,
+            "call_attempted": True,
+            "error_type": type(exc).__name__,
+            "error": str(exc)[:2000],
+            "advisor_response": advisor_response_payload,
+            "protocol_attempt_count": protocol_attempt_count,
+            "protocol_errors": protocol_errors,
+            "model_part": "step_repair_advisor",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        }
+        failure_payload["artifact_digest"] = _diagnostic_artifact_payload_digest(
+            failure_payload
+        )
+        _atomic_write_json(artifact_paths["failure"], failure_payload)
+        journal = _upsert_diagnostic_record(
+            journal,
+            _diagnostic_record(
+                case,
+                status="failed",
+                artifact_path=artifact_paths["failure"],
+                failure_reason=reason,
+            ),
+            increment_call=True,
+        )
+        if advisor_required:
+            observations = [
+                *observations,
+                _advisor_unavailable_observation(
+                    case,
+                    reason=reason,
+                    protocol_attempt_count=protocol_attempt_count,
+                ),
+            ]
+        persist(observations, journal, None)
+        stream.emit(
+            f"Step {step_index} geometry diagnostician failed safely "
+            f"({reason}); deterministic evidence-only replanning remains active.",
+            force=True,
+        )
+    finally:
+        if hasattr(gemini, "reset_lineage"):
+            gemini.reset_lineage("step_repair_advisor")
+    return observations, journal
 
 
 def _repair_observation(issue: StaticIssue) -> dict[str, Any]:
@@ -7616,9 +11291,7 @@ def _planner_repair_context(
                 "failure_phase": attempt.phase,
                 "issue_codes": attempt.issue_codes,
                 "rejected_action": compact_action,
-                "validation_observations": _bounded_diagnostic(
-                    attempt.observations
-                ),
+                "validation_observations": _bounded_diagnostic(attempt.observations),
             }
         )
     result: list[dict[str, Any]] = [
@@ -7632,6 +11305,78 @@ def _planner_repair_context(
         },
         *[dict(item) for item in observations],
     ]
+    if rejected:
+        latest = rejected[-1]
+        latest_action = latest.resolved or latest.draft
+        if latest.phase in {
+            "static_step_validation",
+            "freecad_semantic_validation",
+            "final_repair_replan",
+        } and isinstance(latest_action, dict):
+            diagnosis_directive = next(
+                (
+                    item
+                    for item in reversed(observations)
+                    if item.get("context_type") == "step_geometry_diagnosis"
+                ),
+                None,
+            )
+            repair_scope = (
+                str(diagnosis_directive.get("repair_scope") or "params")
+                if diagnosis_directive is not None
+                else "params"
+            )
+            preserve_keys = {
+                "params": (
+                    "target_port",
+                    "module",
+                    "affected_goal_ids",
+                    "completed_goal_ids",
+                ),
+                "variant": (
+                    "target_port",
+                    "module",
+                    "affected_goal_ids",
+                    "completed_goal_ids",
+                ),
+                "primitive": (
+                    "target_port",
+                    "affected_goal_ids",
+                    "completed_goal_ids",
+                ),
+                "topology": ("affected_goal_ids", "completed_goal_ids"),
+                "rollback": ("affected_goal_ids", "completed_goal_ids"),
+            }.get(
+                repair_scope,
+                (
+                    "target_port",
+                    "module",
+                    "affected_goal_ids",
+                    "completed_goal_ids",
+                ),
+            )
+            result.insert(
+                1,
+                {
+                    "context_type": "causal_repair_envelope",
+                    "preserve_action_fields": {
+                        key: latest_action.get(key) for key in preserve_keys
+                    },
+                    "repair_scope": repair_scope,
+                    "editable_scope": (
+                        "Only evidence-cited planner-authored fields in the "
+                        f"validated {repair_scope} scope"
+                    ),
+                    "instruction": (
+                        "Keep every field listed in preserve_action_fields exactly. "
+                        "A validated diagnosis may release only the structural level "
+                        "named by repair_scope; it cannot alter immutable goals or "
+                        "accept geometry. Change only candidate-controlled fields "
+                        "cited by expected/actual or diagnostic evidence, and never "
+                        "repeat a parameter proven non-causal."
+                    ),
+                },
+            )
     repeat_count, repeated_failure = _planner_stagnation_run(all_rejected)
     exact_repeat_count, exact_repeated_failure = _planner_exact_stagnation_run(
         all_rejected
@@ -7665,13 +11410,136 @@ def _planner_repair_context(
                         if schema_strategy == "encoded"
                         else "The current numeric response grammar is retained. "
                     )
-                    + "Re-plan from the full immutable state; change the independent "
-                    "geometry, sign, module, or goal interpretation responsible for "
-                    "the failure."
+                    + "Re-plan from the full immutable state and causal repair "
+                    "envelope. Preserve structural fields that passed earlier "
+                    "validators; change only the independent geometry or sign "
+                    "actually implicated by the evidence."
                 ),
             },
         )
     return result
+
+
+def _maybe_request_step_repair_advice(
+    gemini: Any,
+    state: PipeState,
+    repair_context: list[dict[str, Any]],
+    observations: list[dict[str, Any]],
+    attempts: list[ActionAttempt],
+    step_index: int,
+) -> dict[str, Any] | None:
+    """Ask an independent model for bounded advice when ordinary repair stalls."""
+
+    if not getattr(gemini, "supports_repair_advisor", False):
+        return None
+    if any(item.get("context_type") == "repair_advisor" for item in observations):
+        return None
+    rejected = [
+        attempt
+        for attempt in attempts
+        if attempt.step_index == step_index and attempt.status == "rejected"
+    ]
+    repeat_count, _failure = _planner_stagnation_run(rejected)
+    empty_freecad_recommendation = any(
+        item.get("check_name") == "freecad_semantic_validation"
+        and not (
+            (item.get("suggestion") or {}).get("recommended_changes")
+            if isinstance(item.get("suggestion"), dict)
+            else None
+        )
+        for item in observations
+        if isinstance(item, dict)
+    )
+    if repeat_count < 2 and not empty_freecad_recommendation:
+        return None
+    if hasattr(gemini, "reset_lineage"):
+        gemini.reset_lineage("parameter")
+    try:
+        advice = _call_structured(
+            gemini,
+            (
+                "Legacy bounded repair-advisor compatibility request. The typed "
+                "Step Geometry Diagnostician is used by run_pipeline. Current "
+                "state and deterministic repair context: "
+                + json.dumps(
+                    {
+                        "state": compact_planner_payload(state, include_catalog=False),
+                        "repair_context": repair_context,
+                    },
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                )
+            ),
+            StepRepairAdviceWire,
+            part="parameter",
+            thinking_level="high",
+            system_instruction=step_repair_advisor_system_instruction(),
+        )
+    except (
+        GeminiBudgetError,
+        GeminiConfigError,
+        GeminiRequestError,
+        StructuredOutputError,
+        HostContractValidationError,
+        TypeError,
+        ValueError,
+    ):
+        return None
+    finally:
+        if hasattr(gemini, "reset_lineage"):
+            gemini.reset_lineage("parameter")
+    if isinstance(advice, StepRepairAdviceWire):
+        advice = StepRepairAdvice.model_validate(advice.model_dump(mode="python"))
+    if not isinstance(advice, StepRepairAdvice):
+        return None
+    return {
+        "context_type": "repair_advisor",
+        "trigger_issue_codes": sorted(
+            {
+                str(item.get("issue_code"))
+                for item in observations
+                if isinstance(item, dict) and item.get("issue_code")
+            }
+        ),
+        "advice": advice.model_dump(mode="json"),
+        "instruction": (
+            "Use this independent diagnosis as a bounded repair plan. It cannot "
+            "change Intent and is not itself an executable action."
+        ),
+    }
+
+
+def _terminal_geometry_diagnosis(
+    observations: list[dict[str, Any]],
+) -> str | None:
+    """Honor an independent LLM decision that another blind retry is futile.
+
+    The advisor still cannot mutate or approve geometry.  This only prevents
+    another planner call when the advisor explicitly selected a terminal
+    disposition from the typed response schema; the last validator rejection
+    remains the run's blocking issue and evidence authority.
+    """
+
+    for observation in reversed(observations):
+        if observation.get("context_type") == "geometry_validation_advisor_unavailable":
+            # Includes legacy checkpoints that recorded terminal=true. Provider,
+            # schema, host-coercion, or capacity failure by the optional advisor
+            # cannot overrule a remaining bounded planner repair attempt.
+            continue
+        if observation.get("context_type") != "step_geometry_diagnosis":
+            continue
+        disposition = observation.get("disposition")
+        if disposition not in {"stop_contract_infeasible", "stop_futile_retry"}:
+            return None
+        instruction = str(observation.get("planner_instruction") or "").strip()
+        diagnosis_class = str(observation.get("diagnosis_class") or "unknown")
+        return (
+            "The independent inverse-geometry advisor classified the rejected "
+            f"transition as {diagnosis_class} and selected {disposition}; "
+            "additional blind LLM action retries were stopped."
+            + (f" Advisor conclusion: {instruction}" if instruction else "")
+        )
+    return None
 
 
 def _planner_stagnation_run(
@@ -7745,7 +11613,9 @@ def _planner_exact_stagnation_run(
             if isinstance(observation, dict)
         ]
         canonical = json.dumps(
-            {"action": material_action, "evidence": evidence_payload},
+            _canonical_stagnation_value(
+                {"action": material_action, "evidence": evidence_payload}
+            ),
             ensure_ascii=False,
             sort_keys=True,
             separators=(",", ":"),
@@ -7766,6 +11636,25 @@ def _planner_exact_stagnation_run(
             break
         repeat_count += 1
     return repeat_count, repeated_failure
+
+
+def _canonical_stagnation_value(value: Any) -> Any:
+    """Remove sub-measurement float jitter without erasing real progress."""
+
+    if isinstance(value, bool) or value is None:
+        return value
+    if isinstance(value, float):
+        if not math.isfinite(value) or value == 0.0:
+            return value
+        digits = max(0, 9 - int(math.floor(math.log10(abs(value)))) - 1)
+        return round(value, digits)
+    if isinstance(value, dict):
+        return {
+            str(key): _canonical_stagnation_value(child) for key, child in value.items()
+        }
+    if isinstance(value, list):
+        return [_canonical_stagnation_value(child) for child in value]
+    return value
 
 
 def _attempt_failure_detail_identity(attempt: ActionAttempt) -> list[str]:
@@ -7923,6 +11812,8 @@ def _fail_run(
     failed_stage: str,
     summary: str,
     gemini: Any,
+    *,
+    pause: bool = False,
 ) -> None:
     _write_progress(paths, actions, attempts, state, step_verifications, critic)
     report = _make_report(
@@ -7934,7 +11825,7 @@ def _fail_run(
         artifacts,
         step_verifications,
         critic,
-        status="failed",
+        status="paused" if pause else "failed",
         verification_status="failed",
         failed_stage=failed_stage,
         skipped_mcp_reason=critic.skipped_mcp_reason,
@@ -7944,14 +11835,45 @@ def _fail_run(
     )
     report = report.model_copy(
         update={
+            "pause_reason": failed_stage if pause else None,
+            "resume_command": (
+                f"./run.sh --resume {artifacts.output_dir}" if pause else None
+            ),
+            "recovery_state": (
+                {
+                    "checkpoint_path": artifacts.checkpoint_path,
+                    "failed_stage": failed_stage,
+                    "next_action": "resume bounded conflict search from checkpoint",
+                }
+                if pause
+                else {}
+            ),
             "artifact_statuses": _artifact_statuses(
                 artifacts,
                 failed_stage=failed_stage,
                 issues=critic.issues,
-            )
+            ),
         }
     )
     _atomic_write_json(paths["report"], report.model_dump(mode="json"))
+    if pause:
+        resume_command = f"./run.sh --resume {artifacts.output_dir}"
+        append_search_event(
+            paths["search_events"],
+            {
+                "event_type": "run_paused",
+                "run_id": run_id,
+                "reason": failed_stage,
+                "checkpoint_path": artifacts.checkpoint_path,
+                "resume_command": resume_command,
+            },
+        )
+        raise PipelinePausedError(
+            failed_stage,
+            str(paths["report"]),
+            critic.issues,
+            resume_command,
+        )
     error_type = (
         CriticValidationError
         if failed_stage in {"final_critic", "max_iter"}
@@ -7989,14 +11911,55 @@ def _make_report(
     llm_policy: dict[str, Any] = {}
     if gemini is not None and hasattr(gemini, "policy_snapshot"):
         llm_policy = dict(gemini.policy_snapshot())
+    action_budget_policy = (
+        getattr(gemini, "_cadgen_action_budget_policy", None)
+        if gemini is not None
+        else None
+    )
+    if isinstance(action_budget_policy, dict):
+        llm_policy["action_budget"] = copy.deepcopy(action_budget_policy)
     (
         intent_attempt_count,
         intent_repair_count,
         intent_protocol_retry_count,
     ) = _intent_attempt_stats(artifacts)
+    (
+        intent_advisor_call_count,
+        intent_advisor_success_count,
+        intent_advisor_failure_count,
+        intent_futile_retry_avoided_count,
+    ) = _intent_diagnostic_stats(artifacts)
+    diagnostic_journal, advisor_artifact_paths = _diagnostic_report_stats(artifacts)
+    advisor_call_count = sum(diagnostic_journal.calls_by_step.values())
+    advisor_success_count = sum(
+        record.status == "complete" for record in diagnostic_journal.records
+    )
+    advisor_failure_count = sum(
+        record.status == "failed" for record in diagnostic_journal.records
+    )
+    artifacts = artifacts.model_copy(
+        update={"advisor_artifact_paths": advisor_artifact_paths}
+    )
+    realization_status = "not_run"
+    deviation_count = 0
+    if artifacts.global_preflight_path:
+        try:
+            preflight_payload = json.loads(
+                Path(artifacts.global_preflight_path).read_text(encoding="utf-8")
+            )
+            if isinstance(preflight_payload, dict):
+                realization_status = str(preflight_payload.get("status") or "not_run")
+                deviations = preflight_payload.get("deviations")
+                deviation_count = len(deviations) if isinstance(deviations, list) else 0
+        except (OSError, json.JSONDecodeError):
+            realization_status = "not_run"
+    if status == "success" and realization_status == "adjusted":
+        status = "success_with_deviations"
     return RunReport(
         run_id=run_id,
         status=status,  # type: ignore[arg-type]
+        realization_status=realization_status,  # type: ignore[arg-type]
+        deviation_count=deviation_count,
         failed_stage=failed_stage,
         dry_run=dry_run,
         freecad_opened=freecad_opened,
@@ -8013,8 +11976,21 @@ def _make_report(
         intent_attempt_count=intent_attempt_count,
         intent_repair_count=intent_repair_count,
         intent_protocol_retry_count=intent_protocol_retry_count,
+        intent_advisor_call_count=intent_advisor_call_count,
+        intent_advisor_success_count=intent_advisor_success_count,
+        intent_advisor_failure_count=intent_advisor_failure_count,
+        intent_futile_retry_avoided_count=(intent_futile_retry_avoided_count),
         action_repair_count=repair_attempt_count,
         repair_attempt_count=repair_attempt_count,
+        step_repair_advisor_count=(
+            advisor_call_count or _repair_advice_count(artifacts)
+        ),
+        advisor_call_count=advisor_call_count,
+        advisor_success_count=advisor_success_count,
+        advisor_failure_count=advisor_failure_count,
+        advisor_cache_hit_count=diagnostic_journal.cache_hit_count,
+        advisor_artifact_paths=advisor_artifact_paths,
+        futile_retry_avoided_count=(diagnostic_journal.futile_retry_avoided_count),
         artifacts=artifacts,
         artifact_statuses=_artifact_statuses(
             artifacts,
@@ -8048,6 +12024,81 @@ def _intent_attempt_stats(artifacts: GenerationArtifacts) -> tuple[int, int, int
         for item in attempts
     )
     return len(attempts), max(0, semantic_calls - 1), protocol_retries
+
+
+def _intent_diagnostic_stats(
+    artifacts: GenerationArtifacts,
+) -> tuple[int, int, int, int]:
+    """Summarize durable intent-advisor calls and avoided futile retries."""
+
+    if not artifacts.intent_diagnostics_path:
+        return 0, 0, 0, 0
+    try:
+        payload = json.loads(
+            Path(artifacts.intent_diagnostics_path).read_text(encoding="utf-8")
+        )
+    except (OSError, json.JSONDecodeError):
+        return 0, 0, 0, 0
+    if not isinstance(payload, list):
+        return 0, 0, 0, 0
+    records = [item for item in payload if isinstance(item, dict)]
+    calls = sum(
+        max(0, int(item.get("advisor_protocol_attempts", 0) or 0)) for item in records
+    )
+    successes = sum(item.get("advisor_status") == "complete" for item in records)
+    failures = sum(
+        item.get("advisor_status") in {"failed", "degraded_fallback"}
+        for item in records
+    )
+    avoided = sum(
+        item.get("terminal_reason")
+        in {"stop_futile_retry", "identical_intent_failure_stagnation"}
+        for item in records
+    )
+    return calls, successes, failures, avoided
+
+
+def _repair_advice_count(artifacts: GenerationArtifacts) -> int:
+    if not artifacts.repair_advice_path:
+        return 0
+    try:
+        payload = json.loads(
+            Path(artifacts.repair_advice_path).read_text(encoding="utf-8")
+        )
+    except (OSError, json.JSONDecodeError):
+        return 0
+    return len(payload) if isinstance(payload, list) else 0
+
+
+def _diagnostic_report_stats(
+    artifacts: GenerationArtifacts,
+) -> tuple[DiagnosticJournal, list[str]]:
+    payload: Any = None
+    candidates = [
+        artifacts.diagnostics_index_path,
+        artifacts.checkpoint_path,
+    ]
+    for candidate in candidates:
+        if not candidate:
+            continue
+        try:
+            loaded = json.loads(Path(candidate).read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if candidate == artifacts.checkpoint_path and isinstance(loaded, dict):
+            loaded = loaded.get("diagnostic_journal")
+        if isinstance(loaded, dict):
+            payload = loaded
+            break
+    try:
+        journal = DiagnosticJournal.model_validate(payload or {})
+    except ValueError:
+        journal = DiagnosticJournal()
+    diagnostic_dir = Path(artifacts.output_dir) / "diagnostics"
+    artifact_paths = sorted(
+        str(path) for path in diagnostic_dir.glob("*.json") if path.name != "index.json"
+    )
+    return journal, artifact_paths
 
 
 def _clear_state_bound_evidence(

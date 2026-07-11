@@ -1,0 +1,141 @@
+{
+  "attempt_id": 6,
+  "candidate_document": "CadGenCandidate_20260711T080948776704Z_2_6_6556f2e444d8",
+  "candidate_shape_fingerprints": {
+    "solid_M1": "aa148f62d9d862481061cebc83a95f840ae5956efdb00b975c2dc5904b7d35be"
+  },
+  "checks": {
+    "adjacent_interface_overlaps": [],
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [
+        "assembly not built"
+      ],
+      "is_closed": false,
+      "is_null": true,
+      "is_valid": false,
+      "passed": false,
+      "solid_count": 0,
+      "volume": 0.0
+    },
+    "assembly_errors": [],
+    "bore_network": {
+      "passed": false,
+      "reason": "bore network not built"
+    },
+    "centerlines": {
+      "M1": {
+        "curve_length": 40.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M2": {
+        "curve_length": 40.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 2,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [
+      {
+        "details": {
+          "kernel_code": "NO_SUITABLE_EDGES",
+          "module_type": "junction",
+          "surface": "inner"
+        },
+        "error": "no compact junction inner Cylinder-Cylinder seams found",
+        "failure_code": "JUNCTION_FILLET_SEAM_NOT_FOUND",
+        "module_id": "M2",
+        "stage": "fillet_compact_junction_material"
+      }
+    ],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            10.0,
+            10.0,
+            40.0
+          ],
+          "minimum": [
+            -10.0,
+            -10.0,
+            0.0
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 4523.893421169301
+      },
+      "M2": {
+        "error": "no compact junction inner Cylinder-Cylinder seams found",
+        "passed": false
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "passed": false,
+      "reason": "outer network not built"
+    },
+    "required_internal_section_module_count": 2,
+    "sampled_internal_section_count": 1,
+    "sampled_internal_sections_by_module": {
+      "M1": 1
+    },
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": [
+      {
+        "error": "module shape is missing",
+        "module_id": "M2"
+      },
+      {
+        "error": "one or more geometry-bearing modules have no internal wall sample",
+        "module_ids": [
+          "M2"
+        ]
+      }
+    ]
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v21",
+  "module_ids": [
+    "M1",
+    "M2"
+  ],
+  "passed": false,
+  "payload_digest": "6556f2e444d80c47de13dad3ccdaf40106d3a594900c88486de9bb8842fe06c5",
+  "run_id": "20260711T080948776704Z",
+  "schema_version": 3,
+  "state_id": "S2",
+  "state_version": 2,
+  "validator_policy": {
+    "generator_version": "cadgen02-freecad-v21",
+    "policy_digest": "287bef99cde36a01250fc736311eaff46a51b6e1b7439dc460a4564e031cfa41",
+    "policy_id": "cadgen02-freecad-validator-v21",
+    "validation_schema_version": 3
+  }
+}

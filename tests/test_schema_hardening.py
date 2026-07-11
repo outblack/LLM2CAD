@@ -7,9 +7,10 @@ from pathlib import Path
 import pytest
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-from pydantic import ValidationError
+from pydantic import ValidationError, model_validator
 
 from cadgen.gemini_client import (
+    GeminiConfigError,
     GeminiInvalidRequestError,
     GeminiRequestError,
     MAX_STRUCTURED_NUMBER_LITERAL_BYTES,
@@ -20,6 +21,7 @@ from cadgen.config import load_settings
 from cadgen.pipeline import (
     PLANNER_PREFERRED_NUMBER_LITERAL_BYTES,
     _PlannerStagnationError,
+    _call_structured,
     _compact_freecad_failure_evidence,
     _freecad_repair_contract,
     _plan_action,
@@ -31,15 +33,23 @@ from cadgen.registry import validate_action, validate_draft
 from cadgen.schemas import (
     ActionDraft,
     ActionAttempt,
+    AgendaRepairDirectiveWire,
     CorePlannerDecision,
+    CorePlannerDecisionWire,
     GeometricConstraint,
     GlobalSpec,
     Goal,
     IntentResult,
+    LLMProductionIntent,
     PipeState,
     PlannerDecision,
+    PlannerDecisionWire,
     Port,
     RouteParamsV2,
+    StepRepairAdviceWire,
+    GeometryValidationAdvisorResponse,
+    ProviderWireModel,
+    VisualCriticResultWire,
 )
 from cadgen.state import StateEngine
 from cadgen.static_validation import build_step_verification
@@ -47,8 +57,8 @@ from cadgen.vector import direction_to_vector
 
 
 def _planner_route_variants() -> dict[str, dict]:
-    schema = gemini_json_schema(PlannerDecision)
-    params_schema = schema["$defs"]["RouteChoice"]["properties"]["params"]
+    schema = gemini_json_schema(PlannerDecisionWire)
+    params_schema = schema["$defs"]["PlannerRouteChoiceWire"]["properties"]["params"]
     variants: dict[str, dict] = {}
     for branch in params_schema["anyOf"]:
         name = branch["$ref"].rsplit("/", 1)[-1]
@@ -56,6 +66,54 @@ def _planner_route_variants() -> dict[str, dict]:
         path_kind = variant["properties"]["path_kind"]["enum"][0]
         variants[path_kind] = variant
     return variants
+
+
+def test_all_marked_provider_wires_pass_runtime_parity_guard():
+    for schema_type in (
+        LLMProductionIntent,
+        CorePlannerDecisionWire,
+        PlannerDecisionWire,
+        AgendaRepairDirectiveWire,
+        VisualCriticResultWire,
+        GeometryValidationAdvisorResponse,
+        StepRepairAdviceWire,
+    ):
+        schema = gemini_json_schema(schema_type)
+        encoded = json.dumps(schema, separators=(",", ":"))
+        assert '"exclusiveMinimum"' not in encoded
+        assert '"exclusiveMaximum"' not in encoded
+        assert '"minLength"' not in encoded
+        assert '"maxLength"' not in encoded
+
+
+def test_provider_wire_with_hidden_validator_is_rejected_before_api_call():
+    class InvalidWire(ProviderWireModel):
+        left: int
+        right: int
+
+        @model_validator(mode="after")
+        def hidden_relation(self):
+            if self.left >= self.right:
+                raise ValueError("left must be below right")
+            return self
+
+    with pytest.raises(GeminiConfigError, match="host-only validators"):
+        gemini_json_schema(InvalidWire)
+
+
+def test_production_structured_call_rejects_non_wire_schema_before_client_use():
+    class NeverCalled:
+        def stream_structured(self, *args, **kwargs):
+            raise AssertionError("client must not be called")
+
+    with pytest.raises(GeminiConfigError, match="must use a ProviderWireModel"):
+        _call_structured(
+            NeverCalled(),
+            "{}",
+            CorePlannerDecision,
+            part="step_planner",
+            thinking_level="low",
+        )
 
 
 def test_unknown_direction_token_does_not_silently_become_positive_x():
@@ -128,7 +186,6 @@ def test_spline_waypoint_may_pass_through_global_origin():
             "section_source": "inherit_target",
             "path_kind": "spline",
             "waypoints": [(0.0, 0.0, 0.0), (20.0, 10.0, 0.0)],
-            "final_tangent": (1.0, 0.0, 0.0),
         },
     )
 
@@ -182,7 +239,6 @@ def test_relative_spline_waypoints_resolve_from_selected_target_port():
             "path_kind": "spline",
             "waypoint_frame": "relative_to_target",
             "waypoints": [(20.0, 0.0, 0.0), (40.0, 10.0, 10.0)],
-            "final_tangent": (1.0, 1.0, 1.0),
         },
     )
 
@@ -373,9 +429,7 @@ def test_self_crossing_spline_control_path_requires_freecad_clearance_check():
         if item.issue_code == "STATIC_SELF_CLEARANCE_REQUIRES_FREECAD"
     )
     assert issue.severity == "warning"
-    assert issue.actual["candidates"][0]["centerline_separation"] == pytest.approx(
-        0.0
-    )
+    assert issue.actual["candidates"][0]["centerline_separation"] == pytest.approx(0.0)
 
 
 def test_transition_derives_concentric_offset_and_preserves_wall_by_default():
@@ -452,8 +506,8 @@ def test_gemini_route_schema_structurally_separates_path_kinds():
         "section_source",
         "path_kind",
         "length",
-        "direction",
     }
+    assert "direction" in variants["line"].get("properties", {})
     assert set(variants["line"]["properties"]) == {
         "section_source",
         "path_kind",
@@ -498,13 +552,15 @@ def test_gemini_route_schema_structurally_separates_path_kinds():
         "frenet",
         "minimum_curvature_radius",
     } & set(variants["spline"]["properties"])
-    assert all(variant["additionalProperties"] is False for variant in variants.values())
+    assert all(
+        variant["additionalProperties"] is False for variant in variants.values()
+    )
 
 
 def test_connect_ports_and_junction_variants_are_structural_at_gemini_boundary():
-    schema = gemini_json_schema(PlannerDecision)
+    schema = gemini_json_schema(PlannerDecisionWire)
 
-    connect_params = schema["$defs"]["ConnectPortsChoice"]["properties"]["params"]
+    connect_params = schema["$defs"]["PlannerConnectChoiceWire"]["properties"]["params"]
     connect_variants = {}
     for branch in connect_params["anyOf"]:
         variant = schema["$defs"][branch["$ref"].rsplit("/", 1)[-1]]
@@ -545,7 +601,9 @@ def test_connect_ports_and_junction_variants_are_structural_at_gemini_boundary()
         connect_variants["spline"]["properties"]
     )
 
-    junction_params = schema["$defs"]["JunctionChoice"]["properties"]["params"]
+    junction_params = schema["$defs"]["PlannerJunctionChoiceWire"]["properties"][
+        "params"
+    ]
     junction_variants = {}
     for branch in junction_params["anyOf"]:
         variant = schema["$defs"][branch["$ref"].rsplit("/", 1)[-1]]
@@ -562,7 +620,7 @@ def test_connect_ports_and_junction_variants_are_structural_at_gemini_boundary()
 
 
 def test_gemini_planner_forces_target_section_inheritance_without_repeated_od_wall():
-    schema = gemini_json_schema(PlannerDecision)
+    schema = gemini_json_schema(PlannerDecisionWire)
     for definition in schema["$defs"].values():
         properties = definition.get("properties", {})
         if "section_source" not in properties:
@@ -595,26 +653,23 @@ def test_gemini_planner_forces_target_section_inheritance_without_repeated_od_wa
 
 
 def test_gemini_planner_floats_use_bounded_decimal_objects_at_llm_boundary():
-    schema = gemini_json_schema(PlannerDecision, encode_decimals=True)
-    route_choice = schema["$defs"]["RouteChoice"]
+    schema = gemini_json_schema(PlannerDecisionWire, encode_decimals=True)
+    route_choice = schema["$defs"]["PlannerRouteChoiceWire"]
     params = route_choice["properties"]["params"]
     line_ref = next(
         branch["$ref"]
         for branch in params["anyOf"]
-        if branch["$ref"].endswith("/RouteLine")
+        if branch["$ref"].endswith("/PlannerRouteLineWire")
     )
     line = schema["$defs"][line_ref.rsplit("/", 1)[-1]]
     vector = schema["$defs"]["V3"]
 
-    assert line["properties"]["length"] == {"$ref": "#/$defs/CDP"}
-    assert all(
-        item == {"$ref": "#/$defs/CD"}
-        for item in vector["prefixItems"]
-    )
-    assert schema["$defs"]["CDP"]["properties"]["p"] == {
+    assert line["properties"]["length"] == {"$ref": "#/$defs/CD"}
+    assert all(item == {"$ref": "#/$defs/CD"} for item in vector["prefixItems"])
+    assert schema["$defs"]["CD"]["properties"]["p"] == {
         "type": "integer",
         "minimum": 0,
-        "maximum": 9,
+        "maximum": 15,
     }
 
     decoded = _decode_decimal_numbers(
@@ -638,7 +693,7 @@ def test_gemini_planner_floats_use_bounded_decimal_objects_at_llm_boundary():
             },
         }
     )
-    decision = PlannerDecision.model_validate(decoded)
+    decision = PlannerDecisionWire.model_validate(decoded)
     assert decision.to_action_draft().params["length"] == 80.0
     assert decision.to_action_draft().params["direction"] == [1.0, 0.0, 0.0]
 
@@ -664,9 +719,7 @@ def test_planner_numeric_vocabulary_preserves_contract_and_safe_derived_values()
 
     literals = _planner_numeric_literals(state)
 
-    assert {"-1", "0", "1", "1.5", "12", "20", "40", "80"} <= set(
-        literals
-    )
+    assert {"-1", "0", "1", "1.5", "12", "20", "40", "80"} <= set(literals)
     assert {"2.25", "25"} <= set(literals)
     assert len(literals) <= 96
 
@@ -735,9 +788,7 @@ def test_planner_numeric_vocabulary_preserves_later_dependency_ready_parallel_go
 def test_planner_numeric_vocabulary_preserves_immutable_geometric_constraint():
     intent = IntentResult(
         global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
-        target_behavior=[
-            Goal(goal_id="G1", type="move", direction="+X", length=80.0)
-        ],
+        target_behavior=[Goal(goal_id="G1", type="move", direction="+X", length=80.0)],
         geometric_constraints=[
             GeometricConstraint(
                 constraint_id="C1",
@@ -851,9 +902,7 @@ def test_planner_numeric_vocabulary_never_truncates_large_active_spline_goal():
 def test_planner_numeric_vocabulary_preserves_nonfirst_targetable_port():
     intent = IntentResult(
         global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
-        target_behavior=[
-            Goal(goal_id="G1", type="move", direction="+X", length=80.0)
-        ],
+        target_behavior=[Goal(goal_id="G1", type="move", direction="+X", length=80.0)],
     )
     state = StateEngine(load_settings(Path("missing.env"))).initial_state(intent)
     ports = [state.open_ports[0]]
@@ -883,10 +932,7 @@ def test_planner_numeric_vocabulary_preserves_nonfirst_targetable_port():
 
 def test_planner_numeric_vocabulary_secondary_tail_keeps_provider_headroom():
     values = [float(index) + 0.125 for index in range(1, 7)]
-    waypoints = [
-        tuple(values[index : index + 3])
-        for index in range(0, len(values), 3)
-    ]
+    waypoints = [tuple(values[index : index + 3]) for index in range(0, len(values), 3)]
     intent = IntentResult(
         global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
         target_behavior=[
@@ -909,9 +955,7 @@ def test_planner_numeric_vocabulary_secondary_tail_keeps_provider_headroom():
     resumed = _planner_numeric_literals(resumed_state)
     mandatory = _planner_numeric_literals(state, include_optional=False)
 
-    payload_bytes = len(
-        json.dumps(first, separators=(",", ":")).encode("utf-8")
-    )
+    payload_bytes = len(json.dumps(first, separators=(",", ":")).encode("utf-8"))
 
     assert len(first) < 96
     assert payload_bytes <= PLANNER_PREFERRED_NUMBER_LITERAL_BYTES
@@ -1204,12 +1248,9 @@ def test_repeated_validator_failure_resets_lineage_and_replans_with_exact_decima
     assert "bounded decimal-object representation" in prompt
 
     fourth = attempts[-1].model_copy(update={"attempt_index": 4})
-    continued_context = _planner_repair_context(
-        observations, [*attempts, fourth], 2
-    )
+    continued_context = _planner_repair_context(observations, [*attempts, fourth], 2)
     assert all(
-        item.get("context_type") != "planner_stagnation"
-        for item in continued_context
+        item.get("context_type") != "planner_stagnation" for item in continued_context
     )
 
     # Different geometry is allowed to use the remaining bounded retry budget;
@@ -1321,7 +1362,9 @@ def test_rollback_repair_epoch_ignores_rejections_before_last_accept():
     )
 
     history = next(
-        item for item in context if item.get("context_type") == "rejected_attempt_history"
+        item
+        for item in context
+        if item.get("context_type") == "rejected_attempt_history"
     )
     assert len(history["attempts"]) == 1
 
@@ -1462,8 +1505,7 @@ def test_planner_numeric_vocabulary_count_boundary_is_stable_at_96_on_resume():
 def test_planner_numeric_vocabulary_97_mandatory_values_use_encoded_schema():
     coordinates = [1000.125 + index for index in range(69)]
     waypoints = [
-        tuple(coordinates[index : index + 3])
-        for index in range(0, len(coordinates), 3)
+        tuple(coordinates[index : index + 3]) for index in range(0, len(coordinates), 3)
     ]
     goals = [
         Goal(
@@ -1837,7 +1879,7 @@ def test_planner_numeric_vocabulary_oversized_mandatory_bytes_use_encoded_schema
 
 def test_actual_planner_numeric_literal_schema_rejects_raw_float_and_bad_line():
     literals = ["-1", "0", "1", "20", "80"]
-    schema = gemini_json_schema(PlannerDecision, number_literals=literals)
+    schema = gemini_json_schema(PlannerDecisionWire, number_literals=literals)
     valid = {
         "catalog_schema_version": 2,
         "target_port": "START",
@@ -1855,7 +1897,7 @@ def test_actual_planner_numeric_literal_schema_rejects_raw_float_and_bad_line():
     }
 
     Draft202012Validator(schema).validate(valid)
-    parsed = PlannerDecision.model_validate(valid)
+    parsed = PlannerDecisionWire.model_validate(valid)
     assert parsed.to_action_draft().params["length"] == 80.0
 
     raw_float = {
@@ -1883,7 +1925,10 @@ def test_actual_planner_numeric_literal_schema_rejects_raw_float_and_bad_line():
         Draft202012Validator(schema).validate(invalid_line)
 
 
-@pytest.mark.parametrize("decision_schema", [CorePlannerDecision, PlannerDecision])
+@pytest.mark.parametrize(
+    "decision_schema",
+    [CorePlannerDecisionWire, PlannerDecisionWire],
+)
 def test_planner_provider_schema_uses_one_bounded_numeric_enum(decision_schema):
     literals = [str(index) for index in range(96)]
     schema = gemini_json_schema(decision_schema, number_literals=literals)
@@ -1949,18 +1994,19 @@ def test_numeric_literal_schema_rejects_oversized_serialized_enum():
     with pytest.raises(ValueError, match="serialized size of 512 bytes"):
         gemini_json_schema(
             CorePlannerDecision,
-            number_literals=[
-                f"{index}.123456789012345" for index in range(40)
-            ],
+            number_literals=[f"{index}.123456789012345" for index in range(40)],
         )
 
 
 def test_encoded_decimal_decoder_rejects_precision_loss_and_bad_scale():
     assert _decode_decimal_numbers({"k": "d", "c": 15, "p": 1}) == 1.5
+    assert _decode_decimal_numbers(
+        {"k": "d", "c": 3_367_006_979_750_809, "p": 14}
+    ) == pytest.approx(33.67006979750809)
     with pytest.raises(ValueError, match="invalid encoded decimal"):
         _decode_decimal_numbers({"k": "d", "c": 1 << 53, "p": 0})
     with pytest.raises(ValueError, match="invalid encoded decimal"):
-        _decode_decimal_numbers({"k": "d", "c": 15, "p": 10})
+        _decode_decimal_numbers({"k": "d", "c": 15, "p": 16})
 
 
 def test_invalid_line_reports_only_selected_module_and_path_variant():
@@ -1986,7 +2032,6 @@ def test_invalid_line_reports_only_selected_module_and_path_variant():
     locations = {error["loc"] for error in errors}
     assert locations == {
         ("choice", "route", "params", "line", "length"),
-        ("choice", "route", "params", "line", "direction"),
         ("choice", "route", "params", "line", "waypoints"),
     }
 
@@ -2041,11 +2086,11 @@ def test_route_discriminators_keep_valid_decision_conversion_compatible():
         ),
         (
             "spline",
-                {
-                    "waypoint_frame": "global",
-                    "waypoints": [[10.0, 2.0, 0.0], [20.0, 5.0, 0.0]],
-                    "direction": [1.0, 0.0, 0.0],
-                },
+            {
+                "waypoint_frame": "global",
+                "waypoints": [[10.0, 2.0, 0.0], [20.0, 5.0, 0.0]],
+                "direction": [1.0, 0.0, 0.0],
+            },
             "direction",
         ),
     ],
@@ -2072,6 +2117,4 @@ def test_arc_and_spline_forbid_other_variant_fields(
         )
 
     locations = {error["loc"] for error in captured.value.errors(include_url=False)}
-    assert locations == {
-        ("choice", "route", "params", path_kind, unexpected_field)
-    }
+    assert locations == {("choice", "route", "params", path_kind, unexpected_field)}

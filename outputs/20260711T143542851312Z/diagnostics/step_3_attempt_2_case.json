@@ -1,0 +1,1071 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260711T143542851312Z",
+    "state_id": "S2",
+    "state_digest": "b019b8814edffe437fb68164a6bd72fc9d3ea5b3a57827281f17c36bf395f2f2",
+    "contract_digest": "c74137b5ed8b5e5486d29488f7366a859046291922877a2409934980a1e0eb33",
+    "step_index": 3,
+    "attempt_index": 2,
+    "action_digest": "5c7db6643e1859ac757f1d201339a8318d7eb3bf59896f586fd961f07b340b25",
+    "failure_signature": "56a96b76e75e2486a6523cd475a5477edb46f6a5989ef6f6a9906ff9e60740d5",
+    "evidence_digest": "03f9067359c4b26edcbf1a4b47f167c8c8d7114f81b1e0aa6102ebcafefced3f",
+    "generator_version": "cadgen02-freecad-v23",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+  ],
+  "current_state": {
+    "state_id": "S2",
+    "state_version": 2,
+    "contract_digest": "c74137b5ed8b5e5486d29488f7366a859046291922877a2409934980a1e0eb33",
+    "remaining_goal_ids": [
+      "line_2",
+      "turn_2",
+      "line_3",
+      "turn_3",
+      "line_4",
+      "turn_4",
+      "line_5",
+      "turn_5",
+      "line_6",
+      "turn_6",
+      "line_7",
+      "turn_7",
+      "line_8",
+      "turn_8",
+      "line_9",
+      "turn_9",
+      "close_loop"
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out",
+        "position": [
+          11.339755984293808,
+          0.0,
+          49.64101386196925
+        ],
+        "axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189229010814105e-07
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "c74137b5ed8b5e5486d29488f7366a859046291922877a2409934980a1e0eb33",
+    "goal_ids": [
+      "line_2"
+    ],
+    "goals": [
+      {
+        "goal_id": "line_2",
+        "depends_on_goal_ids": [
+          "turn_1"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "derived"
+  },
+  "rejected_draft": {
+    "target_port": "M2.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 40.0
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "line_2"
+    ],
+    "completed_goal_ids": [
+      "line_2"
+    ],
+    "satisfied_components": [],
+    "rationale": "Correcting the previous attempt by omitting the optional direction parameter. Since the goal does not specify an explicit direction contract, the resolver must inherit the exact target port tangent. This avoids the tiny tangent mismatch at the joint which caused the FreeCAD self-intersection/unorientable shape errors."
+  },
+  "resolved_action": {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "line",
+      "length": 40.0,
+      "start_position": [
+        11.339755984293808,
+        0.0,
+        49.64101386196925
+      ],
+      "axis": [
+        -0.9999999999999797,
+        0.0,
+        2.0189229010814105e-07
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "direction": [
+        -0.9999999999999797,
+        0.0,
+        2.0189229010814105e-07
+      ]
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "line_2"
+    ],
+    "completed_goal_ids": [
+      "line_2"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [
+    {
+      "id": "M1",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M1",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            20.00000699375367,
+            0.0,
+            34.64101211353104
+          ]
+        ],
+        "end_position": [
+          20.00000699375367,
+          0.0,
+          34.64101211353104
+        ],
+        "out_axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -0.5000001748438417,
+            -0.0,
+            -0.8660253028382761
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M1.out",
+          "position": [
+            20.00000699375367,
+            0.0,
+            34.64101211353104
+          ],
+          "axis": [
+            0.5000001748438417,
+            0.0,
+            0.8660253028382761
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {}
+    },
+    {
+      "id": "M2",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M2",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": -120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          20.00000699375367,
+          0.0,
+          34.64101211353104
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189229010814105e-07
+        ],
+        "path_points": [
+          [
+            20.00000699375367,
+            0.0,
+            34.64101211353104
+          ],
+          [
+            20.238471132431272,
+            0.0,
+            35.07890549185535
+          ],
+          [
+            20.454811658130502,
+            0.0,
+            35.52814099040339
+          ],
+          [
+            20.648490714217402,
+            0.0,
+            35.987601738943255
+          ],
+          [
+            20.81902678404204,
+            0.0,
+            36.456145445660454
+          ],
+          [
+            20.96599588806481,
+            0.0,
+            36.932607237075324
+          ],
+          [
+            21.089032637936334,
+            0.0,
+            37.41580255410207
+          ],
+          [
+            21.187831144910504,
+            0.0,
+            37.90453009704927
+          ],
+          [
+            21.262145780332073,
+            0.0,
+            38.39757481224017
+          ],
+          [
+            21.311791786308206,
+            0.0,
+            38.89371091282765
+          ],
+          [
+            21.33664573504572,
+            0.0,
+            39.39170492629335
+          ],
+          [
+            21.336645835712012,
+            0.0,
+            39.8903187610548
+          ],
+          [
+            21.311792088056805,
+            0.0,
+            40.388312784556106
+          ],
+          [
+            21.26214628241278,
+            0.0,
+            40.88444890518983
+          ],
+          [
+            21.18783184607507,
+            0.0,
+            41.3774936503878
+          ],
+          [
+            21.089033536441555,
+            0.0,
+            41.866221233228266
+          ],
+          [
+            20.965996981676852,
+            0.0,
+            42.34941659993532
+          ],
+          [
+            20.819028070042023,
+            0.0,
+            42.825878450694006
+          ],
+          [
+            20.64849218940812,
+            0.0,
+            43.294422226271
+          ],
+          [
+            20.4548133188444,
+            0.0,
+            43.75388305301545
+          ],
+          [
+            20.238472974539555,
+            0.0,
+            44.20311863891842
+          ],
+          [
+            20.000009012676564,
+            0.0,
+            44.641012113530834
+          ],
+          [
+            19.740014292237525,
+            0.0,
+            45.066474804679366
+          ],
+          [
+            19.45913520106277,
+            0.0,
+            45.478448945077005
+          ],
+          [
+            19.158070048828883,
+            0.0,
+            45.87591030209918
+          ],
+          [
+            18.837567330940786,
+            0.0,
+            46.25787072418748
+          ],
+          [
+            18.498423867654246,
+            0.0,
+            46.62338059755007
+          ],
+          [
+            18.141482823055174,
+            0.0,
+            46.97153120705125
+          ],
+          [
+            17.767631608820835,
+            0.0,
+            47.30145699542045
+          ],
+          [
+            17.37779967797463,
+            0.0,
+            47.61233771516397
+          ],
+          [
+            16.972956214119392,
+            0.0,
+            47.90340046782947
+          ],
+          [
+            16.554107721894283,
+            0.0,
+            48.17392162555336
+          ],
+          [
+            16.122295524645637,
+            0.0,
+            48.423228630113655
+          ],
+          [
+            15.67859317553308,
+            0.0,
+            48.650701665015646
+          ],
+          [
+            15.2241037885072,
+            0.0,
+            48.855775196453436
+          ],
+          [
+            14.759957295794477,
+            0.0,
+            49.03793937931604
+          ],
+          [
+            14.28730763870771,
+            0.0,
+            49.196741324742696
+          ],
+          [
+            13.807329898766119,
+            0.0,
+            49.33178622607588
+          ],
+          [
+            13.321217376257524,
+            0.0,
+            49.44273834041291
+          ],
+          [
+            12.83017862350582,
+            0.0,
+            49.5293218233157
+          ],
+          [
+            12.335434440219474,
+            0.0,
+            49.591321414603456
+          ],
+          [
+            11.83821483839109,
+            0.0,
+            49.62858297352347
+          ],
+          [
+            11.339755984293808,
+            0.0,
+            49.64101386196925
+          ]
+        ],
+        "end_position": [
+          11.339755984293808,
+          0.0,
+          49.64101386196925
+        ],
+        "out_axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189229010814105e-07
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M2.in",
+          "position": [
+            20.00000699375367,
+            0.0,
+            34.64101211353104
+          ],
+          "axis": [
+            -0.5000001748438417,
+            -0.0,
+            -0.8660253028382761
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M2.out",
+          "position": [
+            11.339755984293808,
+            0.0,
+            49.64101386196925
+          ],
+          "axis": [
+            -0.9999999999999797,
+            0.0,
+            2.0189229010814105e-07
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M1.out"
+      }
+    }
+  ],
+  "failed_checks": [
+    {
+      "check_name": "terminal_bore_failures",
+      "evidence": [
+        {
+          "allowance": 0.00019704069123315177,
+          "blocked_volume": 19.704059841082817,
+          "port_id": "M3.out"
+        }
+      ]
+    },
+    {
+      "check_name": "anchored_inlet_bore_failures",
+      "evidence": [
+        {
+          "allowance": 0.0001970406912331518,
+          "blocked_volume": 19.704069123315183,
+          "port_id": "M1.in"
+        }
+      ]
+    },
+    {
+      "check_name": "freecad_semantic_validation",
+      "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "expected": {
+        "freecad_checks": "all implicated checks pass"
+      },
+      "actual": {
+        "error": "FreeCAD assembly check failed",
+        "evidence_artifact_path": "outputs/20260711T143542851312Z/step_mcp/step_3_validation_2.json",
+        "evidence_digest": "03f9067359c4b26edcbf1a4b47f167c8c8d7114f81b1e0aa6102ebcafefced3f",
+        "evidence": {
+          "module_ids": [
+            "M1",
+            "M3"
+          ],
+          "failed_checks": {
+            "assembly": {
+              "bop_errors": [
+                "check_exception: Unorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\n"
+              ],
+              "bounds": {
+                "maximum": [
+                  32.24996670527306,
+                  10.0,
+                  61.28885786781689
+                ],
+                "minimum": [
+                  -28.660244015705388,
+                  -10.0,
+                  -5.000001748438417
+                ]
+              },
+              "is_closed": false,
+              "is_null": false,
+              "is_valid": false,
+              "passed": false,
+              "shape_check_mode": "topology_without_global_bop_argument_analysis",
+              "solid_count": 3,
+              "volume": 23342.62689802157
+            },
+            "outer_network": {
+              "bop_errors": [
+                "check_exception: Self-intersecting wire\nUnorientable shape\nNo error\nNo error\n"
+              ],
+              "bounds": {
+                "maximum": [
+                  32.24996670527306,
+                  10.0,
+                  61.28885786781689
+                ],
+                "minimum": [
+                  -28.660244015705388,
+                  -10.0,
+                  -5.000001748438417
+                ]
+              },
+              "is_closed": true,
+              "is_null": false,
+              "is_valid": false,
+              "passed": false,
+              "shape_check_mode": "topology_without_global_bop_argument_analysis",
+              "solid_count": 1,
+              "volume": 25027.51776518694
+            },
+            "terminal_bore_failures": [
+              {
+                "allowance": 0.00019704069123315177,
+                "blocked_volume": 19.704059841082817,
+                "port_id": "M3.out"
+              }
+            ],
+            "anchored_inlet_bore_failures": [
+              {
+                "allowance": 0.0001970406912331518,
+                "blocked_volume": 19.704069123315183,
+                "port_id": "M1.in"
+              }
+            ]
+          },
+          "validator_policy": {
+            "generator_version": "cadgen02-freecad-v23",
+            "policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+            "policy_id": "cadgen02-freecad-validator-v23",
+            "validation_schema_version": 3
+          },
+          "generator_version": "cadgen02-freecad-v23",
+          "validation_schema_version": 3,
+          "centerline_context": {
+            "M1": {
+              "passed": true,
+              "required_radius": null,
+              "minimum_radius": null,
+              "required_self_clearance": null,
+              "minimum_nonlocal_distance": null,
+              "curve_length": 40.0
+            },
+            "M3": {
+              "passed": true,
+              "required_radius": null,
+              "minimum_radius": null,
+              "required_self_clearance": null,
+              "minimum_nonlocal_distance": null,
+              "curve_length": 40.0
+            }
+          }
+        }
+      }
+    }
+  ],
+  "passed_check_summary": [
+    "assembly_errors",
+    "bore_network",
+    "connection_failures",
+    "module_errors",
+    "non_adjacent_overlaps",
+    "termination_seal_failures",
+    "wall_section_failures"
+  ],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S2",
+        "contract_digest": "c74137b5ed8b5e5486d29488f7366a859046291922877a2409934980a1e0eb33",
+        "goal_ids": [
+          "line_2"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "generator_version": "cadgen02-freecad-v23",
+        "policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+        "policy_id": "cadgen02-freecad-validator-v23",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "check_name": "freecad_semantic_validation",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD assembly check failed",
+          "evidence_artifact_path": "outputs/20260711T143542851312Z/step_mcp/step_3_validation_2.json",
+          "evidence_digest": "03f9067359c4b26edcbf1a4b47f167c8c8d7114f81b1e0aa6102ebcafefced3f",
+          "evidence": {
+            "module_ids": [
+              "M1",
+              "M3"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "check_exception: Unorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\n"
+                ],
+                "bounds": {
+                  "maximum": [
+                    32.24996670527306,
+                    10.0,
+                    61.28885786781689
+                  ],
+                  "minimum": [
+                    -28.660244015705388,
+                    -10.0,
+                    -5.000001748438417
+                  ]
+                },
+                "is_closed": false,
+                "is_null": false,
+                "is_valid": false,
+                "passed": false,
+                "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                "solid_count": 3,
+                "volume": 23342.62689802157
+              },
+              "outer_network": {
+                "bop_errors": [
+                  "check_exception: Self-intersecting wire\nUnorientable shape\nNo error\nNo error\n"
+                ],
+                "bounds": {
+                  "maximum": [
+                    32.24996670527306,
+                    10.0,
+                    61.28885786781689
+                  ],
+                  "minimum": [
+                    -28.660244015705388,
+                    -10.0,
+                    -5.000001748438417
+                  ]
+                },
+                "is_closed": true,
+                "is_null": false,
+                "is_valid": false,
+                "passed": false,
+                "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                "solid_count": 1,
+                "volume": 25027.51776518694
+              },
+              "terminal_bore_failures": [
+                {
+                  "allowance": 0.00019704069123315177,
+                  "blocked_volume": 19.704059841082817,
+                  "port_id": "M3.out"
+                }
+              ],
+              "anchored_inlet_bore_failures": [
+                {
+                  "allowance": 0.0001970406912331518,
+                  "blocked_volume": 19.704069123315183,
+                  "port_id": "M1.in"
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v23",
+              "policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+              "policy_id": "cadgen02-freecad-validator-v23",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v23",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M1": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 40.0
+              },
+              "M3": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 40.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check terminal_bore_failures supplied failure evidence.",
+      "data": {
+        "check_name": "terminal_bore_failures",
+        "evidence": [
+          {
+            "allowance": 0.00019704069123315177,
+            "blocked_volume": 19.704059841082817,
+            "port_id": "M3.out"
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check anchored_inlet_bore_failures supplied failure evidence.",
+      "data": {
+        "check_name": "anchored_inlet_bore_failures",
+        "evidence": [
+          {
+            "allowance": 0.0001970406912331518,
+            "blocked_volume": 19.704069123315183,
+            "port_id": "M1.in"
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check freecad_semantic_validation supplied failure evidence.",
+      "data": {
+        "check_name": "freecad_semantic_validation",
+        "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD assembly check failed",
+          "evidence_artifact_path": "outputs/20260711T143542851312Z/step_mcp/step_3_validation_2.json",
+          "evidence_digest": "03f9067359c4b26edcbf1a4b47f167c8c8d7114f81b1e0aa6102ebcafefced3f",
+          "evidence": {
+            "module_ids": [
+              "M1",
+              "M3"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "check_exception: Unorientable shape\nUnorientable shape\nNo error\nNo error\nNo error\nNo error\n"
+                ],
+                "bounds": {
+                  "maximum": [
+                    32.24996670527306,
+                    10.0,
+                    61.28885786781689
+                  ],
+                  "minimum": [
+                    -28.660244015705388,
+                    -10.0,
+                    -5.000001748438417
+                  ]
+                },
+                "is_closed": false,
+                "is_null": false,
+                "is_valid": false,
+                "passed": false,
+                "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                "solid_count": 3,
+                "volume": 23342.62689802157
+              },
+              "outer_network": {
+                "bop_errors": [
+                  "check_exception: Self-intersecting wire\nUnorientable shape\nNo error\nNo error\n"
+                ],
+                "bounds": {
+                  "maximum": [
+                    32.24996670527306,
+                    10.0,
+                    61.28885786781689
+                  ],
+                  "minimum": [
+                    -28.660244015705388,
+                    -10.0,
+                    -5.000001748438417
+                  ]
+                },
+                "is_closed": true,
+                "is_null": false,
+                "is_valid": false,
+                "passed": false,
+                "shape_check_mode": "topology_without_global_bop_argument_analysis",
+                "solid_count": 1,
+                "volume": 25027.51776518694
+              },
+              "terminal_bore_failures": [
+                {
+                  "allowance": 0.00019704069123315177,
+                  "blocked_volume": 19.704059841082817,
+                  "port_id": "M3.out"
+                }
+              ],
+              "anchored_inlet_bore_failures": [
+                {
+                  "allowance": 0.0001970406912331518,
+                  "blocked_volume": 19.704069123315183,
+                  "port_id": "M1.in"
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v23",
+              "policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+              "policy_id": "cadgen02-freecad-validator-v23",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v23",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M1": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 40.0
+              },
+              "M3": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 40.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "kind": "passed_check",
+      "statement": "These checks passed for the same candidate and must not be casually invalidated.",
+      "data": {
+        "check_names": [
+          "assembly_errors",
+          "bore_network",
+          "connection_failures",
+          "module_errors",
+          "non_adjacent_overlaps",
+          "termination_seal_failures",
+          "wall_section_failures"
+        ]
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/path_kind",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

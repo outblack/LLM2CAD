@@ -18,8 +18,6 @@ from cadgen.stream import ThinkingStream
 class FreeCADLaunchError(RuntimeError):
     """필수 FreeCAD 애플리케이션을 준비하지 못했음을 나타낸다."""
 
-    pass
-
 
 def is_freecad_running(settings: Settings) -> bool:
     """플랫폼별 프로세스 이름을 확인해 FreeCAD 실행 여부를 반환한다."""
@@ -29,9 +27,10 @@ def is_freecad_running(settings: Settings) -> bool:
     if platform.system() == "Darwin":
         if _is_macos_app_running(settings.freecad_app_name):
             return True
-        for process in _freecad_process_candidates(settings):
-            if process != settings.freecad_process_name and _is_process_running(process):
-                return True
+        return any(
+            process != settings.freecad_process_name and _is_process_running(process)
+            for process in _freecad_process_candidates(settings)
+        )
     return False
 
 
@@ -59,6 +58,8 @@ def _is_macos_app_running(app_name: str) -> bool:
 
 
 def _freecad_process_candidates(settings: Settings) -> tuple[str, ...]:
+    """설정과 플랫폼에서 사용할 FreeCAD 프로세스 이름을 중복 없이 만든다."""
+
     candidates = [
         settings.freecad_process_name,
         settings.freecad_app_name,
@@ -67,14 +68,12 @@ def _freecad_process_candidates(settings: Settings) -> tuple[str, ...]:
         "FreeCAD",
         "freecad",
     ]
-    unique: list[str] = []
-    for candidate in candidates:
-        if candidate and candidate not in unique:
-            unique.append(candidate)
-    return tuple(unique)
+    return tuple(dict.fromkeys(candidate for candidate in candidates if candidate))
 
 
 def _escape_applescript_string(value: str) -> str:
+    """애플스크립트 문자열 리터럴에 필요한 두 문자를 이스케이프한다."""
+
     return value.replace("\\", "\\\\").replace('"', '\\"')
 
 

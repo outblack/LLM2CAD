@@ -11,15 +11,75 @@ import json
 import re
 from typing import Any
 
+from cadgen.geometry_policy import CIRCULAR_SWEEP_EQUALITY_ULPS
 from cadgen.schemas import PipeState
 
 
-GENERATOR_VERSION = "cadgen02-freecad-v20"
+GENERATOR_VERSION = "cadgen02-freecad-v24"
 VALIDATION_SCHEMA_VERSION = 3
+VALIDATOR_POLICY_ID = "cadgen02-freecad-validator-v24"
+ADJACENT_INTERFACE_POLICY_ID = "resolver-local-interface-band-v1"
+_VALIDATOR_POLICY_SPEC = {
+    "policy_id": VALIDATOR_POLICY_ID,
+    "generator_version": GENERATOR_VERSION,
+    "validation_schema_version": VALIDATION_SCHEMA_VERSION,
+    "structured_module_error_schema_version": 1,
+    "circular_arc_construction": {
+        "method": "analytic_torus_segment_outer_minus_bore",
+        "minimum_centerline_radius": "outer_profile_radius",
+        "horn_boundary_supported": True,
+        "self_intersecting_spindle_rejected": True,
+        "equality_roundoff_policy": "scale_aware_ulps",
+        "equality_ulps": CIRCULAR_SWEEP_EQUALITY_ULPS,
+    },
+    "adjacent_interface_overlap": {
+        "policy_id": ADJACENT_INTERFACE_POLICY_ID,
+        "engagement_tolerance_multiplier": 20.0,
+        "engagement_radius_multiplier": 1e-4,
+        "margin_tolerance_multiplier": 20.0,
+        "margin_radius_multiplier": 1e-6,
+        "outside_volume_relative_allowance": 1e-8,
+        "minimum_outlet_forward_dot": -1e-9,
+    },
+}
+VALIDATOR_POLICY_DIGEST = hashlib.sha256(
+    json.dumps(
+        _VALIDATOR_POLICY_SPEC,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=True,
+    ).encode("utf-8")
+).hexdigest()
 PUBLISHED_VIEW_DEVIATION_PERCENT = 0.05
 PUBLISHED_VIEW_ANGULAR_DEFLECTION_DEGREES = 5.0
 PUBLISHED_VIEW_SPECULAR_COLOR = (0.12, 0.12, 0.12)
 PUBLISHED_VIEW_SHININESS = 0.25
+
+
+def physical_root_port_payload(state: PipeState) -> dict[str, Any] | None:
+    """현재 열려 있는 구성 루트 접속면이 있으면 payload로 반환한다.
+
+    일반적인 열린 체인은 가상 START cursor를 유지한다. 아직 닫히지 않은
+    폐곡선은 첫 모듈의 실제 inlet으로 이를 대체한다. 저장된 축은 바깥쪽을
+    향하므로 FreeCAD 루트 검사는 반대인 안쪽 방향을 사용한다. connect_ports가
+    예약 inlet을 소비하면 두 루트 표현 모두 사라지고 anchored inlet은 0이 된다.
+    """
+
+    start = state.port_nodes.get("START")
+    if start is not None:
+        return start.model_dump(mode="json")
+    anchor = state.reserved_start_anchor
+    if anchor is None:
+        return None
+    payload = anchor.model_dump(mode="json")
+    payload["axis"] = [-float(component) for component in anchor.axis]
+    return payload
+
+
+def anchored_inlet_count(state: PipeState) -> int:
+    """현재 상태에서 기대되는 FreeCAD 루트 inlet 수를 반환한다."""
+
+    return int(physical_root_port_payload(state) is not None)
 
 
 def geometry_payload(state: PipeState) -> dict[str, Any]:
@@ -27,16 +87,27 @@ def geometry_payload(state: PipeState) -> dict[str, Any]:
 
     return {
         "generator_version": GENERATOR_VERSION,
+        "validator_policy_id": VALIDATOR_POLICY_ID,
+        "validator_policy_digest": VALIDATOR_POLICY_DIGEST,
         "state_id": state.state_id,
         "state_version": state.state_version,
         "contract_digest": state.contract_digest,
         "modeling_tolerance": state.modeling_tolerance,
-        "root_port": (
-            state.port_nodes["START"].model_dump(mode="json")
-            if "START" in state.port_nodes
-            else None
-        ),
-        "modules": [module.model_dump(mode="json") for module in state.placed_modules],
+        "root_port": physical_root_port_payload(state),
+        "modules": [
+            module.model_dump(mode="json")
+            for module in state.placed_modules
+            if not (
+                module.type == "connect_ports"
+                and module.params.get("path_kind") == "seam"
+            )
+        ],
+        "topological_modules": [
+            module.model_dump(mode="json")
+            for module in state.placed_modules
+            if module.type == "connect_ports"
+            and module.params.get("path_kind") == "seam"
+        ],
         "open_ports": [port.model_dump(mode="json") for port in state.open_ports],
         "connection_edges": [
             edge.model_dump(mode="json") for edge in state.connection_edges
@@ -47,8 +118,14 @@ def geometry_payload(state: PipeState) -> dict[str, Any]:
 def geometry_payload_digest(state: PipeState) -> str:
     """정규화된 형상 payload의 SHA-256 식별자를 계산한다."""
 
+    return _geometry_payload_digest(geometry_payload(state))
+
+
+def _geometry_payload_digest(payload: dict[str, Any]) -> str:
+    """이미 만든 형상 payload를 다시 생성하지 않고 digest로 변환한다."""
+
     raw = json.dumps(
-        geometry_payload(state),
+        payload,
         sort_keys=True,
         separators=(",", ":"),
         ensure_ascii=False,
@@ -64,8 +141,25 @@ def candidate_document_name(
 ) -> str:
     """실행ㆍ상태ㆍ시도ㆍpayload digest가 결합된 후보 문서 이름을 만든다."""
 
-    safe_run_id = re.sub(r"[^A-Za-z0-9_]", "_", run_id)[:48] or "local"
     digest = geometry_payload_digest(state)
+    return _candidate_document_name(
+        state,
+        run_id=run_id,
+        attempt_id=attempt_id,
+        digest=digest,
+    )
+
+
+def _candidate_document_name(
+    state: PipeState,
+    *,
+    run_id: str,
+    attempt_id: int,
+    digest: str,
+) -> str:
+    """계산된 digest를 재사용해 후보 FreeCAD 문서 이름을 만든다."""
+
+    safe_run_id = re.sub(r"[^A-Za-z0-9_]", "_", run_id)[:48] or "local"
     return f"CadGenCandidate_{safe_run_id}_{state.state_version}_{attempt_id}_{digest[:12]}"
 
 
@@ -89,16 +183,22 @@ def build_freecad_script(
         modeling_tolerance = state.modeling_tolerance
     if abs(float(modeling_tolerance) - state.modeling_tolerance) > 1e-15:
         raise ValueError("modeling_tolerance differs from the immutable PipeState")
+    # 스크립트 본문, 후보 이름과 검증 digest가 모두 같은 payload를 사용한다.
+    # 큰 모듈 그래프를 단계 하나에서 여러 번 직렬화하지 않도록 한 번만 만든다.
     payload = geometry_payload(state)
+    digest = _geometry_payload_digest(payload)
     payload_json_literal = repr(
         json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
     )
-    candidate_name = candidate_document_name(
+    validator_policy_json_literal = repr(
+        json.dumps(_VALIDATOR_POLICY_SPEC, ensure_ascii=True, separators=(",", ":"))
+    )
+    candidate_name = _candidate_document_name(
         state,
         run_id=run_id,
         attempt_id=attempt_id,
+        digest=digest,
     )
-    digest = geometry_payload_digest(state)
     template = r'''# Generated by cadgen02. Candidate build only; publishing is a separate commit phase.
 import json
 import math
@@ -113,6 +213,9 @@ PAYLOAD_DIGEST = __PAYLOAD_DIGEST__
 VALIDATION_SCHEMA_VERSION = __VALIDATION_SCHEMA_VERSION__
 MODELING_TOLERANCE = __MODELING_TOLERANCE__
 GENERATOR_VERSION = __GENERATOR_VERSION__
+VALIDATOR_POLICY = json.loads(__VALIDATOR_POLICY_JSON__)
+VALIDATOR_POLICY_ID = __VALIDATOR_POLICY_ID__
+VALIDATOR_POLICY_DIGEST = __VALIDATOR_POLICY_DIGEST__
 RUN_ID = __RUN_ID__
 ATTEMPT_ID = __ATTEMPT_ID__
 SPLINE_HANDLE_FACTOR_CACHE = {}
@@ -391,6 +494,148 @@ def make_path_wire(points, path_kind="spline", initial_tangent=None, final_tange
     return make_spline_wire(points, initial_tangent, final_tangent)
 
 
+def circular_sweep_radius_evidence(centerline_radius, outer_profile_radius):
+    centerline = float(centerline_radius)
+    profile = float(outer_profile_radius)
+    if not math.isfinite(centerline) or centerline <= 0.0:
+        raise ValueError("centerline radius must be finite and positive")
+    if not math.isfinite(profile) or profile <= 0.0:
+        raise ValueError("outer profile radius must be finite and positive")
+    raw_clearance = centerline - profile
+    equality_ulps = int(
+        VALIDATOR_POLICY["circular_arc_construction"]["equality_ulps"]
+    )
+    roundoff_band = equality_ulps * max(
+        math.ulp(centerline),
+        math.ulp(profile),
+    )
+    clearance = 0.0 if abs(raw_clearance) <= roundoff_band else raw_clearance
+    if clearance < 0.0:
+        classification = "self_intersecting"
+    elif clearance == 0.0:
+        classification = "horn_boundary"
+    else:
+        classification = "regular"
+    return {
+        "centerline_radius": centerline,
+        "canonical_centerline_radius": (
+            profile if classification == "horn_boundary" else centerline
+        ),
+        "outer_profile_radius": profile,
+        "raw_radial_clearance": raw_clearance,
+        "radial_clearance": clearance,
+        "equality_roundoff_band": roundoff_band,
+        "classification": classification,
+        "supported": classification != "self_intersecting",
+        "construction_method": (
+            "analytic_torus_segment_outer_minus_bore"
+        ),
+    }
+
+
+def analytic_circular_arc_frame(points):
+    wire = make_path_wire(points, "circular_arc")
+    edges = list(wire.Edges)
+    if len(edges) != 1:
+        raise ValueError("analytic circular arc requires exactly one edge")
+    edge = edges[0]
+    first = float(edge.FirstParameter)
+    last = float(edge.LastParameter)
+    start = edge.valueAt(first)
+    tangent = normalized(edge.tangentAt(first))
+    try:
+        center = edge.Curve.Center
+    except Exception as exc:
+        raise ValueError("circular arc has no analytic circle center") from exc
+    radial_vector = start - center
+    centerline_radius = float(radial_vector.Length)
+    if centerline_radius <= MODELING_TOLERANCE:
+        raise ValueError("circular arc centerline radius is degenerate")
+    radial_axis = normalized(radial_vector)
+    directed_normal = normalized(radial_axis.cross(tangent))
+    sweep_degrees = math.degrees(float(edge.Length) / centerline_radius)
+    if not (0.0 < sweep_degrees < 360.0):
+        raise ValueError("analytic torus sweep magnitude must be in (0, 360)")
+    return {
+        "center": center,
+        "radial_axis": radial_axis,
+        "tangent_axis": tangent,
+        "directed_normal": directed_normal,
+        "centerline_radius": centerline_radius,
+        "sweep_degrees": sweep_degrees,
+    }
+
+
+def rigid_frame_transform(shape, origin, x_axis, y_axis, z_axis):
+    matrix = App.Matrix()
+    matrix.A11 = float(x_axis.x)
+    matrix.A12 = float(y_axis.x)
+    matrix.A13 = float(z_axis.x)
+    matrix.A14 = float(origin.x)
+    matrix.A21 = float(x_axis.y)
+    matrix.A22 = float(y_axis.y)
+    matrix.A23 = float(z_axis.y)
+    matrix.A24 = float(origin.y)
+    matrix.A31 = float(x_axis.z)
+    matrix.A32 = float(y_axis.z)
+    matrix.A33 = float(z_axis.z)
+    matrix.A34 = float(origin.z)
+    matrix.A44 = 1.0
+    transformed = shape.copy()
+    transformed.transformShape(matrix, True)
+    return transformed
+
+
+def make_analytic_torus_segment(frame, profile_radius):
+    profile = safe_radius(profile_radius)
+    assessment = circular_sweep_radius_evidence(
+        frame["centerline_radius"],
+        profile,
+    )
+    if not assessment["supported"]:
+        raise ValueError(
+            "circular sweep profile is self-intersecting: radial_clearance="
+            + str(assessment["raw_radial_clearance"])
+        )
+    local = Part.makeTorus(
+        float(assessment["canonical_centerline_radius"]),
+        profile,
+        App.Vector(0.0, 0.0, 0.0),
+        App.Vector(0.0, 0.0, 1.0),
+        -180.0,
+        180.0,
+        float(frame["sweep_degrees"]),
+    )
+    return rigid_frame_transform(
+        local,
+        frame["center"],
+        frame["radial_axis"],
+        frame["tangent_axis"],
+        frame["directed_normal"],
+    )
+
+
+def make_analytic_circular_tube(points, outer_radius, bore_radius):
+    frame = analytic_circular_arc_frame(points)
+    outer_assessment = circular_sweep_radius_evidence(
+        frame["centerline_radius"],
+        outer_radius,
+    )
+    if not outer_assessment["supported"]:
+        raise ValueError(
+            "circular arc centerline radius is smaller than the outer profile "
+            "radius; classification=self_intersecting"
+        )
+    canonical_frame = dict(frame)
+    canonical_frame["raw_centerline_radius"] = frame["centerline_radius"]
+    canonical_frame["centerline_radius"] = outer_assessment[
+        "canonical_centerline_radius"
+    ]
+    outer = make_analytic_torus_segment(canonical_frame, outer_radius)
+    bore = make_analytic_torus_segment(canonical_frame, bore_radius)
+    return outer.cut(bore), outer, bore
+
+
 def make_sweep_solid(
     points,
     radius,
@@ -447,6 +692,69 @@ def make_swept_tube(
     # valid.  A co-terminal outer-minus-inner cut is open, closed-shell valid,
     # and preserves the analytic endpoint tangents for line, arc, and spline.
     return outer.cut(bore), outer, bore
+
+
+def composite_route_edges(modules):
+    """Build one ordered OCC edge list from solved degree-2 route modules."""
+    edges = []
+    for module in modules:
+        params = module["params"]
+        points = params.get("path_points") or []
+        if len(points) < 2:
+            raise ValueError(
+                "composite route module has no resolved centerline: "
+                + str(module.get("id"))
+            )
+        kind = params.get("path_kind", "line")
+        vectors = [vector(point) for point in points]
+        if kind == "line":
+            edges.append(Part.makeLine(vectors[0], vectors[-1]))
+        elif kind == "circular_arc":
+            middle = vectors[len(vectors) // 2]
+            edges.append(Part.Arc(vectors[0], middle, vectors[-1]).toShape())
+        elif kind == "spline":
+            spline = make_spline_wire(
+                points,
+                params.get("initial_tangent"),
+                params.get("final_tangent"),
+            )
+            edges.extend(list(spline.Edges))
+        else:
+            raise ValueError("unsupported composite route path_kind: " + str(kind))
+    return edges
+
+
+def make_composite_route_tube(modules):
+    """Sweep one outer and bore profile over a maximal constant-section route."""
+    if not modules:
+        raise ValueError("composite route requires at least one module")
+    sections = {
+        (
+            float(module["params"]["outer_diameter"]),
+            float(module["params"]["wall_thickness"]),
+        )
+        for module in modules
+    }
+    if len(sections) != 1:
+        raise ValueError("composite route requires one constant circular section")
+    outer_diameter, wall_thickness = next(iter(sections))
+    edges = composite_route_edges(modules)
+    wire = Part.Wire(edges)
+    if not wire.Edges:
+        raise ValueError("composite route wire has no edges")
+    first_edge = wire.Edges[0]
+    first = first_edge.valueAt(first_edge.FirstParameter)
+    tangent = normalized(first_edge.tangentAt(first_edge.FirstParameter))
+    outer_radius = outer_diameter / 2.0
+    bore_radius = inner_radius(outer_diameter, wall_thickness)
+    outer_profile = make_circle_wire(outer_radius, first, tangent)
+    bore_profile = make_circle_wire(bore_radius, first, tangent)
+    outer = wire.makePipeShell([outer_profile], True, False)
+    bore = wire.makePipeShell([bore_profile], True, False)
+    material = outer.cut(bore).removeSplitter()
+    if not valid_closed_single_solid(material):
+        raise ValueError("composite centerline sweep did not produce one valid tube solid")
+    return material, outer, bore
 
 
 def make_cylinder_tube(start_values, end_values, outer_radius, bore_radius):
@@ -547,6 +855,21 @@ def compact_junction_seams(shape, allowed_radii, center, terminal_points):
         MODELING_TOLERANCE * 50.0,
         maximum_radius * 1e-4,
     )
+    # ``make_junction`` adds a tolerance-scale inlet engagement so OCC can fuse
+    # the child to its parent robustly.  That tiny helper cylinder can leave a
+    # short Cylinder↔Cylinder edge near the outer rim.  It is construction
+    # topology, not the authored arm seam, and attempting the exact user fillet
+    # on it produces the characteristic "no suitable edges" failure.  Derive
+    # the cutoff from the same engagement policy instead of from the authored
+    # blend radius, which must never be silently changed.
+    engagement_scale = max(
+        MODELING_TOLERANCE * 20.0,
+        maximum_radius * 1e-4,
+    )
+    minimum_authored_seam_length = max(
+        MODELING_TOLERANCE * 80.0,
+        engagement_scale * 4.0,
+    )
 
     def radius_is_allowed(value):
         return any(
@@ -562,6 +885,8 @@ def compact_junction_seams(shape, allowed_radii, center, terminal_points):
                 continue
             radii = [cylinder_face_radius(face) for face in faces]
             if any(value is None or not radius_is_allowed(value) for value in radii):
+                continue
+            if float(edge.Length) <= minimum_authored_seam_length:
                 continue
             parameter = (
                 float(edge.FirstParameter) + float(edge.LastParameter)
@@ -878,12 +1203,10 @@ def make_module_shape(module):
             inner_radius(params["outer_diameter"], params["wall_thickness"]),
         )
     if kind == "bend_pipe":
-        return make_swept_tube(
+        return make_analytic_circular_tube(
             params["path_points"],
             float(params["outer_diameter"]) / 2.0,
             inner_radius(params["outer_diameter"], params["wall_thickness"]),
-            "circular_arc",
-            True,
         )
     if kind == "reducer_pipe":
         return make_loft_tube(params)
@@ -921,10 +1244,17 @@ def make_module_shape(module):
         return make_termination(migrated)
     if kind == "route":
         path_kind = params["path_kind"]
+        if path_kind == "circular_arc":
+            return make_analytic_circular_tube(
+                params["path_points"],
+                float(params["outer_diameter"]) / 2.0,
+                inner_radius(
+                    params["outer_diameter"],
+                    params["wall_thickness"],
+                ),
+            )
         if path_kind == "line":
             path_kind = "line"
-        elif path_kind == "circular_arc":
-            path_kind = "circular_arc"
         else:
             path_kind = "spline"
         return make_swept_tube(
@@ -944,6 +1274,15 @@ def make_module_shape(module):
             "START" in (module.get("input_bindings") or {}).values(),
         )
     if kind == "connect_ports":
+        if params["path_kind"] == "circular_arc":
+            return make_analytic_circular_tube(
+                params["path_points"],
+                float(params["outer_diameter"]) / 2.0,
+                inner_radius(
+                    params["outer_diameter"],
+                    params["wall_thickness"],
+                ),
+            )
         return make_swept_tube(
             params["path_points"],
             float(params["outer_diameter"]) / 2.0,
@@ -960,9 +1299,52 @@ def make_module_shape(module):
     raise ValueError("unsupported module type: " + str(kind))
 
 
+def module_circular_sweep_evidence(module):
+    params = module["params"]
+    is_circular = (
+        module["type"] == "bend_pipe"
+        or params.get("path_kind") == "circular_arc"
+    )
+    if not is_circular:
+        return None
+    frame = analytic_circular_arc_frame(params["path_points"])
+    assessment = circular_sweep_radius_evidence(
+        frame["centerline_radius"],
+        float(params["outer_diameter"]) / 2.0,
+    )
+    authored_normal = params.get("plane_normal")
+    signed_sweep = params.get("sweep_angle", params.get("angle"))
+    normal_dot = None
+    if authored_normal is not None:
+        normal_dot = float(
+            frame["directed_normal"].dot(normalized(vector(authored_normal)))
+        )
+    return {
+        **assessment,
+        "derived_sweep_magnitude_degrees": float(frame["sweep_degrees"]),
+        "authored_signed_sweep_degrees": (
+            float(signed_sweep) if signed_sweep is not None else None
+        ),
+        "directed_normal": vector_json(frame["directed_normal"]),
+        "authored_plane_normal_dot": normal_dot,
+        "analytic_frame_origin": vector_json(frame["center"]),
+        "analytic_frame_radial_axis": vector_json(frame["radial_axis"]),
+        "analytic_frame_tangent_axis": vector_json(frame["tangent_axis"]),
+    }
+
+
 def centerline_check(module):
     params = module["params"]
     curve_length = None
+    circular_sweep = None
+    try:
+        circular_sweep = module_circular_sweep_evidence(module)
+    except Exception as exc:
+        return {
+            "passed": False,
+            "required_radius": params.get("minimum_curvature_radius"),
+            "circular_sweep_error": str(exc),
+        }
     try:
         if params.get("path_points"):
             curve_length = float(
@@ -999,12 +1381,19 @@ def centerline_check(module):
             else None
         )
         return {
-            "passed": required is None or actual + MODELING_TOLERANCE >= required,
+            "passed": (
+                (required is None or actual + MODELING_TOLERANCE >= required)
+                and (
+                    circular_sweep is None
+                    or bool(circular_sweep.get("supported"))
+                )
+            ),
             "required_radius": required,
             "minimum_radius": actual,
             "curve_length": curve_length,
             "minimum_nonlocal_distance": None,
             "required_self_clearance": None,
+            "circular_sweep": circular_sweep,
         }
     try:
         optimized_handle_factors = None
@@ -1192,6 +1581,10 @@ def centerline_check(module):
                 and self_clearance_passed
                 and tangent_continuity_passed
                 and endpoint_tangency_passed
+                and (
+                    circular_sweep is None
+                    or bool(circular_sweep.get("supported"))
+                )
             ),
             "required_radius": required,
             "minimum_radius": minimum_radius,
@@ -1215,12 +1608,14 @@ def centerline_check(module):
             "self_clearance_passed": self_clearance_passed,
             "self_clearance_closest_pair": closest_pair,
             "self_clearance_method": "dense_nonlocal_segment_sampling",
+            "circular_sweep": circular_sweep,
         }
     except Exception as exc:
         return {
             "passed": False,
             "required_radius": required,
             "error": str(exc),
+            "circular_sweep": circular_sweep,
         }
 
 
@@ -1296,6 +1691,121 @@ def sample_hollow_section(
     return failures
 
 
+def kernel_failure_code(error):
+    """Return a stable, coarse OCC code without parsing provider prose upstream."""
+    lowered = str(error).lower()
+    for marker, code in (
+        ("no suitable edges", "NO_SUITABLE_EDGES"),
+        ("command not done", "COMMAND_NOT_DONE"),
+        ("makepipeshell", "MAKE_PIPE_SHELL_FAILED"),
+        ("makefillet", "MAKE_FILLET_FAILED"),
+        ("brep_api", "BREP_API_FAILED"),
+        ("brepalgoapi", "BREP_BOOLEAN_FAILED"),
+        ("boolean", "BOOLEAN_OPERATION_FAILED"),
+        ("occ", "OCC_EXCEPTION"),
+        ("topods", "TOPODS_CONVERSION_FAILED"),
+    ):
+        if marker in lowered:
+            return code
+    return "UNKNOWN_KERNEL_ERROR"
+
+
+def embedded_failure_details(error):
+    marker = str(error).find(": ")
+    if marker < 0:
+        return {}
+    encoded = str(error)[marker + 2:]
+    if not encoded.startswith("{"):
+        return {}
+    try:
+        value = json.loads(encoded)
+    except Exception:
+        return {}
+    return value if isinstance(value, dict) else {}
+
+
+def module_failure_record(module, module_id, error):
+    """Keep the original error while exposing stable failure semantics."""
+    error = str(error)
+    lowered = error.lower()
+    details = {"module_type": str(module.get("type", "unknown"))}
+    failure_code = "MODULE_SHAPE_CONSTRUCTION_FAILED"
+    stage = "make_module_shape"
+
+    if "a filleted junction requires a positive upstream route" in lowered:
+        failure_code = "JUNCTION_FILLET_REQUIRES_UPSTREAM_ROUTE"
+        stage = "junction_precondition"
+    elif "blend_radius exceeds max_hub_radius" in lowered:
+        failure_code = "JUNCTION_BLEND_RADIUS_EXCEEDS_HUB"
+        stage = "junction_precondition"
+        details["surface"] = "inner" if "inner_blend_radius" in lowered else "outer"
+        try:
+            required_text = error.split("required ", 1)[1]
+            required_text, maximum_text = required_text.split(", maximum ", 1)
+            details["required_radius"] = float(required_text)
+            details["maximum_radius"] = float(maximum_text)
+        except Exception:
+            pass
+    elif "raw compact junction is not one valid closed solid" in lowered:
+        failure_code = "JUNCTION_RAW_MATERIAL_INVALID"
+        stage = "junction_material_construction"
+    elif "no compact junction " in lowered and "seams found" in lowered:
+        failure_code = "JUNCTION_FILLET_SEAM_NOT_FOUND"
+        stage = "fillet_compact_junction_material"
+        details["surface"] = "inner" if " junction inner " in lowered else "outer"
+        details["kernel_code"] = "NO_SUITABLE_EDGES"
+    elif "exact compact junction fillet failed:" in lowered:
+        parsed = embedded_failure_details(error)
+        details.update(parsed)
+        surface = str(details.get("surface", "unknown"))
+        failure_code = (
+            "JUNCTION_INNER_FILLET_FAILED"
+            if surface == "inner"
+            else "JUNCTION_OUTER_FILLET_FAILED"
+        )
+        stage = "fillet_compact_junction_material"
+        details["kernel_code"] = kernel_failure_code(details.get("error", error))
+    elif "exact compact junction fillet produced an invalid solid:" in lowered:
+        failure_code = "JUNCTION_FILLET_INVALID_SOLID"
+        stage = "fillet_compact_junction_material"
+        details.update(embedded_failure_details(error))
+    elif "compact junction sequential fillet made no topology progress:" in lowered:
+        failure_code = "JUNCTION_FILLET_NO_TOPOLOGY_PROGRESS"
+        stage = "fillet_compact_junction_material"
+        details.update(embedded_failure_details(error))
+    elif "compact junction left unresolved " in lowered and " seams:" in lowered:
+        failure_code = "JUNCTION_FILLET_UNRESOLVED_SEAMS"
+        stage = "fillet_compact_junction_material"
+        details["surface"] = "inner" if "unresolved inner" in lowered else "outer"
+        try:
+            details["unresolved_count"] = int(error.rsplit(": ", 1)[1])
+        except Exception:
+            pass
+    elif any(marker in lowered for marker in (
+        "no suitable edges",
+        "command not done",
+        "makepipeshell",
+        "makefillet",
+        "brep_api",
+        "brepalgoapi",
+        "boolean",
+        "occ",
+        "topods",
+    )):
+        failure_code = "OCC_KERNEL_OPERATION_FAILED"
+        stage = "make_module_shape"
+        details["kernel_code"] = kernel_failure_code(error)
+        details["kernel_error"] = error[:240]
+
+    return {
+        "module_id": module_id,
+        "error": error,
+        "failure_code": failure_code,
+        "stage": stage,
+        "details": details,
+    }
+
+
 if CANDIDATE_DOCUMENT in App.listDocuments():
     App.closeDocument(CANDIDATE_DOCUMENT)
 doc = App.newDocument(CANDIDATE_DOCUMENT)
@@ -1341,10 +1851,17 @@ for module in MODULES:
         module_outer_shapes[module["id"]] = outer
         if bore is not None:
             module_bore_shapes[module["id"]] = bore
-        module_checks[module["id"]] = shape_check(shape)
+        module_check = shape_check(shape)
+        circular_sweep = module_circular_sweep_evidence(module)
+        if circular_sweep is not None:
+            module_check["circular_sweep"] = circular_sweep
+            module_check["construction_method"] = circular_sweep[
+                "construction_method"
+            ]
+        module_checks[module["id"]] = module_check
     except Exception as exc:
         error = str(exc)
-        module_errors.append({"module_id": module_id, "error": error})
+        module_errors.append(module_failure_record(module, module_id, error))
         if module_id is not None:
             module_checks[module_id] = {
                 "passed": False,
@@ -1362,18 +1879,65 @@ assembly_check = {
     "passed": False,
 }
 overlaps = []
+adjacent_interface_overlaps = []
 assembly_errors = []
+backend_fallbacks = []
 outer_network_check = {"passed": False, "reason": "outer network not built"}
 bore_network_check = {"passed": False, "reason": "bore network not built"}
 if not module_errors and module_shapes:
     outer_network = None
     flow_bore_network = None
+    composite_route_modules = (
+        list(MODULES)
+        if MODULES
+        and all(
+            module.get("type") in ("route", "connect_ports")
+            and module.get("params", {}).get("path_kind")
+            in ("line", "circular_arc", "spline")
+            for module in MODULES
+        )
+        else []
+    )
+    if composite_route_modules:
+        try:
+            assembly, outer_network, flow_bore_network = make_composite_route_tube(
+                composite_route_modules
+            )
+            assembly_check = shape_check(assembly)
+            assembly_check["construction_method"] = "composite_centerline_sweep"
+            assembly_check["source_module_ids"] = [
+                module["id"] for module in composite_route_modules
+            ]
+            outer_network_check = shape_check(outer_network)
+            outer_network_check["construction_method"] = (
+                "composite_centerline_outer_sweep"
+            )
+            bore_network_check = shape_check(flow_bore_network)
+            bore_network_check["passed"] = bool(
+                bore_network_check.get("passed")
+                and int(bore_network_check.get("solid_count", 0)) == 1
+            )
+            bore_network_check["construction_method"] = (
+                "composite_centerline_bore_sweep"
+            )
+        except Exception as exc:
+            # A backend failure is not a geometry conclusion.  Preserve the
+            # same solved GeometryIR and deterministically fall back to the
+            # legacy fuse portfolio below.
+            backend_fallbacks.append(
+                {"stage": "composite_centerline_sweep", "error": str(exc)}
+            )
+            assembly = None
+            outer_network = None
+            flow_bore_network = None
     try:
-        outer_network = fuse_shapes(list(module_outer_shapes.values()))
-        outer_network_check = shape_check(outer_network)
+        if outer_network is None:
+            outer_network = fuse_shapes(list(module_outer_shapes.values()))
+            outer_network_check = shape_check(outer_network)
+            outer_network_check["construction_method"] = "module_outer_fuse_fallback"
     except Exception as exc:
         assembly_errors.append({"stage": "outer_network_fuse", "error": str(exc)})
-    if module_bore_shapes:
+    if module_bore_shapes and flow_bore_network is None:
         try:
             bore_network = fuse_shapes(list(module_bore_shapes.values()))
             flow_bore_network = bore_network
@@ -1416,12 +1980,14 @@ if not module_errors and module_shapes:
     try:
         if outer_network is None:
             raise ValueError("outer network is unavailable")
-        assembly = (
-            outer_network.cut(flow_bore_network).removeSplitter()
-            if flow_bore_network is not None
-            else outer_network
-        )
-        assembly_check = shape_check(assembly)
+        if assembly is None:
+            assembly = (
+                outer_network.cut(flow_bore_network).removeSplitter()
+                if flow_bore_network is not None
+                else outer_network
+            )
+            assembly_check = shape_check(assembly)
+            assembly_check["construction_method"] = "module_boolean_fallback"
         if flow_bore_network is not None:
             # ``assembly`` is defined immediately above as
             # ``outer_network.cut(flow_bore_network)``. Re-running a global
@@ -1443,12 +2009,138 @@ if not module_errors and module_shapes:
     except Exception as exc:
         assembly_errors.append({"stage": "assembly_global_bore_cut", "error": str(exc)})
     module_ids = list(module_shapes)
-    module_by_id = {module["id"]: module for module in MODULES}
     adjacency = set()
+    adjacent_junction_children = {}
     for module in MODULES:
         for bound in (module.get("input_bindings") or {}).values():
             if "." in bound:
-                adjacency.add(tuple(sorted((module["id"], bound.split(".", 1)[0]))))
+                parent_id = bound.split(".", 1)[0]
+                pair = tuple(sorted((module["id"], parent_id)))
+                adjacency.add(pair)
+                if module["type"] == "junction":
+                    adjacent_junction_children[pair] = (module, parent_id)
+
+    def adjacent_junction_interface_overlap(common_shape, child, parent_id):
+        """Return evidence only when overlap is confined to the mating interface.
+
+        A transverse junction arm necessarily intersects the immediately upstream
+        tube near the shared port.  The admissible region is a resolver-derived
+        cylindrical band around that port; it never depends on the LLM-authored
+        max_hub_radius.  Backward-pointing outlets are deliberately ineligible,
+        and any material outside the local band remains a collision.
+        """
+        params = child["params"]
+        # Keep the classifier self-contained so its deterministic policy can be
+        # unit-tested without a FreeCAD document or hidden process globals.
+        policy = __ADJACENT_INTERFACE_POLICY__
+        policy_digest = __VALIDATOR_POLICY_DIGEST__
+        policy_generator_version = __GENERATOR_VERSION__
+        start = vector(params["start_position"])
+        inlet_axis = normalized(vector(params["axis"]))
+        inlet_outer_radius = float(params["outer_diameter"]) / 2.0
+        outlets = params.get("outlets") or []
+        if not outlets:
+            return None
+        outlet_outer_radii = []
+        minimum_forward_dot = 1.0
+        for outlet in outlets:
+            outlet_axis = normalized(vector(outlet["axis"]))
+            forward_dot = float(outlet_axis.dot(inlet_axis))
+            minimum_forward_dot = min(minimum_forward_dot, forward_dot)
+            # A local interface allowance must never legitimize a branch whose
+            # centerline travels back into the upstream module.
+            if forward_dot < -1e-9:
+                return None
+            outlet_outer_radii.append(float(outlet["outer_diameter"]) / 2.0)
+        engagement = max(
+            MODELING_TOLERANCE * float(policy["engagement_tolerance_multiplier"]),
+            inlet_outer_radius * float(policy["engagement_radius_multiplier"]),
+        )
+        margin = max(
+            MODELING_TOLERANCE * float(policy["margin_tolerance_multiplier"]),
+            inlet_outer_radius * float(policy["margin_radius_multiplier"]),
+        )
+        upstream_depth = max(outlet_outer_radii) + engagement + margin
+        downstream_depth = engagement + margin
+        interface_band = Part.makeCylinder(
+            inlet_outer_radius + margin,
+            upstream_depth + downstream_depth,
+            start - inlet_axis * upstream_depth,
+            inlet_axis,
+        )
+        try:
+            outside_shape = common_shape.cut(interface_band)
+            outside_volume = float(outside_shape.Volume)
+        except Exception:
+            # Failure to prove locality is not permission to ignore an overlap.
+            return None
+        common_volume = float(common_shape.Volume)
+        outside_allowance = max(
+            MODELING_TOLERANCE ** 3,
+            common_volume * float(policy["outside_volume_relative_allowance"]),
+        )
+        if outside_volume > outside_allowance:
+            return None
+        evidence = {
+            "module_ids": [parent_id, child["id"]],
+            "parent_module_id": parent_id,
+            "child_module_id": child["id"],
+            "common_volume": common_volume,
+            "outside_interface_volume": outside_volume,
+            "outside_interface_allowance": outside_allowance,
+            "interface_upstream_depth": upstream_depth,
+            "interface_downstream_depth": downstream_depth,
+            "minimum_outlet_forward_dot": minimum_forward_dot,
+            "policy": "resolver_local_interface_band",
+            "policy_id": policy["policy_id"],
+            "policy_digest": policy_digest,
+            "generator_version": policy_generator_version,
+        }
+        parent_bindings = [
+            (str(input_name), str(bound_port))
+            for input_name, bound_port in (child.get("input_bindings") or {}).items()
+            if isinstance(bound_port, str)
+            and bound_port.startswith(str(parent_id) + ".")
+        ]
+        if len(parent_bindings) == 1:
+            input_name, bound_port = parent_bindings[0]
+            evidence["parent_child_binding"] = {
+                "child_input_name": input_name,
+                "parent_port_id": bound_port,
+            }
+        # Bounds and centroid are diagnostic aids, not permission criteria.  A
+        # kernel that cannot expose either still has to pass the volume/locality
+        # proof above; malformed values are never emitted.
+        try:
+            bounds = common_shape.BoundBox
+            minimum = [
+                float(bounds.XMin),
+                float(bounds.YMin),
+                float(bounds.ZMin),
+            ]
+            maximum = [
+                float(bounds.XMax),
+                float(bounds.YMax),
+                float(bounds.ZMax),
+            ]
+            if (
+                all(math.isfinite(value) for value in minimum + maximum)
+                and all(low <= high for low, high in zip(minimum, maximum))
+            ):
+                evidence["common_bounds"] = {
+                    "minimum": minimum,
+                    "maximum": maximum,
+                }
+        except Exception:
+            pass
+        try:
+            centroid = vector_json(common_shape.CenterOfMass)
+            if all(math.isfinite(value) for value in centroid):
+                evidence["common_centroid"] = centroid
+        except Exception:
+            pass
+        return evidence
+
     for index, left_id in enumerate(module_ids):
         for right_id in module_ids[index + 1:]:
             pair = tuple(sorted((left_id, right_id)))
@@ -1468,45 +2160,24 @@ if not module_errors and module_shapes:
             if boxes_disjoint:
                 continue
             allowed_volume = MODELING_TOLERANCE ** 3
-            if pair in adjacency:
-                for child_id, parent_id in ((left_id, right_id), (right_id, left_id)):
-                    child = module_by_id[child_id]
-                    bound_parents = {
-                        value.split(".", 1)[0]
-                        for value in (child.get("input_bindings") or {}).values()
-                        if "." in value
-                    }
-                    if parent_id in bound_parents and child["type"] == "junction":
-                        params = child["params"]
-                        outer_radius = float(params["outer_diameter"]) / 2.0
-                        bore_radius = inner_radius(
-                            params["outer_diameter"], params["wall_thickness"]
-                        )
-                        engagement = max(
-                            MODELING_TOLERANCE * 20.0,
-                            outer_radius * 1e-4,
-                        )
-                        if params.get("blend_mode") == "fillet":
-                            # A smooth hub intentionally owns a bounded overlap
-                            # with its immediately upstream connected module.
-                            # Non-adjacent pairs retain the strict global limit.
-                            engagement = max(
-                                engagement,
-                                float(params["max_hub_radius"]),
-                            )
-                        allowed_volume = max(
-                            allowed_volume,
-                            math.pi
-                            * (outer_radius ** 2 - bore_radius ** 2)
-                            * engagement
-                            * 1.25,
-                        )
             try:
-                volume = float(module_shapes[left_id].common(module_shapes[right_id]).Volume)
+                common_shape = module_shapes[left_id].common(module_shapes[right_id])
+                volume = float(common_shape.Volume)
             except Exception as exc:
                 overlaps.append({"module_ids": [left_id, right_id], "error": str(exc)})
                 continue
             if volume > allowed_volume:
+                junction_relation = adjacent_junction_children.get(pair)
+                if junction_relation is not None:
+                    child, parent_id = junction_relation
+                    interface_evidence = adjacent_junction_interface_overlap(
+                        common_shape,
+                        child,
+                        parent_id,
+                    )
+                    if interface_evidence is not None:
+                        adjacent_interface_overlaps.append(interface_evidence)
+                        continue
                 overlaps.append({
                     "module_ids": [left_id, right_id],
                     "adjacent": pair in adjacency,
@@ -1911,7 +2582,9 @@ checks = {
     "centerlines": centerline_checks,
     "module_errors": module_errors,
     "assembly_errors": assembly_errors,
+    "backend_fallbacks": backend_fallbacks,
     "non_adjacent_overlaps": overlaps,
+    "adjacent_interface_overlaps": adjacent_interface_overlaps,
     "connection_failures": connection_failures,
     "terminal_bore_failures": terminal_bore_failures,
     "anchored_inlet_bore_failures": anchored_inlet_bore_failures,
@@ -1951,6 +2624,12 @@ passed = (
 validation = {
     "schema_version": VALIDATION_SCHEMA_VERSION,
     "generator_version": GENERATOR_VERSION,
+    "validator_policy": {
+        "policy_id": VALIDATOR_POLICY_ID,
+        "policy_digest": VALIDATOR_POLICY_DIGEST,
+        "generator_version": GENERATOR_VERSION,
+        "validation_schema_version": VALIDATION_SCHEMA_VERSION,
+    },
     "run_id": RUN_ID,
     "state_id": PAYLOAD["state_id"],
     "state_version": PAYLOAD["state_version"],
@@ -1976,6 +2655,12 @@ print("CADGEN_VALIDATION=" + json.dumps(validation, sort_keys=True, separators=(
         "__VALIDATION_SCHEMA_VERSION__": str(VALIDATION_SCHEMA_VERSION),
         "__MODELING_TOLERANCE__": repr(float(modeling_tolerance)),
         "__GENERATOR_VERSION__": repr(GENERATOR_VERSION),
+        "__VALIDATOR_POLICY_JSON__": validator_policy_json_literal,
+        "__VALIDATOR_POLICY_ID__": repr(VALIDATOR_POLICY_ID),
+        "__VALIDATOR_POLICY_DIGEST__": repr(VALIDATOR_POLICY_DIGEST),
+        "__ADJACENT_INTERFACE_POLICY__": repr(
+            _VALIDATOR_POLICY_SPEC["adjacent_interface_overlap"]
+        ),
         "__RUN_ID__": repr(run_id),
         "__ATTEMPT_ID__": str(int(attempt_id)),
     }
@@ -1994,9 +2679,35 @@ def build_freecad_publish_script(
 ) -> str:
     """검증된 fingerprint를 재확인하고 버전 문서를 저장하는 게시 코드를 만든다."""
 
-    candidate = candidate_document_name(state, run_id=run_id, attempt_id=attempt_id)
+    return _build_freecad_publish_script(
+        state,
+        run_id=run_id,
+        attempt_id=attempt_id,
+        fcstd_path=fcstd_path,
+        candidate_shape_fingerprints=candidate_shape_fingerprints,
+        payload_digest=geometry_payload_digest(state),
+    )
+
+
+def _build_freecad_publish_script(
+    state: PipeState,
+    *,
+    run_id: str,
+    attempt_id: int,
+    fcstd_path: str | None,
+    candidate_shape_fingerprints: dict[str, str] | None,
+    payload_digest: str,
+) -> str:
+    """트랜잭션에서 이미 검증한 digest를 재사용해 게시 코드를 만든다."""
+
+    digest = payload_digest
+    candidate = _candidate_document_name(
+        state,
+        run_id=run_id,
+        attempt_id=attempt_id,
+        digest=digest,
+    )
     published = published_document_name(state, run_id=run_id)
-    digest = geometry_payload_digest(state)
     payload = {
         "candidate_document": candidate,
         "candidate_prefix": candidate.rsplit(
@@ -2011,13 +2722,11 @@ def build_freecad_publish_script(
         "fcstd_path": fcstd_path,
         "candidate_shape_fingerprints": candidate_shape_fingerprints or {},
         "view_deviation_percent": PUBLISHED_VIEW_DEVIATION_PERCENT,
-        "view_angular_deflection_degrees": (
-            PUBLISHED_VIEW_ANGULAR_DEFLECTION_DEGREES
-        ),
+        "view_angular_deflection_degrees": (PUBLISHED_VIEW_ANGULAR_DEFLECTION_DEGREES),
         "view_specular_color": PUBLISHED_VIEW_SPECULAR_COLOR,
         "view_shininess": PUBLISHED_VIEW_SHININESS,
     }
-    template = r'''# Generated by cadgen02. Idempotent publish phase.
+    template = r"""# Generated by cadgen02. Idempotent publish phase.
 import json
 import os
 import hashlib
@@ -2130,7 +2839,7 @@ if META["published_document"] in App.listDocuments():
     for document_name in list(App.listDocuments()):
         if document_name.startswith(META["candidate_prefix"]):
             App.closeDocument(document_name)
-'''
+"""
     return template.replace(
         "__META_JSON__",
         repr(json.dumps(payload, ensure_ascii=False, separators=(",", ":"))),
@@ -2145,5 +2854,27 @@ def build_freecad_candidate_cleanup_script(
 ) -> str:
     """특정 실행 시도의 후보 문서만 닫는 정리 스크립트를 만든다."""
 
-    candidate = candidate_document_name(state, run_id=run_id, attempt_id=attempt_id)
-    return f'''import json\nimport FreeCAD as App\nname = {candidate!r}\nif name in App.listDocuments():\n    App.closeDocument(name)\nprint("CADGEN_CLEANUP=" + json.dumps({{"candidate_document": name, "closed": name not in App.listDocuments()}}, sort_keys=True, separators=(",", ":")))\n'''
+    return _build_freecad_candidate_cleanup_script(
+        state,
+        run_id=run_id,
+        attempt_id=attempt_id,
+        payload_digest=geometry_payload_digest(state),
+    )
+
+
+def _build_freecad_candidate_cleanup_script(
+    state: PipeState,
+    *,
+    run_id: str,
+    attempt_id: int,
+    payload_digest: str,
+) -> str:
+    """트랜잭션의 digest로 해당 후보 문서 이름만 정확히 정리한다."""
+
+    candidate = _candidate_document_name(
+        state,
+        run_id=run_id,
+        attempt_id=attempt_id,
+        digest=payload_digest,
+    )
+    return f"""import json\nimport FreeCAD as App\nname = {candidate!r}\nif name in App.listDocuments():\n    App.closeDocument(name)\nprint("CADGEN_CLEANUP=" + json.dumps({{"candidate_document": name, "closed": name not in App.listDocuments()}}, sort_keys=True, separators=(",", ":")))\n"""

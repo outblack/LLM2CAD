@@ -1,0 +1,81 @@
+{
+  "records": [
+    {
+      "case_id": "94c593cd35339fb1e38f2b7fbfdb325ca0a0973dcd69e304d4c3c7b555b97352",
+      "diagnostic_context_digest": "eec0cdfa064d0878dde0d32dcf7046cf25d39f9acbdb09d6da537b390b55deb3",
+      "failure_signature": "56a96b76e75e2486a6523cd475a5477edb46f6a5989ef6f6a9906ff9e60740d5",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 1,
+      "repair_epoch": 0,
+      "status": "failed",
+      "artifact_path": "outputs/20260711T143542851312Z/diagnostics/step_3_attempt_1_advisor_failure.json",
+      "failure_reason": "structured_output_error"
+    },
+    {
+      "case_id": "3a403f6f439a7c098eb1cb1b2d8717add64a1f5e01ebc2283d925af53bb90df9",
+      "diagnostic_context_digest": "6dce0ba46a394e8c45cb978f0f58afba6707368816d493a39c01ea9237366ca0",
+      "failure_signature": "56a96b76e75e2486a6523cd475a5477edb46f6a5989ef6f6a9906ff9e60740d5",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 2,
+      "repair_epoch": 0,
+      "status": "failed",
+      "artifact_path": "outputs/20260711T143542851312Z/diagnostics/step_3_attempt_2_advisor_failure.json",
+      "failure_reason": "structured_output_error"
+    },
+    {
+      "case_id": "dcdf21ff57ca1c439cbe02a2c86630f011eff075ac2318eb75aacfe47626e596",
+      "diagnostic_context_digest": "ad2227eaf57febc070f37d7f63f5bec0da94fccc7b2a7414e6fc16a06543f935",
+      "failure_signature": "56a96b76e75e2486a6523cd475a5477edb46f6a5989ef6f6a9906ff9e60740d5",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 3,
+      "repair_epoch": 0,
+      "status": "failed",
+      "artifact_path": "outputs/20260711T143542851312Z/diagnostics/step_3_attempt_3_advisor_failure.json",
+      "failure_reason": "structured_output_error"
+    },
+    {
+      "case_id": "52f1be96afbeda875b353e619e0d6f654221522609cf3a190da3d7ff2812b44e",
+      "diagnostic_context_digest": "ec1f109a11a836a34bba95a63f2723bde82466ad2092d45e640461319ace10ba",
+      "failure_signature": "56a96b76e75e2486a6523cd475a5477edb46f6a5989ef6f6a9906ff9e60740d5",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 4,
+      "repair_epoch": 0,
+      "status": "skipped",
+      "artifact_path": "outputs/20260711T143542851312Z/diagnostics/step_3_attempt_4_case.json",
+      "failure_reason": "deduplicated_or_deterministic_fast_path"
+    },
+    {
+      "case_id": "a15d8cacd2834ffbed2f222eacfac8e1cb2e6f90289537e89a33599fa8d316f2",
+      "diagnostic_context_digest": "3639008f227751b546094ace349fc75c61d85b44f3f6e2c8cadbc48d7b5bc1fc",
+      "failure_signature": "56a96b76e75e2486a6523cd475a5477edb46f6a5989ef6f6a9906ff9e60740d5",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 5,
+      "repair_epoch": 0,
+      "status": "skipped",
+      "artifact_path": "outputs/20260711T143542851312Z/diagnostics/step_3_attempt_5_case.json",
+      "failure_reason": "deduplicated_or_deterministic_fast_path"
+    },
+    {
+      "case_id": "21533575679fa153f6d20906bd3562c37b24b24fa9e7d9b7fa448267ca16534f",
+      "diagnostic_context_digest": "692242f9a05047294e456ab0f08f491c646e981d48c3a405cbaae101766dcaa2",
+      "failure_signature": "126632bba6e16e28f8e9b4d5c30c8979ad1aca4d4466e516829af200ee7e85d1",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 6,
+      "repair_epoch": 0,
+      "status": "skipped",
+      "artifact_path": "outputs/20260711T143542851312Z/diagnostics/step_3_attempt_6_case.json",
+      "failure_reason": "deduplicated_or_deterministic_fast_path"
+    }
+  ],
+  "calls_by_step": {
+    "3:0": 3
+  },
+  "cache_hit_count": 0,
+  "futile_retry_avoided_count": 0
+}

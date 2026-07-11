@@ -1,0 +1,64 @@
+{
+  "case_id": "3417f5339dccd64bd7a7d579f2b6a189f9240b67ccb34b1d7355d37828088ebe",
+  "diagnostic_context_digest": "dc06c45c16e9105a9b8d2d222cc627acf38653e21fb9ef9653de7f2dfe8bc8a8",
+  "failure_signature": "7e8d5a687478ec701bd9657f2bf6d3b6d66b45f0436f45243ca4b714b4263977",
+  "failure_reason": "host_validation_error",
+  "call_attempted": true,
+  "error_type": "DiagnosticValidationError",
+  "error": "advisor recommendation unit must not be blank",
+  "advisor_response": {
+    "diagnosis_class": "candidate_variant_or_topology",
+    "disposition": "change_primitive_or_mode",
+    "confidence": "high",
+    "summary": "The validation failed due to an incomplete goal dependency; the 'turn_10' goal must be completed before 'close_loop'.",
+    "causal_chain": [
+      "The rejected draft attempted to satisfy both 'turn_10' and 'close_loop' simultaneously using the 'connect_ports' primitive.",
+      "The deterministic validator check 'draft_validation' failed with the error that 'close_loop' has incomplete dependencies: ['turn_10'].",
+      "This indicates that the 'close_loop' goal cannot be evaluated or completed until its prerequisite 'turn_10' is successfully completed.",
+      "Therefore, the planner must discard the 'connect_ports' draft and instead use the 'turn' primitive to fulfill only the 'turn_10' goal in this step."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E004"
+    ],
+    "recommendations": [
+      {
+        "path": "/module",
+        "action": "replace",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "turn",
+        "unit": "",
+        "classification": "feasible",
+        "rationale": "The immutable goal slice specifies a goal of type 'turn' which must be completed prior to 'close_loop'.",
+        "evidence_id": "E001"
+      }
+    ],
+    "strategy_kind": "primitive_change",
+    "strategy_instruction": "Abandon the 'connect_ports' module. Plan a new step using the 'turn' primitive to resolve the 'turn_10' goal dependency independently.",
+    "verification_checks": [
+      "Verify that the chosen module is 'turn'.",
+      "Verify that the step planner does not attempt to include 'close_loop' in the completed goals."
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Change the module to 'turn' to address the 'turn_10' goal first. Defer the 'close_loop' goal to a subsequent step since it strictly depends on 'turn_10'."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    },
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-11T13:49:46.201480+00:00",
+  "artifact_digest": "522b9f83158250d40b41f7529b601fd4efd001b8516df990d28cddad0b23fdc6"
+}

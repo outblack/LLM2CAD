@@ -1,0 +1,2293 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260711T132755339990Z",
+    "state_id": "S7",
+    "state_digest": "63a5586508b6b0f080346417f65ccdfc846225665cbc94b3bb653a001273d69b",
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "step_index": 8,
+    "attempt_index": 1,
+    "action_digest": "a2dae36f0c5856b70e3c8d361732edde2be1d7bdcbf9619bed478611ad15c27c",
+    "failure_signature": "ec75ee3449b28786ccaac92c578c163c39b83da0001bf5ad58dbee48974eb5ff",
+    "evidence_digest": "24b5e3fcfa70c82deeed1c16dcd1fefc3bcb8f3926a21aeea2b6ca16bde95c47",
+    "generator_version": "cadgen02-freecad-v22",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "c0bbc9bd10c06280f4bca401a425422cecceab666f19ab9a0da818b0cc65ae2f",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0008_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+  ],
+  "current_state": {
+    "state_id": "S7",
+    "state_version": 7,
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "remaining_goal_ids": [
+      "turn_4",
+      "move_5",
+      "turn_5",
+      "move_6",
+      "turn_6",
+      "move_7",
+      "turn_7",
+      "move_8",
+      "turn_8",
+      "move_9",
+      "turn_9",
+      "move_10",
+      "turn_10",
+      "close_loop"
+    ],
+    "open_ports": [
+      {
+        "id": "M7.out",
+        "position": [
+          -78.49311037055352,
+          -25.503957577976223,
+          0.0
+        ],
+        "axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6",
+      "M7"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M3.out",
+        "port_b_id": "M4.in",
+        "action_id": "A4",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E4",
+        "port_a_id": "M4.out",
+        "port_b_id": "M5.in",
+        "action_id": "A5",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E5",
+        "port_a_id": "M5.out",
+        "port_b_id": "M6.in",
+        "action_id": "A6",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E6",
+        "port_a_id": "M6.out",
+        "port_b_id": "M7.in",
+        "action_id": "A7",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "goal_ids": [
+      "turn_4"
+    ],
+    "goals": [
+      {
+        "goal_id": "turn_4",
+        "depends_on_goal_ids": [
+          "move_4"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -72.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "explicit"
+  },
+  "rejected_draft": {
+    "target_port": "M7.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "bend_radius": 10.0,
+      "sweep_angle": -72.0,
+      "plane_normal": [
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "turn_4"
+    ],
+    "completed_goal_ids": [
+      "turn_4"
+    ],
+    "satisfied_components": [],
+    "rationale": "Complete turn_4 with a planar circular arc of bend radius 10 and sweep angle -72 about the Z-axis normal hint [0, 0, 1]."
+  },
+  "resolved_action": {
+    "action_id": "A8",
+    "action_type": "ADD_MODULE",
+    "target_port": "M7.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "bend_radius": 10.0,
+      "sweep_angle": -72.0,
+      "plane_normal": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "start_position": [
+        -78.49311037055352,
+        -25.503957577976223,
+        0.0
+      ],
+      "axis": [
+        0.5877852522924729,
+        -0.8090169943749477,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "terminal_axis": [
+        -0.5877852522924734,
+        -0.8090169943749473,
+        0.0
+      ]
+    },
+    "consumed_port_ids": [
+      "M7.out"
+    ],
+    "affected_goal_ids": [
+      "turn_4"
+    ],
+    "completed_goal_ids": [
+      "turn_4"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [
+    {
+      "id": "M1",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M1",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "path_points": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            40.0,
+            0.0
+          ]
+        ],
+        "end_position": [
+          0.0,
+          40.0,
+          0.0
+        ],
+        "out_axis": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -0.0,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M1.out",
+          "position": [
+            0.0,
+            40.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {}
+    },
+    {
+      "id": "M2",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M2",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": 144.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          0.0,
+          40.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          -0.5877852522924732,
+          -0.8090169943749473,
+          0.0
+        ],
+        "path_points": [
+          [
+            0.0,
+            40.0,
+            0.0
+          ],
+          [
+            -0.012140078057100823,
+            40.49259941092817,
+            0.0
+          ],
+          [
+            -0.048530835929355476,
+            40.98400278279642,
+            0.0
+          ],
+          [
+            -0.1090839162885402,
+            41.473016980546376,
+            0.0
+          ],
+          [
+            -0.19365229531022266,
+            41.95845467007167,
+            0.0
+          ],
+          [
+            -0.30203063964990484,
+            42.439137201083774,
+            0.0
+          ],
+          [
+            -0.43395580499559117,
+            42.913897468893246,
+            0.0
+          ],
+          [
+            -0.5891074749862852,
+            43.38158274815817,
+            0.0
+          ],
+          [
+            -0.7671089389451051,
+            43.841057491719255,
+            0.0
+          ],
+          [
+            -0.9675280065387106,
+            44.29120608772609,
+            0.0
+          ],
+          [
+            -1.189878057142156,
+            44.7309355683601,
+            0.0
+          ],
+          [
+            -1.433619221361372,
+            45.15917826357751,
+            0.0
+          ],
+          [
+            -1.6981596918444932,
+            45.574894393428856,
+            0.0
+          ],
+          [
+            -1.9828571601993321,
+            45.977074592660934,
+            0.0
+          ],
+          [
+            -2.2870203765281936,
+            46.364742361471414,
+            0.0
+          ],
+          [
+            -2.609910827793409,
+            46.736956436465576,
+            0.0
+          ],
+          [
+            -2.950744530938528,
+            47.09281307605853,
+            0.0
+          ],
+          [
+            -3.3086939364114176,
+            47.43144825477394,
+            0.0
+          ],
+          [
+            -3.6828899374674906,
+            47.7520397611113,
+            0.0
+          ],
+          [
+            -4.072423980374451,
+            48.05380919388833,
+            0.0
+          ],
+          [
+            -4.476350270394942,
+            48.3360238522112,
+            0.0
+          ],
+          [
+            -4.89368806819093,
+            48.59799851448372,
+            0.0
+          ],
+          [
+            -5.3234240710741325,
+            48.83909710213612,
+            0.0
+          ],
+          [
+            -5.764514873320755,
+            49.05873422403367,
+            0.0
+          ],
+          [
+            -6.215889499576896,
+            49.25637659781556,
+            0.0
+          ],
+          [
+            -6.676452005203403,
+            49.431544344712776,
+            0.0
+          ],
+          [
+            -7.145084137246578,
+            49.58381215470122,
+            0.0
+          ],
+          [
+            -7.620648049573812,
+            49.712810319161136,
+            0.0
+          ],
+          [
+            -8.101989065581742,
+            49.81822562853537,
+            0.0
+          ],
+          [
+            -8.587938481769084,
+            49.89980213280707,
+            0.0
+          ],
+          [
+            -9.07731640536698,
+            49.95734176295034,
+            0.0
+          ],
+          [
+            -9.568934619137043,
+            49.990704811844935,
+            0.0
+          ],
+          [
+            -10.061599466381386,
+            49.99981027348727,
+            0.0
+          ],
+          [
+            -10.5541147491597,
+            49.98463603967434,
+            0.0
+          ],
+          [
+            -11.045284632676534,
+            49.94521895368273,
+            0.0
+          ],
+          [
+            -11.533916548786854,
+            49.88165472081259,
+            0.0
+          ],
+          [
+            -12.018824091570103,
+            49.794097676013656,
+            0.0
+          ],
+          [
+            -12.498829897942308,
+            49.68276040915759,
+            0.0
+          ],
+          [
+            -12.972768506312025,
+            49.54791324886644,
+            0.0
+          ],
+          [
+            -13.43948918633928,
+            49.38988360615056,
+            0.0
+          ],
+          [
+            -13.897858732926792,
+            49.209055179449535,
+            0.0
+          ],
+          [
+            -14.34676421765965,
+            49.005867023006374,
+            0.0
+          ],
+          [
+            -14.785115691012864,
+            48.78081248083698,
+            0.0
+          ],
+          [
+            -15.211848828765849,
+            48.53443798888316,
+            0.0
+          ],
+          [
+            -15.625927516198232,
+            48.267341748257635,
+            0.0
+          ],
+          [
+            -16.026346363792562,
+            47.9801722728024,
+            0.0
+          ],
+          [
+            -16.412133148335784,
+            47.67362681448697,
+            0.0
+          ],
+          [
+            -16.78235117349234,
+            47.348449670469755,
+            0.0
+          ],
+          [
+            -17.136101544117523,
+            47.00543037593291,
+            0.0
+          ],
+          [
+            -17.472525348788906,
+            46.64540178707858,
+            0.0
+          ],
+          [
+            -17.790805745256705,
+            46.26923805894106,
+            0.0
+          ],
+          [
+            -18.090169943749473,
+            45.877852522924734,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -18.090169943749473,
+          45.877852522924734,
+          0.0
+        ],
+        "out_axis": [
+          -0.5877852522924732,
+          -0.8090169943749473,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M2.in",
+          "position": [
+            0.0,
+            40.0,
+            0.0
+          ],
+          "axis": [
+            -0.0,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M2.out",
+          "position": [
+            -18.090169943749473,
+            45.877852522924734,
+            0.0
+          ],
+          "axis": [
+            -0.5877852522924732,
+            -0.8090169943749473,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M1.out"
+      }
+    },
+    {
+      "id": "M3",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M3",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          -18.090169943749473,
+          45.877852522924734,
+          0.0
+        ],
+        "axis": [
+          -0.5877852522924732,
+          -0.8090169943749473,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          -0.5877852522924732,
+          -0.8090169943749473,
+          0.0
+        ],
+        "path_points": [
+          [
+            -18.090169943749473,
+            45.877852522924734,
+            0.0
+          ],
+          [
+            -41.60158003544841,
+            13.517172747926843,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -41.60158003544841,
+          13.517172747926843,
+          0.0
+        ],
+        "out_axis": [
+          -0.5877852522924732,
+          -0.8090169943749473,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M3.in",
+          "position": [
+            -18.090169943749473,
+            45.877852522924734,
+            0.0
+          ],
+          "axis": [
+            0.5877852522924732,
+            0.8090169943749473,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M3.out",
+          "position": [
+            -41.60158003544841,
+            13.517172747926843,
+            0.0
+          ],
+          "axis": [
+            -0.5877852522924732,
+            -0.8090169943749473,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M2.out"
+      }
+    },
+    {
+      "id": "M4",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M4",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": -72.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          -41.60158003544841,
+          13.517172747926843,
+          0.0
+        ],
+        "axis": [
+          -0.5877852522924732,
+          -0.8090169943749473,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          -0.9510565162951535,
+          0.30901699437494756,
+          0.0
+        ],
+        "path_points": [
+          [
+            -41.60158003544841,
+            13.517172747926843,
+            0.0
+          ],
+          [
+            -41.907126963527645,
+            13.118111657944569,
+            0.0
+          ],
+          [
+            -42.23233852495606,
+            12.734906596509058,
+            0.0
+          ],
+          [
+            -42.57639320710503,
+            12.368525572863081,
+            0.0
+          ],
+          [
+            -42.93842189798764,
+            12.019894097269834,
+            0.0
+          ],
+          [
+            -43.317510081710985,
+            11.689892843093682,
+            0.0
+          ],
+          [
+            -43.712700148622694,
+            11.379355422142808,
+            0.0
+          ],
+          [
+            -44.122993814316004,
+            11.089066278893448,
+            0.0
+          ],
+          [
+            -44.54735464138282,
+            10.819758708915051,
+            0.0
+          ],
+          [
+            -44.984710657544554,
+            10.572113006502043,
+            0.0
+          ],
+          [
+            -45.433957063547155,
+            10.34675474619138,
+            0.0
+          ],
+          [
+            -45.893959023979875,
+            10.144253202506995,
+            0.0
+          ],
+          [
+            -46.36355453396801,
+            9.96511991192293,
+            0.0
+          ],
+          [
+            -46.84155735449812,
+            9.809807380677816,
+            0.0
+          ],
+          [
+            -47.32676000896063,
+            9.678707941704836,
+            0.0
+          ],
+          [
+            -47.81793683334064,
+            9.57215276356469,
+            0.0
+          ],
+          [
+            -48.3138470723515,
+            9.490411013885065,
+            0.0
+          ],
+          [
+            -48.81323801369045,
+            9.433689179419853,
+            0.0
+          ],
+          [
+            -49.314848152498534,
+            9.402130544445683,
+            0.0
+          ],
+          [
+            -49.81741037803141,
+            9.395814828813414,
+            0.0
+          ],
+          [
+            -50.31965517449102,
+            9.414757986568862,
+            0.0
+          ],
+          [
+            -50.8203138279327,
+            9.458912165651492,
+            0.0
+          ],
+          [
+            -51.31812163114672,
+            9.528165828772895,
+            0.0
+          ],
+          [
+            -51.811821078418426,
+            9.622344035169641,
+            0.0
+          ],
+          [
+            -52.30016504209685,
+            9.741208882518837,
+            0.0
+          ],
+          [
+            -52.78191992294736,
+            9.884460107900042,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -52.78191992294736,
+          9.884460107900042,
+          0.0
+        ],
+        "out_axis": [
+          -0.9510565162951535,
+          0.30901699437494756,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M4.in",
+          "position": [
+            -41.60158003544841,
+            13.517172747926843,
+            0.0
+          ],
+          "axis": [
+            0.5877852522924732,
+            0.8090169943749473,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M4.out",
+          "position": [
+            -52.78191992294736,
+            9.884460107900042,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951535,
+            0.30901699437494756,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M3.out"
+      }
+    },
+    {
+      "id": "M5",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M5",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          -52.78191992294736,
+          9.884460107900042,
+          0.0
+        ],
+        "axis": [
+          -0.9510565162951535,
+          0.30901699437494756,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          -0.9510565162951535,
+          0.30901699437494756,
+          0.0
+        ],
+        "path_points": [
+          [
+            -52.78191992294736,
+            9.884460107900042,
+            0.0
+          ],
+          [
+            -90.8241805747535,
+            22.245139882897945,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -90.8241805747535,
+          22.245139882897945,
+          0.0
+        ],
+        "out_axis": [
+          -0.9510565162951535,
+          0.30901699437494756,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M5.in",
+          "position": [
+            -52.78191992294736,
+            9.884460107900042,
+            0.0
+          ],
+          "axis": [
+            0.9510565162951535,
+            -0.30901699437494756,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M5.out",
+          "position": [
+            -90.8241805747535,
+            22.245139882897945,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951535,
+            0.30901699437494756,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M4.out"
+      }
+    },
+    {
+      "id": "M6",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M6",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": 144.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          -90.8241805747535,
+          22.245139882897945,
+          0.0
+        ],
+        "axis": [
+          -0.9510565162951535,
+          0.30901699437494756,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "path_points": [
+          [
+            -90.8241805747535,
+            22.245139882897945,
+            0.0
+          ],
+          [
+            -91.29642194487256,
+            22.3858155719493,
+            0.0
+          ],
+          [
+            -91.775019686438,
+            22.50305789754242,
+            0.0
+          ],
+          [
+            -92.25881175666167,
+            22.596582193480437,
+            0.0
+          ],
+          [
+            -92.74662350084441,
+            22.66616138131277,
+            0.0
+          ],
+          [
+            -93.23727050445589,
+            22.711626521685137,
+            0.0
+          ],
+          [
+            -93.72956146891167,
+            22.732867224526935,
+            0.0
+          ],
+          [
+            -94.22230110406467,
+            22.729831917080066,
+            0.0
+          ],
+          [
+            -94.71429303038839,
+            22.7025279691184,
+            0.0
+          ],
+          [
+            -95.20434268380501,
+            22.651021675053837,
+            0.0
+          ],
+          [
+            -95.69126021610566,
+            22.575438092972455,
+            0.0
+          ],
+          [
+            -96.17386338392045,
+            22.47596074099151,
+            0.0
+          ],
+          [
+            -96.6509804192238,
+            22.3528311516746,
+            0.0
+          ],
+          [
+            -97.12145287440552,
+            22.206348285586813,
+            0.0
+          ],
+          [
+            -97.58413843499969,
+            22.036867805413813,
+            0.0
+          ],
+          [
+            -98.037913693242,
+            21.84480121240729,
+            0.0
+          ],
+          [
+            -98.48167687572138,
+            21.630614847253504,
+            0.0
+          ],
+          [
+            -98.91435051850297,
+            21.394828757790798,
+            0.0
+          ],
+          [
+            -99.33488408322746,
+            21.138015436325336,
+            0.0
+          ],
+          [
+            -99.74225650783458,
+            20.860798429610867,
+            0.0
+          ],
+          [
+            -100.13547868571771,
+            20.563850824867437,
+            0.0
+          ],
+          [
+            -100.51359586729019,
+            20.247893615515142,
+            0.0
+          ],
+          [
+            -100.87568997813224,
+            19.913693950590826,
+            0.0
+          ],
+          [
+            -101.2208818480899,
+            19.562063272098264,
+            0.0
+          ],
+          [
+            -101.548333345914,
+            19.19385534481428,
+            0.0
+          ],
+          [
+            -101.85724941425583,
+            18.80996418333458,
+            0.0
+          ],
+          [
+            -102.14688000007884,
+            18.41132188139231,
+            0.0
+          ],
+          [
+            -102.4165218757991,
+            17.998896348719967,
+            0.0
+          ],
+          [
+            -102.6655203467329,
+            17.573688960949426,
+            0.0
+          ],
+          [
+            -102.89327084070555,
+            17.136732128256284,
+            0.0
+          ],
+          [
+            -103.0992203759622,
+            16.689086788651835,
+            0.0
+          ],
+          [
+            -103.28286890381608,
+            16.231839832009022,
+            0.0
+          ],
+          [
+            -103.44377052277453,
+            15.766101461076845,
+            0.0
+          ],
+          [
+            -103.58153456119484,
+            15.293002495890764,
+            0.0
+          ],
+          [
+            -103.69582652584103,
+            14.813691628124005,
+            0.0
+          ],
+          [
+            -103.78636891403866,
+            14.329332632046217,
+            0.0
+          ],
+          [
+            -103.8529418874557,
+            13.841101538861418,
+            0.0
+          ],
+          [
+            -103.89538380587341,
+            13.350183781285839,
+            0.0
+          ],
+          [
+            -103.91359161965127,
+            12.857771315298795,
+            0.0
+          ],
+          [
+            -103.9075211199332,
+            12.365059726054962,
+            0.0
+          ],
+          [
+            -103.87718704598727,
+            11.87324532498495,
+            0.0
+          ],
+          [
+            -103.82266304941857,
+            11.383522245132479,
+            0.0
+          ],
+          [
+            -103.74408151534199,
+            10.897079541780707,
+            0.0
+          ],
+          [
+            -103.64163324094902,
+            10.415098305407431,
+            0.0
+          ],
+          [
+            -103.51556697224925,
+            9.938748793978972,
+            0.0
+          ],
+          [
+            -103.36618880011116,
+            9.469187591545579,
+            0.0
+          ],
+          [
+            -103.19386141706872,
+            9.007554800037273,
+            0.0
+          ],
+          [
+            -102.9990032366982,
+            8.554971271078575,
+            0.0
+          ],
+          [
+            -102.78208737770359,
+            8.112535884543279,
+            0.0
+          ],
+          [
+            -102.54364051517686,
+            7.681322880456932,
+            0.0
+          ],
+          [
+            -102.28424160182274,
+            7.262379250725298,
+            0.0
+          ],
+          [
+            -102.00452046225244,
+            6.856722197021684,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -102.00452046225244,
+          6.856722197021684,
+          0.0
+        ],
+        "out_axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M6.in",
+          "position": [
+            -90.8241805747535,
+            22.245139882897945,
+            0.0
+          ],
+          "axis": [
+            0.9510565162951535,
+            -0.30901699437494756,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M6.out",
+          "position": [
+            -102.00452046225244,
+            6.856722197021684,
+            0.0
+          ],
+          "axis": [
+            0.5877852522924729,
+            -0.8090169943749477,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M5.out"
+      }
+    },
+    {
+      "id": "M7",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M7",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          -102.00452046225244,
+          6.856722197021684,
+          0.0
+        ],
+        "axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "path_points": [
+          [
+            -102.00452046225244,
+            6.856722197021684,
+            0.0
+          ],
+          [
+            -78.49311037055352,
+            -25.503957577976223,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -78.49311037055352,
+          -25.503957577976223,
+          0.0
+        ],
+        "out_axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M7.in",
+          "position": [
+            -102.00452046225244,
+            6.856722197021684,
+            0.0
+          ],
+          "axis": [
+            -0.5877852522924729,
+            0.8090169943749477,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M7.out",
+          "position": [
+            -78.49311037055352,
+            -25.503957577976223,
+            0.0
+          ],
+          "axis": [
+            0.5877852522924729,
+            -0.8090169943749477,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M6.out"
+      }
+    }
+  ],
+  "failed_checks": [
+    {
+      "check_name": "centerlines",
+      "evidence": {
+        "M8": {
+          "circular_sweep": {
+            "analytic_frame_origin": [
+              -86.58328031430297,
+              -31.381810100900953,
+              0.0
+            ],
+            "analytic_frame_radial_axis": [
+              0.8090169943749465,
+              0.5877852522924745,
+              0.0
+            ],
+            "analytic_frame_tangent_axis": [
+              0.5877852522924745,
+              -0.8090169943749465,
+              0.0
+            ],
+            "authored_plane_normal_dot": -1.0,
+            "authored_signed_sweep_degrees": -72.0,
+            "canonical_centerline_radius": 9.999999999999975,
+            "centerline_radius": 9.999999999999975,
+            "classification": "self_intersecting",
+            "construction_method": "analytic_torus_segment_outer_minus_bore",
+            "derived_sweep_magnitude_degrees": 72.00000000000018,
+            "directed_normal": [
+              0.0,
+              0.0,
+              -1.0
+            ],
+            "equality_roundoff_band": 1.4210854715202004e-14,
+            "outer_profile_radius": 10.0,
+            "radial_clearance": -2.4868995751603507e-14,
+            "raw_radial_clearance": -2.4868995751603507e-14,
+            "supported": false
+          },
+          "curvature_method": "dense_piecewise_curve_sampling",
+          "curvature_proof": "sampled_not_global_extremum",
+          "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+          "curve_length": 12.566370614359174,
+          "endpoint_tangency_passed": true,
+          "endpoint_tangent_dots": null,
+          "minimum_join_tangent_dot": 1.0,
+          "minimum_nonlocal_distance": null,
+          "minimum_radius": 9.999999999999972,
+          "minimum_radius_location": {
+            "edge_parameter": [
+              0,
+              0.1129009859883835
+            ],
+            "position": [
+              -77.88241040321589,
+              -26.452828178603113,
+              0.0
+            ],
+            "sample_index": 23
+          },
+          "minimum_radius_nearest_path_point_index": 2,
+          "optimized_handle_factors": null,
+          "passed": false,
+          "required_radius": null,
+          "required_self_clearance": 20.0001,
+          "sample_count": 257,
+          "self_clearance_closest_pair": null,
+          "self_clearance_method": "dense_nonlocal_segment_sampling",
+          "self_clearance_passed": true,
+          "tangent_continuity_passed": true,
+          "zero_curvature": false
+        }
+      }
+    },
+    {
+      "check_name": "wall_section_failures",
+      "evidence": [
+        {
+          "error": "module shape is missing",
+          "module_id": "M8"
+        },
+        {
+          "error": "one or more geometry-bearing modules have no internal wall sample",
+          "module_ids": [
+            "M8"
+          ]
+        }
+      ]
+    },
+    {
+      "check_name": "module_errors",
+      "evidence": [
+        {
+          "details": {
+            "module_type": "route"
+          },
+          "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+          "failure_code": "MODULE_SHAPE_CONSTRUCTION_FAILED",
+          "module_id": "M8",
+          "stage": "make_module_shape"
+        }
+      ]
+    },
+    {
+      "check_name": "freecad_semantic_validation",
+      "issue_id": "STEP_0008_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "expected": {
+        "freecad_checks": "all implicated checks pass"
+      },
+      "actual": {
+        "error": "FreeCAD module_errors evidence is not empty",
+        "evidence_artifact_path": "/Users/jhkim/Documents/cadgen02/outputs/20260711T132755339990Z/step_mcp/step_8_validation_1.json",
+        "evidence_digest": "24b5e3fcfa70c82deeed1c16dcd1fefc3bcb8f3926a21aeea2b6ca16bde95c47",
+        "evidence": {
+          "module_ids": [
+            "M8"
+          ],
+          "failed_checks": {
+            "assembly": {
+              "bop_errors": [
+                "assembly not built"
+              ],
+              "is_closed": false,
+              "is_null": true,
+              "is_valid": false,
+              "passed": false,
+              "solid_count": 0,
+              "volume": 0.0
+            },
+            "outer_network": {
+              "passed": false,
+              "reason": "outer network not built"
+            },
+            "bore_network": {
+              "passed": false,
+              "reason": "bore network not built"
+            },
+            "modules": {
+              "M8": {
+                "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+                "passed": false
+              }
+            },
+            "centerlines": {
+              "M8": {
+                "passed": false,
+                "required_radius": null,
+                "minimum_radius": 9.999999999999972,
+                "zero_curvature": false,
+                "minimum_radius_nearest_path_point_index": 2,
+                "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                "required_self_clearance": 20.0001,
+                "minimum_nonlocal_distance": null,
+                "self_clearance_passed": true,
+                "endpoint_tangency_passed": true,
+                "endpoint_tangent_dots": null,
+                "minimum_join_tangent_dot": 1.0
+              }
+            },
+            "module_errors": [
+              {
+                "details": {
+                  "module_type": "route"
+                },
+                "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+                "failure_code": "MODULE_SHAPE_CONSTRUCTION_FAILED",
+                "module_id": "M8",
+                "stage": "make_module_shape"
+              }
+            ],
+            "wall_section_failures": [
+              {
+                "error": "module shape is missing",
+                "module_id": "M8"
+              },
+              {
+                "error": "one or more geometry-bearing modules have no internal wall sample",
+                "module_ids": [
+                  "M8"
+                ]
+              }
+            ]
+          },
+          "validator_policy": {
+            "generator_version": "cadgen02-freecad-v22",
+            "policy_digest": "c0bbc9bd10c06280f4bca401a425422cecceab666f19ab9a0da818b0cc65ae2f",
+            "policy_id": "cadgen02-freecad-validator-v22",
+            "validation_schema_version": 3
+          },
+          "generator_version": "cadgen02-freecad-v22",
+          "validation_schema_version": 3,
+          "centerline_context": {
+            "M8": {
+              "passed": false,
+              "required_radius": null,
+              "minimum_radius": 9.999999999999972,
+              "zero_curvature": false,
+              "minimum_radius_nearest_path_point_index": 2,
+              "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+              "required_self_clearance": 20.0001,
+              "minimum_nonlocal_distance": null,
+              "self_clearance_passed": true,
+              "endpoint_tangency_passed": true,
+              "endpoint_tangent_dots": null,
+              "minimum_join_tangent_dot": 1.0,
+              "curve_length": 12.566370614359174,
+              "optimized_handle_factors": null,
+              "minimum_radius_location": {
+                "sample_index": 23,
+                "edge_parameter": [
+                  0,
+                  0.1129009859883835
+                ],
+                "position": [
+                  -77.88241040321589,
+                  -26.452828178603113,
+                  0.0
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "passed_check_summary": [
+    "anchored_inlet_bore_failures",
+    "assembly_errors",
+    "connection_failures",
+    "non_adjacent_overlaps",
+    "terminal_bore_failures",
+    "termination_seal_failures"
+  ],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S7",
+        "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+        "goal_ids": [
+          "turn_4"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "generator_version": "cadgen02-freecad-v22",
+        "policy_digest": "c0bbc9bd10c06280f4bca401a425422cecceab666f19ab9a0da818b0cc65ae2f",
+        "policy_id": "cadgen02-freecad-validator-v22",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0008_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "check_name": "freecad_semantic_validation",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD module_errors evidence is not empty",
+          "evidence_artifact_path": "/Users/jhkim/Documents/cadgen02/outputs/20260711T132755339990Z/step_mcp/step_8_validation_1.json",
+          "evidence_digest": "24b5e3fcfa70c82deeed1c16dcd1fefc3bcb8f3926a21aeea2b6ca16bde95c47",
+          "evidence": {
+            "module_ids": [
+              "M8"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "assembly not built"
+                ],
+                "is_closed": false,
+                "is_null": true,
+                "is_valid": false,
+                "passed": false,
+                "solid_count": 0,
+                "volume": 0.0
+              },
+              "outer_network": {
+                "passed": false,
+                "reason": "outer network not built"
+              },
+              "bore_network": {
+                "passed": false,
+                "reason": "bore network not built"
+              },
+              "modules": {
+                "M8": {
+                  "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+                  "passed": false
+                }
+              },
+              "centerlines": {
+                "M8": {
+                  "passed": false,
+                  "required_radius": null,
+                  "minimum_radius": 9.999999999999972,
+                  "zero_curvature": false,
+                  "minimum_radius_nearest_path_point_index": 2,
+                  "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                  "required_self_clearance": 20.0001,
+                  "minimum_nonlocal_distance": null,
+                  "self_clearance_passed": true,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": null,
+                  "minimum_join_tangent_dot": 1.0
+                }
+              },
+              "module_errors": [
+                {
+                  "details": {
+                    "module_type": "route"
+                  },
+                  "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+                  "failure_code": "MODULE_SHAPE_CONSTRUCTION_FAILED",
+                  "module_id": "M8",
+                  "stage": "make_module_shape"
+                }
+              ],
+              "wall_section_failures": [
+                {
+                  "error": "module shape is missing",
+                  "module_id": "M8"
+                },
+                {
+                  "error": "one or more geometry-bearing modules have no internal wall sample",
+                  "module_ids": [
+                    "M8"
+                  ]
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v22",
+              "policy_digest": "c0bbc9bd10c06280f4bca401a425422cecceab666f19ab9a0da818b0cc65ae2f",
+              "policy_id": "cadgen02-freecad-validator-v22",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v22",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M8": {
+                "passed": false,
+                "required_radius": null,
+                "minimum_radius": 9.999999999999972,
+                "zero_curvature": false,
+                "minimum_radius_nearest_path_point_index": 2,
+                "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                "required_self_clearance": 20.0001,
+                "minimum_nonlocal_distance": null,
+                "self_clearance_passed": true,
+                "endpoint_tangency_passed": true,
+                "endpoint_tangent_dots": null,
+                "minimum_join_tangent_dot": 1.0,
+                "curve_length": 12.566370614359174,
+                "optimized_handle_factors": null,
+                "minimum_radius_location": {
+                  "sample_index": 23,
+                  "edge_parameter": [
+                    0,
+                    0.1129009859883835
+                  ],
+                  "position": [
+                    -77.88241040321589,
+                    -26.452828178603113,
+                    0.0
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check centerlines supplied failure evidence.",
+      "data": {
+        "check_name": "centerlines",
+        "evidence": {
+          "M8": {
+            "circular_sweep": {
+              "analytic_frame_origin": [
+                -86.58328031430297,
+                -31.381810100900953,
+                0.0
+              ],
+              "analytic_frame_radial_axis": [
+                0.8090169943749465,
+                0.5877852522924745,
+                0.0
+              ],
+              "analytic_frame_tangent_axis": [
+                0.5877852522924745,
+                -0.8090169943749465,
+                0.0
+              ],
+              "authored_plane_normal_dot": -1.0,
+              "authored_signed_sweep_degrees": -72.0,
+              "canonical_centerline_radius": 9.999999999999975,
+              "centerline_radius": 9.999999999999975,
+              "classification": "self_intersecting",
+              "construction_method": "analytic_torus_segment_outer_minus_bore",
+              "derived_sweep_magnitude_degrees": 72.00000000000018,
+              "directed_normal": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "equality_roundoff_band": 1.4210854715202004e-14,
+              "outer_profile_radius": 10.0,
+              "radial_clearance": -2.4868995751603507e-14,
+              "raw_radial_clearance": -2.4868995751603507e-14,
+              "supported": false
+            },
+            "curvature_method": "dense_piecewise_curve_sampling",
+            "curvature_proof": "sampled_not_global_extremum",
+            "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+            "curve_length": 12.566370614359174,
+            "endpoint_tangency_passed": true,
+            "endpoint_tangent_dots": null,
+            "minimum_join_tangent_dot": 1.0,
+            "minimum_nonlocal_distance": null,
+            "minimum_radius": 9.999999999999972,
+            "minimum_radius_location": {
+              "edge_parameter": [
+                0,
+                0.1129009859883835
+              ],
+              "position": [
+                -77.88241040321589,
+                -26.452828178603113,
+                0.0
+              ],
+              "sample_index": 23
+            },
+            "minimum_radius_nearest_path_point_index": 2,
+            "optimized_handle_factors": null,
+            "passed": false,
+            "required_radius": null,
+            "required_self_clearance": 20.0001,
+            "sample_count": 257,
+            "self_clearance_closest_pair": null,
+            "self_clearance_method": "dense_nonlocal_segment_sampling",
+            "self_clearance_passed": true,
+            "tangent_continuity_passed": true,
+            "zero_curvature": false
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check wall_section_failures supplied failure evidence.",
+      "data": {
+        "check_name": "wall_section_failures",
+        "evidence": [
+          {
+            "error": "module shape is missing",
+            "module_id": "M8"
+          },
+          {
+            "error": "one or more geometry-bearing modules have no internal wall sample",
+            "module_ids": [
+              "M8"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "kernel_error",
+      "statement": "FreeCAD or host check module_errors supplied failure evidence.",
+      "data": {
+        "check_name": "module_errors",
+        "evidence": [
+          {
+            "details": {
+              "module_type": "route"
+            },
+            "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+            "failure_code": "MODULE_SHAPE_CONSTRUCTION_FAILED",
+            "module_id": "M8",
+            "stage": "make_module_shape"
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check freecad_semantic_validation supplied failure evidence.",
+      "data": {
+        "check_name": "freecad_semantic_validation",
+        "issue_id": "STEP_0008_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD module_errors evidence is not empty",
+          "evidence_artifact_path": "/Users/jhkim/Documents/cadgen02/outputs/20260711T132755339990Z/step_mcp/step_8_validation_1.json",
+          "evidence_digest": "24b5e3fcfa70c82deeed1c16dcd1fefc3bcb8f3926a21aeea2b6ca16bde95c47",
+          "evidence": {
+            "module_ids": [
+              "M8"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "assembly not built"
+                ],
+                "is_closed": false,
+                "is_null": true,
+                "is_valid": false,
+                "passed": false,
+                "solid_count": 0,
+                "volume": 0.0
+              },
+              "outer_network": {
+                "passed": false,
+                "reason": "outer network not built"
+              },
+              "bore_network": {
+                "passed": false,
+                "reason": "bore network not built"
+              },
+              "modules": {
+                "M8": {
+                  "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+                  "passed": false
+                }
+              },
+              "centerlines": {
+                "M8": {
+                  "passed": false,
+                  "required_radius": null,
+                  "minimum_radius": 9.999999999999972,
+                  "zero_curvature": false,
+                  "minimum_radius_nearest_path_point_index": 2,
+                  "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                  "required_self_clearance": 20.0001,
+                  "minimum_nonlocal_distance": null,
+                  "self_clearance_passed": true,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": null,
+                  "minimum_join_tangent_dot": 1.0
+                }
+              },
+              "module_errors": [
+                {
+                  "details": {
+                    "module_type": "route"
+                  },
+                  "error": "circular arc centerline radius is smaller than the outer profile radius; classification=self_intersecting",
+                  "failure_code": "MODULE_SHAPE_CONSTRUCTION_FAILED",
+                  "module_id": "M8",
+                  "stage": "make_module_shape"
+                }
+              ],
+              "wall_section_failures": [
+                {
+                  "error": "module shape is missing",
+                  "module_id": "M8"
+                },
+                {
+                  "error": "one or more geometry-bearing modules have no internal wall sample",
+                  "module_ids": [
+                    "M8"
+                  ]
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v22",
+              "policy_digest": "c0bbc9bd10c06280f4bca401a425422cecceab666f19ab9a0da818b0cc65ae2f",
+              "policy_id": "cadgen02-freecad-validator-v22",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v22",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M8": {
+                "passed": false,
+                "required_radius": null,
+                "minimum_radius": 9.999999999999972,
+                "zero_curvature": false,
+                "minimum_radius_nearest_path_point_index": 2,
+                "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                "required_self_clearance": 20.0001,
+                "minimum_nonlocal_distance": null,
+                "self_clearance_passed": true,
+                "endpoint_tangency_passed": true,
+                "endpoint_tangent_dots": null,
+                "minimum_join_tangent_dot": 1.0,
+                "curve_length": 12.566370614359174,
+                "optimized_handle_factors": null,
+                "minimum_radius_location": {
+                  "sample_index": 23,
+                  "edge_parameter": [
+                    0,
+                    0.1129009859883835
+                  ],
+                  "position": [
+                    -77.88241040321589,
+                    -26.452828178603113,
+                    0.0
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "kind": "passed_check",
+      "statement": "These checks passed for the same candidate and must not be casually invalidated.",
+      "data": {
+        "check_names": [
+          "anchored_inlet_bore_failures",
+          "assembly_errors",
+          "connection_failures",
+          "non_adjacent_overlaps",
+          "terminal_bore_failures",
+          "termination_seal_failures"
+        ]
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/path_kind",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/bend_radius",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/sweep_angle",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/plane_normal/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/plane_normal/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/plane_normal/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change",
+    "kernel_review"
+  ]
+}

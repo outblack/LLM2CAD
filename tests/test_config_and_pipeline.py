@@ -24,6 +24,7 @@ from cadgen.registry import validate_action
 from cadgen.schemas import (
     ActionDraft,
     CorePlannerDecision,
+    CorePlannerDecisionWire,
     GlobalSpec,
     Goal,
     IntentResult,
@@ -48,7 +49,9 @@ def _successful_freecad_result(code: str) -> dict:
         prefix = "CADGEN_READY="
     elif "CADGEN_VALIDATION=" in code:
         payload_line = next(
-            line for line in code.splitlines() if line.startswith("PAYLOAD = json.loads(")
+            line
+            for line in code.splitlines()
+            if line.startswith("PAYLOAD = json.loads(")
         )
         payload_json = ast.literal_eval(payload_line[len("PAYLOAD = json.loads(") : -1])
         payload = json.loads(payload_json)
@@ -98,12 +101,10 @@ def _successful_freecad_result(code: str) -> dict:
                 "outer_network": {"passed": True},
                 "bore_network": {"passed": True},
                 "modules": {
-                    module["id"]: {"passed": True}
-                    for module in payload["modules"]
+                    module["id"]: {"passed": True} for module in payload["modules"]
                 },
                 "centerlines": {
-                    module["id"]: {"passed": True}
-                    for module in payload["modules"]
+                    module["id"]: {"passed": True} for module in payload["modules"]
                 },
                 "module_errors": [],
                 "assembly_errors": [],
@@ -140,7 +141,10 @@ def _successful_freecad_result(code: str) -> dict:
         raise AssertionError("unexpected FreeCAD script")
     return {
         "content": [
-            {"type": "text", "text": prefix + json.dumps(evidence, separators=(",", ":"))}
+            {
+                "type": "text",
+                "text": prefix + json.dumps(evidence, separators=(",", ":")),
+            }
         ]
     }
 
@@ -177,6 +181,77 @@ def test_model_env_overrides(monkeypatch):
     assert settings.model_for("intent") == "gemini-3.5-pro"
 
 
+def test_step_repair_advisor_has_dedicated_model_policy_and_safe_defaults(
+    monkeypatch,
+):
+    settings = load_settings(Path("missing.env"))
+
+    assert settings.model_for("intent") == "gemini-3.1-flash-lite"
+    assert settings.model_for("step_planner") == "gemini-3.5-flash"
+    assert settings.model_for("step_repair_advisor") == "gemini-3.1-pro-preview"
+    assert (
+        len(
+            {
+                settings.model_for("intent"),
+                settings.model_for("step_planner"),
+                settings.model_for("step_repair_advisor"),
+            }
+        )
+        == 3
+    )
+    assert settings.step_repair_advisor_enabled is True
+    assert settings.step_repair_advisor_required is True
+    assert settings.step_repair_advisor_trigger_attempt == 1
+    assert settings.step_repair_advisor_max_calls_per_step == 3
+    assert settings.step_repair_advisor_max_signatures_per_step == 3
+    assert settings.step_repair_advisor_probe_limit == 0
+    assert settings.output_token_limit_for("step_repair_advisor") == 4096
+
+    monkeypatch.setenv("GEMINI_STEP_REPAIR_ADVISOR_MODEL", "diagnostician-model")
+    monkeypatch.setenv("CADGEN_STEP_REPAIR_ADVISOR_ENABLED", "false")
+    monkeypatch.setenv("CADGEN_STEP_REPAIR_ADVISOR_REQUIRED", "false")
+    monkeypatch.setenv("CADGEN_STEP_REPAIR_ADVISOR_TRIGGER_ATTEMPT", "3")
+    monkeypatch.setenv("CADGEN_STEP_REPAIR_ADVISOR_MAX_CALLS_PER_STEP", "2")
+    monkeypatch.setenv("CADGEN_STEP_REPAIR_ADVISOR_MAX_SIGNATURES_PER_STEP", "4")
+    monkeypatch.setenv("CADGEN_STEP_REPAIR_ADVISOR_PROBE_LIMIT", "1")
+    monkeypatch.setenv(
+        "CADGEN_GEMINI_STEP_REPAIR_ADVISOR_MAX_OUTPUT_TOKENS",
+        "3072",
+    )
+    overridden = load_settings(Path("missing.env"))
+
+    assert overridden.model_for("step_repair_advisor") == "diagnostician-model"
+    assert overridden.step_repair_advisor_enabled is False
+    assert overridden.step_repair_advisor_required is False
+    assert overridden.step_repair_advisor_trigger_attempt == 3
+    assert overridden.step_repair_advisor_max_calls_per_step == 2
+    assert overridden.step_repair_advisor_max_signatures_per_step == 4
+    assert overridden.step_repair_advisor_probe_limit == 1
+    assert overridden.output_token_limit_for("step_repair_advisor") == 3072
+
+
+def test_skip_freecad_keeps_static_inverse_advisor_enabled():
+    settings = load_settings(Path("missing.env"))
+
+    skipped = settings.with_overrides(skip_freecad=True)
+
+    assert skipped.step_repair_advisor_enabled is True
+    assert skipped.freecad_mcp_enabled is False
+
+
+def test_step_repair_advisor_rejects_invalid_limits():
+    settings = load_settings(Path("missing.env"))
+
+    with pytest.raises(ValueError, match="TRIGGER_ATTEMPT"):
+        replace(settings, step_repair_advisor_trigger_attempt=0)
+    with pytest.raises(ValueError, match="MAX_CALLS_PER_STEP"):
+        replace(settings, step_repair_advisor_max_calls_per_step=-1)
+    with pytest.raises(ValueError, match="MAX_SIGNATURES_PER_STEP"):
+        replace(settings, step_repair_advisor_max_signatures_per_step=-1)
+    with pytest.raises(ValueError, match="PROBE_LIMIT"):
+        replace(settings, step_repair_advisor_probe_limit=-1)
+
+
 def test_intent_output_token_limit_has_independent_default_and_override(monkeypatch):
     settings = load_settings(Path("missing.env"))
     assert settings.gemini_max_output_tokens == 16384
@@ -200,9 +275,14 @@ def test_retry_defaults_are_generous_and_global_call_cap_is_retry_aware():
     minimum_full_replay_budget = (
         settings.intent_repair_attempts
         + 1
-        + (settings.final_repair_rounds + 1)
+        + 2
+        * (settings.final_repair_rounds + 1)
         * settings.max_iter
         * (settings.step_repair_attempts + 1)
+        + (settings.final_repair_rounds + 1)
+        * settings.max_iter
+        * settings.step_repair_advisor_max_calls_per_step
+        * 2
     )
     assert settings.gemini_max_calls >= minimum_full_replay_budget
     assert settings.gemini_max_total_tokens == 1_000_000
@@ -213,6 +293,13 @@ def test_freecad_mcp_timeout_env_override(monkeypatch):
     settings = load_settings(Path("missing.env"))
 
     assert settings.freecad_mcp_timeout_sec == 7.5
+
+
+def test_gemini_request_timeout_env_override(monkeypatch):
+    monkeypatch.setenv("CADGEN_GEMINI_REQUEST_TIMEOUT_SEC", "12.5")
+    settings = load_settings(Path("missing.env"))
+
+    assert settings.gemini_request_timeout_sec == 12.5
 
 
 def test_step_mcp_env_override(monkeypatch):
@@ -232,6 +319,26 @@ def test_invalid_boolean_and_nonpositive_limits_fail_configuration(monkeypatch):
         load_settings(Path("missing.env")).with_overrides(max_iter=0)
 
 
+def test_action_budget_uses_soft_baseline_and_explicit_override_is_hard(monkeypatch):
+    monkeypatch.delenv("CADGEN_MAX_ITER", raising=False)
+    monkeypatch.delenv("CADGEN_MAX_ITER_HARD_CEILING", raising=False)
+    settings = load_settings(Path("missing.env"))
+
+    assert settings.max_iter == 12
+    assert settings.max_iter_hard_ceiling == 64
+    assert settings.max_iter_is_hard_limit is False
+
+    explicit = settings.with_overrides(max_iter=20)
+    assert explicit.max_iter == 20
+    assert explicit.max_iter_hard_ceiling == 20
+    assert explicit.max_iter_is_hard_limit is True
+
+    monkeypatch.setenv("CADGEN_MAX_ITER", "12")
+    monkeypatch.setenv("CADGEN_MAX_ITER_HARD_CEILING", "8")
+    with pytest.raises(ValueError, match="must not exceed"):
+        load_settings(Path("missing.env"))
+
+
 def test_korean_dry_run_generates_pipe_modules(tmp_path):
     settings = load_settings(Path("missing.env")).with_overrides(
         output_dir=tmp_path,
@@ -249,7 +356,9 @@ def test_korean_dry_run_generates_pipe_modules(tmp_path):
     run_dir = Path(report.artifacts.output_dir)
     intent = json.loads((run_dir / "intent.json").read_text(encoding="utf-8"))
     actions = json.loads((run_dir / "actions.json").read_text(encoding="utf-8"))
-    step_checks = json.loads((run_dir / "step_verification.json").read_text(encoding="utf-8"))
+    step_checks = json.loads(
+        (run_dir / "step_verification.json").read_text(encoding="utf-8")
+    )
     critic = json.loads((run_dir / "critic_report.json").read_text(encoding="utf-8"))
     run_report = json.loads((run_dir / "run_report.json").read_text(encoding="utf-8"))
 
@@ -396,9 +505,7 @@ def test_step_planner_prompt_uses_compact_catalog_not_full_state():
         "terminate",
     }
     route_catalog = next(
-        module
-        for module in payload["module_catalog"]
-        if module["id"] == "route"
+        module for module in payload["module_catalog"] if module["id"] == "route"
     )
     assert "direction" in route_catalog["authored_params"]
     assert "length" in route_catalog["authored_params"]
@@ -588,7 +695,7 @@ def test_non_dry_run_pipeline_keeps_gemini_module_selection(monkeypatch, tmp_pat
     step_calls = [call for call in FakeGeminiClient.calls if call[2] == "step_planner"]
     assert len(step_calls) == 1
     prompt, schema, part = step_calls[0]
-    assert schema is CorePlannerDecision
+    assert schema is CorePlannerDecisionWire
     assert part == "step_planner"
     assert '"id":"route"' in prompt
     assert "straight_pipe" not in prompt
@@ -640,7 +747,9 @@ def test_non_dry_run_planner_rejects_legacy_action_before_defaults_can_apply():
         pipeline._plan_action(state, dry_run=False, gemini=FakeGemini())
 
 
-def test_non_dry_run_step_mcp_uses_fake_executor_before_final_mcp(monkeypatch, tmp_path):
+def test_non_dry_run_step_mcp_uses_fake_executor_before_final_mcp(
+    monkeypatch, tmp_path
+):
     settings = replace(
         load_settings(Path("missing.env")),
         output_dir=tmp_path,
@@ -685,9 +794,7 @@ def test_non_dry_run_step_mcp_uses_fake_executor_before_final_mcp(monkeypatch, t
 
     assert len(calls) == 2
     assert step_checks[0]["mcp_status"] == "passed"
-    assert step_checks[0]["mcp_result_path"].endswith(
-        "step_mcp/step_1_attempt_1.json"
-    )
+    assert step_checks[0]["mcp_result_path"].endswith("step_mcp/step_1_attempt_1.json")
     assert report.verification_status == "passed"
     assert report.top_issues == []
     assert report.freecad_mcp_used is True
@@ -751,9 +858,9 @@ def test_pipeline_static_failure_writes_partial_artifacts_and_skips_mcp(
                             "outer_diameter": 20.0,
                             "wall_thickness": 2.0,
                         },
-                        ],
-                        "blend_mode": "hard",
-                        "max_hub_radius": 12.0,
+                    ],
+                    "blend_mode": "hard",
+                    "max_hub_radius": 12.0,
                 },
             )
 
@@ -940,8 +1047,8 @@ def test_pipeline_final_critic_failure_writes_report_and_skips_final_mcp(
                 return IntentResult(
                     global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
                     target_behavior=[
-                            Goal(type="branch", branch_count=1, branch_angles=[45.0]),
-                            Goal(type="branch", branch_count=1, branch_angles=[45.0]),
+                        Goal(type="branch", branch_count=1, branch_angles=[45.0]),
+                        Goal(type="branch", branch_count=1, branch_angles=[45.0]),
                     ],
                     expected_open_ports=4,
                     expected_open_ports_source="explicit",
@@ -970,9 +1077,9 @@ def test_pipeline_final_critic_failure_writes_report_and_skips_final_mcp(
                             "outer_diameter": 20.0,
                             "wall_thickness": 2.0,
                         },
-                            ],
-                        "blend_mode": "hard",
-                        "max_hub_radius": 12.0,
+                    ],
+                    "blend_mode": "hard",
+                    "max_hub_radius": 12.0,
                 },
             )
 
@@ -1043,16 +1150,10 @@ def test_pipeline_planning_failure_writes_report(monkeypatch, tmp_path):
     assert report["top_issues"] == ["STEP_0001_01_PLANNING_FAILED"]
     assert report["static_error_count"] == 1
     critic = json.loads(
-        Path(report["artifacts"]["critic_report_path"]).read_text(
-            encoding="utf-8"
-        )
+        Path(report["artifacts"]["critic_report_path"]).read_text(encoding="utf-8")
     )
-    assert [issue["issue_code"] for issue in critic["issues"]] == [
-        "PLANNING_FAILED"
-    ]
-    artifact_statuses = {
-        item["name"]: item for item in report["artifact_statuses"]
-    }
+    assert [issue["issue_code"] for issue in critic["issues"]] == ["PLANNING_FAILED"]
+    artifact_statuses = {item["name"]: item for item in report["artifact_statuses"]}
     assert artifact_statuses["actions"]["status"] == "available"
     assert artifact_statuses["state"]["status"] == "available"
     assert artifact_statuses["critic_report"]["status"] == "available"
@@ -1084,9 +1185,7 @@ def test_structured_planner_failure_resets_lineage_and_retries_with_full_catalog
             del unused_settings
             self.lineage = False
 
-        def stream_structured(
-            self, prompt, schema, *, part, thinking_level="low"
-        ):
+        def stream_structured(self, prompt, schema, *, part, thinking_level="low"):
             del schema
             if part == "intent":
                 return IntentResult(
@@ -1094,9 +1193,7 @@ def test_structured_planner_failure_resets_lineage_and_retries_with_full_catalog
                         outer_diameter=20.0,
                         wall_thickness=2.0,
                     ),
-                    target_behavior=[
-                        Goal(type="move", direction="+X", length=20.0)
-                    ],
+                    target_behavior=[Goal(type="move", direction="+X", length=20.0)],
                     expected_open_ports=1,
                     expected_open_ports_source="derived",
                 )
@@ -1263,7 +1360,9 @@ def test_pipeline_recovers_from_invalid_planner_schema_without_spending_repair_a
     )
 
 
-def test_pipeline_invalid_v2_draft_writes_report_before_resolution(monkeypatch, tmp_path):
+def test_pipeline_invalid_v2_draft_writes_report_before_resolution(
+    monkeypatch, tmp_path
+):
     settings = replace(
         load_settings(Path("missing.env")),
         output_dir=tmp_path,
@@ -1801,8 +1900,12 @@ def test_validation_reports_bad_numeric_values_without_raising():
 
     assert not result.valid
     assert any("Missing required param" in error for error in result.errors)
-    assert any("Invalid numeric param for bend_radius" in error for error in result.errors)
-    assert any("segment_resolution must be at least 4" in error for error in result.errors)
+    assert any(
+        "Invalid numeric param for bend_radius" in error for error in result.errors
+    )
+    assert any(
+        "segment_resolution must be at least 4" in error for error in result.errors
+    )
 
 
 def test_validation_reports_bad_junction_branch_angles():
@@ -1896,13 +1999,26 @@ def test_validation_rejects_invalid_script_consumed_numeric_params():
     )
 
     assert not reducer.valid
-    assert any("wall_thickness_out must be non-negative" in error for error in reducer.errors)
+    assert any(
+        "wall_thickness_out must be non-negative" in error for error in reducer.errors
+    )
     assert not connector.valid
-    assert any("coupling_outer_diameter must be at least outer_diameter" in error for error in connector.errors)
-    assert any("sleeve_overlap must be non-negative" in error for error in connector.errors)
+    assert any(
+        "coupling_outer_diameter must be at least outer_diameter" in error
+        for error in connector.errors
+    )
+    assert any(
+        "sleeve_overlap must be non-negative" in error for error in connector.errors
+    )
     assert not cap.valid
-    assert any("cap_thickness must be greater than zero for capped ends" in error for error in cap.errors)
-    assert any("cap_thickness must be greater than bore extension" in error for error in cap.errors)
+    assert any(
+        "cap_thickness must be greater than zero for capped ends" in error
+        for error in cap.errors
+    )
+    assert any(
+        "cap_thickness must be greater than bore extension" in error
+        for error in cap.errors
+    )
 
 
 def test_junction_branch_count_creates_trunk_plus_branch_ports():
@@ -2098,7 +2214,10 @@ def test_junction_vector_count_mismatch_fails_registry_validation():
     result = validate_action(action, state)
 
     assert not result.valid
-    assert any("branch_count must match explicit outlet vector count" in error for error in result.errors)
+    assert any(
+        "branch_count must match explicit outlet vector count" in error
+        for error in result.errors
+    )
 
 
 def test_junction_invalid_and_conflicting_vectors_fail_registry_validation():
@@ -2148,9 +2267,15 @@ def test_junction_invalid_and_conflicting_vectors_fail_registry_validation():
 
     assert not invalid.valid
     assert any("must not be a zero vector" in error for error in invalid.errors)
-    assert any("Invalid numeric param for required_outlet_vectors[1][0]" in error for error in invalid.errors)
+    assert any(
+        "Invalid numeric param for required_outlet_vectors[1][0]" in error
+        for error in invalid.errors
+    )
     assert not conflicting.valid
-    assert any("outlet_vectors must match required_outlet_vectors" in error for error in conflicting.errors)
+    assert any(
+        "outlet_vectors must match required_outlet_vectors" in error
+        for error in conflicting.errors
+    )
 
 
 def test_junction_registry_canonicalizes_planner_vector_and_style_aliases():
@@ -2227,7 +2352,12 @@ def test_static_step_validation_reports_branch_direction_mismatch():
     intent = IntentResult(
         global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
         target_behavior=[
-            Goal(type="branch", direction="-X", branch_count=2, branch_angles=[45.0, -45.0])
+            Goal(
+                type="branch",
+                direction="-X",
+                branch_count=2,
+                branch_angles=[45.0, -45.0],
+            )
         ],
         expected_open_ports=3,
         expected_open_ports_source="derived",
@@ -2237,7 +2367,11 @@ def test_static_step_validation_reports_branch_direction_mismatch():
         ActionDraft(
             target_port=before.open_ports[0].id,
             module="junction_pipe",
-            params={"branch_count": 2, "branch_angles": [45.0, -45.0], "direction": "+X"},
+            params={
+                "branch_count": 2,
+                "branch_angles": [45.0, -45.0],
+                "direction": "+X",
+            },
         ),
         before,
     )
@@ -2306,7 +2440,9 @@ def test_static_step_validation_requires_opposite_input_axis():
 
     step = build_step_verification(before, action, after, intent, 1)
 
-    assert any(issue.issue_code == "MODULE_INPUT_AXIS_MISMATCH" for issue in step.issues)
+    assert any(
+        issue.issue_code == "MODULE_INPUT_AXIS_MISMATCH" for issue in step.issues
+    )
 
 
 def test_explicit_required_outlet_directions_must_each_be_covered():
@@ -2343,7 +2479,9 @@ def test_explicit_required_outlet_directions_must_each_be_covered():
 
     step = build_step_verification(before, action, after, intent, 1)
     mismatch = next(
-        issue for issue in step.issues if issue.issue_code == "BRANCH_DIRECTION_MISMATCH"
+        issue
+        for issue in step.issues
+        if issue.issue_code == "BRANCH_DIRECTION_MISMATCH"
     )
 
     assert "-X" in mismatch.actual["missing_directions"]
@@ -2465,9 +2603,7 @@ def test_junction_direction_param_guides_branch_axes_and_passes_static_check():
     engine = StateEngine(settings)
     intent = IntentResult(
         global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
-        target_behavior=[
-            Goal(type="branch", direction="-X", branch_count=2)
-        ],
+        target_behavior=[Goal(type="branch", direction="-X", branch_count=2)],
         expected_open_ports=3,
         expected_open_ports_source="derived",
     )
@@ -2527,7 +2663,9 @@ def test_final_critic_rejects_expected_open_port_mismatch():
     critic = build_final_critic_report(intent, state, [])
 
     assert not critic.passed
-    assert any(issue.issue_code == "OPEN_PORT_COUNT_MISMATCH" for issue in critic.issues)
+    assert any(
+        issue.issue_code == "OPEN_PORT_COUNT_MISMATCH" for issue in critic.issues
+    )
 
 
 def test_final_critic_rejects_missing_terminal_vector_even_when_count_matches():
@@ -2575,7 +2713,9 @@ def test_final_critic_rejects_missing_terminal_vector_even_when_count_matches():
 
     critic = build_final_critic_report(intent, state, [])
     mismatch = next(
-        issue for issue in critic.issues if issue.issue_code == "FINAL_OUTLET_VECTOR_MISMATCH"
+        issue
+        for issue in critic.issues
+        if issue.issue_code == "FINAL_OUTLET_VECTOR_MISMATCH"
     )
 
     assert not critic.passed
@@ -2622,7 +2762,9 @@ def test_ensure_freecad_open_does_not_launch_when_macos_app_is_running(monkeypat
         if cmd[:2] == ["osascript", "-e"]:
             return subprocess_result(returncode=0, stdout="true\n")
         if cmd[:2] == ["open", "-a"]:
-            raise AssertionError("open -a should not be called for an already-running app")
+            raise AssertionError(
+                "open -a should not be called for an already-running app"
+            )
         raise AssertionError(f"unexpected command: {cmd}")
 
     monkeypatch.setattr(freecad_app.platform, "system", lambda: "Darwin")

@@ -1,0 +1,2137 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260711T132755339990Z",
+    "state_id": "S19",
+    "state_digest": "c9afb0fc09db9673ea5dfc27ce00f0a033380590610b5f1be6687acee3e0554b",
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "step_index": 20,
+    "attempt_index": 1,
+    "action_digest": "04c2313ef4e776bb2c71a420491475f6d48e007d26f79bf7382ed6e4d50ceeb8",
+    "failure_signature": "7e8d5a687478ec701bd9657f2bf6d3b6d66b45f0436f45243ca4b714b4263977",
+    "evidence_digest": "53c39790dd5820c3099086052b1353b84cc433bd891159c0dd0befa6d3787dfc",
+    "generator_version": "cadgen02-freecad-v23",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0020_01_DRAFT_VALIDATION_FAILED"
+  ],
+  "current_state": {
+    "state_id": "S19",
+    "state_version": 19,
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "remaining_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "open_ports": [
+      {
+        "id": "M19.out",
+        "position": [
+          6.9098300562505415,
+          -9.51056516295155,
+          0.0
+        ],
+        "axis": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2",
+      "M3",
+      "M4",
+      "M5",
+      "M6",
+      "M7",
+      "M8",
+      "M9",
+      "M10",
+      "M11",
+      "M12",
+      "M13",
+      "M14",
+      "M15",
+      "M16",
+      "M17",
+      "M18",
+      "M19"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M3.out",
+        "port_b_id": "M4.in",
+        "action_id": "A4",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E4",
+        "port_a_id": "M4.out",
+        "port_b_id": "M5.in",
+        "action_id": "A5",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E5",
+        "port_a_id": "M5.out",
+        "port_b_id": "M6.in",
+        "action_id": "A6",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E6",
+        "port_a_id": "M6.out",
+        "port_b_id": "M7.in",
+        "action_id": "A7",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E7",
+        "port_a_id": "M7.out",
+        "port_b_id": "M8.in",
+        "action_id": "A8",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E8",
+        "port_a_id": "M8.out",
+        "port_b_id": "M9.in",
+        "action_id": "A9",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E9",
+        "port_a_id": "M9.out",
+        "port_b_id": "M10.in",
+        "action_id": "A10",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E10",
+        "port_a_id": "M10.out",
+        "port_b_id": "M11.in",
+        "action_id": "A11",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E11",
+        "port_a_id": "M11.out",
+        "port_b_id": "M12.in",
+        "action_id": "A12",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E12",
+        "port_a_id": "M12.out",
+        "port_b_id": "M13.in",
+        "action_id": "A13",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E13",
+        "port_a_id": "M13.out",
+        "port_b_id": "M14.in",
+        "action_id": "A14",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E14",
+        "port_a_id": "M14.out",
+        "port_b_id": "M15.in",
+        "action_id": "A15",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E15",
+        "port_a_id": "M15.out",
+        "port_b_id": "M16.in",
+        "action_id": "A16",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E16",
+        "port_a_id": "M16.out",
+        "port_b_id": "M17.in",
+        "action_id": "A17",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E17",
+        "port_a_id": "M17.out",
+        "port_b_id": "M18.in",
+        "action_id": "A18",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E18",
+        "port_a_id": "M18.out",
+        "port_b_id": "M19.in",
+        "action_id": "A19",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+    "goal_ids": [
+      "close_loop",
+      "turn_10"
+    ],
+    "goals": [
+      {
+        "goal_id": "turn_10",
+        "depends_on_goal_ids": [
+          "move_10"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -72.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      {
+        "goal_id": "close_loop",
+        "depends_on_goal_ids": [
+          "turn_10"
+        ],
+        "allow_parallel": false,
+        "type": "connect",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "start_anchor"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "explicit"
+  },
+  "rejected_draft": {
+    "target_port": "M19.out",
+    "module": "connect_ports",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "spline",
+      "other_port_id": "M1.in",
+      "waypoints": [
+        [
+          0.0,
+          -10.0,
+          0.0
+        ]
+      ]
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "completed_goal_ids": [
+      "turn_10",
+      "close_loop"
+    ],
+    "satisfied_components": [],
+    "rationale": null
+  },
+  "resolved_action": null,
+  "implicated_modules": [
+    {
+      "id": "M12",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M12",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": -72.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          -52.781919922947374,
+          -72.64808030970195,
+          0.0
+        ],
+        "axis": [
+          0.9510565162951538,
+          0.3090169943749471,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "path_points": [
+          [
+            -52.781919922947374,
+            -72.64808030970195,
+            0.0
+          ],
+          [
+            -52.30016504209687,
+            -72.50482908432075,
+            0.0
+          ],
+          [
+            -51.81182107841845,
+            -72.38596423697155,
+            0.0
+          ],
+          [
+            -51.31812163114674,
+            -72.29178603057481,
+            0.0
+          ],
+          [
+            -50.820313827932715,
+            -72.22253236745341,
+            0.0
+          ],
+          [
+            -50.31965517449103,
+            -72.17837818837077,
+            0.0
+          ],
+          [
+            -49.817410378031425,
+            -72.15943503061533,
+            0.0
+          ],
+          [
+            -49.314848152498556,
+            -72.1657507462476,
+            0.0
+          ],
+          [
+            -48.813238013690466,
+            -72.19730938122177,
+            0.0
+          ],
+          [
+            -48.31384707235152,
+            -72.25403121568698,
+            0.0
+          ],
+          [
+            -47.81793683334065,
+            -72.3357729653666,
+            0.0
+          ],
+          [
+            -47.326760008960655,
+            -72.44232814350676,
+            0.0
+          ],
+          [
+            -46.841557354498136,
+            -72.57342758247972,
+            0.0
+          ],
+          [
+            -46.363554533968035,
+            -72.72874011372484,
+            0.0
+          ],
+          [
+            -45.89395902397989,
+            -72.90787340430892,
+            0.0
+          ],
+          [
+            -45.433957063547176,
+            -73.1103749479933,
+            0.0
+          ],
+          [
+            -44.984710657544575,
+            -73.33573320830396,
+            0.0
+          ],
+          [
+            -44.54735464138284,
+            -73.58337891071697,
+            0.0
+          ],
+          [
+            -44.12299381431602,
+            -73.85268648069537,
+            0.0
+          ],
+          [
+            -43.71270014862271,
+            -74.14297562394472,
+            0.0
+          ],
+          [
+            -43.317510081711006,
+            -74.4535130448956,
+            0.0
+          ],
+          [
+            -42.93842189798765,
+            -74.78351429907175,
+            0.0
+          ],
+          [
+            -42.57639320710505,
+            -75.13214577466499,
+            0.0
+          ],
+          [
+            -42.23233852495608,
+            -75.49852679831098,
+            0.0
+          ],
+          [
+            -41.907126963527666,
+            -75.88173185974648,
+            0.0
+          ],
+          [
+            -41.60158003544842,
+            -76.28079294972876,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -41.60158003544842,
+          -76.28079294972876,
+          0.0
+        ],
+        "out_axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M12.in",
+          "position": [
+            -52.781919922947374,
+            -72.64808030970195,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951538,
+            -0.3090169943749471,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M12.out",
+          "position": [
+            -41.60158003544842,
+            -76.28079294972876,
+            0.0
+          ],
+          "axis": [
+            0.5877852522924729,
+            -0.8090169943749477,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M11.out"
+      }
+    },
+    {
+      "id": "M13",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M13",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          -41.60158003544842,
+          -76.28079294972876,
+          0.0
+        ],
+        "axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "path_points": [
+          [
+            -41.60158003544842,
+            -76.28079294972876,
+            0.0
+          ],
+          [
+            -18.090169943749505,
+            -108.64147272472667,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -18.090169943749505,
+          -108.64147272472667,
+          0.0
+        ],
+        "out_axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M13.in",
+          "position": [
+            -41.60158003544842,
+            -76.28079294972876,
+            0.0
+          ],
+          "axis": [
+            -0.5877852522924729,
+            0.8090169943749477,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M13.out",
+          "position": [
+            -18.090169943749505,
+            -108.64147272472667,
+            0.0
+          ],
+          "axis": [
+            0.5877852522924729,
+            -0.8090169943749477,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M12.out"
+      }
+    },
+    {
+      "id": "M14",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M14",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": 144.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          -18.090169943749505,
+          -108.64147272472667,
+          0.0
+        ],
+        "axis": [
+          0.5877852522924729,
+          -0.8090169943749477,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          4.996003610813204e-16,
+          1.0,
+          0.0
+        ],
+        "path_points": [
+          [
+            -18.090169943749505,
+            -108.64147272472667,
+            0.0
+          ],
+          [
+            -17.790805745256733,
+            -109.032858260743,
+            0.0
+          ],
+          [
+            -17.472525348788942,
+            -109.40902198888051,
+            0.0
+          ],
+          [
+            -17.136101544117555,
+            -109.76905057773484,
+            0.0
+          ],
+          [
+            -16.782351173492373,
+            -110.11206987227169,
+            0.0
+          ],
+          [
+            -16.412133148335815,
+            -110.43724701628891,
+            0.0
+          ],
+          [
+            -16.026346363792598,
+            -110.74379247460433,
+            0.0
+          ],
+          [
+            -15.625927516198264,
+            -111.03096195005958,
+            0.0
+          ],
+          [
+            -15.211848828765884,
+            -111.2980581906851,
+            0.0
+          ],
+          [
+            -14.785115691012898,
+            -111.54443268263891,
+            0.0
+          ],
+          [
+            -14.346764217659683,
+            -111.76948722480832,
+            0.0
+          ],
+          [
+            -13.897858732926828,
+            -111.97267538125148,
+            0.0
+          ],
+          [
+            -13.439489186339316,
+            -112.1535038079525,
+            0.0
+          ],
+          [
+            -12.972768506312061,
+            -112.31153345066838,
+            0.0
+          ],
+          [
+            -12.498829897942342,
+            -112.44638061095952,
+            0.0
+          ],
+          [
+            -12.018824091570135,
+            -112.5577178778156,
+            0.0
+          ],
+          [
+            -11.533916548786888,
+            -112.64527492261453,
+            0.0
+          ],
+          [
+            -11.04528463267657,
+            -112.70883915548467,
+            0.0
+          ],
+          [
+            -10.554114749159734,
+            -112.74825624147628,
+            0.0
+          ],
+          [
+            -10.06159946638142,
+            -112.76343047528921,
+            0.0
+          ],
+          [
+            -9.568934619137078,
+            -112.75432501364688,
+            0.0
+          ],
+          [
+            -9.077316405367014,
+            -112.72096196475229,
+            0.0
+          ],
+          [
+            -8.58793848176912,
+            -112.66342233460901,
+            0.0
+          ],
+          [
+            -8.101989065581778,
+            -112.58184583033731,
+            0.0
+          ],
+          [
+            -7.6206480495738464,
+            -112.47643052096308,
+            0.0
+          ],
+          [
+            -7.145084137246613,
+            -112.34743235650316,
+            0.0
+          ],
+          [
+            -6.676452005203439,
+            -112.19516454651472,
+            0.0
+          ],
+          [
+            -6.215889499576932,
+            -112.0199967996175,
+            0.0
+          ],
+          [
+            -5.76451487332079,
+            -111.82235442583561,
+            0.0
+          ],
+          [
+            -5.323424071074166,
+            -111.60271730393806,
+            0.0
+          ],
+          [
+            -4.893688068190965,
+            -111.36161871628566,
+            0.0
+          ],
+          [
+            -4.476350270394977,
+            -111.09964405401314,
+            0.0
+          ],
+          [
+            -4.072423980374485,
+            -110.81742939569027,
+            0.0
+          ],
+          [
+            -3.6828899374675235,
+            -110.51565996291325,
+            0.0
+          ],
+          [
+            -3.3086939364114514,
+            -110.19506845657588,
+            0.0
+          ],
+          [
+            -2.950744530938562,
+            -109.85643327786048,
+            0.0
+          ],
+          [
+            -2.609910827793441,
+            -109.50057663826752,
+            0.0
+          ],
+          [
+            -2.2870203765282264,
+            -109.12836256327336,
+            0.0
+          ],
+          [
+            -1.9828571601993659,
+            -108.74069479446288,
+            0.0
+          ],
+          [
+            -1.698159691844527,
+            -108.3385145952308,
+            0.0
+          ],
+          [
+            -1.433619221361404,
+            -107.92279846537946,
+            0.0
+          ],
+          [
+            -1.1898780571421863,
+            -107.49455577016205,
+            0.0
+          ],
+          [
+            -0.9675280065387444,
+            -107.05482628952804,
+            0.0
+          ],
+          [
+            -0.7671089389451389,
+            -106.60467769352121,
+            0.0
+          ],
+          [
+            -0.5891074749863137,
+            -106.14520294996012,
+            0.0
+          ],
+          [
+            -0.43395580499562314,
+            -105.6775176706952,
+            0.0
+          ],
+          [
+            -0.3020306396499368,
+            -105.20275740288572,
+            0.0
+          ],
+          [
+            -0.19365229531025285,
+            -104.72207487187362,
+            0.0
+          ],
+          [
+            -0.10908391628857039,
+            -104.23663718234832,
+            0.0
+          ],
+          [
+            -0.048530835929385674,
+            -103.74762298459838,
+            0.0
+          ],
+          [
+            -0.012140078057129244,
+            -103.25621961273012,
+            0.0
+          ],
+          [
+            -2.842170943040401e-14,
+            -102.76362020180196,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -2.842170943040401e-14,
+          -102.76362020180196,
+          0.0
+        ],
+        "out_axis": [
+          4.996003610813204e-16,
+          1.0,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M14.in",
+          "position": [
+            -18.090169943749505,
+            -108.64147272472667,
+            0.0
+          ],
+          "axis": [
+            -0.5877852522924729,
+            0.8090169943749477,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M14.out",
+          "position": [
+            -2.842170943040401e-14,
+            -102.76362020180196,
+            0.0
+          ],
+          "axis": [
+            4.996003610813204e-16,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M13.out"
+      }
+    },
+    {
+      "id": "M15",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M15",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          -2.842170943040401e-14,
+          -102.76362020180196,
+          0.0
+        ],
+        "axis": [
+          4.996003610813204e-16,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          4.996003610813204e-16,
+          1.0,
+          0.0
+        ],
+        "path_points": [
+          [
+            -2.842170943040401e-14,
+            -102.76362020180196,
+            0.0
+          ],
+          [
+            -8.43769498715119e-15,
+            -62.763620201801956,
+            0.0
+          ]
+        ],
+        "end_position": [
+          -8.43769498715119e-15,
+          -62.763620201801956,
+          0.0
+        ],
+        "out_axis": [
+          4.996003610813204e-16,
+          1.0,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M15.in",
+          "position": [
+            -2.842170943040401e-14,
+            -102.76362020180196,
+            0.0
+          ],
+          "axis": [
+            -4.996003610813204e-16,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M15.out",
+          "position": [
+            -8.43769498715119e-15,
+            -62.763620201801956,
+            0.0
+          ],
+          "axis": [
+            4.996003610813204e-16,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M14.out"
+      }
+    },
+    {
+      "id": "M16",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M16",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": -72.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          -8.43769498715119e-15,
+          -62.763620201801956,
+          0.0
+        ],
+        "axis": [
+          4.996003610813204e-16,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.9510565162951538,
+          0.309016994374947,
+          0.0
+        ],
+        "path_points": [
+          [
+            -8.881784197001252e-15,
+            -62.763620201801956,
+            0.0
+          ],
+          [
+            0.01263043393981711,
+            -62.26117702000426,
+            0.0
+          ],
+          [
+            0.05048983018699005,
+            -61.76000305328981,
+            0.0
+          ],
+          [
+            0.1134825526208516,
+            -61.26136431059439,
+            0.0
+          ],
+          [
+            0.2014494761575243,
+            -60.76652039665789,
+            0.0
+          ],
+          [
+            0.31416838871368213,
+            -60.27672133015341,
+            0.0
+          ],
+          [
+            0.45135455253356405,
+            -59.793204386031604,
+            0.0
+          ],
+          [
+            0.6126614234612529,
+            -59.317190970056785,
+            0.0
+          ],
+          [
+            0.7976815263412913,
+            -58.84988353342993,
+            0.0
+          ],
+          [
+            1.005947484336284,
+            -58.39246253529263,
+            0.0
+          ],
+          [
+            1.2369331995613582,
+            -57.946083460784806,
+            0.0
+          ],
+          [
+            1.4900551820530765,
+            -57.511873902189,
+            0.0
+          ],
+          [
+            1.7646740237157204,
+            -57.090930710534394,
+            0.0
+          ],
+          [
+            2.0600960135216413,
+            -56.6843172248559,
+            0.0
+          ],
+          [
+            2.3755748898855167,
+            -56.293060586107515,
+            0.0
+          ],
+          [
+            2.7103137257858796,
+            -55.91814914251507,
+            0.0
+          ],
+          [
+            3.0634669418719476,
+            -55.56052995292289,
+            0.0
+          ],
+          [
+            3.4341424424704323,
+            -55.22110639444092,
+            0.0
+          ],
+          [
+            3.8214038690966534,
+            -54.90073588043577,
+            0.0
+          ],
+          [
+            4.224272965777321,
+            -54.60022769463012,
+            0.0
+          ],
+          [
+            4.641732050210032,
+            -54.32034094678181,
+            0.0
+          ],
+          [
+            5.072726584517082,
+            -54.061782655106704,
+            0.0
+          ],
+          [
+            5.516167839099675,
+            -53.825205960289324,
+            0.0
+          ],
+          [
+            5.97093564286337,
+            -53.61120847559278,
+            0.0
+          ],
+          [
+            6.435881212867491,
+            -53.42033077723584,
+            0.0
+          ],
+          [
+            6.909830056250524,
+            -53.25305503885043,
+            0.0
+          ]
+        ],
+        "end_position": [
+          6.909830056250524,
+          -53.25305503885043,
+          0.0
+        ],
+        "out_axis": [
+          0.9510565162951538,
+          0.309016994374947,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M16.in",
+          "position": [
+            -8.43769498715119e-15,
+            -62.763620201801956,
+            0.0
+          ],
+          "axis": [
+            -4.996003610813204e-16,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M16.out",
+          "position": [
+            6.909830056250524,
+            -53.25305503885043,
+            0.0
+          ],
+          "axis": [
+            0.9510565162951538,
+            0.309016994374947,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M15.out"
+      }
+    },
+    {
+      "id": "M17",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M17",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          6.909830056250524,
+          -53.25305503885043,
+          0.0
+        ],
+        "axis": [
+          0.9510565162951538,
+          0.309016994374947,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.9510565162951538,
+          0.309016994374947,
+          0.0
+        ],
+        "path_points": [
+          [
+            6.909830056250524,
+            -53.25305503885043,
+            0.0
+          ],
+          [
+            44.95209070805667,
+            -40.89237526385254,
+            0.0
+          ]
+        ],
+        "end_position": [
+          44.95209070805667,
+          -40.89237526385254,
+          0.0
+        ],
+        "out_axis": [
+          0.9510565162951538,
+          0.309016994374947,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M17.in",
+          "position": [
+            6.909830056250524,
+            -53.25305503885043,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951538,
+            -0.309016994374947,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M17.out",
+          "position": [
+            44.95209070805667,
+            -40.89237526385254,
+            0.0
+          ],
+          "axis": [
+            0.9510565162951538,
+            0.309016994374947,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M16.out"
+      }
+    },
+    {
+      "id": "M18",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M18",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 10.0,
+        "sweep_angle": 144.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "start_position": [
+          44.95209070805667,
+          -40.89237526385254,
+          0.0
+        ],
+        "axis": [
+          0.9510565162951538,
+          0.309016994374947,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ],
+        "path_points": [
+          [
+            44.95209070805667,
+            -40.89237526385254,
+            0.0
+          ],
+          [
+            45.41682909731038,
+            -40.72860777411211,
+            0.0
+          ],
+          [
+            45.87293611363439,
+            -40.54214611370434,
+            0.0
+          ],
+          [
+            46.31930432207258,
+            -40.33344301445163,
+            0.0
+          ],
+          [
+            46.75484993364643,
+            -40.103005210737116,
+            0.0
+          ],
+          [
+            47.17851543681156,
+            -39.85139220914568,
+            0.0
+          ],
+          [
+            47.58927216511225,
+            -39.57921492997322,
+            0.0
+          ],
+          [
+            47.9861227947997,
+            -39.28713422390264,
+            0.0
+          ],
+          [
+            48.36810376634962,
+            -38.97585926744808,
+            0.0
+          ],
+          [
+            48.734287623999826,
+            -38.64614584106325,
+            0.0
+          ],
+          [
+            49.08378526762729,
+            -38.29879449409471,
+            0.0
+          ],
+          [
+            49.41574811149714,
+            -37.93464860103555,
+            0.0
+          ],
+          [
+            49.72937014464203,
+            -37.554592313798935,
+            0.0
+          ],
+          [
+            50.023889887869416,
+            -37.15954841498352,
+            0.0
+          ],
+          [
+            50.29859224264486,
+            -36.75047607734281,
+            0.0
+          ],
+          [
+            50.552810227362485,
+            -36.32836853489879,
+            0.0
+          ],
+          [
+            50.78592659678668,
+            -35.894250671354236,
+            0.0
+          ],
+          [
+            50.99737534073321,
+            -35.44917653165901,
+            0.0
+          ],
+          [
+            51.186643058350754,
+            -34.994226762772534,
+            0.0
+          ],
+          [
+            51.35327020466622,
+            -34.53050598983609,
+            0.0
+          ],
+          [
+            51.49685220636703,
+            -34.059140134125684,
+            0.0
+          ],
+          [
+            51.617040444111566,
+            -33.581273679297695,
+            0.0
+          ],
+          [
+            51.713543098982264,
+            -33.0980668925646,
+            0.0
+          ],
+          [
+            51.78612586102656,
+            -32.61069300754815,
+            0.0
+          ],
+          [
+            51.83461249816508,
+            -32.120335375649745,
+            0.0
+          ],
+          [
+            51.858885284085915,
+            -31.62818459285483,
+            0.0
+          ],
+          [
+            51.858885284085915,
+            -31.13543560894719,
+            0.0
+          ],
+          [
+            51.83461249816508,
+            -30.643284826152268,
+            0.0
+          ],
+          [
+            51.786125861026555,
+            -30.152927194253866,
+            0.0
+          ],
+          [
+            51.713543098982264,
+            -29.665553309237414,
+            0.0
+          ],
+          [
+            51.617040444111566,
+            -29.18234652250432,
+            0.0
+          ],
+          [
+            51.49685220636703,
+            -28.70448006767633,
+            0.0
+          ],
+          [
+            51.35327020466622,
+            -28.23311421196593,
+            0.0
+          ],
+          [
+            51.18664305835076,
+            -27.76939343902948,
+            0.0
+          ],
+          [
+            50.997375340733214,
+            -27.314443670143007,
+            0.0
+          ],
+          [
+            50.78592659678668,
+            -26.86936953044778,
+            0.0
+          ],
+          [
+            50.552810227362485,
+            -26.43525166690322,
+            0.0
+          ],
+          [
+            50.298592242644865,
+            -26.01314412445921,
+            0.0
+          ],
+          [
+            50.023889887869416,
+            -25.604071786818498,
+            0.0
+          ],
+          [
+            49.72937014464203,
+            -25.209027888003078,
+            0.0
+          ],
+          [
+            49.41574811149714,
+            -24.828971600766472,
+            0.0
+          ],
+          [
+            49.08378526762729,
+            -24.464825707707305,
+            0.0
+          ],
+          [
+            48.73428762399983,
+            -24.11747436073877,
+            0.0
+          ],
+          [
+            48.36810376634963,
+            -23.787760934353937,
+            0.0
+          ],
+          [
+            47.9861227947997,
+            -23.476485977899372,
+            0.0
+          ],
+          [
+            47.589272165112256,
+            -23.184405271828798,
+            0.0
+          ],
+          [
+            47.178515436811566,
+            -22.912227992656337,
+            0.0
+          ],
+          [
+            46.75484993364644,
+            -22.660614991064897,
+            0.0
+          ],
+          [
+            46.31930432207258,
+            -22.430177187350385,
+            0.0
+          ],
+          [
+            45.872936113634395,
+            -22.221474088097672,
+            0.0
+          ],
+          [
+            45.416829097310384,
+            -22.0350124276899,
+            0.0
+          ],
+          [
+            44.95209070805668,
+            -21.87124493794947,
+            0.0
+          ]
+        ],
+        "end_position": [
+          44.95209070805668,
+          -21.87124493794947,
+          0.0
+        ],
+        "out_axis": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M18.in",
+          "position": [
+            44.95209070805667,
+            -40.89237526385254,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951538,
+            -0.309016994374947,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M18.out",
+          "position": [
+            44.95209070805668,
+            -21.87124493794947,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951534,
+            0.309016994374948,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M17.out"
+      }
+    },
+    {
+      "id": "M19",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M19",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "line",
+        "length": 40.0,
+        "start_position": [
+          44.95209070805668,
+          -21.87124493794947,
+          0.0
+        ],
+        "axis": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ],
+        "path_points": [
+          [
+            44.95209070805668,
+            -21.87124493794947,
+            0.0
+          ],
+          [
+            6.9098300562505415,
+            -9.51056516295155,
+            0.0
+          ]
+        ],
+        "end_position": [
+          6.9098300562505415,
+          -9.51056516295155,
+          0.0
+        ],
+        "out_axis": [
+          -0.9510565162951534,
+          0.309016994374948,
+          0.0
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M19.in",
+          "position": [
+            44.95209070805668,
+            -21.87124493794947,
+            0.0
+          ],
+          "axis": [
+            0.9510565162951534,
+            -0.309016994374948,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M19.out",
+          "position": [
+            6.9098300562505415,
+            -9.51056516295155,
+            0.0
+          ],
+          "axis": [
+            -0.9510565162951534,
+            0.309016994374948,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M18.out"
+      }
+    }
+  ],
+  "failed_checks": [
+    {
+      "check_name": "draft_validation",
+      "issue_id": "STEP_0020_01_DRAFT_VALIDATION_FAILED",
+      "issue_code": "DRAFT_VALIDATION_FAILED",
+      "expected": {},
+      "actual": {
+        "errors": [
+          "goal close_loop has incomplete dependencies: ['turn_10']"
+        ]
+      }
+    }
+  ],
+  "passed_check_summary": [],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S19",
+        "contract_digest": "6b18c6d5e6a085e82df9016b8cae8e93e642429144a4bd04aa566ea881938fe6",
+        "goal_ids": [
+          "close_loop",
+          "turn_10"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "policy_id": "cadgen02-freecad-validator-v23",
+        "policy_digest": "77b857683446bd86e2fc26ac608e6a6f5b4a1a306b59f601ce7cd33b16d67d96",
+        "generator_version": "cadgen02-freecad-v23",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0020_01_DRAFT_VALIDATION_FAILED",
+        "issue_code": "DRAFT_VALIDATION_FAILED",
+        "check_name": "draft_validation",
+        "expected": {},
+        "actual": {
+          "errors": [
+            "goal close_loop has incomplete dependencies: ['turn_10']"
+          ]
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check draft_validation supplied failure evidence.",
+      "data": {
+        "check_name": "draft_validation",
+        "issue_id": "STEP_0020_01_DRAFT_VALIDATION_FAILED",
+        "issue_code": "DRAFT_VALIDATION_FAILED",
+        "expected": {},
+        "actual": {
+          "errors": [
+            "goal close_loop has incomplete dependencies: ['turn_10']"
+          ]
+        }
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/waypoints/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This smoothing waypoint was inserted by the planner."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/path_kind",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/other_port_id",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/waypoints/0/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/waypoints/0/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/waypoints/0/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [
+    {
+      "operation": "revise_action_draft",
+      "parameter_errors": [
+        "goal close_loop has incomplete dependencies: ['turn_10']"
+      ],
+      "instruction": "Return a complete schema-v2 action and change only the named primitive/parameter fields."
+    }
+  ],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

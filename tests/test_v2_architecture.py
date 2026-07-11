@@ -4,13 +4,14 @@ import asyncio
 import hashlib
 import json
 import math
+import textwrap
 from dataclasses import replace
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
-from pydantic import BaseModel, Field, ValidationError
+from pydantic import BaseModel, Field, ValidationError, model_validator
 
 import cadgen.pipeline as pipeline
 from cadgen.config import load_settings
@@ -33,6 +34,7 @@ from cadgen.gemini_client import (
     GeminiClient,
     GeminiInvalidRequestError,
     GeminiRequestError,
+    HostContractValidationError,
     StructuredOutputError,
     StructuredOutputIncompleteError,
     gemini_json_schema,
@@ -61,6 +63,7 @@ from cadgen.schemas import (
     ComponentGoalSpec,
     ConnectPortsParamsV2,
     CorePlannerDecision,
+    CorePlannerDecisionWire,
     GeometricConstraint,
     GlobalSpec,
     Goal,
@@ -281,7 +284,6 @@ def test_v2_draft_requires_llm_authored_section_and_geometry():
     errors = " ".join(validate_draft(explicit_without_dimensions, state).errors)
     assert "outer_diameter and wall_thickness" in errors
     assert "Missing LLM-authored param: length" in errors
-    assert "Missing LLM-authored param: direction" in errors
 
 
 def test_explicit_inlet_section_cannot_hide_a_mating_mismatch():
@@ -447,6 +449,7 @@ def test_pipeline_repairs_only_rejected_step_and_commits_only_valid_action(
                         "path_kind": "line",
                         "section_source": "inherit_target",
                         "length": 20.0,
+                        "direction": (0.0, 0.0, 0.0),
                     },
                 )
             return _line_action("START", ["G1"], completed=["G1"])
@@ -477,7 +480,7 @@ def test_pipeline_repairs_only_rejected_step_and_commits_only_valid_action(
     assert report.repair_attempt_count == 1
     assert "DRAFT_VALIDATION_FAILED" in FakeGemini.prompts[1]
     assert "rejected_attempt_history" in FakeGemini.prompts[1]
-    assert "Missing LLM-authored param: direction" in FakeGemini.prompts[1]
+    assert "direction must not be a zero vector" in FakeGemini.prompts[1]
     assert '"failure_phase":"draft_validation"' in FakeGemini.prompts[1]
     assert "move ->" not in FakeGemini.prompts[1]
 
@@ -515,6 +518,7 @@ def test_identical_failure_stops_before_exhausting_large_repair_budget(
                         "path_kind": "line",
                         "section_source": "inherit_target",
                         "length": 20.0,
+                        "direction": (0.0, 0.0, 0.0),
                     },
                 )
             return _line_action("START", ["G1"], completed=["G1"])
@@ -565,7 +569,9 @@ def test_resume_reuses_paid_drafts_and_never_resets_step_retry_budget(
                     "path_kind": "line",
                     "section_source": "inherit_target",
                     "length": 20.0,
-                    # Deliberately missing the LLM-authored direction.
+                    # An explicit zero direction remains invalid even though
+                    # omission now means inherit the target-port tangent.
+                    "direction": (0.0, 0.0, 0.0),
                 },
             )
 
@@ -848,8 +854,7 @@ def test_connect_ports_derives_exact_endpoint_tangents_from_ports():
     corrupted_result = validate_action(corrupted, state1)
     assert not corrupted_result.valid
     assert any(
-        "final_tangent invariant mismatch" in error
-        for error in corrupted_result.errors
+        "final_tangent invariant mismatch" in error for error in corrupted_result.errors
     )
     after = engine.apply_action(resolved, state1)
     step = build_step_verification(state1, resolved, after, intent, 2)
@@ -1101,6 +1106,7 @@ _STRUCTURED_JSON_PATHS = [
         ('{"value":NaN}', "non-standard JSON numeric constant"),
         ('{"value":Infinity}', "non-standard JSON numeric constant"),
         ('{"value":-Infinity}', "non-standard JSON numeric constant"),
+        ('{"value":1e999}', "non-finite JSON number"),
     ],
 )
 def test_gemini_client_rejects_nonstandard_json_on_every_structured_path(
@@ -1111,7 +1117,9 @@ def test_gemini_client_rejects_nonstandard_json_on_every_structured_path(
     expected_message,
 ):
     client = _gemini_client_with_output(tmp_path, raw_json)
-    kwargs = {"numeric_literals": numeric_literals} if numeric_literals is not None else {}
+    kwargs = (
+        {"numeric_literals": numeric_literals} if numeric_literals is not None else {}
+    )
 
     with pytest.raises(StructuredOutputError) as exc_info:
         client.stream_structured("test", _TinyResult, part=part, **kwargs)
@@ -1128,12 +1136,42 @@ def test_gemini_client_applies_json_schema_before_pydantic_on_every_path(
     # Pydantic 자체는 문자열 "1"을 정수로 coercion할 수 있다. 모든 경로에서
     # 먼저 JSON Schema를 적용해야 공급자에게 전달한 계약과 로컬 검증이 같다.
     client = _gemini_client_with_output(tmp_path, '{"value":"1"}')
-    kwargs = {"numeric_literals": numeric_literals} if numeric_literals is not None else {}
+    kwargs = (
+        {"numeric_literals": numeric_literals} if numeric_literals is not None else {}
+    )
 
     with pytest.raises(StructuredOutputError) as exc_info:
         client.stream_structured("test", _TinyResult, part=part, **kwargs)
 
     assert isinstance(exc_info.value.cause, JSONSchemaValidationError)
+
+
+class _HostRelationalResult(BaseModel):
+    lower: int
+    upper: int
+
+    @model_validator(mode="after")
+    def validate_order(self):
+        if self.lower >= self.upper:
+            raise ValueError("lower must be below upper")
+        return self
+
+
+def test_provider_schema_pass_host_semantic_failure_has_distinct_error(tmp_path):
+    client = _gemini_client_with_output(
+        tmp_path,
+        '{"lower":5,"upper":1}',
+    )
+
+    with pytest.raises(HostContractValidationError) as captured:
+        client.stream_structured(
+            "test",
+            _HostRelationalResult,
+            part="patch",
+        )
+
+    assert not isinstance(captured.value, StructuredOutputError)
+    assert "lower must be below upper" in str(captured.value.cause)
 
 
 def test_gemini_client_resends_controls_tracks_usage_and_reuses_lineage(tmp_path):
@@ -1812,9 +1850,7 @@ def test_resume_reexecutes_prepared_transaction_idempotently_when_mcp_is_live(
     assert "step_planner" not in context.planner_lineage
 
 
-def test_committed_resume_reconciliation_restores_measurements(
-    monkeypatch, tmp_path
-):
+def test_committed_resume_reconciliation_restores_measurements(monkeypatch, tmp_path):
     run_dir, checkpoint, settings, engine, unused_previous, candidate = (
         _prepared_checkpoint(tmp_path, phase="PUBLISHED")
     )
@@ -1868,9 +1904,10 @@ def test_committed_resume_reconciliation_restores_measurements(
     assert context.semantic_mcp_passed is True
     assert context.state.module_measurements["M1"]["centerline_length"] == 10.0
     assert context.step_verifications[-1].mcp_status == "passed"
-    assert context.step_verifications[-1].mcp_measurements["M1"][
-        "centerline_length"
-    ] == 10.0
+    assert (
+        context.step_verifications[-1].mcp_measurements["M1"]["centerline_length"]
+        == 10.0
+    )
 
 
 def test_resume_semantic_rollback_clears_inflight_planner_lineage(
@@ -1929,6 +1966,113 @@ def test_resume_rejects_tampered_candidate_digest(tmp_path):
             run_dir=run_dir,
             expected_run_id=run_dir.name,
         )
+
+
+def test_resume_revalidates_valid_old_generator_digest_with_current_policy(
+    monkeypatch, tmp_path
+):
+    run_dir, checkpoint, settings, engine, unused_previous, candidate = (
+        _prepared_checkpoint(tmp_path, phase="PUBLISHED")
+    )
+    del unused_previous
+    payload = json.loads(checkpoint.read_text(encoding="utf-8"))
+    payload["candidate_digest"] = "a" * 64
+    payload["candidate_document"] = "old-generator-candidate"
+    payload["published_document"] = "old-generator-published"
+    checkpoint.write_text(json.dumps(payload), encoding="utf-8")
+    settings = replace(
+        settings,
+        freecad_mcp_enabled=True,
+        freecad_step_mcp_enabled=True,
+        freecad_mcp_required=True,
+    )
+    calls = []
+
+    def current_generator_transaction(unused_settings, state, **kwargs):
+        del unused_settings
+        calls.append((state.state_id, kwargs["attempt_id"]))
+        evidence = _validation_evidence(state, run_id=run_dir.name)
+        validator = kwargs.get("evidence_validator")
+        if validator is not None:
+            validator(evidence)
+        return {}, evidence, {}
+
+    monkeypatch.setattr(
+        pipeline,
+        "_validate_and_publish_freecad",
+        current_generator_transaction,
+    )
+    context = pipeline._load_resume_context(
+        checkpoint,
+        settings,
+        engine,
+        dry_run=False,
+        run_dir=run_dir,
+        expected_run_id=run_dir.name,
+    )
+
+    assert calls == [(candidate.state_id, 1)]
+    assert context.state.state_id == candidate.state_id
+    assert context.semantic_mcp_passed is True
+    assert context.attempts[-1].phase == "recovery_commit"
+
+
+def test_committed_resume_replays_unversioned_freecad_rejection_before_new_llm_call(
+    tmp_path,
+):
+    run_dir, checkpoint, settings, engine, previous, unused_candidate = (
+        _prepared_checkpoint(tmp_path, phase="PREPARED")
+    )
+    del unused_candidate
+    payload = json.loads(checkpoint.read_text(encoding="utf-8"))
+    payload.update(
+        {
+            "phase": "COMMITTED",
+            "state": previous.model_dump(mode="json"),
+            "state_digest": pipeline._pipe_state_digest(previous),
+            "freecad_verified": False,
+            "attempts": [
+                ActionAttempt(
+                    step_index=1,
+                    attempt_index=1,
+                    state_id=previous.state_id,
+                    phase="freecad_semantic_validation",
+                    status="rejected",
+                    draft=payload["draft"],
+                    issue_codes=["FREECAD_GEOMETRY_VALIDATION_FAILED"],
+                    observations=[
+                        {
+                            "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+                            "actual": {
+                                "evidence": {
+                                    "failed_checks": {"non_adjacent_overlaps": []}
+                                }
+                            },
+                        }
+                    ],
+                ).model_dump(mode="json")
+            ],
+            "next_attempt_index": 2,
+        }
+    )
+    checkpoint.write_text(json.dumps(payload), encoding="utf-8")
+
+    context = pipeline._load_resume_context(
+        checkpoint,
+        settings,
+        engine,
+        dry_run=True,
+        run_dir=run_dir,
+        expected_run_id=run_dir.name,
+    )
+
+    assert context.pending_draft is not None
+    assert context.pending_draft_attempt_index == 2
+    assert context.next_attempt_index == 2
+    assert any(
+        item.get("context_type") == "generator_migration_replay"
+        for item in context.pending_repair_observations
+    )
 
 
 def test_resume_completed_committed_run_does_not_replay_actions(tmp_path):
@@ -2199,7 +2343,7 @@ def test_completed_accessory_is_removed_from_followup_schema_and_catalog():
 
     fake = FakeGemini()
     pipeline._plan_action(state1, dry_run=False, gemini=fake)
-    assert fake.selected_schema is CorePlannerDecision
+    assert fake.selected_schema is CorePlannerDecisionWire
 
 
 def test_missing_usage_metadata_latches_future_paid_calls_closed(tmp_path):
@@ -2313,12 +2457,7 @@ def _spline_route_action(
         params={
             "path_kind": "spline",
             "section_source": "inherit_target",
-            "waypoints": waypoints
-            or [(20.0, 0.0, 5.0), (40.0, 0.0, 0.0)],
-            "final_tangent": (1.0, 0.0, 0.0),
-            "interpolation": "bspline",
-            "frenet": True,
-            "minimum_curvature_radius": 10.1,
+            "waypoints": waypoints or [(20.0, 0.0, 5.0), (40.0, 0.0, 0.0)],
         },
     )
 
@@ -2424,9 +2563,7 @@ def test_final_only_mcp_supplies_spline_length_before_final_critic(
             del prompt, schema
             if part == "intent":
                 return intent
-            return _spline_route_action(
-                waypoints=[(20.0, 0.0, 2.0), (40.0, 0.0, 0.0)]
-            )
+            return _spline_route_action(waypoints=[(20.0, 0.0, 2.0), (40.0, 0.0, 0.0)])
 
     calls = []
 
@@ -2599,9 +2736,7 @@ def test_visual_review_receives_immutable_shape_contract(monkeypatch, tmp_path):
         return VisualCriticResult(
             state_id=state.state_id,
             payload_digest=geometry_payload_digest(state),
-            evidence_sha256=[
-                hashlib.sha256(image_path.read_bytes()).hexdigest()
-            ],
+            evidence_sha256=[hashlib.sha256(image_path.read_bytes()).hexdigest()],
             passed=True,
             issues=[],
         )
@@ -2657,9 +2792,7 @@ def test_visual_module_map_distinguishes_physical_ends_from_mated_ports():
         "M2.out": "free_downstream_open_terminal",
     }
     assert all(
-        "open_now" not in port
-        for module in module_map
-        for port in module["ports"]
+        "open_now" not in port for module in module_map for port in module["ports"]
     )
     assert realized_terminal_topology(state) == {
         "anchored_START_is_physical_open_inlet": True,
@@ -2677,9 +2810,7 @@ def test_visual_review_path_is_append_only_across_resumes(tmp_path):
     (review_dir / "round_3.json").write_text("{}", encoding="utf-8")
     (review_dir / "notes.json").write_text("{}", encoding="utf-8")
 
-    assert pipeline._next_visual_review_path(tmp_path) == (
-        review_dir / "round_4.json"
-    )
+    assert pipeline._next_visual_review_path(tmp_path) == (review_dir / "round_4.json")
 
 
 def test_view_capture_probe_activates_document_and_clears_selection():
@@ -3379,7 +3510,7 @@ def test_generator_digest_binds_version_and_modeling_tolerance():
         intent
     )
 
-    assert GENERATOR_VERSION == "cadgen02-freecad-v20"
+    assert GENERATOR_VERSION == "cadgen02-freecad-v24"
     assert geometry_payload_digest(first) != geometry_payload_digest(second)
 
 
@@ -3406,10 +3537,7 @@ def test_publish_always_rebuilds_same_name_document_from_candidate():
     assert 'if "Deviation" in view.PropertiesList:' in script
     assert 'view.Deviation = META["view_deviation_percent"]' in script
     assert 'if "AngularDeflection" in view.PropertiesList:' in script
-    assert (
-        'view.AngularDeflection = META["view_angular_deflection_degrees"]'
-        in script
-    )
+    assert 'view.AngularDeflection = META["view_angular_deflection_degrees"]' in script
     assert '"view_deviation_percent":0.05' in script
     assert '"view_angular_deflection_degrees":5.0' in script
     assert '"view_specular_color":[0.12,0.12,0.12]' in script
@@ -4031,9 +4159,9 @@ def test_near_full_route_uses_analytic_endpoint_tangents(sweep_angle):
 
 @pytest.mark.parametrize(
     ("bend_radius", "expected_valid"),
-    [(10.00005, False), (10.0002, True)],
+    [(9.9999, False), (10.0, True), (10.00005, True)],
 )
-def test_arc_tube_regularity_keeps_a_modeling_tolerance_margin(
+def test_analytic_arc_tube_accepts_horn_boundary_and_rejects_spindle(
     bend_radius,
     expected_valid,
 ):
@@ -4322,7 +4450,7 @@ def test_generated_fillet_junction_uses_exact_radius_sphere_free_material_seams(
     assert "valid_closed_single_solid" in script
     assert "Part.makeSphere" not in script
     assert "hub_candidates" not in script
-    assert 'if params.get("blend_mode") == "fillet":' in script
+    assert 'if params["blend_mode"] == "fillet":' in script
     assert 'float(params["max_hub_radius"])' in script
 
     # Exact authored fillet radii are never changed and there is no silent
@@ -4335,6 +4463,183 @@ def test_generated_fillet_junction_uses_exact_radius_sphere_free_material_seams(
     assert "compact_junction_seams" in fillet_body
     assert "for factor" not in fillet_body
     assert "exact_radius *" not in fillet_body
+
+
+def test_generated_junction_overlap_uses_local_non_llm_interface_band():
+    script = build_freecad_script(
+        StateEngine(_settings()).initial_state(
+            _intent(Goal(goal_id="G1", type="move", length=10.0))
+        )
+    )
+
+    overlap_body = script.split("    def adjacent_junction_interface_overlap", 1)[
+        1
+    ].split("\n    for index, left_id", 1)[0]
+    assert 'params["max_hub_radius"]' not in overlap_body
+    assert "max(outlet_outer_radii) + engagement + margin" in overlap_body
+    assert "common_shape.cut(interface_band)" in overlap_body
+    assert "if forward_dot < -1e-9:" in overlap_body
+    assert '"policy": "resolver_local_interface_band"' in overlap_body
+    assert '"adjacent_interface_overlaps": adjacent_interface_overlaps' in script
+
+
+def test_local_junction_interface_band_accepts_only_forward_local_overlap():
+    script = build_freecad_script(
+        StateEngine(_settings()).initial_state(
+            _intent(Goal(goal_id="G1", type="move", length=10.0))
+        )
+    )
+    function_source = textwrap.dedent(
+        "def adjacent_junction_interface_overlap"
+        + script.split("    def adjacent_junction_interface_overlap", 1)[1].split(
+            "\n    for index, left_id", 1
+        )[0]
+    )
+
+    class FakeVector:
+        def __init__(self, values):
+            self.values = tuple(float(value) for value in values)
+
+        @property
+        def Length(self):
+            return math.sqrt(sum(value * value for value in self.values))
+
+        def dot(self, other):
+            return sum(left * right for left, right in zip(self.values, other.values))
+
+        def __mul__(self, scalar):
+            return FakeVector(value * float(scalar) for value in self.values)
+
+        def __sub__(self, other):
+            return FakeVector(
+                left - right for left, right in zip(self.values, other.values)
+            )
+
+    def fake_vector(values):
+        return values if isinstance(values, FakeVector) else FakeVector(values)
+
+    def fake_normalized(value):
+        candidate = fake_vector(value)
+        return FakeVector(
+            component / candidate.Length for component in candidate.values
+        )
+
+    class FakePart:
+        @staticmethod
+        def makeCylinder(radius, length, start, axis):
+            return {
+                "radius": radius,
+                "length": length,
+                "start": start,
+                "axis": axis,
+            }
+
+    class FakeCommon:
+        Volume = 182.6882574752523
+
+        def __init__(self, outside_volume):
+            self.outside_volume = outside_volume
+            self.cut_calls = 0
+
+        def cut(self, unused_zone):
+            del unused_zone
+            self.cut_calls += 1
+            return SimpleNamespace(Volume=self.outside_volume)
+
+    namespace = {
+        "MODELING_TOLERANCE": 1e-4,
+        "Part": FakePart,
+        "vector": fake_vector,
+        "normalized": fake_normalized,
+    }
+    exec(function_source, namespace)
+    classify = namespace["adjacent_junction_interface_overlap"]
+    forward_child = {
+        "id": "M2",
+        "params": {
+            "start_position": [30.0, 0.0, 0.0],
+            "axis": [1.0, 0.0, 0.0],
+            "outer_diameter": 20.0,
+            "max_hub_radius": 1.0,
+            "outlets": [
+                {"axis": [1.0, 0.0, 0.0], "outer_diameter": 20.0},
+                {"axis": [0.0, 1.0, 0.0], "outer_diameter": 20.0},
+            ],
+        },
+    }
+
+    local_common = FakeCommon(0.0)
+    evidence = classify(local_common, forward_child, "M1")
+    assert evidence is not None
+    assert local_common.cut_calls == 1
+    assert evidence["policy"] == "resolver_local_interface_band"
+    assert evidence["interface_upstream_depth"] == pytest.approx(10.004)
+
+    # max_hub_radius is authored by the LLM and must not change the allowance.
+    enlarged_hub = json.loads(json.dumps(forward_child))
+    enlarged_hub["params"]["max_hub_radius"] = 1000.0
+    enlarged = classify(FakeCommon(0.0), enlarged_hub, "M1")
+    assert enlarged is not None
+    assert enlarged["interface_upstream_depth"] == pytest.approx(
+        evidence["interface_upstream_depth"]
+    )
+
+    nonlocal_common = FakeCommon(1.0)
+    assert classify(nonlocal_common, forward_child, "M1") is None
+    assert nonlocal_common.cut_calls == 1
+
+    backward_child = json.loads(json.dumps(forward_child))
+    backward_child["params"]["outlets"][1]["axis"] = [-0.5, 1.0, 0.0]
+    backward_common = FakeCommon(0.0)
+    assert classify(backward_common, backward_child, "M1") is None
+    assert backward_common.cut_calls == 0
+
+
+@pytest.mark.parametrize(
+    "engagement_edge_length",
+    [0.0028284271323941136, 0.005656854363770622],
+)
+def test_compact_junction_seams_ignore_tolerance_scale_engagement_edge(
+    engagement_edge_length,
+):
+    script = build_freecad_script(
+        StateEngine(_settings()).initial_state(
+            _intent(Goal(goal_id="G1", type="move", length=10.0))
+        )
+    )
+    function_source = (
+        "def compact_junction_seams"
+        + script.split("def compact_junction_seams", 1)[1].split(
+            "\ndef fillet_compact_junction_material", 1
+        )[0]
+    )
+
+    class ShortEngagementEdge:
+        Length = engagement_edge_length
+
+    class FakeShape:
+        Edges = [ShortEngagementEdge()]
+
+        @staticmethod
+        def ancestorsOfType(unused_edge, unused_face_type):
+            del unused_edge, unused_face_type
+            return [object(), object()]
+
+    namespace = {
+        "MODELING_TOLERANCE": 1e-4,
+        "Part": SimpleNamespace(Face=object()),
+        "cylinder_face_radius": lambda unused_face: 10.0,
+    }
+    exec(function_source, namespace)
+
+    seams = namespace["compact_junction_seams"](
+        FakeShape(),
+        [10.0],
+        SimpleNamespace(),
+        [],
+    )
+    assert seams == []
+    assert "edge.Length) <= minimum_authored_seam_length" in function_source
 
 
 def test_resume_preserves_semantic_rejection_for_next_llm_repair(monkeypatch, tmp_path):
@@ -4383,6 +4688,9 @@ def test_resume_preserves_semantic_rejection_for_next_llm_repair(monkeypatch, tm
         ][0]["module_id"]
         == "M1"
     )
-    assert context.pending_repair_observations[-1]["actual"]["evidence"][
-        "centerline_context"
-    ]["M1"]["curvature_repair_hint"] == "spread the nearby direction change"
+    assert (
+        context.pending_repair_observations[-1]["actual"]["evidence"][
+            "centerline_context"
+        ]["M1"]["curvature_repair_hint"]
+        == "spread the nearby direction change"
+    )

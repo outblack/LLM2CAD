@@ -123,7 +123,9 @@ def build_state_transition(
     target_port = _find_port(action.target_port, before_state.open_ports)
     before_module_ids = {module.id for module in before_state.placed_modules}
     produced_modules = [
-        module for module in after_state.placed_modules if module.id not in before_module_ids
+        module
+        for module in after_state.placed_modules
+        if module.id not in before_module_ids
     ]
     produced_module_id = produced_modules[0].id if len(produced_modules) == 1 else None
     before_open_ids = [port.id for port in before_state.open_ports]
@@ -165,13 +167,35 @@ def build_state_transition(
             target_port.model_dump(mode="json") if target_port is not None else {}
         ),
         produced_module_id=produced_module_id,
-        produced_port_ids=[port_id for port_id in after_open_ids if port_id not in before_open_set],
-        removed_port_ids=[port_id for port_id in before_open_ids if port_id not in after_open_set],
+        produced_port_ids=[
+            port_id for port_id in after_open_ids if port_id not in before_open_set
+        ],
+        removed_port_ids=[
+            port_id
+            for port_id in [
+                *before_open_ids,
+                *(
+                    [before_state.reserved_start_anchor.id]
+                    if before_state.reserved_start_anchor is not None
+                    else []
+                ),
+            ]
+            if port_id
+            not in {
+                *after_open_set,
+                *(
+                    [after_state.reserved_start_anchor.id]
+                    if after_state.reserved_start_anchor is not None
+                    else []
+                ),
+            }
+        ],
         consumed_port_ids=list(action.consumed_port_ids or [action.target_port]),
         connection_edge_ids=[
             edge.edge_id
             for edge in after_state.connection_edges
-            if edge.edge_id not in {item.edge_id for item in before_state.connection_edges}
+            if edge.edge_id
+            not in {item.edge_id for item in before_state.connection_edges}
         ],
         affected_goal_ids=list(action.affected_goal_ids),
         completed_goal_ids=list(action.completed_goal_ids),
@@ -196,13 +220,9 @@ def validate_step_checkpoint(
     goals = transition.affected_goals or (
         [transition.consumed_goal] if transition.consumed_goal else [{}]
     )
-    _validate_goal_order_and_dependencies(
-        issues, before_state, action, transition
-    )
+    _validate_goal_order_and_dependencies(issues, before_state, action, transition)
     _validate_atomic_goal_binding(issues, action, transition)
-    _validate_monotone_step_constraints(
-        issues, after_state, intent, transition
-    )
+    _validate_monotone_step_constraints(issues, after_state, intent, transition)
 
     if target_port is None:
         _append_issue(
@@ -426,8 +446,7 @@ def _validate_monotone_step_constraints(
             )
         ):
             actual_length = sum(
-                _module_centerline_length(module)
-                for module in state.placed_modules
+                _module_centerline_length(module) for module in state.placed_modules
             )
             if actual_length > float(constraint.value) + VECTOR_TOLERANCE:
                 _append_issue(
@@ -460,10 +479,24 @@ def _validate_goal_order_and_dependencies(
         for historical_action in before_state.action_history
         for goal_id in historical_action.completed_goal_ids
     }
+    goals_by_id = {
+        goal.goal_id: goal
+        for goal in before_state.remaining_goals
+        if goal.goal_id is not None
+    }
     for index, goal in enumerate(before_state.remaining_goals):
         if goal.goal_id not in affected:
             continue
-        missing_dependencies = set(goal.depends_on_goal_ids) - completed_history
+        missing_dependencies = {
+            dependency_id
+            for dependency_id in set(goal.depends_on_goal_ids) - completed_history
+            if not _same_action_dependency_is_provable(
+                dependent_goal=goal,
+                dependency_goal=goals_by_id.get(dependency_id),
+                completed_goal_ids=completed,
+                action=action,
+            )
+        }
         if missing_dependencies:
             _append_issue(
                 issues,
@@ -496,6 +529,27 @@ def _validate_goal_order_and_dependencies(
             )
 
 
+def _same_action_dependency_is_provable(
+    *,
+    dependent_goal: Any,
+    dependency_goal: Any,
+    completed_goal_ids: set[str],
+    action: ResolvedAction,
+) -> bool:
+    """Permit the one atomic dependency pair measured by a closure arc."""
+
+    if dependency_goal is None or dependency_goal.goal_id not in completed_goal_ids:
+        return False
+    return bool(
+        dependent_goal.type == "connect"
+        and dependent_goal.connection_target == "start_anchor"
+        and dependency_goal.type == "turn"
+        and dependent_goal.goal_id in completed_goal_ids
+        and action.module == "connect_ports"
+        and action.params.get("path_kind") == "circular_arc"
+    )
+
+
 def _validate_atomic_goal_binding(
     issues: list[StaticIssue],
     action: ResolvedAction,
@@ -520,9 +574,7 @@ def _validate_atomic_goal_binding(
             and goal.get("component") is not None
             and action.params.get("component_type") != goal.get("component")
         )
-        if (
-            goal_id not in completed or component_mismatch
-        ):
+        if goal_id not in completed or component_mismatch:
             _append_issue(
                 issues,
                 "ATOMIC_GOAL_ACTION_MISMATCH",
@@ -585,6 +637,8 @@ def _validate_affected_component_multiplicity(
                     "module_ids": matching_module_ids,
                 },
             )
+
+
 def _validate_capability_coverage(
     issues: list[StaticIssue],
     transition: StateTransition,
@@ -662,11 +716,7 @@ def build_final_critic_report(
 ) -> CriticReport:
     """누적 단계 증거와 최종 상태를 계약 전체에 대조해 최종 판정을 만든다."""
 
-    issues = [
-        issue
-        for step in step_verifications
-        for issue in step.issues
-    ]
+    issues = [issue for step in step_verifications for issue in step.issues]
     final_issues: list[StaticIssue] = []
 
     if state.remaining_goals:
@@ -700,12 +750,8 @@ def build_final_critic_report(
 
     _validate_final_graph(final_issues, state)
     _validate_geometric_constraints(final_issues, state, step_verifications)
-    _validate_final_goal_lengths(
-        final_issues, intent, state, step_verifications
-    )
-    _validate_final_spline_curvature(
-        final_issues, state, step_verifications
-    )
+    _validate_final_goal_lengths(final_issues, intent, state, step_verifications)
+    _validate_final_spline_curvature(final_issues, state, step_verifications)
 
     satisfied_components = [
         str(module.params.get("component_type"))
@@ -730,7 +776,9 @@ def build_final_critic_report(
             "One or more user-required components have no matching geometry-producing inline component.",
             expected={"required_components": intent.required_components},
             actual={
-                "satisfied_component_counts": dict(sorted(satisfied_component_counts.items())),
+                "satisfied_component_counts": dict(
+                    sorted(satisfied_component_counts.items())
+                ),
                 "missing_components": missing_components,
             },
             suggestion={"operation": "replan_required_components"},
@@ -762,7 +810,10 @@ def build_final_critic_report(
         )
 
     actual_open_ports = len(state.open_ports)
-    if intent.expected_open_ports is None or intent.expected_open_ports_source == "unknown":
+    if (
+        intent.expected_open_ports is None
+        or intent.expected_open_ports_source == "unknown"
+    ):
         _append_issue(
             final_issues,
             "EXPECTED_OPEN_PORTS_UNKNOWN",
@@ -898,6 +949,21 @@ def _validate_final_graph(issues: list[StaticIssue], state: PipeState) -> None:
     incidence_pairs = [
         (edge.module_id, edge.port_id) for edge in state.module_incidence_edges
     ]
+    if state.reserved_start_anchor is not None:
+        _append_issue(
+            issues,
+            "FINAL_RESERVED_START_ANCHOR_UNCONSUMED",
+            "error",
+            "final_port_graph",
+            "The first module inlet is still reserved for a pending START-seam closure.",
+            port_ids=[state.reserved_start_anchor.id],
+            expected={"reserved_start_anchor": None},
+            actual={
+                "reserved_start_anchor": state.reserved_start_anchor.model_dump(
+                    mode="json"
+                )
+            },
+        )
     if len(edge_ids) != len(set(edge_ids)) or len(incidence_pairs) != len(
         set(incidence_pairs)
     ):
@@ -1158,8 +1224,7 @@ def _validate_geometric_constraints(
                 continue
             if final_bounds is not None:
                 actual = (
-                    final_bounds.maximum[axis_index]
-                    - final_bounds.minimum[axis_index]
+                    final_bounds.maximum[axis_index] - final_bounds.minimum[axis_index]
                 )
             else:
                 lows = [point[axis_index] - radius for point, radius in samples]
@@ -1191,8 +1256,7 @@ def _validate_geometric_constraints(
             if final_bounds is not None:
                 for index, axis_name in enumerate(("X", "Y", "Z")):
                     if (
-                        final_bounds.minimum[index]
-                        < minimum[index] - VECTOR_TOLERANCE
+                        final_bounds.minimum[index] < minimum[index] - VECTOR_TOLERANCE
                         or final_bounds.maximum[index]
                         > maximum[index] + VECTOR_TOLERANCE
                     ):
@@ -1260,9 +1324,7 @@ def _validate_final_goal_lengths(
             continue
         modules = [
             module
-            for action, module in zip(
-                state.action_history, state.placed_modules
-            )
+            for action, module in zip(state.action_history, state.placed_modules)
             if goal.goal_id in action.affected_goal_ids
         ]
         if not modules:
@@ -1398,14 +1460,15 @@ def _validate_conservative_collision(
     for existing in before_state.placed_modules:
         hit_existing = False
         for left_start, left_end, left_radius, left_label in produced_segments:
-            for right_start, right_end, right_radius, right_label in _module_collision_segments(
-                existing
-            ):
+            for (
+                right_start,
+                right_end,
+                right_radius,
+                right_label,
+            ) in _module_collision_segments(existing):
                 if any(
                     _segment_has_endpoint(left_start, left_end, binding_position)
-                    and _segment_has_endpoint(
-                        right_start, right_end, binding_position
-                    )
+                    and _segment_has_endpoint(right_start, right_end, binding_position)
                     for binding_position in adjacent_bindings.get(existing.id, [])
                 ):
                     # The pair incident to the shared port intentionally fuses.
@@ -1653,9 +1716,7 @@ def _segment_distance(
             )
         )
     else:
-        first_parameter = (
-            max(0.0, min(1.0, (b * e - c * d) / denominator))
-        )
+        first_parameter = max(0.0, min(1.0, (b * e - c * d) / denominator))
         second_parameter = (b * first_parameter + e) / c
         if second_parameter < 0.0:
             second_parameter = 0.0
@@ -1713,18 +1774,12 @@ def _module_centerline_length(module: Any) -> float:
                 angle_a = 2.0 * math.asin(min(1.0, chord_a / (2.0 * radius)))
                 angle_b = 2.0 * math.asin(min(1.0, chord_b / (2.0 * radius)))
                 return radius * (angle_a + angle_b)
-        return sum(
-            length(sub(right, left)) for left, right in zip(points, points[1:])
-        )
+        return sum(length(sub(right, left)) for left, right in zip(points, points[1:]))
     inlet = module.ports.get("in") or module.ports.get("in_a")
     if inlet is None:
         return 0.0
-    outlets = [
-        port for name, port in module.ports.items() if name.startswith("out")
-    ]
-    return sum(
-        length(sub(vec(port.position), vec(inlet.position))) for port in outlets
-    )
+    outlets = [port for name, port in module.ports.items() if name.startswith("out")]
+    return sum(length(sub(vec(port.position), vec(inlet.position))) for port in outlets)
 
 
 def _three_point_arc_length(
@@ -1792,7 +1847,10 @@ def _module_spatial_samples(
             mul(axis, direction * float(module.params.get("thickness", 0.0))),
         )
         samples.append((end, radius))
-    if module.type == "inline_component" and module.params.get("actuator_axis") is not None:
+    if (
+        module.type == "inline_component"
+        and module.params.get("actuator_axis") is not None
+    ):
         start = vec(module.params["start_position"])
         pipe_axis = normalize(vec(module.params["axis"]))
         actuator_axis = normalize(vec(module.params["actuator_axis"]))
@@ -1892,7 +1950,10 @@ def _validate_module_connection(
             port_ids=[in_port.id, target_port.id],
             expected={"target_position": list(target_port.position)},
             actual={"input_position": list(in_port.position)},
-            suggestion={"operation": "move_module_start", "target_port": target_port.id},
+            suggestion={
+                "operation": "move_module_start",
+                "target_port": target_port.id,
+            },
         )
 
     expected_in_axis = tuple(-value for value in target_port.axis)
@@ -1906,10 +1967,7 @@ def _validate_module_connection(
         target_port.outer_diameter / 2.0,
         axis_alignment,
     )
-    if (
-        axis_alignment < PARALLEL_DOT_THRESHOLD
-        or outer_rim_error > tolerance
-    ):
+    if axis_alignment < PARALLEL_DOT_THRESHOLD or outer_rim_error > tolerance:
         _append_issue(
             issues,
             "MODULE_INPUT_AXIS_MISMATCH",
@@ -1926,7 +1984,10 @@ def _validate_module_connection(
                 "outer_rim_error": outer_rim_error,
                 "modeling_tolerance": tolerance,
             },
-            suggestion={"operation": "align_module_axis", "target_port": target_port.id},
+            suggestion={
+                "operation": "align_module_axis",
+                "target_port": target_port.id,
+            },
         )
 
     if action.target_port not in transition.removed_port_ids:
@@ -2011,15 +2072,56 @@ def _validate_graph_transition(
         for edge in after_state.connection_edges
         if edge.edge_id in set(transition.connection_edge_ids)
     ]
-    if len(new_edges) != len(consumed):
+    start_anchor_bootstrap = _is_start_anchor_bootstrap_transition(
+        before_state,
+        after_state,
+        action,
+        produced_module,
+    )
+    start_anchor_bootstrap_required = bool(
+        before_state.state_version == 0
+        and action.target_port == "START"
+        and any(
+            goal.type == "connect" and goal.connection_target == "start_anchor"
+            for goal in before_state.remaining_goals
+        )
+    )
+    if start_anchor_bootstrap_required and not start_anchor_bootstrap:
+        _append_issue(
+            issues,
+            "START_ANCHOR_BOOTSTRAP_MISMATCH",
+            "error",
+            "port_graph_transition",
+            "A closed-loop contract must replace virtual START with the first module inlet as its reserved seam anchor.",
+            transition=transition,
+            module_id=produced_module.id,
+            expected={
+                "reserved_start_anchor": produced_module.ports.get("in").id
+                if produced_module.ports.get("in") is not None
+                else "module.in",
+                "start_connection_edge": False,
+            },
+            actual={
+                "reserved_start_anchor": (
+                    after_state.reserved_start_anchor.id
+                    if after_state.reserved_start_anchor is not None
+                    else None
+                ),
+                "input_bindings": produced_module.input_bindings,
+                "START_in_port_nodes": "START" in after_state.port_nodes,
+            },
+        )
+    expected_new_edges = 0 if start_anchor_bootstrap_required else len(consumed)
+    if len(new_edges) != expected_new_edges:
         _append_issue(
             issues,
             "CONNECTION_EDGE_COUNT_MISMATCH",
             "error",
             "port_graph_connection",
-            "Each consumed port must create one mating connection edge.",
+            "Each consumed physical port must create one mating connection edge; "
+            "the construction-only START cursor is replaced by the reserved first inlet.",
             transition=transition,
-            expected={"new_connection_edges": len(consumed)},
+            expected={"new_connection_edges": expected_new_edges},
             actual={"new_connection_edges": len(new_edges)},
         )
     for produced_port_id in transition.produced_port_ids:
@@ -2090,6 +2192,32 @@ def _validate_graph_transition(
             )
 
 
+def _is_start_anchor_bootstrap_transition(
+    before_state: PipeState,
+    after_state: PipeState,
+    action: ResolvedAction,
+    produced_module: Any,
+) -> bool:
+    """Recognize the one legal replacement of virtual START by a real inlet."""
+
+    inlet = produced_module.ports.get("in")
+    anchor = after_state.reserved_start_anchor
+    return bool(
+        before_state.state_version == 0
+        and action.target_port == "START"
+        and before_state.reserved_start_anchor is None
+        and inlet is not None
+        and anchor is not None
+        and anchor.id == inlet.id
+        and "START" not in after_state.port_nodes
+        and "START" not in produced_module.input_bindings.values()
+        and any(
+            goal.type == "connect" and goal.connection_target == "start_anchor"
+            for goal in before_state.remaining_goals
+        )
+    )
+
+
 def _validate_route_continuity(
     issues: list[StaticIssue],
     transition: StateTransition,
@@ -2100,7 +2228,14 @@ def _validate_route_continuity(
 ) -> None:
     if action.module not in {"route", "connect_ports"}:
         return
-    points = action.params.get("path_points") or produced_module.params.get("path_points")
+    if action.module == "connect_ports" and action.params.get("path_kind") == "seam":
+        # A seam is a topology-only closure between already coincident,
+        # tangent-compatible physical ports. Registry validation proves those
+        # predicates; there is intentionally no zero-length centerline edge.
+        return
+    points = action.params.get("path_points") or produced_module.params.get(
+        "path_points"
+    )
     if not isinstance(points, list) or len(points) < 2:
         _append_issue(
             issues,
@@ -2161,10 +2296,7 @@ def _validate_route_continuity(
         target_port.outer_diameter / 2.0,
         start_dot,
     )
-    if (
-        start_dot < PARALLEL_DOT_THRESHOLD
-        or start_rim_error > tolerance
-    ):
+    if start_dot < PARALLEL_DOT_THRESHOLD or start_rim_error > tolerance:
         _append_issue(
             issues,
             "ROUTE_START_TANGENT_MISMATCH",
@@ -2197,10 +2329,7 @@ def _validate_route_continuity(
             out_port.outer_diameter / 2.0,
             end_dot,
         )
-        if (
-            end_dot < PARALLEL_DOT_THRESHOLD
-            or end_rim_error > tolerance
-        ):
+        if end_dot < PARALLEL_DOT_THRESHOLD or end_rim_error > tolerance:
             _append_issue(
                 issues,
                 "ROUTE_END_TANGENT_MISMATCH",
@@ -2220,7 +2349,7 @@ def _validate_route_continuity(
             )
     if action.module == "connect_ports":
         other_id = action.params.get("other_port_id")
-        other_port = _find_port(str(other_id), before_state.open_ports)
+        other_port = _find_connectable_port(str(other_id), before_state)
         if other_port is not None:
             expected_end = tuple(-value for value in other_port.axis)
             end_dot = dot(end_tangent, normalize(vec(expected_end)))
@@ -2230,10 +2359,7 @@ def _validate_route_continuity(
                 other_port.outer_diameter / 2.0,
                 end_dot,
             )
-            if (
-                end_dot < PARALLEL_DOT_THRESHOLD
-                or end_rim_error > tolerance
-            ):
+            if end_dot < PARALLEL_DOT_THRESHOLD or end_rim_error > tolerance:
                 _append_issue(
                     issues,
                     "CONNECT_END_TANGENT_MISMATCH",
@@ -2253,7 +2379,11 @@ def _validate_route_continuity(
                 )
         if arc_tangents is not None:
             for label, authored, derived in (
-                ("initial_tangent", action.params.get("initial_tangent"), start_tangent),
+                (
+                    "initial_tangent",
+                    action.params.get("initial_tangent"),
+                    start_tangent,
+                ),
                 ("final_tangent", action.params.get("final_tangent"), end_tangent),
             ):
                 authored_dot = (
@@ -2294,7 +2424,10 @@ def _validate_route_continuity(
     if minimum_required is None or len(points) < 3:
         return
     minimum_actual = min(
-        (_circumradius(vec(a), vec(b), vec(c)) for a, b, c in zip(points, points[1:], points[2:])),
+        (
+            _circumradius(vec(a), vec(b), vec(c))
+            for a, b, c in zip(points, points[1:], points[2:])
+        ),
         default=float("inf"),
     )
     if minimum_actual + VECTOR_TOLERANCE < float(minimum_required):
@@ -2345,10 +2478,7 @@ def _arc_endpoint_tangents(
         mul(cross(normal_raw, a), dot(b, b)),
     )
     center = add(start, mul(numerator, 1.0 / (2.0 * normal_squared)))
-    radius_vectors = [
-        sub(point, center)
-        for point in (start, middle, end)
-    ]
+    radius_vectors = [sub(point, center) for point in (start, middle, end)]
 
     def directed_sweep(normal: tuple[float, float, float]) -> float:
         total = 0.0
@@ -2489,7 +2619,8 @@ def _validate_branch_goal_direction(
             "Junction produced a different number of terminal outputs than requested.",
             transition=transition,
             module_id=produced_module.id,
-            port_ids=[port.id for port in branch_ports] + ([primary_port.id] if primary_port else []),
+            port_ids=[port.id for port in branch_ports]
+            + ([primary_port.id] if primary_port else []),
             expected={
                 "branch_count": branch_count,
                 "include_primary_outlet": include_primary,
@@ -2576,10 +2707,12 @@ def _validate_branch_goal_direction(
         for port in branch_ports:
             if (
                 required_branch_od is not None
-                and abs(port.outer_diameter - float(required_branch_od)) > VECTOR_TOLERANCE
+                and abs(port.outer_diameter - float(required_branch_od))
+                > VECTOR_TOLERANCE
             ) or (
                 required_branch_wall is not None
-                and abs(port.wall_thickness - float(required_branch_wall)) > VECTOR_TOLERANCE
+                and abs(port.wall_thickness - float(required_branch_wall))
+                > VECTOR_TOLERANCE
             ):
                 wrong_sections.append(
                     {
@@ -2628,9 +2761,7 @@ def _validate_branch_goal_direction(
             else:
                 plane_dot = dot(normal, outlet_axis)
                 if abs(plane_dot) > 1e-3:
-                    out_of_plane.append(
-                        {"port_id": port.id, "normal_dot": plane_dot}
-                    )
+                    out_of_plane.append({"port_id": port.id, "normal_dot": plane_dot})
                 sine = dot(normal, cross(inlet_axis, outlet_axis))
                 actual_angles.append(math.degrees(math.atan2(sine, cosine)))
         if out_of_plane:
@@ -2645,7 +2776,11 @@ def _validate_branch_goal_direction(
                 expected={"branch_plane_normal": normal_raw, "max_abs_dot": 1e-3},
                 actual={"out_of_plane": out_of_plane},
             )
-        expected_angles = branch_angles if normal is not None else [abs(value) for value in branch_angles]
+        expected_angles = (
+            branch_angles
+            if normal is not None
+            else [abs(value) for value in branch_angles]
+        )
         available = list(enumerate(actual_angles))
         mismatches = []
         tolerance = 0.5
@@ -2715,9 +2850,11 @@ def _validate_branch_goal_direction(
                     ("wall_thickness", port.wall_thickness),
                 ):
                     expected_value = contract.get(field_name)
-                    if expected_value is not None and abs(
-                        float(actual_value) - float(expected_value)
-                    ) > VECTOR_TOLERANCE:
+                    if (
+                        expected_value is not None
+                        and abs(float(actual_value) - float(expected_value))
+                        > VECTOR_TOLERANCE
+                    ):
                         detail_failures.append(
                             {
                                 "outlet_index": index,
@@ -2766,7 +2903,9 @@ def _validate_branch_goal_direction(
 
     explicit_directions = list(goal.get("required_outlet_directions") or [])
     single_direction = goal.get("direction") if not explicit_directions else None
-    required_directions = explicit_directions or ([single_direction] if single_direction else [])
+    required_directions = explicit_directions or (
+        [single_direction] if single_direction else []
+    )
     if not required_directions:
         return
     required_count = len(required_directions) if explicit_directions else branch_count
@@ -2785,7 +2924,9 @@ def _validate_branch_goal_direction(
                     best_port = port
             if best_port is not None and best_score >= EXPLICIT_VECTOR_DOT_THRESHOLD:
                 matched.append(best_port.id)
-                available_ports = [port for port in available_ports if port.id != best_port.id]
+                available_ports = [
+                    port for port in available_ports if port.id != best_port.id
+                ]
             else:
                 missing_directions.append(direction)
         for port in branch_ports:
@@ -2959,6 +3100,65 @@ def _validate_goal_completion(
     modules.append(produced_module)
     goal_type = goal.get("type")
 
+    if goal_type == "connect":
+        if produced_module.type != "connect_ports":
+            _append_issue(
+                issues,
+                "GOAL_CONNECT_MODULE_MISMATCH",
+                "error",
+                "goal_completion",
+                "A completed connect goal must be realized by connect_ports.",
+                transition=transition,
+                module_id=produced_module.id,
+                expected={"module": "connect_ports"},
+                actual={"module": produced_module.type},
+            )
+        anchor = before_state.reserved_start_anchor
+        other_port_id = action.params.get("other_port_id")
+        connection_target = goal.get("connection_target", "another_open_port")
+        if connection_target == "start_anchor":
+            anchor_consumed = bool(
+                anchor is not None
+                and other_port_id == anchor.id
+                and anchor.id in action.consumed_port_ids
+                and anchor.id in transition.removed_port_ids
+                and anchor.id in produced_module.input_bindings.values()
+            )
+            if not anchor_consumed:
+                _append_issue(
+                    issues,
+                    "GOAL_START_ANCHOR_NOT_CONSUMED",
+                    "error",
+                    "goal_completion",
+                    "The START-seam closure did not consume and mate the reserved first inlet.",
+                    transition=transition,
+                    module_id=produced_module.id,
+                    port_ids=[anchor.id] if anchor is not None else [],
+                    expected={
+                        "connection_target": "start_anchor",
+                        "reserved_port_id": anchor.id if anchor is not None else None,
+                    },
+                    actual={
+                        "other_port_id": other_port_id,
+                        "consumed_port_ids": action.consumed_port_ids,
+                        "removed_port_ids": transition.removed_port_ids,
+                        "input_bindings": produced_module.input_bindings,
+                    },
+                )
+        elif anchor is not None and other_port_id == anchor.id:
+            _append_issue(
+                issues,
+                "GOAL_UNDECLARED_START_ANCHOR_CLOSURE",
+                "error",
+                "goal_completion",
+                "A normal two-open-port connect goal cannot consume the reserved START inlet.",
+                transition=transition,
+                module_id=produced_module.id,
+                port_ids=[anchor.id],
+                expected={"connection_target": "another_open_port"},
+                actual={"other_port_id": other_port_id},
+            )
+
     if goal_type in {"move", "route", "connector"} and goal.get("length") is not None:
         direction = goal.get("direction")
         matching_connector_modules = [
@@ -2980,9 +3180,7 @@ def _validate_goal_completion(
         elif goal_type in {"route", "connector"} and has_unmeasured_spline:
             actual_length = None
         elif goal_type in {"route", "connector"}:
-            actual_length = sum(
-                _module_centerline_length(module) for module in modules
-            )
+            actual_length = sum(_module_centerline_length(module) for module in modules)
         elif direction is not None:
             direction_vector = direction_to_vector(direction)
             actual_length = sum(
@@ -3044,8 +3242,7 @@ def _validate_goal_completion(
                 else:
                     actual_radius = None
                 if actual_radius is not None and (
-                    float(actual_radius) + VECTOR_TOLERANCE
-                    < float(required_curvature)
+                    float(actual_radius) + VECTOR_TOLERANCE < float(required_curvature)
                 ):
                     curvature_failures.append(
                         {"module_id": module.id, "authored_radius": actual_radius}
@@ -3195,7 +3392,9 @@ def _validate_goal_completion(
                 module_id=produced_module.id,
                 expected={"terminal_axis": terminal_axis},
                 actual={
-                    "terminal_axis": list(out_port.axis) if out_port is not None else None
+                    "terminal_axis": list(out_port.axis)
+                    if out_port is not None
+                    else None
                 },
             )
 
@@ -3205,9 +3404,10 @@ def _validate_goal_completion(
             if expected_value is None:
                 continue
             actual_value = produced_module.params.get(field_name)
-            if actual_value is None or abs(
-                float(actual_value) - float(expected_value)
-            ) > VECTOR_TOLERANCE:
+            if (
+                actual_value is None
+                or abs(float(actual_value) - float(expected_value)) > VECTOR_TOLERANCE
+            ):
                 _append_issue(
                     issues,
                     "GOAL_JUNCTION_DIMENSION_MISMATCH",
@@ -3243,9 +3443,7 @@ def _validate_goal_completion(
                     "component_types": [
                         module.params.get("component_type") for module in modules
                     ],
-                    "matching_module_ids": [
-                        module.id for module in matching_modules
-                    ],
+                    "matching_module_ids": [module.id for module in matching_modules],
                 },
             )
         component_spec = goal.get("component_spec")
@@ -3257,15 +3455,17 @@ def _validate_goal_completion(
                     continue
                 actual_value = component_module.params.get(field_name)
                 if isinstance(expected_value, (list, tuple)):
-                    matches = (
-                        actual_value is not None
-                        and _same_direction(actual_value, expected_value)
+                    matches = actual_value is not None and _same_direction(
+                        actual_value, expected_value
                     )
                 elif isinstance(expected_value, (int, float)) and not isinstance(
                     expected_value, bool
                 ):
                     try:
-                        matches = abs(float(actual_value) - float(expected_value)) <= VECTOR_TOLERANCE
+                        matches = (
+                            abs(float(actual_value) - float(expected_value))
+                            <= VECTOR_TOLERANCE
+                        )
                     except (TypeError, ValueError):
                         matches = False
                 else:
@@ -3341,9 +3541,10 @@ def _validate_goal_completion(
             ]
             actual_signed_angle = sum(signed_angles) if signed_angles else None
             expected_signed_angle = float(goal["angle"])
-            if actual_signed_angle is None or abs(
-                actual_signed_angle - expected_signed_angle
-            ) > tolerance:
+            if (
+                actual_signed_angle is None
+                or abs(actual_signed_angle - expected_signed_angle) > tolerance
+            ):
                 _append_issue(
                     issues,
                     "GOAL_TURN_SIGNED_ANGLE_MISMATCH",
@@ -3415,9 +3616,15 @@ def _validate_goal_completion(
                 expected={"diameter_out": float(goal["diameter_out"])},
                 actual={"diameter_out": actual_diameter, "goal_id": goal_id},
             )
-        if inlet_port is not None and out_port is not None and (
-            abs(inlet_port.outer_diameter - out_port.outer_diameter) <= VECTOR_TOLERANCE
-            and abs(inlet_port.wall_thickness - out_port.wall_thickness) <= VECTOR_TOLERANCE
+        if (
+            inlet_port is not None
+            and out_port is not None
+            and (
+                abs(inlet_port.outer_diameter - out_port.outer_diameter)
+                <= VECTOR_TOLERANCE
+                and abs(inlet_port.wall_thickness - out_port.wall_thickness)
+                <= VECTOR_TOLERANCE
+            )
         ):
             _append_issue(
                 issues,
@@ -3528,9 +3735,7 @@ def _validate_goal_completion(
         previous_progress = -1.0
         failures = []
         for waypoint in goal["required_waypoints"]:
-            distance, progress = _point_to_goal_path_projection(
-                vec(waypoint), modules
-            )
+            distance, progress = _point_to_goal_path_projection(vec(waypoint), modules)
             if (
                 distance > VECTOR_TOLERANCE * 10.0
                 or progress + VECTOR_TOLERANCE < previous_progress
@@ -3562,10 +3767,7 @@ def _validate_goal_completion(
         actual_termination = action.params.get("termination_type")
         if actual_termination is None and action.module == "cap_pipe":
             actual_termination = action.params.get("end_type")
-        valid = (
-            end_type == "open"
-            and produced_count >= 1
-        ) or (
+        valid = (end_type == "open" and produced_count >= 1) or (
             end_type in {"cap", "plug"}
             and produced_count == 0
             and len(action.consumed_port_ids) == 1
@@ -3727,22 +3929,20 @@ def _point_to_goal_path_projection(
                 local_distance = distances[point_index]
                 local_progress = sum(
                     length(sub(right, left))
-                    for left, right in zip(points, points[1:point_index + 1])
+                    for left, right in zip(points, points[1 : point_index + 1])
                 )
             else:
                 local_distance = float("inf")
                 local_progress = 0.0
             path_length = sum(
-                length(sub(right, left))
-                for left, right in zip(points, points[1:])
+                length(sub(right, left)) for left, right in zip(points, points[1:])
             )
         else:
             local_distance, local_progress = _point_to_polyline_projection(
                 point, points
             )
             path_length = sum(
-                length(sub(right, left))
-                for left, right in zip(points, points[1:])
+                length(sub(right, left)) for left, right in zip(points, points[1:])
             )
         if local_distance < best_distance:
             best_distance = local_distance
@@ -3806,7 +4006,9 @@ def _module_turn_angle(module: Any) -> float:
     if in_port is None or out_port is None:
         return 0.0
     incoming = tuple(-value for value in in_port.axis)
-    cosine = max(-1.0, min(1.0, dot(normalize(vec(incoming)), normalize(vec(out_port.axis)))))
+    cosine = max(
+        -1.0, min(1.0, dot(normalize(vec(incoming)), normalize(vec(out_port.axis))))
+    )
     return math.degrees(math.acos(cosine))
 
 
@@ -3831,7 +4033,9 @@ def _required_outlet_vectors(
     return _normalize_vector_list(raw_vectors)
 
 
-def _intent_required_outlet_vectors(intent: IntentResult) -> list[tuple[float, float, float]]:
+def _intent_required_outlet_vectors(
+    intent: IntentResult,
+) -> list[tuple[float, float, float]]:
     vectors: list[tuple[float, float, float]] = []
     for goal in intent.target_behavior:
         explicit_vectors = _normalize_vector_list(
@@ -3893,14 +4097,18 @@ def _match_vectors_to_ports(
                     "position": list(port.position),
                 }
             )
-            available = [candidate for candidate in available if candidate.id != port.id]
+            available = [
+                candidate for candidate in available if candidate.id != port.id
+            ]
         else:
             best_score = ranked[0][0] if ranked else None
             missing.append(
                 {
                     "vector_index": vector_index,
                     "expected_vector": list(required_vector),
-                    "best_dot": round(best_score, 4) if best_score is not None else None,
+                    "best_dot": round(best_score, 4)
+                    if best_score is not None
+                    else None,
                 }
             )
     rejected = []
@@ -3928,10 +4136,7 @@ def _match_vectors_to_ports(
 
 
 def _vectors_json(vectors: list[tuple[float, float, float]]) -> list[list[float]]:
-    return [
-        [round(float(component), 6) for component in vector]
-        for vector in vectors
-    ]
+    return [[round(float(component), 6) for component in vector] for vector in vectors]
 
 
 def _direction_score(target_port: Port, port: Port, direction: Direction) -> float:
@@ -3968,12 +4173,14 @@ def _append_issue(
             message=message,
             step_index=step_index,
             action_id=transition.action_id if transition is not None else None,
-            module_id=module_id or (
-                transition.produced_module_id if transition is not None else None
-            ),
+            module_id=module_id
+            or (transition.produced_module_id if transition is not None else None),
             port_ids=port_ids or [],
-            target_port_id=target_port_id or (
-                transition.target_port_before.get("id") if transition is not None else None
+            target_port_id=target_port_id
+            or (
+                transition.target_port_before.get("id")
+                if transition is not None
+                else None
             ),
             consumed_goal_index=(
                 transition.consumed_goal_index if transition is not None else None
@@ -3992,10 +4199,22 @@ def _find_port(port_id: str, ports: list[Port]) -> Port | None:
     return None
 
 
+def _find_connectable_port(port_id: str, state: PipeState) -> Port | None:
+    port = _find_port(port_id, state.open_ports)
+    if port is not None:
+        return port
+    anchor = state.reserved_start_anchor
+    if anchor is not None and anchor.id == port_id:
+        return anchor
+    return None
+
+
 def _produced_module(before_state: PipeState, after_state: PipeState) -> Any | None:
     before_module_ids = {module.id for module in before_state.placed_modules}
     modules = [
-        module for module in after_state.placed_modules if module.id not in before_module_ids
+        module
+        for module in after_state.placed_modules
+        if module.id not in before_module_ids
     ]
     if len(modules) != 1:
         return None
@@ -4004,7 +4223,9 @@ def _produced_module(before_state: PipeState, after_state: PipeState) -> Any | N
 
 def _produced_module_count(before_state: PipeState, after_state: PipeState) -> int:
     before_module_ids = {module.id for module in before_state.placed_modules}
-    return sum(1 for module in after_state.placed_modules if module.id not in before_module_ids)
+    return sum(
+        1 for module in after_state.placed_modules if module.id not in before_module_ids
+    )
 
 
 def _near(a: Any, b: Any, tolerance: float = VECTOR_TOLERANCE) -> bool:
@@ -4034,8 +4255,10 @@ def _duplicate_open_port_groups(ports: list[Port]) -> list[dict[str, Any]]:
         if port.id in used:
             continue
         group = [port]
-        for other in ports[index + 1:]:
-            if _near(port.position, other.position) and _parallel(port.axis, other.axis):
+        for other in ports[index + 1 :]:
+            if _near(port.position, other.position) and _parallel(
+                port.axis, other.axis
+            ):
                 group.append(other)
         if len(group) > 1:
             used.update(item.id for item in group)

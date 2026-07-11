@@ -1,0 +1,47 @@
+[
+  {
+    "attempt_index": 1,
+    "status": "schema_retry",
+    "phase": "provider_schema_negotiation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 1,
+    "consumes_semantic_budget": false,
+    "parsed_intent": false,
+    "candidate_digest": null,
+    "diagnostic": "Gemini interaction request was rejected: Error code: 400 - {'error': {'message': 'Request contains an invalid argument.', 'code': 'invalid_request'}}",
+    "schema_profile": "preferred_numeric_enum",
+    "next_schema_profile": "mandatory_source_numeric_enum",
+    "lineage_reset": true,
+    "will_retry": true
+  },
+  {
+    "attempt_index": 2,
+    "status": "schema_retry",
+    "phase": "provider_schema_negotiation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 2,
+    "consumes_semantic_budget": false,
+    "parsed_intent": false,
+    "candidate_digest": null,
+    "diagnostic": "Gemini interaction request was rejected: Error code: 400 - {'error': {'message': 'Request contains an invalid argument.', 'code': 'invalid_request'}}",
+    "schema_profile": "mandatory_source_numeric_enum",
+    "next_schema_profile": "compact_encoded_decimal",
+    "lineage_reset": true,
+    "will_retry": true
+  },
+  {
+    "attempt_index": 3,
+    "status": "schema_rejected",
+    "phase": "provider_schema_negotiation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 3,
+    "consumes_semantic_budget": false,
+    "parsed_intent": false,
+    "candidate_digest": null,
+    "diagnostic": "Gemini interaction request was rejected: Error code: 400 - {'error': {'message': 'Request contains an invalid argument.', 'code': 'invalid_request'}}",
+    "schema_profile": "compact_encoded_decimal",
+    "next_schema_profile": null,
+    "lineage_reset": false,
+    "will_retry": false
+  }
+]

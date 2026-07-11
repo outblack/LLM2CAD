@@ -1,0 +1,95 @@
+Create one connected hollow circular-pipe network in millimeters.
+
+The overall shape should resemble a planar two-loop water-distribution network: two approximately rectangular loops stacked vertically, with a diagonal supply pipe entering the upper-right junction from above and to the right.
+
+Do not use explicit global coordinates or user-authored waypoints. Determine all exact positions, junction poses, connection points, and closure geometry automatically from the requested topology and relative layout.
+
+Pipe parameters:
+
+- Constant outside diameter: 12 mm
+- Constant wall thickness: 2 mm
+- Circular hollow cross-section
+- Smooth and continuous internal bore
+- All main pipes use the same diameter and wall thickness
+- Use broad, mechanically plausible bends rather than sharp corners
+- A bend radius around two to three times the pipe outside diameter is preferred, but it may be adjusted automatically for feasibility
+
+Required topology:
+
+1. Begin at one upstream reservoir-side interface located visually above and to the right of the main network.
+
+2. Add one inline flange component at this upstream interface. The flange represents the reservoir connection. Do not create the reservoir tank itself.
+
+3. From the flange, create one straight diagonal supply pipe traveling downward and toward the left until it reaches the upper-right junction of the network.
+
+4. At the upper-right junction, create a smooth binary junction primitive with exactly two downstream passages:
+
+   - one passage travels horizontally toward the upper-left side;
+   - the other passage travels vertically downward along the right side.
+
+5. The upper horizontal passage reaches the upper-left corner. At that corner, use a smooth elbow and continue vertically downward to the middle-left junction.
+
+6. The right vertical passage continues downward from the upper-right junction to the middle-right junction.
+
+7. At the middle-left junction, create a smooth binary junction:
+
+   - the primary passage continues vertically downward toward the lower-left corner;
+   - one side passage points horizontally toward the middle-right junction.
+
+8. At the middle-right junction, create a matching smooth binary junction:
+
+   - the primary passage continues vertically downward toward the lower-right connection;
+   - one side passage points horizontally toward the middle-left junction.
+
+9. Connect the two facing side passages of the middle-left and middle-right junctions. This connection forms the shared horizontal side between the upper and lower loops.
+
+10. Close this middle horizontal connection using connect_ports. Insert exactly one inline coupling component near the connection seam. The coupling must be coaxial with the pipe and must not block or reduce the bore.
+
+11. Continue the primary passage from the middle-left junction vertically downward. At the lower-left corner, create a smooth elbow that turns the pipe horizontally toward the right.
+
+12. Continue the primary passage from the middle-right junction vertically downward toward the lower-right connection.
+
+13. Connect the lower horizontal pipe from the lower-left side to the lower end of the right vertical pipe. Use connect_ports to close this second loop.
+
+14. Insert exactly one inline coupling component near this lower connection seam. The coupling must appear as a short local sleeve around the pipe while preserving the full internal flow passage.
+
+The final network must contain exactly two stacked closed loops:
+
+- an upper loop bounded by the upper horizontal pipe, the upper portions of the left and right vertical pipes, and the shared middle horizontal pipe;
+- a lower loop bounded by the shared middle horizontal pipe, the lower portions of the left and right vertical pipes, and the lower horizontal pipe.
+
+Relative proportions:
+
+- The upper, middle, and lower horizontal spans should have approximately equal lengths.
+- The left and right sides of each loop should have approximately equal heights.
+- The full network should be roughly twice as tall as one horizontal span.
+- The diagonal inlet should be shorter than the total height of the two-loop network.
+- Keep sufficient spacing between parallel pipes so that couplings and junction hubs do not collide.
+- Preserve the clear visual appearance of two stacked rectangular loops.
+- Minor automatic dimension adjustments are allowed when required for curvature, clearance, or valid loop closure.
+
+Primitive and component requirements:
+
+- Use route primitives for straight pipe runs.
+- Use turn primitives for the upper-left and lower-left elbows.
+- Use smooth junction primitives at the upper-right, middle-left, and middle-right branch nodes.
+- Use connect_ports for the middle and lower loop closures.
+- Use inline_component only for:
+  - one flange at the upstream reservoir interface;
+  - one coupling at the middle closure;
+  - one coupling at the lower closure.
+- Do not model junctions or elbows as inline components.
+- Do not add valves, caps, plugs, unions, extra branches, or extra open ports.
+
+Junction requirements:
+
+- Use junction_style=smooth_hub.
+- Keep each junction compact and close to the normal pipe diameter.
+- Do not create spherical nodes, bulbous chambers, or large swollen junction bodies.
+- Blend both the outer wall and the internal bore smoothly.
+- Allow the geometry system to determine exact blend radii and hub dimensions.
+
+Final validation requirements:
+
+- The result must be one connected pipe material network.
+- The internal bore must form one connected

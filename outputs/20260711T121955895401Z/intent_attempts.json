@@ -1,0 +1,27 @@
+[
+  {
+    "attempt_index": 1,
+    "status": "rejected",
+    "phase": "semantic_validation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 0,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "provider_response_received": true,
+    "candidate_digest": "583da91e0ac50bee87353de57040988c981b19ec44129e7bc4907653e5c8b476",
+    "diagnostic": "sequential heading contradiction at m2: move.direction=+Y is a straight-run heading but the incoming heading is [-0.587785, -0.809017, 0.0] (dot=-0.809017); align start_axis/the preceding outlet or represent the heading change as a turn; sequential heading contradiction at m3: move.direction=+Y is a straight-run heading but the incoming heading is [0.951057, 0.309017, 0.0] (dot=0.309017); align start_axis/the preceding outlet or represent the heading change as a turn; sequential heading contradiction at m4: move.direction=+Y is a straight-run heading but the incoming heading is [-0.587785, -0.809017, 0.0] (dot=-0.809017); align start_axis/the preceding outlet or represent the heading change as a turn; sequential heading contradiction at m5: move.direction=+Y is a straight-run heading but the incoming heading is [0.951057, 0.309017, 0.0] (dot=0.309017); align start_axis/the preceding outlet or represent the heading change as a turn; sequential heading contradiction at m6: move.direction=+Y is a straight-run heading but the incoming heading is [-0.587785, -0.809017, 0.0] (dot=-0.809017); align start_axis/the preceding outlet or represent the heading change as a turn; sequential headi",
+    "lineage_reset": false,
+    "will_retry": true
+  },
+  {
+    "attempt_index": 2,
+    "status": "accepted",
+    "phase": "semantic_validation",
+    "semantic_attempt": 2,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "6a63fffa4c2a6ef84c9b9710aa3b56e4f2f56b92b9daa4a8130b5df2d36655f0",
+    "diagnostic": null,
+    "lineage_reset": false
+  }
+]

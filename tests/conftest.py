@@ -10,6 +10,13 @@ import cadgen.freecad_mcp as freecad_mcp
 def forbid_pipeline_external_processes(monkeypatch):
     """Keep the static suite hermetic: no app launch, uvx, MCP, or paid API."""
 
+    # Legacy pipeline tests intentionally exercise the LLM step-planner and its
+    # historical retry fixtures.  The new production defaults use the host
+    # primitive compiler and conflict search; focused architecture tests cover
+    # those paths directly without invalidating the older fault-injection suite.
+    monkeypatch.setenv("CADGEN_PRIMITIVE_COMPILER_ENABLED", "false")
+    monkeypatch.setenv("CADGEN_CONFLICT_SEARCH_ENABLED", "false")
+
     async def ready_probe(unused_settings, *, executor=None):
         del unused_settings, executor
         return {"passed": True, "protocol": 1}

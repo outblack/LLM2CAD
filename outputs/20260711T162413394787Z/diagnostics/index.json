@@ -1,0 +1,19 @@
+{
+  "records": [
+    {
+      "case_id": "c8afdf6026eb103b0bdb3a295729633f86e38015bb269a1917498da76b2c2a4c",
+      "diagnostic_context_digest": "27d1ef6091574a3285f225db6463b3b833f39656a49e7429ddb59c1af049e4f0",
+      "failure_signature": "e57ebcc6f2f5ad6b30b6c754a4bd1286794cd039094d505fee336d94cf1e7a22",
+      "state_id": "S6",
+      "step_index": 7,
+      "attempt_index": 1,
+      "repair_epoch": 0,
+      "status": "pending",
+      "artifact_path": "outputs/20260711T162413394787Z/diagnostics/step_7_attempt_1_case.json",
+      "failure_reason": null
+    }
+  ],
+  "calls_by_step": {},
+  "cache_hit_count": 0,
+  "futile_retry_avoided_count": 0
+}

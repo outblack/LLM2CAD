@@ -25,6 +25,32 @@ from cadgen.schemas import (
 from cadgen.static_validation import top_issue_ids
 
 
+# 보고서의 아티팩트 이름과 ``GenerationArtifacts`` 필드 연결을 한곳에 둔다.
+# 순서는 기존 보고서 출력 순서를 그대로 보존한다.
+_ARTIFACT_FIELDS: tuple[tuple[str, str], ...] = (
+    ("prompt", "prompt_path"),
+    ("intent", "intent_path"),
+    ("intent_attempts", "intent_attempts_path"),
+    ("intent_diagnostics", "intent_diagnostics_path"),
+    ("actions", "actions_path"),
+    ("action_attempts", "action_attempts_path"),
+    ("repair_advice", "repair_advice_path"),
+    ("diagnostics_index", "diagnostics_index_path"),
+    ("constraint_ledger", "constraint_ledger_path"),
+    ("global_preflight", "global_preflight_path"),
+    ("search_events", "search_events_path"),
+    ("state", "state_path"),
+    ("step_verification", "step_verification_path"),
+    ("critic_report", "critic_report_path"),
+    ("freecad_script", "freecad_script_path"),
+    ("checkpoint", "checkpoint_path"),
+    ("run_report", "report_path"),
+    ("mcp_result", "mcp_result_path"),
+    ("freecad_validation", "freecad_validation_path"),
+    ("freecad_document", "freecad_document_path"),
+)
+
+
 def _artifact_paths(run_dir: Path) -> dict[str, Path]:
     """한 실행 디렉터리 안의 표준 아티팩트 경로를 반환한다."""
 
@@ -32,8 +58,15 @@ def _artifact_paths(run_dir: Path) -> dict[str, Path]:
         "prompt": run_dir / "prompt.txt",
         "intent": run_dir / "intent.json",
         "intent_attempts": run_dir / "intent_attempts.json",
+        "intent_diagnostics": run_dir / "intent_diagnostics.json",
+        "constraint_ledger": run_dir / "constraint_ledger.json",
+        "global_preflight": run_dir / "global_preflight.json",
+        "search_events": run_dir / "search_events.jsonl",
         "actions": run_dir / "actions.json",
         "attempts": run_dir / "action_attempts.json",
+        "repair_advice": run_dir / "repair_advice.json",
+        "diagnostics_dir": run_dir / "diagnostics",
+        "diagnostics_index": run_dir / "diagnostics" / "index.json",
         "state": run_dir / "state.json",
         "steps": run_dir / "step_verification.json",
         "critic": run_dir / "critic_report.json",
@@ -78,38 +111,13 @@ def _artifact_statuses(
 ) -> list[ArtifactStatus]:
     """보고서에 기록할 파일별 생성 여부와 차단 원인을 계산한다."""
 
-    entries = {
-        "prompt": artifacts.prompt_path,
-        "intent": artifacts.intent_path,
-        "intent_attempts": artifacts.intent_attempts_path,
-        "actions": artifacts.actions_path,
-        "action_attempts": artifacts.action_attempts_path,
-        "state": artifacts.state_path,
-        "step_verification": artifacts.step_verification_path,
-        "critic_report": artifacts.critic_report_path,
-        "freecad_script": artifacts.freecad_script_path,
-        "checkpoint": artifacts.checkpoint_path,
-        "run_report": artifacts.report_path,
-        "mcp_result": artifacts.mcp_result_path,
-        "freecad_validation": artifacts.freecad_validation_path,
-        "freecad_document": artifacts.freecad_document_path,
-    }
     blocking = top_issue_ids(issues)
     statuses: list[ArtifactStatus] = []
-    for name, path in entries.items():
+    for name, field_name in _ARTIFACT_FIELDS:
+        path = getattr(artifacts, field_name)
         exists = bool(path) and (Path(path).exists() or name == "run_report")
         if name == "freecad_document" and exists:
-            manifest_path = Path(artifacts.output_dir) / "freecad_artifact.json"
-            try:
-                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-                digest = str(manifest.get("payload_digest", ""))
-                exists = (
-                    manifest.get("fcstd_path") == str(Path(path).resolve())
-                    and bool(digest)
-                    and Path(path).name.endswith(digest[:12] + ".FCStd")
-                )
-            except (OSError, json.JSONDecodeError, AttributeError):
-                exists = False
+            exists = _freecad_document_matches_manifest(artifacts, Path(path))
         statuses.append(
             ArtifactStatus(
                 name=name,
@@ -123,17 +131,35 @@ def _artifact_statuses(
     return statuses
 
 
+def _freecad_document_matches_manifest(
+    artifacts: GenerationArtifacts,
+    document_path: Path,
+) -> bool:
+    """FreeCAD 문서가 현재 payload manifest에 결합된 최신 결과인지 확인한다."""
+
+    manifest_path = Path(artifacts.output_dir) / "freecad_artifact.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        digest = str(manifest.get("payload_digest", ""))
+        return (
+            manifest.get("fcstd_path") == str(document_path.resolve())
+            and bool(digest)
+            and document_path.name.endswith(digest[:12] + ".FCStd")
+        )
+    except (OSError, json.JSONDecodeError, AttributeError):
+        return False
+
+
 def _next_visual_review_path(run_dir: Path) -> Path:
     """resume 후에도 덮어쓰지 않는 다음 visual review 파일명을 계산한다."""
 
     review_dir = run_dir / "visual_review"
-    round_numbers: list[int] = []
+    latest_round = 0
     for path in review_dir.glob("round_*.json"):
         match = re.fullmatch(r"round_(\d+)\.json", path.name)
         if match:
-            round_numbers.append(int(match.group(1)))
-    next_round = max(round_numbers, default=0) + 1
-    return review_dir / f"round_{next_round}.json"
+            latest_round = max(latest_round, int(match.group(1)))
+    return review_dir / f"round_{latest_round + 1}.json"
 
 
 def _atomic_write_json(path: Path, payload: Any) -> None:

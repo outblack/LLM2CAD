@@ -16,6 +16,13 @@ from pathlib import Path
 from typing import Any
 
 from cadgen.config import Settings
+from cadgen.freecad_script import (
+    ADJACENT_INTERFACE_POLICY_ID,
+    GENERATOR_VERSION,
+    VALIDATION_SCHEMA_VERSION,
+    VALIDATOR_POLICY_DIGEST,
+    VALIDATOR_POLICY_ID,
+)
 
 
 class FreeCADMCPError(RuntimeError):
@@ -112,11 +119,11 @@ App.setActiveDocument(name)
 Gui.activeDocument().activeView().fitAll()
 print("{_VISUAL_READY_PREFIX}" + json.dumps({{"passed": True}}, sort_keys=True, separators=(",", ":")))
 '''
-    cleanup_code = f'''import FreeCAD as App
+    cleanup_code = f"""import FreeCAD as App
 name = {document_name!r}
 if name in App.listDocuments():
     App.closeDocument(name)
-'''
+"""
     try:
         create_result = (
             await _call_freecad_tools(
@@ -181,7 +188,12 @@ async def _execute_freecad_code(settings: Settings, code: str) -> dict[str, Any]
                 await asyncio.sleep(0.01)
         results = await _call_freecad_tools(
             settings,
-            [(settings.freecad_mcp_execute_tool, {settings.freecad_mcp_execute_arg: code})],
+            [
+                (
+                    settings.freecad_mcp_execute_tool,
+                    {settings.freecad_mcp_execute_arg: code},
+                )
+            ],
         )
     finally:
         if acquired:
@@ -236,6 +248,401 @@ async def _call_freecad_tools(
             return results
 
 
+_STRUCTURED_MODULE_FAILURE_STAGES = {
+    "JUNCTION_FILLET_REQUIRES_UPSTREAM_ROUTE": "junction_precondition",
+    "JUNCTION_BLEND_RADIUS_EXCEEDS_HUB": "junction_precondition",
+    "JUNCTION_RAW_MATERIAL_INVALID": "junction_material_construction",
+    "JUNCTION_FILLET_SEAM_NOT_FOUND": "fillet_compact_junction_material",
+    "JUNCTION_OUTER_FILLET_FAILED": "fillet_compact_junction_material",
+    "JUNCTION_INNER_FILLET_FAILED": "fillet_compact_junction_material",
+    "JUNCTION_FILLET_INVALID_SOLID": "fillet_compact_junction_material",
+    "JUNCTION_FILLET_NO_TOPOLOGY_PROGRESS": ("fillet_compact_junction_material"),
+    "JUNCTION_FILLET_UNRESOLVED_SEAMS": "fillet_compact_junction_material",
+    "OCC_KERNEL_OPERATION_FAILED": "make_module_shape",
+    "MODULE_SHAPE_CONSTRUCTION_FAILED": "make_module_shape",
+}
+
+
+def _strict_finite_number(value: Any, *, label: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise FreeCADMCPError(f"{label} must be a finite JSON number")
+    numeric = float(value)
+    if not math.isfinite(numeric):
+        raise FreeCADMCPError(f"{label} must be a finite JSON number")
+    return numeric
+
+
+def _strict_vector(value: Any, *, label: str) -> list[float]:
+    if not isinstance(value, list) or len(value) != 3:
+        raise FreeCADMCPError(f"{label} must be a three-number list")
+    return [
+        _strict_finite_number(item, label=f"{label}[{index}]")
+        for index, item in enumerate(value)
+    ]
+
+
+def _strict_bounds(value: Any, *, label: str) -> tuple[list[float], list[float]]:
+    if not isinstance(value, dict) or set(value) != {"minimum", "maximum"}:
+        raise FreeCADMCPError(f"{label} has an invalid bounds shape")
+    minimum = _strict_vector(value["minimum"], label=f"{label}.minimum")
+    maximum = _strict_vector(value["maximum"], label=f"{label}.maximum")
+    if any(low > high for low, high in zip(minimum, maximum)):
+        raise FreeCADMCPError(f"{label} has inverted bounds")
+    return minimum, maximum
+
+
+def _validate_json_details(value: Any, *, label: str, depth: int = 0) -> None:
+    if depth > 8:
+        raise FreeCADMCPError(f"{label} exceeds the supported nesting depth")
+    if value is None or isinstance(value, (str, bool)):
+        return
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if not math.isfinite(float(value)):
+            raise FreeCADMCPError(f"{label} contains a non-finite number")
+        return
+    if isinstance(value, list):
+        if len(value) > 256:
+            raise FreeCADMCPError(f"{label} contains too many list items")
+        for index, item in enumerate(value):
+            _validate_json_details(
+                item,
+                label=f"{label}[{index}]",
+                depth=depth + 1,
+            )
+        return
+    if isinstance(value, dict):
+        if len(value) > 128 or any(not isinstance(key, str) for key in value):
+            raise FreeCADMCPError(f"{label} has an invalid object shape")
+        for key, item in value.items():
+            _validate_json_details(
+                item,
+                label=f"{label}.{key}",
+                depth=depth + 1,
+            )
+        return
+    raise FreeCADMCPError(f"{label} contains a non-JSON value")
+
+
+def _validate_validator_policy_metadata(
+    evidence: dict[str, Any],
+) -> dict[str, Any] | None:
+    metadata = evidence.get("validator_policy")
+    if metadata is None:
+        # Schema v3 existed before policy binding.  Its absence remains readable,
+        # but new structured evidence below may not claim a current policy.
+        return None
+    required = {
+        "policy_id",
+        "policy_digest",
+        "generator_version",
+        "validation_schema_version",
+    }
+    if not isinstance(metadata, dict) or set(metadata) != required:
+        raise FreeCADMCPError("FreeCAD validator policy metadata is malformed")
+    expected = {
+        "policy_id": VALIDATOR_POLICY_ID,
+        "policy_digest": VALIDATOR_POLICY_DIGEST,
+        "generator_version": GENERATOR_VERSION,
+        "validation_schema_version": VALIDATION_SCHEMA_VERSION,
+    }
+    if metadata != expected:
+        raise FreeCADMCPError("FreeCAD validator policy metadata mismatch")
+    if evidence.get("generator_version") != metadata["generator_version"]:
+        raise FreeCADMCPError("FreeCAD validator policy generator binding mismatch")
+    if evidence.get("schema_version") != metadata["validation_schema_version"]:
+        raise FreeCADMCPError("FreeCAD validator policy schema binding mismatch")
+    return metadata
+
+
+def _validate_structured_module_error_details(
+    failure_code: str,
+    details: dict[str, Any],
+    *,
+    label: str,
+) -> None:
+    module_type = details.get("module_type")
+    if not isinstance(module_type, str) or not module_type:
+        raise FreeCADMCPError(f"{label}.details.module_type is invalid")
+    if failure_code.startswith("JUNCTION_") and module_type != "junction":
+        raise FreeCADMCPError(f"{label} junction failure has a non-junction module")
+
+    def require_surface() -> str:
+        surface = details.get("surface")
+        if surface not in {"outer", "inner"}:
+            raise FreeCADMCPError(f"{label}.details.surface is invalid")
+        return str(surface)
+
+    if failure_code == "JUNCTION_BLEND_RADIUS_EXCEEDS_HUB":
+        require_surface()
+        required = _strict_finite_number(
+            details.get("required_radius"),
+            label=f"{label}.details.required_radius",
+        )
+        maximum = _strict_finite_number(
+            details.get("maximum_radius"),
+            label=f"{label}.details.maximum_radius",
+        )
+        if required <= maximum or maximum <= 0.0:
+            raise FreeCADMCPError(f"{label} radius-limit evidence is inconsistent")
+    elif failure_code == "JUNCTION_FILLET_SEAM_NOT_FOUND":
+        require_surface()
+        if details.get("kernel_code") != "NO_SUITABLE_EDGES":
+            raise FreeCADMCPError(f"{label}.details.kernel_code is invalid")
+    elif failure_code in {
+        "JUNCTION_OUTER_FILLET_FAILED",
+        "JUNCTION_INNER_FILLET_FAILED",
+        "JUNCTION_FILLET_INVALID_SOLID",
+    }:
+        surface = require_surface()
+        expected_surface = (
+            "outer"
+            if failure_code == "JUNCTION_OUTER_FILLET_FAILED"
+            else "inner"
+            if failure_code == "JUNCTION_INNER_FILLET_FAILED"
+            else surface
+        )
+        if surface != expected_surface:
+            raise FreeCADMCPError(f"{label} failure code and surface disagree")
+        radius = _strict_finite_number(
+            details.get("radius"),
+            label=f"{label}.details.radius",
+        )
+        edge_length = _strict_finite_number(
+            details.get("edge_length"),
+            label=f"{label}.details.edge_length",
+        )
+        _strict_vector(details.get("edge_center"), label=f"{label}.details.edge_center")
+        if radius <= 0.0 or edge_length <= 0.0:
+            raise FreeCADMCPError(f"{label} fillet measurements are invalid")
+        if failure_code in {
+            "JUNCTION_OUTER_FILLET_FAILED",
+            "JUNCTION_INNER_FILLET_FAILED",
+        } and not isinstance(details.get("kernel_code"), str):
+            raise FreeCADMCPError(f"{label}.details.kernel_code is invalid")
+    elif failure_code == "JUNCTION_FILLET_NO_TOPOLOGY_PROGRESS":
+        require_surface()
+        radius = _strict_finite_number(
+            details.get("radius"),
+            label=f"{label}.details.radius",
+        )
+        before = details.get("before")
+        after = details.get("after")
+        if (
+            radius <= 0.0
+            or isinstance(before, bool)
+            or isinstance(after, bool)
+            or not isinstance(before, int)
+            or not isinstance(after, int)
+            or before <= 0
+            or after < before
+        ):
+            raise FreeCADMCPError(f"{label} topology-progress evidence is invalid")
+    elif failure_code == "JUNCTION_FILLET_UNRESOLVED_SEAMS":
+        require_surface()
+        count = details.get("unresolved_count")
+        if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+            raise FreeCADMCPError(f"{label}.details.unresolved_count is invalid")
+    elif failure_code == "OCC_KERNEL_OPERATION_FAILED":
+        if (
+            not isinstance(details.get("kernel_code"), str)
+            or not details["kernel_code"]
+            or not isinstance(details.get("kernel_error"), str)
+            or not details["kernel_error"]
+        ):
+            raise FreeCADMCPError(f"{label} kernel details are invalid")
+
+
+def _validate_module_errors(
+    value: Any,
+    *,
+    expected_module_ids: list[str],
+    policy_metadata: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    if not isinstance(value, list):
+        raise FreeCADMCPError("FreeCAD module_errors evidence must be a list")
+    seen: set[str] = set()
+    expected = set(expected_module_ids)
+    for index, item in enumerate(value):
+        label = f"FreeCAD module_errors[{index}]"
+        if not isinstance(item, dict):
+            raise FreeCADMCPError(f"{label} must be an object")
+        module_id = item.get("module_id")
+        error = item.get("error")
+        if module_id not in expected or module_id in seen:
+            raise FreeCADMCPError(f"{label}.module_id is invalid or duplicated")
+        if not isinstance(error, str) or not error:
+            raise FreeCADMCPError(f"{label}.error must be a non-empty string")
+        seen.add(module_id)
+        structured_keys = {"failure_code", "stage", "details"}
+        present = structured_keys.intersection(item)
+        if not present:
+            if set(item) != {"module_id", "error"}:
+                raise FreeCADMCPError(f"{label} legacy shape is invalid")
+            continue
+        if present != structured_keys or set(item) != {
+            "module_id",
+            "error",
+            *structured_keys,
+        }:
+            raise FreeCADMCPError(f"{label} structured fields are incomplete")
+        if policy_metadata is None:
+            raise FreeCADMCPError(f"{label} lacks validator policy binding")
+        failure_code = item["failure_code"]
+        stage = item["stage"]
+        details = item["details"]
+        if (
+            failure_code not in _STRUCTURED_MODULE_FAILURE_STAGES
+            or stage != _STRUCTURED_MODULE_FAILURE_STAGES[failure_code]
+        ):
+            raise FreeCADMCPError(f"{label} failure_code/stage is unsupported")
+        if not isinstance(details, dict):
+            raise FreeCADMCPError(f"{label}.details must be an object")
+        _validate_json_details(details, label=f"{label}.details")
+        _validate_structured_module_error_details(
+            failure_code,
+            details,
+            label=label,
+        )
+    return value
+
+
+def _validate_adjacent_interface_overlaps(
+    value: Any,
+    *,
+    expected_module_ids: list[str],
+    policy_metadata: dict[str, Any] | None,
+    evidence_generator_version: Any,
+) -> None:
+    if value is None:
+        # Optional in schema v3 for artifacts produced before v21 hardening.
+        return
+    if not isinstance(value, list):
+        raise FreeCADMCPError(
+            "FreeCAD adjacent_interface_overlaps evidence must be a list"
+        )
+    if value and policy_metadata is None:
+        raise FreeCADMCPError(
+            "FreeCAD adjacent interface evidence lacks validator policy binding"
+        )
+    module_index = {
+        module_id: index for index, module_id in enumerate(expected_module_ids)
+    }
+    seen_pairs: set[tuple[str, str]] = set()
+    required = {
+        "module_ids",
+        "parent_module_id",
+        "child_module_id",
+        "parent_child_binding",
+        "common_volume",
+        "outside_interface_volume",
+        "outside_interface_allowance",
+        "interface_upstream_depth",
+        "interface_downstream_depth",
+        "minimum_outlet_forward_dot",
+        "policy",
+        "policy_id",
+        "policy_digest",
+        "generator_version",
+    }
+    optional = {"common_bounds", "common_centroid"}
+    for index, item in enumerate(value):
+        label = f"FreeCAD adjacent_interface_overlaps[{index}]"
+        if (
+            not isinstance(item, dict)
+            or not required.issubset(item)
+            or not set(item).issubset(required | optional)
+        ):
+            raise FreeCADMCPError(f"{label} has an invalid object shape")
+        parent = item["parent_module_id"]
+        child = item["child_module_id"]
+        pair = item["module_ids"]
+        if (
+            not isinstance(parent, str)
+            or not isinstance(child, str)
+            or parent not in module_index
+            or child not in module_index
+            or parent == child
+            or not isinstance(pair, list)
+            or pair != [parent, child]
+            or module_index[parent] >= module_index[child]
+            or (parent, child) in seen_pairs
+        ):
+            raise FreeCADMCPError(f"{label} parent/child relationship is invalid")
+        seen_pairs.add((parent, child))
+        binding = item["parent_child_binding"]
+        if (
+            not isinstance(binding, dict)
+            or set(binding) != {"child_input_name", "parent_port_id"}
+            or not isinstance(binding["child_input_name"], str)
+            or not binding["child_input_name"]
+            or not isinstance(binding["parent_port_id"], str)
+            or not binding["parent_port_id"].startswith(parent + ".")
+            or len(binding["parent_port_id"]) <= len(parent) + 1
+        ):
+            raise FreeCADMCPError(f"{label} parent/child binding is invalid")
+        if (
+            item["policy"] != "resolver_local_interface_band"
+            or item["policy_id"] != ADJACENT_INTERFACE_POLICY_ID
+            or item["policy_digest"] != VALIDATOR_POLICY_DIGEST
+            or item["generator_version"] != evidence_generator_version
+            or item["generator_version"] != GENERATOR_VERSION
+        ):
+            raise FreeCADMCPError(f"{label} policy binding is invalid")
+        common_volume = _strict_finite_number(
+            item["common_volume"], label=f"{label}.common_volume"
+        )
+        outside_volume = _strict_finite_number(
+            item["outside_interface_volume"],
+            label=f"{label}.outside_interface_volume",
+        )
+        outside_allowance = _strict_finite_number(
+            item["outside_interface_allowance"],
+            label=f"{label}.outside_interface_allowance",
+        )
+        upstream_depth = _strict_finite_number(
+            item["interface_upstream_depth"],
+            label=f"{label}.interface_upstream_depth",
+        )
+        downstream_depth = _strict_finite_number(
+            item["interface_downstream_depth"],
+            label=f"{label}.interface_downstream_depth",
+        )
+        forward_dot = _strict_finite_number(
+            item["minimum_outlet_forward_dot"],
+            label=f"{label}.minimum_outlet_forward_dot",
+        )
+        if (
+            common_volume <= 0.0
+            or outside_volume < 0.0
+            or outside_allowance <= 0.0
+            or outside_volume > outside_allowance + max(1e-15, outside_allowance * 1e-9)
+            or upstream_depth <= 0.0
+            or downstream_depth <= 0.0
+            or forward_dot < -1e-9
+            or forward_dot > 1.0 + 1e-12
+        ):
+            raise FreeCADMCPError(f"{label} measurements are inconsistent")
+        bounds: tuple[list[float], list[float]] | None = None
+        if "common_bounds" in item:
+            bounds = _strict_bounds(
+                item["common_bounds"], label=f"{label}.common_bounds"
+            )
+        if "common_centroid" in item:
+            centroid = _strict_vector(
+                item["common_centroid"], label=f"{label}.common_centroid"
+            )
+            if bounds is not None:
+                minimum, maximum = bounds
+                for axis, (point, low, high) in enumerate(
+                    zip(centroid, minimum, maximum)
+                ):
+                    slack = max(1e-12, abs(high - low) * 1e-9)
+                    if point < low - slack or point > high + slack:
+                        raise FreeCADMCPError(
+                            f"{label}.common_centroid[{axis}] is outside bounds"
+                        )
+
+
 def assess_freecad_validation(
     result: dict[str, Any],
     *,
@@ -275,9 +682,8 @@ def assess_freecad_validation(
     }
     for field, expected in identity_expectations.items():
         if expected is not None and evidence.get(field) != expected:
-            raise FreeCADMCPError(
-                f"FreeCAD validation {field} mismatch"
-            )
+            raise FreeCADMCPError(f"FreeCAD validation {field} mismatch")
+    policy_metadata = _validate_validator_policy_metadata(evidence)
     if evidence.get("module_ids") != expected_module_ids:
         raise FreeCADMCPError("FreeCAD validation module list mismatch")
     checks = evidence.get("checks")
@@ -305,12 +711,27 @@ def assess_freecad_validation(
     if not required_checks.issubset(checks):
         missing = sorted(required_checks - set(checks))
         raise FreeCADMCPError(f"FreeCAD validation checks are incomplete: {missing}")
-    for name in ("module_errors", "assembly_errors"):
-        if checks.get(name) != []:
-            raise FreeCADValidationError(
-                f"FreeCAD {name} evidence is not empty",
-                evidence,
-            )
+    module_errors = _validate_module_errors(
+        checks.get("module_errors"),
+        expected_module_ids=expected_module_ids,
+        policy_metadata=policy_metadata,
+    )
+    _validate_adjacent_interface_overlaps(
+        checks.get("adjacent_interface_overlaps"),
+        expected_module_ids=expected_module_ids,
+        policy_metadata=policy_metadata,
+        evidence_generator_version=evidence.get("generator_version"),
+    )
+    if module_errors:
+        raise FreeCADValidationError(
+            "FreeCAD module_errors evidence is not empty",
+            evidence,
+        )
+    if checks.get("assembly_errors") != []:
+        raise FreeCADValidationError(
+            "FreeCAD assembly_errors evidence is not empty",
+            evidence,
+        )
     for name in ("assembly", "outer_network", "bore_network"):
         value = checks.get(name)
         if not isinstance(value, dict) or value.get("passed") is not True:
@@ -335,10 +756,9 @@ def assess_freecad_validation(
         numeric_maximum = [float(value) for value in maximum]
     except (TypeError, ValueError) as exc:
         raise FreeCADMCPError("FreeCAD assembly bounds evidence is invalid") from exc
-    if (
-        not all(math.isfinite(value) for value in [*numeric_minimum, *numeric_maximum])
-        or any(low > high for low, high in zip(numeric_minimum, numeric_maximum))
-    ):
+    if not all(
+        math.isfinite(value) for value in [*numeric_minimum, *numeric_maximum]
+    ) or any(low > high for low, high in zip(numeric_minimum, numeric_maximum)):
         raise FreeCADMCPError("FreeCAD assembly bounds evidence is invalid")
     modules = checks.get("modules")
     if (
@@ -499,7 +919,9 @@ def assess_freecad_publish(
     if expected_fcstd_path is not None:
         artifact = Path(expected_fcstd_path)
         if not artifact.is_file() or artifact.stat().st_size <= 0:
-            raise FreeCADMCPError("Published FreeCAD FCStd artifact is missing on the host")
+            raise FreeCADMCPError(
+                "Published FreeCAD FCStd artifact is missing on the host"
+            )
     if evidence.get("passed") is not True:
         raise FreeCADMCPError("FreeCAD publish verification failed")
     return evidence
@@ -528,9 +950,7 @@ async def capture_freecad_views(
     activate_probe = _document_probe_code(
         document_name, payload_digest, set_active=True
     )
-    verify_probe = _document_probe_code(
-        document_name, payload_digest, set_active=False
-    )
+    verify_probe = _document_probe_code(document_name, payload_digest, set_active=False)
     calls: list[tuple[str, dict[str, Any]]] = []
     for view_name in views:
         calls.append(
@@ -600,7 +1020,9 @@ def _document_evidence(result: dict[str, Any]) -> dict[str, Any]:
     _raise_for_mcp_failure(result)
     payloads = _sentinel_payloads(result, _DOCUMENT_PREFIX)
     if len(payloads) != 1:
-        raise FreeCADMCPError("Document digest probe did not return exactly one sentinel")
+        raise FreeCADMCPError(
+            "Document digest probe did not return exactly one sentinel"
+        )
     return payloads[0]
 
 
@@ -645,7 +1067,7 @@ def _sentinel_payloads(result: dict[str, Any], prefix: str) -> list[dict[str, An
             marker_index = line.find(prefix)
             if marker_index < 0:
                 continue
-            raw = line[marker_index + len(prefix):].strip()
+            raw = line[marker_index + len(prefix) :].strip()
             try:
                 value = json.loads(raw)
             except json.JSONDecodeError as exc:

@@ -1,0 +1,3218 @@
+[
+  {
+    "step_index": 1,
+    "attempt_index": 1,
+    "state_id": "S0",
+    "state_digest": "e081146ea5d24a9c4da0e458621a9662ab4cc1149cf1b209eba7f1798b5c58a5",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_1"
+      ],
+      "completed_goal_ids": [
+        "straight_1"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "straight_1"
+      ],
+      "completed_goal_ids": [
+        "straight_1"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [],
+    "observations": []
+  },
+  {
+    "step_index": 2,
+    "attempt_index": 1,
+    "state_id": "S1",
+    "state_digest": "a8f3e1548ead67037623f35dd80827f269eefe74cdb51ccdc3ddb449d388a59d",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M1.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": 120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_1"
+      ],
+      "completed_goal_ids": [
+        "turn_1"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": 120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          20.00000699375367,
+          0.0,
+          34.64101211353104
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.4999998251561381,
+          0.0,
+          -0.8660255047305658
+        ]
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "turn_1"
+      ],
+      "completed_goal_ids": [
+        "turn_1"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M2",
+                "M1"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  20.26000188598796,
+                  0.0,
+                  35.06647469969768
+                ],
+                [
+                  20.5408811435115,
+                  0.0,
+                  35.47844872668063
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ]
+              ],
+              "centerline_separation": 0.498613834761457,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 3,
+    "attempt_index": 1,
+    "state_id": "S2",
+    "state_digest": "75ec87b31df9ee1379a1987826b3d09d0b1f10410be24de64be9f198db36ec76",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M2.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_2"
+      ],
+      "completed_goal_ids": [
+        "straight_2"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A3",
+      "action_type": "ADD_MODULE",
+      "target_port": "M2.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          37.32051506944208,
+          0.0,
+          34.641008616654
+        ],
+        "axis": [
+          0.4999998251561381,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.4999998251561381,
+          0.0,
+          -0.8660255047305658
+        ]
+      },
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "affected_goal_ids": [
+        "straight_2"
+      ],
+      "completed_goal_ids": [
+        "straight_2"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0003_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [],
+        "target_port_id": "M2.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M3",
+                "M1"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ]
+              ],
+              "centerline_separation": 17.320508075688764,
+              "required_separation": 20.0,
+              "clearance": -2.679491924311236
+            },
+            {
+              "module_ids": [
+                "M3",
+                "M2"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ],
+                [
+                  20.26000188598796,
+                  0.0,
+                  35.06647469969768
+                ]
+              ],
+              "centerline_separation": 17.065817632643107,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356893
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 4,
+    "attempt_index": 1,
+    "state_id": "S3",
+    "state_digest": "74f4715d53d6e6e5dbc5fe75b0b826b775c0ccfe78b06f8ac91ddbe89508a037",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M3.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_2"
+      ],
+      "completed_goal_ids": [
+        "turn_2"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A4",
+      "action_type": "ADD_MODULE",
+      "target_port": "M3.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          57.320508075687606,
+          0.0,
+          -1.1572568631379454e-05
+        ],
+        "axis": [
+          0.4999998251561381,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "M3.out"
+      ],
+      "affected_goal_ids": [
+        "turn_2"
+      ],
+      "completed_goal_ids": [
+        "turn_2"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0004_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 4,
+        "action_id": "A4",
+        "module_id": "M4",
+        "port_ids": [],
+        "target_port_id": "M3.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M4",
+                "M3"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  57.580502796126645,
+                  0.0,
+                  -0.425474263717164
+                ],
+                [
+                  57.8613818873014,
+                  0.0,
+                  -0.8374484041147996
+                ]
+              ],
+              "existing_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "centerline_separation": 0.49861383476145715,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 5,
+    "attempt_index": 1,
+    "state_id": "S4",
+    "state_digest": "989d9140764508c04a7b3a32939dd046e3827f3ab2f3597e1d8bf7d1984d3f01",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M4.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_3"
+      ],
+      "completed_goal_ids": [
+        "straight_3"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A5",
+      "action_type": "ADD_MODULE",
+      "target_port": "M4.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          74.64101615137602,
+          0.0,
+          -1.5069445669091408e-05
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "M4.out"
+      ],
+      "affected_goal_ids": [
+        "straight_3"
+      ],
+      "completed_goal_ids": [
+        "straight_3"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0005_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 5,
+        "action_id": "A5",
+        "module_id": "M5",
+        "port_ids": [],
+        "target_port_id": "M4.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M5",
+                "M3"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "existing_segment": [
+                [
+                  37.32051506944208,
+                  0.0,
+                  34.641008616654
+                ],
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ]
+              ],
+              "centerline_separation": 17.320508075688767,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112325
+            },
+            {
+              "module_ids": [
+                "M5",
+                "M4"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "existing_segment": [
+                [
+                  57.320508075687606,
+                  0.0,
+                  -1.1572568631379454e-05
+                ],
+                [
+                  57.580502796126645,
+                  0.0,
+                  -0.425474263717164
+                ]
+              ],
+              "centerline_separation": 17.06581763264311,
+              "required_separation": 20.0,
+              "clearance": -2.9341823673568896
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 6,
+    "attempt_index": 1,
+    "state_id": "S5",
+    "state_digest": "7a36e59c46a7f9c19be5e74edf0f3b864c3665412a24d650cea4220ebcf972ef",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M5.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": 120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_3"
+      ],
+      "completed_goal_ids": [
+        "turn_3"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A6",
+      "action_type": "ADD_MODULE",
+      "target_port": "M5.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": 120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          94.64102314512968,
+          0.0,
+          34.640997044085374
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ]
+      },
+      "consumed_port_ids": [
+        "M5.out"
+      ],
+      "affected_goal_ids": [
+        "turn_3"
+      ],
+      "completed_goal_ids": [
+        "turn_3"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0006_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 6,
+        "action_id": "A6",
+        "module_id": "M6",
+        "port_ids": [],
+        "target_port_id": "M5.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M6",
+                "M5"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  94.90101803736397,
+                  0.0,
+                  35.06645963025201
+                ],
+                [
+                  95.1818972948875,
+                  0.0,
+                  35.478433657234966
+                ]
+              ],
+              "existing_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "centerline_separation": 0.4986138347614551,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 7,
+    "attempt_index": 1,
+    "state_id": "S6",
+    "state_digest": "ff1e7fe19acab90f0a5c28a175bef43ed79b1e6741dcc9f1b516c5fc50d4398f",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M6.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_4"
+      ],
+      "completed_goal_ids": [
+        "straight_4"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A7",
+      "action_type": "ADD_MODULE",
+      "target_port": "M6.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          111.96153122081809,
+          0.0,
+          34.64099354720834
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ]
+      },
+      "consumed_port_ids": [
+        "M6.out"
+      ],
+      "affected_goal_ids": [
+        "straight_4"
+      ],
+      "completed_goal_ids": [
+        "straight_4"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0007_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 7,
+        "action_id": "A7",
+        "module_id": "M7",
+        "port_ids": [],
+        "target_port_id": "M6.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M7",
+                "M5"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  74.64101615137602,
+                  0.0,
+                  -1.5069445669091408e-05
+                ],
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ]
+              ],
+              "centerline_separation": 17.32050807568876,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112396
+            },
+            {
+              "module_ids": [
+                "M7",
+                "M6"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  94.64102314512968,
+                  0.0,
+                  34.640997044085374
+                ],
+                [
+                  94.90101803736397,
+                  0.0,
+                  35.06645963025201
+                ]
+              ],
+              "centerline_separation": 17.065817632643107,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356893
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 8,
+    "attempt_index": 1,
+    "state_id": "S7",
+    "state_digest": "f9be2d337fc96ff5c803054d0084ed7e7df89b8eb11c04a20f0ad1bc6e988a78",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M7.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_4"
+      ],
+      "completed_goal_ids": [
+        "turn_4"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A8",
+      "action_type": "ADD_MODULE",
+      "target_port": "M7.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          131.96152422706362,
+          0.0,
+          -2.66420142907009e-05
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "M7.out"
+      ],
+      "affected_goal_ids": [
+        "turn_4"
+      ],
+      "completed_goal_ids": [
+        "turn_4"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0008_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 8,
+        "action_id": "A8",
+        "module_id": "M8",
+        "port_ids": [],
+        "target_port_id": "M7.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M8",
+                "M7"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  132.22151894750266,
+                  0.0,
+                  -0.42548933316282334
+                ],
+                [
+                  132.50239803867743,
+                  0.0,
+                  -0.8374634735604598
+                ]
+              ],
+              "existing_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "centerline_separation": 0.49861383476145715,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 9,
+    "attempt_index": 1,
+    "state_id": "S8",
+    "state_digest": "c2a7ccfe161f7e7b847f455d6302297159ce9e95443f5c49f173c98b98171096",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M8.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_5"
+      ],
+      "completed_goal_ids": [
+        "straight_5"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A9",
+      "action_type": "ADD_MODULE",
+      "target_port": "M8.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          149.28203230275204,
+          0.0,
+          -3.0138891334630102e-05
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "M8.out"
+      ],
+      "affected_goal_ids": [
+        "straight_5"
+      ],
+      "completed_goal_ids": [
+        "straight_5"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0009_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 9,
+        "action_id": "A9",
+        "module_id": "M9",
+        "port_ids": [],
+        "target_port_id": "M8.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M9",
+                "M7"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "existing_segment": [
+                [
+                  111.96153122081809,
+                  0.0,
+                  34.64099354720834
+                ],
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ]
+              ],
+              "centerline_separation": 17.320508075688775,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112254
+            },
+            {
+              "module_ids": [
+                "M9",
+                "M8"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "existing_segment": [
+                [
+                  131.96152422706362,
+                  0.0,
+                  -2.66420142907009e-05
+                ],
+                [
+                  132.22151894750266,
+                  0.0,
+                  -0.42548933316282334
+                ]
+              ],
+              "centerline_separation": 17.065817632643117,
+              "required_separation": 20.0,
+              "clearance": -2.9341823673568825
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 10,
+    "attempt_index": 1,
+    "state_id": "S9",
+    "state_digest": "1bca130cd114d06f6d21e9294f9e9b8cb231d089c34e35c7ea3f83731a0cd6ba",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M9.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": 120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_5"
+      ],
+      "completed_goal_ids": [
+        "turn_5"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A10",
+      "action_type": "ADD_MODULE",
+      "target_port": "M9.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": 120.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          169.2820392965057,
+          0.0,
+          34.64098197463971
+        ],
+        "axis": [
+          0.5000001748438416,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ]
+      },
+      "consumed_port_ids": [
+        "M9.out"
+      ],
+      "affected_goal_ids": [
+        "turn_5"
+      ],
+      "completed_goal_ids": [
+        "turn_5"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0010_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 10,
+        "action_id": "A10",
+        "module_id": "M10",
+        "port_ids": [],
+        "target_port_id": "M9.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M10",
+                "M9"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  169.54203418874,
+                  0.0,
+                  35.066444560806346
+                ],
+                [
+                  169.82291344626353,
+                  0.0,
+                  35.4784185877893
+                ]
+              ],
+              "existing_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "centerline_separation": 0.4986138347614551,
+              "required_separation": 20.0,
+              "clearance": -19.501386165238543
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 11,
+    "attempt_index": 1,
+    "state_id": "S10",
+    "state_digest": "0cd712b015074ec75f82608f80e9601534277feecdcbc55b1239cbb2f92d7c99",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M10.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_6"
+      ],
+      "completed_goal_ids": [
+        "straight_6"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A11",
+      "action_type": "ADD_MODULE",
+      "target_port": "M10.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          186.60254737219412,
+          0.0,
+          34.64097847776267
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ]
+      },
+      "consumed_port_ids": [
+        "M10.out"
+      ],
+      "affected_goal_ids": [
+        "straight_6"
+      ],
+      "completed_goal_ids": [
+        "straight_6"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0011_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 11,
+        "action_id": "A11",
+        "module_id": "M11",
+        "port_ids": [],
+        "target_port_id": "M10.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M11",
+                "M9"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  149.28203230275204,
+                  0.0,
+                  -3.0138891334630102e-05
+                ],
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ]
+              ],
+              "centerline_separation": 17.320508075688775,
+              "required_separation": 20.0,
+              "clearance": -2.6794919243112254
+            },
+            {
+              "module_ids": [
+                "M11",
+                "M10"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "existing_segment": [
+                [
+                  169.2820392965057,
+                  0.0,
+                  34.64098197463971
+                ],
+                [
+                  169.54203418874,
+                  0.0,
+                  35.066444560806346
+                ]
+              ],
+              "centerline_separation": 17.06581763264312,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356879
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 12,
+    "attempt_index": 1,
+    "state_id": "S11",
+    "state_digest": "33e39f7c38441af3faa774d5fe549e3d26103842e3c71df040e166a2e2c5158b",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M11.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -30.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_6"
+      ],
+      "completed_goal_ids": [
+        "turn_6"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A12",
+      "action_type": "ADD_MODULE",
+      "target_port": "M11.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -30.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          206.60254037843964,
+          0.0,
+          -4.171145995712777e-05
+        ],
+        "axis": [
+          0.49999982515613817,
+          0.0,
+          -0.8660255047305658
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.8660253028382762,
+          0.0,
+          -0.5000001748438415
+        ]
+      },
+      "consumed_port_ids": [
+        "M11.out"
+      ],
+      "affected_goal_ids": [
+        "turn_6"
+      ],
+      "completed_goal_ids": [
+        "turn_6"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0012_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 12,
+        "action_id": "A12",
+        "module_id": "M12",
+        "port_ids": [],
+        "target_port_id": "M11.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M12",
+                "M11"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  206.87608864670702,
+                  0.0,
+                  -0.44643211683752426
+                ],
+                [
+                  207.17262429530288,
+                  0.0,
+                  -0.877894349480254
+                ]
+              ],
+              "existing_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "centerline_separation": 0.5235389661574668,
+              "required_separation": 20.0,
+              "clearance": -19.476461033842533
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 13,
+    "attempt_index": 1,
+    "state_id": "S12",
+    "state_digest": "3445764a0da30b6315dcdd31bf08e0e5fb700ac81db69ae9ae54da2ca60892e1",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M12.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_7"
+      ],
+      "completed_goal_ids": [
+        "straight_7"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A13",
+      "action_type": "ADD_MODULE",
+      "target_port": "M12.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          210.2627936773069,
+          0.0,
+          -3.6602964882813414
+        ],
+        "axis": [
+          0.8660253028382762,
+          0.0,
+          -0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.8660253028382762,
+          0.0,
+          -0.5000001748438415
+        ]
+      },
+      "consumed_port_ids": [
+        "M12.out"
+      ],
+      "affected_goal_ids": [
+        "straight_7"
+      ],
+      "completed_goal_ids": [
+        "straight_7"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0013_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 13,
+        "action_id": "A13",
+        "module_id": "M13",
+        "port_ids": [],
+        "target_port_id": "M12.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M13",
+                "M11"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "existing_segment": [
+                [
+                  186.60254737219412,
+                  0.0,
+                  34.64097847776267
+                ],
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ]
+              ],
+              "centerline_separation": 5.17638090205042,
+              "required_separation": 20.0,
+              "clearance": -14.82361909794958
+            },
+            {
+              "module_ids": [
+                "M13",
+                "M12"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "existing_segment": [
+                [
+                  206.60254037843964,
+                  0.0,
+                  -4.171145995712777e-05
+                ],
+                [
+                  206.87608864670702,
+                  0.0,
+                  -0.44643211683752426
+                ]
+              ],
+              "centerline_separation": 4.668907277118109,
+              "required_separation": 20.0,
+              "clearance": -15.331092722881891
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 14,
+    "attempt_index": 1,
+    "state_id": "S13",
+    "state_digest": "419b55a1dab7e0b32b94f292eae138250119596a4e301653465f20853eb41198",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M13.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -90.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_7"
+      ],
+      "completed_goal_ids": [
+        "turn_7"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A14",
+      "action_type": "ADD_MODULE",
+      "target_port": "M13.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -90.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          244.90380579083794,
+          0.0,
+          -23.660303482035005
+        ],
+        "axis": [
+          0.8660253028382762,
+          0.0,
+          -0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          0.5000001748438415,
+          0.0,
+          0.8660253028382762
+        ]
+      },
+      "consumed_port_ids": [
+        "M13.out"
+      ],
+      "affected_goal_ids": [
+        "turn_7"
+      ],
+      "completed_goal_ids": [
+        "turn_7"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0014_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 14,
+        "action_id": "A14",
+        "module_id": "M14",
+        "port_ids": [],
+        "target_port_id": "M13.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M14",
+                "M13"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  245.33476698710786,
+                  0.0,
+                  -23.895210285416926
+                ],
+                [
+                  245.77673540226866,
+                  0.0,
+                  -24.108687869640143
+                ]
+              ],
+              "existing_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "centerline_separation": 0.4908245704582368,
+              "required_separation": 20.0,
+              "clearance": -19.509175429541763
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 15,
+    "attempt_index": 1,
+    "state_id": "S14",
+    "state_digest": "66d7aabe55beeaaa0891fa1a7188ba19f97bb9aff85d7bdef78ea57db31c6b8b",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M14.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 189.282032
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_8"
+      ],
+      "completed_goal_ids": [
+        "straight_8"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A15",
+      "action_type": "ADD_MODULE",
+      "target_port": "M14.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 189.282032,
+        "start_position": [
+          258.5640605676591,
+          0.0,
+          -20.000052202090664
+        ],
+        "axis": [
+          0.5000001748438415,
+          0.0,
+          0.8660253028382762
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          0.5000001748438415,
+          0.0,
+          0.8660253028382762
+        ]
+      },
+      "consumed_port_ids": [
+        "M14.out"
+      ],
+      "affected_goal_ids": [
+        "straight_8"
+      ],
+      "completed_goal_ids": [
+        "straight_8"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0015_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 15,
+        "action_id": "A15",
+        "module_id": "M15",
+        "port_ids": [],
+        "target_port_id": "M14.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M15",
+                "M13"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "existing_segment": [
+                [
+                  210.2627936773069,
+                  0.0,
+                  -3.6602964882813414
+                ],
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ]
+              ],
+              "centerline_separation": 14.14213562373095,
+              "required_separation": 20.0,
+              "clearance": -5.857864376269051
+            },
+            {
+              "module_ids": [
+                "M15",
+                "M14"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "existing_segment": [
+                [
+                  244.90380579083794,
+                  0.0,
+                  -23.660303482035005
+                ],
+                [
+                  245.33476698710786,
+                  0.0,
+                  -23.895210285416926
+                ]
+              ],
+              "centerline_separation": 13.790810894741346,
+              "required_separation": 20.0,
+              "clearance": -6.209189105258654
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 16,
+    "attempt_index": 1,
+    "state_id": "S15",
+    "state_digest": "84b8c0a2ae01ae57511d92aaeb0e51946e098aa9f47a27567cccdf18966d0886",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M15.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -90.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_8"
+      ],
+      "completed_goal_ids": [
+        "turn_8"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A16",
+      "action_type": "ADD_MODULE",
+      "target_port": "M15.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -90.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          353.2051096624567,
+          0.0,
+          143.9229768825536
+        ],
+        "axis": [
+          0.5000001748438415,
+          0.0,
+          0.8660253028382762
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          -0.8660253028382762,
+          0.0,
+          0.5000001748438415
+        ]
+      },
+      "consumed_port_ids": [
+        "M15.out"
+      ],
+      "affected_goal_ids": [
+        "turn_8"
+      ],
+      "completed_goal_ids": [
+        "turn_8"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0016_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 16,
+        "action_id": "A16",
+        "module_id": "M16",
+        "port_ids": [],
+        "target_port_id": "M15.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M16",
+                "M15"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  353.44001646583865,
+                  0.0,
+                  144.35393807882352
+                ],
+                [
+                  353.65349405006185,
+                  0.0,
+                  144.79590649398432
+                ]
+              ],
+              "existing_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "centerline_separation": 0.4908245704582419,
+              "required_separation": 20.0,
+              "clearance": -19.509175429541756
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 17,
+    "attempt_index": 1,
+    "state_id": "S16",
+    "state_digest": "08ea918ed39e829de12642e778554b774ba1ee3274cdd7591fb3e6e916e8ebd7",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M16.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "straight_9"
+      ],
+      "completed_goal_ids": [
+        "straight_9"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler bound the LLM-selected line primitive."
+    },
+    "resolved": {
+      "action_id": "A17",
+      "action_type": "ADD_MODULE",
+      "target_port": "M16.out",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          349.54485838251236,
+          0.0,
+          157.5832316593748
+        ],
+        "axis": [
+          -0.8660253028382762,
+          0.0,
+          0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          -0.8660253028382762,
+          0.0,
+          0.5000001748438415
+        ]
+      },
+      "consumed_port_ids": [
+        "M16.out"
+      ],
+      "affected_goal_ids": [
+        "straight_9"
+      ],
+      "completed_goal_ids": [
+        "straight_9"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0017_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 17,
+        "action_id": "A17",
+        "module_id": "M17",
+        "port_ids": [],
+        "target_port_id": "M16.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M17",
+                "M15"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "existing_segment": [
+                [
+                  258.5640605676591,
+                  0.0,
+                  -20.000052202090664
+                ],
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ]
+              ],
+              "centerline_separation": 14.142135623730983,
+              "required_separation": 20.0,
+              "clearance": -5.857864376269017
+            },
+            {
+              "module_ids": [
+                "M17",
+                "M16"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "existing_segment": [
+                [
+                  353.2051096624567,
+                  0.0,
+                  143.9229768825536
+                ],
+                [
+                  353.44001646583865,
+                  0.0,
+                  144.35393807882352
+                ]
+              ],
+              "centerline_separation": 13.790810894741382,
+              "required_separation": 20.0,
+              "clearance": -6.209189105258618
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 18,
+    "attempt_index": 1,
+    "state_id": "S17",
+    "state_digest": "7ff357131d4a30a3f2e948097e9a0b22b555950cb12db3aba4faae6fce930cfb",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M17.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -30.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "turn_final"
+      ],
+      "completed_goal_ids": [
+        "turn_final"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler derived the frame of the LLM-selected arc."
+    },
+    "resolved": {
+      "action_id": "A18",
+      "action_type": "ADD_MODULE",
+      "target_port": "M17.out",
+      "module": "route",
+      "params": {
+        "path_kind": "circular_arc",
+        "section_source": "inherit_target",
+        "bend_radius": 10.0,
+        "sweep_angle": -30.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          314.9038462689813,
+          0.0,
+          177.58323865312846
+        ],
+        "axis": [
+          -0.8660253028382762,
+          0.0,
+          0.5000001748438415
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189228977507412e-07
+        ]
+      },
+      "consumed_port_ids": [
+        "M17.out"
+      ],
+      "affected_goal_ids": [
+        "turn_final"
+      ],
+      "completed_goal_ids": [
+        "turn_final"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0018_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 18,
+        "action_id": "A18",
+        "module_id": "M18",
+        "port_ids": [],
+        "target_port_id": "M17.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M18",
+                "M17"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  314.4437513168117,
+                  0.0,
+                  177.8330499500574
+                ],
+                [
+                  313.97121279567864,
+                  0.0,
+                  178.0584393800016
+                ]
+              ],
+              "existing_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "centerline_separation": 0.5235389661574803,
+              "required_separation": 20.0,
+              "clearance": -19.47646103384252
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  },
+  {
+    "step_index": 19,
+    "attempt_index": 1,
+    "state_id": "S18",
+    "state_digest": "b887f55661fcc40cedb5db8ff4382f78ed19feaae32b0b1c2e0eb2cd2b522c76",
+    "phase": "freecad_semantic_validation",
+    "status": "rejected",
+    "draft": {
+      "target_port": "M18.out",
+      "module": "connect_ports",
+      "params": {
+        "other_port_id": "M1.in",
+        "path_kind": "spline",
+        "section_source": "inherit_target",
+        "waypoints": [
+          [
+            190.62181432411097,
+            0.0,
+            178.92300970686813
+          ],
+          [
+            -59.641036963407366,
+            0.0,
+            -103.30125807246972
+          ]
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "close_loop"
+      ],
+      "completed_goal_ids": [
+        "close_loop"
+      ],
+      "satisfied_components": [],
+      "rationale": "Host compiler synthesized the closure for the LLM-selected connect primitive."
+    },
+    "resolved": {
+      "action_id": "A19",
+      "action_type": "ADD_MODULE",
+      "target_port": "M18.out",
+      "module": "connect_ports",
+      "params": {
+        "other_port_id": "M1.in",
+        "path_kind": "spline",
+        "section_source": "inherit_target",
+        "waypoints": [
+          [
+            190.62181432411097,
+            0.0,
+            178.92300970686813
+          ],
+          [
+            -59.641036963407366,
+            0.0,
+            -103.30125807246972
+          ]
+        ],
+        "start_position": [
+          309.90384653946575,
+          0.0,
+          178.9229856247455
+        ],
+        "axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189228977507412e-07
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -0.5000001748438417,
+          -0.0,
+          -0.8660253028382761
+        ],
+        "minimum_curvature_radius": 20.0,
+        "interpolation": "bspline",
+        "frenet": false,
+        "initial_tangent": [
+          -0.9999999999999797,
+          0.0,
+          2.0189228977507412e-07
+        ],
+        "final_tangent": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "M18.out",
+        "M1.in"
+      ],
+      "affected_goal_ids": [
+        "close_loop"
+      ],
+      "completed_goal_ids": [
+        "close_loop"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "FREECAD_GEOMETRY_VALIDATION_FAILED"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0019_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "check_name": "freecad_semantic_validation",
+        "message": "FreeCAD rejected the speculative geometry.",
+        "step_index": 19,
+        "action_id": "A19",
+        "module_id": "M19",
+        "port_ids": [],
+        "target_port_id": "M18.out",
+        "expected": {
+          "freecad_checks": "all implicated checks pass",
+          "minimum_curvature_radius_by_module": {
+            "M19": 20.0
+          },
+          "unexpected_overlap_excess_volume": 0.0
+        },
+        "actual": {
+          "error": "One or more FreeCAD centerline checks failed",
+          "evidence_artifact_path": "outputs/20260711T161056876004Z/step_mcp/step_19_validation_1.json",
+          "evidence_digest": "081e5c1add39a172be5ef911099f3df8509f579ff14314da618922a624e7d6df",
+          "measured_minimum_curvature_radius_by_module": {
+            "M19": 17.3492750111799
+          },
+          "unexpected_overlap_residuals": [
+            {
+              "module_ids": [
+                "M3",
+                "M19"
+              ],
+              "adjacent": false,
+              "common_volume": 530.0177491874873,
+              "allowed_volume": 1.0000000000000002e-12,
+              "excess_volume": 530.0177491874863
+            },
+            {
+              "module_ids": [
+                "M4",
+                "M19"
+              ],
+              "adjacent": false,
+              "common_volume": 252.51045345416787,
+              "allowed_volume": 1.0000000000000002e-12,
+              "excess_volume": 252.51045345416688
+            },
+            {
+              "module_ids": [
+                "M5",
+                "M19"
+              ],
+              "adjacent": false,
+              "common_volume": 422.86467426910644,
+              "allowed_volume": 1.0000000000000002e-12,
+              "excess_volume": 422.8646742691054
+            },
+            {
+              "module_ids": [
+                "M6",
+                "M19"
+              ],
+              "adjacent": false,
+              "common_volume": 141.83572617501096,
+              "allowed_volume": 1.0000000000000002e-12,
+              "excess_volume": 141.83572617500997
+            }
+          ],
+          "evidence": {
+            "module_ids": [
+              "M19",
+              "M3",
+              "M4",
+              "M5",
+              "M6"
+            ],
+            "failed_checks": {
+              "centerlines": {
+                "M19": {
+                  "passed": false,
+                  "required_radius": 20.0,
+                  "minimum_radius": 17.3492750111799,
+                  "zero_curvature": false,
+                  "minimum_radius_nearest_path_point_index": 2,
+                  "curvature_repair_hint": "The curvature peak is near authored path point index 2. Move or remove nearby implementation points and spread the turn over longer chords. Preserve genuinely required anchors, but do not add clustered points because shorter adjacent chords make this cubic construction tighter.",
+                  "required_self_clearance": 20.0001,
+                  "minimum_nonlocal_distance": 28.64274079834213,
+                  "self_clearance_passed": true,
+                  "endpoint_tangency_passed": true,
+                  "endpoint_tangent_dots": {
+                    "final": 1.0,
+                    "initial": 1.0000000000000002
+                  },
+                  "minimum_join_tangent_dot": 1.0
+                }
+              },
+              "non_adjacent_overlaps": [
+                {
+                  "adjacent": false,
+                  "allowed_volume": 1.0000000000000002e-12,
+                  "common_volume": 530.0177491874873,
+                  "module_ids": [
+                    "M3",
+                    "M19"
+                  ]
+                },
+                {
+                  "adjacent": false,
+                  "allowed_volume": 1.0000000000000002e-12,
+                  "common_volume": 252.51045345416787,
+                  "module_ids": [
+                    "M4",
+                    "M19"
+                  ]
+                },
+                {
+                  "adjacent": false,
+                  "allowed_volume": 1.0000000000000002e-12,
+                  "common_volume": 422.86467426910644,
+                  "module_ids": [
+                    "M5",
+                    "M19"
+                  ]
+                },
+                {
+                  "adjacent": false,
+                  "allowed_volume": 1.0000000000000002e-12,
+                  "common_volume": 141.83572617501096,
+                  "module_ids": [
+                    "M6",
+                    "M19"
+                  ]
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v24",
+              "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+              "policy_id": "cadgen02-freecad-validator-v24",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v24",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M19": {
+                "passed": false,
+                "required_radius": 20.0,
+                "minimum_radius": 17.3492750111799,
+                "zero_curvature": false,
+                "minimum_radius_nearest_path_point_index": 2,
+                "curvature_repair_hint": "The curvature peak is near authored path point index 2. Move or remove nearby implementation points and spread the turn over longer chords. Preserve genuinely required anchors, but do not add clustered points because shorter adjacent chords make this cubic construction tighter.",
+                "required_self_clearance": 20.0001,
+                "minimum_nonlocal_distance": 28.64274079834213,
+                "self_clearance_passed": true,
+                "endpoint_tangency_passed": true,
+                "endpoint_tangent_dots": {
+                  "final": 1.0,
+                  "initial": 1.0000000000000002
+                },
+                "minimum_join_tangent_dot": 1.0,
+                "curve_length": 654.3805253935388,
+                "optimized_handle_factors": [
+                  0.4,
+                  0.55,
+                  0.55,
+                  0.4
+                ],
+                "minimum_radius_location": {
+                  "sample_index": 504,
+                  "edge_parameter": [
+                    1,
+                    0.96875
+                  ],
+                  "position": [
+                    -54.41037482090167,
+                    0.0,
+                    -105.94302876651832
+                  ]
+                }
+              },
+              "M3": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 39.99999999999999
+              },
+              "M4": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": 9.999999999999988,
+                "zero_curvature": false,
+                "minimum_radius_nearest_path_point_index": 6,
+                "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                "required_self_clearance": 20.0001,
+                "minimum_nonlocal_distance": null,
+                "self_clearance_passed": true,
+                "endpoint_tangency_passed": true,
+                "endpoint_tangent_dots": null,
+                "minimum_join_tangent_dot": 1.0,
+                "curve_length": 20.943951023931962,
+                "optimized_handle_factors": null,
+                "minimum_radius_location": {
+                  "sample_index": 36,
+                  "edge_parameter": [
+                    0,
+                    0.29452431127404344
+                  ],
+                  "position": [
+                    59.144838629225404,
+                    0.0,
+                    -2.2986526678653085
+                  ]
+                }
+              },
+              "M5": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 39.99999999999999
+              },
+              "M6": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": 9.999999999999995,
+                "zero_curvature": false,
+                "minimum_radius_nearest_path_point_index": 17,
+                "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+                "required_self_clearance": 20.0001,
+                "minimum_nonlocal_distance": null,
+                "self_clearance_passed": true,
+                "endpoint_tangency_passed": true,
+                "endpoint_tangent_dots": null,
+                "minimum_join_tangent_dot": 1.0,
+                "curve_length": 20.943951023931938,
+                "optimized_handle_factors": null,
+                "minimum_radius_location": {
+                  "sample_index": 106,
+                  "edge_parameter": [
+                    0,
+                    0.8672104720846818
+                  ],
+                  "position": [
+                    101.51110954705537,
+                    0.0,
+                    39.47945571633876
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "suggestion": {
+          "operation": "revise_freecad_geometry_inputs",
+          "recommended_changes": [
+            {
+              "module_id": "M19",
+              "path_kind": "spline",
+              "parameters": [
+                "waypoints"
+              ],
+              "current_minimum_radius": 17.3492750111799,
+              "required_minimum_radius": 20.0,
+              "nearest_path_point_index": 2,
+              "nearest_waypoint_index": 1,
+              "instruction": "The curvature peak is near authored path point index 2. Move or remove nearby implementation points and spread the turn over longer chords. Preserve genuinely required anchors, but do not add clustered points because shorter adjacent chords make this cubic construction tighter."
+            },
+            {
+              "module_id": "M19",
+              "classification": "nonlocal_module_overlap",
+              "parameters": [
+                "waypoints",
+                "direction",
+                "bend_radius",
+                "outlets[*].axis"
+              ],
+              "excess_volume": 530.0177491874863,
+              "instruction": "Move the implicated path or outlet away from the non-adjacent module while preserving immutable terminal contracts."
+            },
+            {
+              "module_id": "M19",
+              "classification": "nonlocal_module_overlap",
+              "parameters": [
+                "waypoints",
+                "direction",
+                "bend_radius",
+                "outlets[*].axis"
+              ],
+              "excess_volume": 252.51045345416688,
+              "instruction": "Move the implicated path or outlet away from the non-adjacent module while preserving immutable terminal contracts."
+            },
+            {
+              "module_id": "M19",
+              "classification": "nonlocal_module_overlap",
+              "parameters": [
+                "waypoints",
+                "direction",
+                "bend_radius",
+                "outlets[*].axis"
+              ],
+              "excess_volume": 422.8646742691054,
+              "instruction": "Move the implicated path or outlet away from the non-adjacent module while preserving immutable terminal contracts."
+            },
+            {
+              "module_id": "M19",
+              "classification": "nonlocal_module_overlap",
+              "parameters": [
+                "waypoints",
+                "direction",
+                "bend_radius",
+                "outlets[*].axis"
+              ],
+              "excess_volume": 141.83572617500997,
+              "instruction": "Move the implicated path or outlet away from the non-adjacent module while preserving immutable terminal contracts."
+            }
+          ],
+          "instruction": "Use failed_checks and centerline_context to change the implicated radius, waypoint, length, offset, or blend value; return a new full action."
+        }
+      }
+    ]
+  },
+  {
+    "step_index": 19,
+    "attempt_index": 2,
+    "state_id": "S18",
+    "state_digest": "b887f55661fcc40cedb5db8ff4382f78ed19feaae32b0b1c2e0eb2cd2b522c76",
+    "phase": "commit",
+    "status": "accepted",
+    "draft": {
+      "target_port": "M18.out",
+      "module": "connect_ports",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "other_port_id": "M1.in",
+        "waypoints": [
+          [
+            -100.0,
+            0.0,
+            178.923
+          ],
+          [
+            -100.0,
+            0.0,
+            -173.2
+          ]
+        ]
+      },
+      "consumes_goal_index": 0,
+      "catalog_schema_version": 2,
+      "affected_goal_ids": [
+        "close_loop"
+      ],
+      "completed_goal_ids": [
+        "close_loop"
+      ],
+      "satisfied_components": [],
+      "rationale": "To resolve the collision and curvature violations on the closing loop connection (M19), we route the spline clear of the existing pipe structure. The primary collision was caused by the path cutting diagonally through the first triangular peak (M3-M6, located in X: 59-101, Z: -2-39). By extending the spline horizontally to the left (X = -100 mm) at the high elevation of the start port (Z = 178.923 mm), we completely bypass all existing peaks. We then descend vertically well to the left of the origin (at X = -100 mm) down to Z = -173.2 mm, which aligns perfectly with the target port's incoming tangent vector [0.5, 0.0, 0.866]. This creates a smooth, generous U-turn that comfortably exceeds the minimum 20.0 mm bend radius requirement without colliding with any part of the assembly."
+    },
+    "resolved": {
+      "action_id": "A19",
+      "action_type": "ADD_MODULE",
+      "target_port": "M18.out",
+      "module": "connect_ports",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "spline",
+        "other_port_id": "M1.in",
+        "waypoints": [
+          [
+            -100.0,
+            0.0,
+            178.923
+          ],
+          [
+            -100.0,
+            0.0,
+            -173.2
+          ]
+        ],
+        "start_position": [
+          309.90384653946575,
+          0.0,
+          178.9229856247455
+        ],
+        "axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189228977507412e-07
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "end_axis": [
+          -0.5000001748438417,
+          -0.0,
+          -0.8660253028382761
+        ],
+        "minimum_curvature_radius": 20.0,
+        "interpolation": "bspline",
+        "frenet": false,
+        "initial_tangent": [
+          -0.9999999999999797,
+          0.0,
+          2.0189228977507412e-07
+        ],
+        "final_tangent": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ]
+      },
+      "consumed_port_ids": [
+        "M18.out",
+        "M1.in"
+      ],
+      "affected_goal_ids": [
+        "close_loop"
+      ],
+      "completed_goal_ids": [
+        "close_loop"
+      ],
+      "satisfied_components": []
+    },
+    "issue_codes": [
+      "STATIC_COLLISION_REQUIRES_FREECAD"
+    ],
+    "observations": [
+      {
+        "issue_id": "STEP_0019_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 19,
+        "action_id": "A19",
+        "module_id": "M19",
+        "port_ids": [],
+        "target_port_id": "M18.out",
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M19",
+                "M17"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  309.90384653946575,
+                  0.0,
+                  178.9229856247455
+                ],
+                [
+                  -100.0,
+                  0.0,
+                  178.923
+                ]
+              ],
+              "existing_segment": [
+                [
+                  349.54485838251236,
+                  0.0,
+                  157.5832316593748
+                ],
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ]
+              ],
+              "centerline_separation": 5.176380902050436,
+              "required_separation": 20.0,
+              "clearance": -14.823619097949564
+            },
+            {
+              "module_ids": [
+                "M19",
+                "M18"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  309.90384653946575,
+                  0.0,
+                  178.9229856247455
+                ],
+                [
+                  -100.0,
+                  0.0,
+                  178.923
+                ]
+              ],
+              "existing_segment": [
+                [
+                  314.9038462689813,
+                  0.0,
+                  177.58323865312846
+                ],
+                [
+                  314.4437513168117,
+                  0.0,
+                  177.8330499500574
+                ]
+              ],
+              "centerline_separation": 4.6689072771181115,
+              "required_separation": 20.0,
+              "clearance": -15.331092722881888
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ]
+  }
+]

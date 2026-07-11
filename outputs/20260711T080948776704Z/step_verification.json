@@ -1,0 +1,306 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "inlet_straight",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+Z",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": []
+      },
+      "affected_goals": [
+        {
+          "goal_id": "inlet_straight",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+Z",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": []
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "inlet_straight"
+      ],
+      "completed_goal_ids": [
+        "inlet_straight"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 2,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "junction_1",
+        "depends_on_goal_ids": [
+          "inlet_straight"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [
+          [
+            -1.0,
+            0.0,
+            -1.0
+          ]
+        ],
+        "required_outlets": [],
+        "include_primary_outlet": true,
+        "required_waypoints": [],
+        "notes": "First Y-junction; one terminal outlet, one primary continuation."
+      },
+      "affected_goals": [
+        {
+          "goal_id": "junction_1",
+          "depends_on_goal_ids": [
+            "inlet_straight"
+          ],
+          "allow_parallel": false,
+          "type": "branch",
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [
+            [
+              -1.0,
+              0.0,
+              -1.0
+            ]
+          ],
+          "required_outlets": [],
+          "include_primary_outlet": true,
+          "required_waypoints": [],
+          "notes": "First Y-junction; one terminal outlet, one primary continuation."
+        }
+      ],
+      "state_before_id": "S1",
+      "state_after_id": "S2",
+      "action_id": "A2",
+      "module": "junction",
+      "target_port_before": {
+        "id": "M1.out",
+        "position": [
+          0.0,
+          0.0,
+          40.0
+        ],
+        "axis": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M2",
+      "produced_port_ids": [
+        "M2.out",
+        "M2.out_1"
+      ],
+      "removed_port_ids": [
+        "M1.out"
+      ],
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "connection_edge_ids": [
+        "E2"
+      ],
+      "affected_goal_ids": [
+        "junction_1"
+      ],
+      "completed_goal_ids": [
+        "junction_1"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M1.out"
+      ],
+      "open_port_ids_after": [
+        "M2.out",
+        "M2.out_1"
+      ]
+    },
+    "status": "failed",
+    "issues": [
+      {
+        "issue_id": "STEP_0002_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "severity": "error",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "check_name": "freecad_semantic_validation",
+        "message": "FreeCAD rejected the speculative geometry.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "consumed_goal_index": null,
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD module_errors evidence is not empty",
+          "evidence_artifact_path": "outputs/20260711T080948776704Z/step_mcp/step_2_validation_6.json",
+          "evidence_digest": "20afd74218cf5e0c46906988839c359fc60af9ea5a72b9e738ab5edf11ca8a57",
+          "evidence": {
+            "module_ids": [
+              "M2"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "assembly not built"
+                ],
+                "is_closed": false,
+                "is_null": true,
+                "is_valid": false,
+                "passed": false,
+                "solid_count": 0,
+                "volume": 0.0
+              },
+              "outer_network": {
+                "passed": false,
+                "reason": "outer network not built"
+              },
+              "bore_network": {
+                "passed": false,
+                "reason": "bore network not built"
+              },
+              "modules": {
+                "M2": {
+                  "error": "no compact junction inner Cylinder-Cylinder seams found",
+                  "passed": false
+                }
+              },
+              "module_errors": [
+                {
+                  "details": {
+                    "kernel_code": "NO_SUITABLE_EDGES",
+                    "module_type": "junction",
+                    "surface": "inner"
+                  },
+                  "error": "no compact junction inner Cylinder-Cylinder seams found",
+                  "failure_code": "JUNCTION_FILLET_SEAM_NOT_FOUND",
+                  "module_id": "M2",
+                  "stage": "fillet_compact_junction_material"
+                }
+              ],
+              "wall_section_failures": [
+                {
+                  "error": "module shape is missing",
+                  "module_id": "M2"
+                },
+                {
+                  "error": "one or more geometry-bearing modules have no internal wall sample",
+                  "module_ids": [
+                    "M2"
+                  ]
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v21",
+              "policy_digest": "287bef99cde36a01250fc736311eaff46a51b6e1b7439dc460a4564e031cfa41",
+              "policy_id": "cadgen02-freecad-validator-v21",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v21",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M2": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 40.0
+              }
+            }
+          }
+        },
+        "suggestion": {
+          "operation": "revise_freecad_geometry_inputs",
+          "recommended_changes": [],
+          "instruction": "Use failed_checks and centerline_context to change the implicated radius, waypoint, length, offset, or blend value; return a new full action."
+        }
+      }
+    ],
+    "mcp_status": "failed",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": "FreeCAD module_errors evidence is not empty",
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  }
+]

@@ -7,10 +7,34 @@
 from __future__ import annotations
 
 import math
-from typing import Iterable
+from typing import Final, Iterable
 
 Vector = tuple[float, float, float]
 ARC_PLANE_MIN_SINE = 1e-6
+
+# 방향 토큰 표는 좌표 변환 때마다 새로 만들 필요가 없는 불변 데이터다.
+# 모듈에서 한 번만 구성해 반복적인 작은 객체 할당을 없앤다.
+_DIRECTION_VECTORS: Final[dict[str, Vector]] = {
+    "+X": (1.0, 0.0, 0.0),
+    "-X": (-1.0, 0.0, 0.0),
+    "+Y": (0.0, 1.0, 0.0),
+    "-Y": (0.0, -1.0, 0.0),
+    "+Z": (0.0, 0.0, 1.0),
+    "-Z": (0.0, 0.0, -1.0),
+    "UP": (0.0, 0.0, 1.0),
+    "DOWN": (0.0, 0.0, -1.0),
+    "RIGHT": (0.0, 1.0, 0.0),
+    "LEFT": (0.0, -1.0, 0.0),
+    "FORWARD": (1.0, 0.0, 0.0),
+    "BACK": (-1.0, 0.0, 0.0),
+}
+
+# 임의 벡터와 안정적으로 외적할 기준축을 우선순위대로 보관한다.
+_PERPENDICULAR_AXIS_CANDIDATES: Final[tuple[Vector, ...]] = (
+    (0.0, 0.0, 1.0),
+    (0.0, 1.0, 0.0),
+    (1.0, 0.0, 0.0),
+)
 
 
 def vec(values: Iterable[float]) -> Vector:
@@ -72,23 +96,10 @@ def direction_to_vector(
         if default is None:
             raise ValueError("direction token is required")
         return default
-    table = {
-        "+X": (1.0, 0.0, 0.0),
-        "-X": (-1.0, 0.0, 0.0),
-        "+Y": (0.0, 1.0, 0.0),
-        "-Y": (0.0, -1.0, 0.0),
-        "+Z": (0.0, 0.0, 1.0),
-        "-Z": (0.0, 0.0, -1.0),
-        "UP": (0.0, 0.0, 1.0),
-        "DOWN": (0.0, 0.0, -1.0),
-        "RIGHT": (0.0, 1.0, 0.0),
-        "LEFT": (0.0, -1.0, 0.0),
-        "FORWARD": (1.0, 0.0, 0.0),
-        "BACK": (-1.0, 0.0, 0.0),
-    }
     normalized = direction.strip().upper()
-    if normalized in table:
-        return table[normalized]
+    vector = _DIRECTION_VECTORS.get(normalized)
+    if vector is not None:
+        return vector
     if default is not None:
         return default
     raise ValueError(f"unknown direction token: {direction!r}")
@@ -111,12 +122,11 @@ def canonical_circular_arc_frame(
     plane_normal_hint: Vector,
     sweep_angle_degrees: float,
 ) -> tuple[Vector, Vector, Vector]:
-    """Return a consistent plane normal plus analytic arc endpoint tangents.
+    """일관된 평면 법선과 원호 양 끝의 해석적 접선을 반환한다.
 
-    The planner chooses the bend-plane hint and signed sweep.  Exact
-    orthogonality and the dependent terminal tangent are resolver-owned
-    consequences, so finite LLM numeric vocabularies never need to spell an
-    irrational sine/cosine vector merely to satisfy continuity validation.
+    planner는 굽힘 평면 힌트와 부호 있는 회전각만 선택한다. 정확한 직교화와
+    종단 접선은 resolver가 계산하므로, LLM이 연속성 검사를 맞추기 위해
+    무리수 사인ㆍ코사인 벡터를 직접 작성할 필요가 없다.
     """
 
     start_tangent = normalize(inlet_tangent)
@@ -143,13 +153,12 @@ def circular_rim_mismatch(
     radius_b: float,
     alignment_cosine: float,
 ) -> float:
-    """Conservative positional mismatch bound for two circular interface rims.
+    """두 원형 접속면 테두리 사이의 보수적인 위치 불일치 상한을 계산한다.
 
-    ``alignment_cosine`` is the cosine after applying the desired mating
-    convention (parallel for path tangents, anti-parallel for outward port
-    axes).  The rotational term is the maximum displacement of a point at the
-    larger radius under the minimum aligning rotation.  Center and radius
-    errors are then added by the triangle inequality.
+    ``alignment_cosine``은 접속 규약을 적용한 뒤의 코사인이다. 경로 접선은
+    평행, 바깥쪽 포트 축은 반평행을 기준으로 한다. 회전 오차는 두 축을
+    일치시키는 최소 회전에서 큰 반지름의 점이 이동할 수 있는 최대 거리이며,
+    중심과 반지름 오차는 삼각부등식으로 더한다.
     """
 
     values = (position_error, radius_a, radius_b, alignment_cosine)
@@ -170,9 +179,10 @@ def circular_rim_mismatch(
 
 
 def choose_perpendicular_axis(v: Vector) -> Vector:
-    candidates = [(0.0, 0.0, 1.0), (0.0, 1.0, 0.0), (1.0, 0.0, 0.0)]
+    """입력 벡터와 안정적으로 직교하는 결정론적 단위축을 선택한다."""
+
     base = normalize(v)
-    for candidate in candidates:
+    for candidate in _PERPENDICULAR_AXIS_CANDIDATES:
         if abs(dot(base, candidate)) < 0.85:
             return normalize(cross(base, candidate))
     return (0.0, 1.0, 0.0)
@@ -186,6 +196,8 @@ def arc_points(
     angle_deg: float,
     segments: int,
 ) -> list[Vector]:
+    """두 접선 방향과 반지름으로 원호의 균등 각도 표본점을 만든다."""
+
     u = normalize(in_axis)
     v = normalize(out_axis)
     theta = math.radians(max(1.0, min(abs(angle_deg), 180.0)))

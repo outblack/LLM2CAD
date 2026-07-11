@@ -1,0 +1,12 @@
+{
+  "case_id": "a97ac605783bd9e43684b77ef8834dafbef019276699928642dd5570c94510d7",
+  "diagnostic_context_digest": "7db623f5df3af9d6553752beb4f01fc0a4fccc1957d9fc4b2d776ae02fc5ef94",
+  "failure_signature": "02874ba38374b0912e32d618070d84049aaca2864445380cf3c4dbeffe0ed974",
+  "failure_reason": "binding_mismatch",
+  "call_attempted": true,
+  "error_type": "DiagnosticValidationError",
+  "error": "diagnosis binding does not match its case",
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-11T07:29:38.862889+00:00",
+  "artifact_digest": "1f29dbcdfbcf2be60655ecb79a0dc069153f40907458687ae16719ff03dc58f4"
+}

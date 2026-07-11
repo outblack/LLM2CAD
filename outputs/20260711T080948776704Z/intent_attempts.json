@@ -1,0 +1,26 @@
+[
+  {
+    "attempt_index": 1,
+    "status": "rejected",
+    "phase": "semantic_validation",
+    "semantic_attempt": 1,
+    "structured_retry_attempt": 1,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "36c190c2ae6e1ca22b7c5144cb4d1e3a7fc1d49f1c6d103e796df8ca203a272b",
+    "diagnostic": "connecting_spline fixed required-anchor spline is infeasible after every authored outlet of junction_1: required minimum curvature radius is 20 mm; outlet evaluations=[{'incoming_heading': [0.0, 0.0, 1.0], 'first_waypoint_axial_projection': 20.0, 'predicted_minimum_radius': 9.946743, 'feasible': False}, {'incoming_heading': [-0.707107, 0.0, -0.707107], 'first_waypoint_axial_projection': -14.142136, 'predicted_minimum_radius': 0.824448, 'feasible': False}]. The system will not choose an outlet or patch coordinates. Re-author the LLM-inferred relative waypoint contract so at least one permitted branch heading has positive entry advance and passes the calculated curvature bound; preserve any coordinates explicitly supplied by the user; four-port is explicit source topology, so expected_open_ports_source must be 'explicit', not 'derived'",
+    "lineage_reset": false,
+    "will_retry": true
+  },
+  {
+    "attempt_index": 2,
+    "status": "accepted",
+    "phase": "semantic_validation",
+    "semantic_attempt": 2,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "af8618f7f67512d5b7cc5fd647b9ee9879491956a5f93a7c32681fbbbe0bfb48",
+    "diagnostic": null,
+    "lineage_reset": false
+  }
+]

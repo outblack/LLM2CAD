@@ -10,8 +10,18 @@ from dataclasses import dataclass
 import math
 from typing import Any
 
-from cadgen.geometry_policy import predict_c1_spline
-from cadgen.schemas import ActionDraft, PipeState, ResolvedAction, ValidationResult
+from cadgen.geometry_policy import (
+    CircularSweepRadiusAssessment,
+    classify_circular_sweep_radius,
+    predict_c1_spline,
+)
+from cadgen.schemas import (
+    ActionDraft,
+    PipeState,
+    ResolvedAction,
+    ValidationDiagnostic,
+    ValidationResult,
+)
 from cadgen.vector import (
     canonical_circular_arc_frame,
     circular_rim_mismatch,
@@ -34,7 +44,39 @@ SUPPORTED_INLINE_COMPONENTS: tuple[str, ...] = (
 # independent of nominal size: both OD and bore center/radius movement must fit
 # inside this half-angle, preventing a positive-but-near-zero length from being
 # accepted as a "smooth" transition.
+# reducer 계열 loft의 일반적인 형상 안전 상한이다. 호칭 지름과 무관하게
+# 외경과 내경의 중심ㆍ반지름 변화가 이 반각 안에 들어오도록 제한한다.
 MAX_TRANSITION_HALF_ANGLE_DEGREES = 30.0
+
+
+def _check_circular_sweep_radius(
+    errors: list[str],
+    centerline_radius: float | None,
+    outer_profile_radius: float | None,
+    *,
+    field_name: str,
+) -> CircularSweepRadiusAssessment | None:
+    """모든 registry 계층에 동일한 해석적 torus 반지름 정책을 적용한다."""
+
+    if centerline_radius is None or outer_profile_radius is None:
+        return None
+    try:
+        assessment = classify_circular_sweep_radius(
+            centerline_radius,
+            outer_profile_radius,
+        )
+    except ValueError:
+        # 유한성ㆍ양수 여부에 대한 필드별 오류는 호출자가 별도로 기록한다.
+        return None
+    if not assessment.supported_by_analytic_torus:
+        errors.append(
+            f"{field_name} must be at least the outer pipe radius for an "
+            "analytic circular sweep; "
+            f"classification={assessment.classification}, "
+            f"radial_clearance={assessment.raw_radial_clearance:.12g}, "
+            f"equality_roundoff_band={assessment.equality_roundoff_band:.12g}"
+        )
+    return assessment
 
 
 @dataclass(frozen=True)
@@ -232,6 +274,9 @@ MODULE_REGISTRY: dict[str, ModuleSpec] = {
             "interpolation",
             "frenet",
             "minimum_curvature_radius",
+            "bend_radius",
+            "sweep_angle",
+            "plane_normal",
             "path_points",
         ),
         2,
@@ -336,10 +381,6 @@ MODULE_DRAFT_PARAMS: dict[str, tuple[str, ...]] = {
         "plane_normal",
         "waypoint_frame",
         "waypoints",
-        "final_tangent",
-        "interpolation",
-        "frenet",
-        "minimum_curvature_radius",
     ),
     "transition": (
         "section_source",
@@ -367,9 +408,6 @@ MODULE_DRAFT_PARAMS: dict[str, tuple[str, ...]] = {
         "outer_diameter",
         "wall_thickness",
         "waypoints",
-        "interpolation",
-        "frenet",
-        "minimum_curvature_radius",
     ),
     "terminate": (
         "section_source",
@@ -385,21 +423,31 @@ MODULE_DRAFT_PARAMS: dict[str, tuple[str, ...]] = {
         "component_type",
         "length",
         "body_outer_diameter",
-            "body_start_offset",
-            "body_length",
-            "flange_bolt_count",
-            "flange_bolt_circle_diameter",
-            "flange_bolt_hole_diameter",
-            "flange_reference_axis",
-            "union_ring_outer_diameter",
-            "union_ring_length",
-            "actuator_diameter",
-            "actuator_height",
-            "actuator_axis",
+        "body_start_offset",
+        "body_length",
+        "flange_bolt_count",
+        "flange_bolt_circle_diameter",
+        "flange_bolt_hole_diameter",
+        "flange_reference_axis",
+        "union_ring_outer_diameter",
+        "union_ring_length",
+        "actuator_diameter",
+        "actuator_height",
+        "actuator_axis",
         "connector_type_out",
         "connector_gender_out",
         "connector_standard_out",
     ),
+}
+
+# catalog 구조는 프로세스가 실행되는 동안 변하지 않는다. 자주 호출되는
+# 조회 경로에서 registry 전체 순회와 set 재생성을 반복하지 않도록 읽기 전용
+# 파생값을 한 번만 계산한다. 외부 API는 기존처럼 새 list를 반환한다.
+_LLM_VISIBLE_MODULE_IDS = tuple(
+    module_id for module_id, spec in MODULE_REGISTRY.items() if spec.llm_visible
+)
+_MODULE_DRAFT_PARAM_SETS = {
+    module_id: frozenset(params) for module_id, params in MODULE_DRAFT_PARAMS.items()
 }
 
 
@@ -412,16 +460,15 @@ def available_modules() -> list[str]:
 def llm_visible_modules() -> list[str]:
     """프로덕션 LLM 선택이 허용된 primitive ID만 반환한다."""
 
-    return [module_id for module_id, spec in MODULE_REGISTRY.items() if spec.llm_visible]
+    return list(_LLM_VISIBLE_MODULE_IDS)
 
 
 def planner_catalog() -> list[dict[str, Any]]:
     """프로덕션 planner에 허용된 schema-v2 primitive 설명만 반환한다."""
 
     catalog = []
-    for module_id, spec in MODULE_REGISTRY.items():
-        if not spec.llm_visible:
-            continue
+    for module_id in _LLM_VISIBLE_MODULE_IDS:
+        spec = MODULE_REGISTRY[module_id]
         entry = {
             "id": module_id,
             "schema_version": 2,
@@ -429,9 +476,9 @@ def planner_catalog() -> list[dict[str, Any]]:
             "outputs": spec.output_count,
             "use_when": spec.use_when,
             "not_when": spec.not_when,
-            # The inlet section is already immutable state on target_port.
-            # Production planning must inherit it; a diameter/wall change is a
-            # transition output, not an explicit mismatch at a mating face.
+            # inlet 단면은 target_port에 이미 고정된 상태다. 프로덕션 planner는
+            # 이를 상속하며, 지름ㆍ두께 변경은 접속면 불일치가 아니라
+            # transition의 출력으로만 표현한다.
             "authored_params": [
                 parameter
                 for parameter in draft_params_for(module_id)
@@ -449,7 +496,10 @@ def planner_catalog() -> list[dict[str, Any]]:
 def _planner_variant_contracts(module_id: str) -> dict[str, list[str]]:
     if module_id == "route":
         return {
-            "line": ["length", "direction"],
+            "line": [
+                "length",
+                "optional direction only for an immutable explicit direction contract; otherwise resolver inherits target tangent",
+            ],
             "circular_arc": [
                 "bend_radius",
                 "signed sweep_angle",
@@ -539,7 +589,7 @@ def resolver_owned_params_for(module_id: str) -> tuple[str, ...]:
     """해당 primitive에서 resolver만 계산할 수 있는 파라미터 이름을 반환한다."""
 
     spec = MODULE_REGISTRY[module_id]
-    draft_params = set(draft_params_for(module_id))
+    draft_params = _MODULE_DRAFT_PARAM_SETS[module_id]
     resolved_params = [*spec.required_params, *spec.optional_params]
     return tuple(param for param in resolved_params if param not in draft_params)
 
@@ -547,7 +597,7 @@ def resolver_owned_params_for(module_id: str) -> tuple[str, ...]:
 def filter_draft_params(module_id: str, params: dict[str, Any]) -> dict[str, Any]:
     """LLM 입력에서 primitive별 authored 파라미터만 보존한다."""
 
-    allowed = set(draft_params_for(module_id))
+    allowed = _MODULE_DRAFT_PARAM_SETS[module_id]
     return {key: value for key, value in params.items() if key in allowed}
 
 
@@ -564,7 +614,7 @@ def canonicalize_junction_params(params: dict[str, Any]) -> dict[str, Any]:
 
 
 def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
-    """Validate an LLM decision without choosing or repairing it."""
+    """LLM 결정을 대신 선택하거나 보정하지 않고 계약만 검증한다."""
     errors: list[str] = []
     spec = MODULE_REGISTRY.get(draft.module)
     if spec is None:
@@ -572,7 +622,9 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
     if not spec.llm_visible:
         return ValidationResult(
             valid=False,
-            errors=[f"Legacy module is not accepted from the production planner: {draft.module}"],
+            errors=[
+                f"Legacy module is not accepted from the production planner: {draft.module}"
+            ],
         )
     if draft.catalog_schema_version != 2:
         errors.append("catalog_schema_version must be 2")
@@ -604,7 +656,14 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
         errors.append(f"affected_goal_ids are not pending: {unknown_affected}")
     if not completed.issubset(affected):
         errors.append("completed_goal_ids must be a subset of affected_goal_ids")
-    _validate_goal_order_claims(affected, completed, state, errors)
+    _validate_goal_order_claims(
+        affected,
+        completed,
+        state,
+        errors,
+        module=draft.module,
+        params=draft.params,
+    )
     _validate_completion_claims(completed, state, errors)
     _validate_atomic_goal_binding(
         draft.module,
@@ -625,6 +684,15 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
     if unexpected:
         errors.append(f"Unexpected authored params for {draft.module}: {unexpected}")
     params = draft.params
+    numeric_limit = _state_scaled_authored_numeric_limit(state)
+    for path, value in _nested_numeric_values(params):
+        if abs(value) > numeric_limit:
+            errors.append(
+                f"authored numeric value params.{path}={value:.12g} exceeds the "
+                f"state-scaled safety limit {numeric_limit:.12g}; preserve the "
+                "decimal scale of immutable state values instead of shifting "
+                "the decimal point"
+            )
     section_source = params.get("section_source")
     if section_source not in {"inherit_target", "explicit"}:
         errors.append("section_source must be inherit_target or explicit")
@@ -637,18 +705,17 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
         params.get("outer_diameter") is not None
         or params.get("wall_thickness") is not None
     ):
-        errors.append(
-            "inherit_target must omit outer_diameter and wall_thickness"
-        )
+        errors.append("inherit_target must omit outer_diameter and wall_thickness")
 
     if draft.module == "route":
         kind = params.get("path_kind")
         if kind == "line":
-            _require_authored(params, ("length", "direction"), errors)
+            _require_authored(params, ("length",), errors)
             line_length = _float_param(params, "length", errors)
             if line_length is not None and line_length <= 0.0:
                 errors.append("line route length must be greater than zero")
-            _validate_vector_value(params.get("direction"), "direction", errors)
+            if params.get("direction") is not None:
+                _validate_vector_value(params.get("direction"), "direction", errors)
             if any(
                 params.get(name) is not None
                 for name in (
@@ -675,10 +742,14 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
             sweep_angle = _float_param(params, "sweep_angle", errors)
             if bend_radius is not None and bend_radius <= 0.0:
                 errors.append("circular_arc bend_radius must be greater than zero")
+            _check_circular_sweep_radius(
+                errors,
+                bend_radius,
+                (target_port.outer_diameter / 2.0 if target_port is not None else None),
+                field_name="circular_arc bend_radius",
+            )
             if sweep_angle is not None and not (0.0 < abs(sweep_angle) < 360.0):
-                errors.append(
-                    "circular_arc sweep_angle magnitude must be in (0, 360)"
-                )
+                errors.append("circular_arc sweep_angle magnitude must be in (0, 360)")
             _validate_vector_value(params.get("plane_normal"), "plane_normal", errors)
             if any(
                 params.get(name) is not None
@@ -729,8 +800,7 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
                     )
                     separation = vector_length(
                         tuple(
-                            resolved_first[index]
-                            - float(target_port.position[index])
+                            resolved_first[index] - float(target_port.position[index])
                             for index in range(3)
                         )
                     )
@@ -798,9 +868,7 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
             errors,
         )
         if params.get("blend_mode") == "fillet":
-            _require_authored(
-                params, ("blend_radius", "inner_blend_radius"), errors
-            )
+            _require_authored(params, ("blend_radius", "inner_blend_radius"), errors)
         elif params.get("blend_mode") == "hard" and (
             params.get("blend_radius") is not None
             or params.get("inner_blend_radius") is not None
@@ -841,14 +909,73 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
             errors,
         )
         other = params.get("other_port_id")
+        start_anchor_claimed = _claims_start_anchor_connection(affected, state)
+        reserved_anchor = state.reserved_start_anchor
         if other == draft.target_port:
-            errors.append("connect_ports requires two distinct open ports")
+            errors.append("connect_ports requires two distinct connectable ports")
+        elif start_anchor_claimed:
+            if reserved_anchor is None:
+                errors.append(
+                    "start_anchor connection is unavailable until the first module inlet is reserved"
+                )
+            elif other != reserved_anchor.id:
+                errors.append(
+                    "start_anchor connect goal requires other_port_id="
+                    f"{reserved_anchor.id}, not {other}"
+                )
         elif other not in open_ids:
             errors.append(f"Second target port is not open: {other}")
-        waypoints = _vector_list_param(
-            params, "waypoints", errors, allow_zero=True
-        )
-        if params.get("path_kind") == "line":
+        waypoints = _vector_list_param(params, "waypoints", errors, allow_zero=True)
+        if params.get("path_kind") == "seam":
+            if waypoints:
+                errors.append("seam connect_ports does not accept waypoints")
+            if any(
+                params.get(name) is not None
+                for name in (
+                    "initial_tangent",
+                    "final_tangent",
+                    "interpolation",
+                    "frenet",
+                    "minimum_curvature_radius",
+                    "bend_radius",
+                    "sweep_angle",
+                    "plane_normal",
+                )
+            ):
+                errors.append("seam connect_ports does not accept path geometry")
+            if target_port is not None:
+                other_port = (
+                    reserved_anchor
+                    if reserved_anchor is not None and reserved_anchor.id == other
+                    else next(
+                        (port for port in state.open_ports if port.id == other), None
+                    )
+                )
+                if other_port is not None:
+                    position_error = vector_length(
+                        sub(
+                            tuple(float(value) for value in target_port.position),
+                            tuple(float(value) for value in other_port.position),
+                        )
+                    )
+                    tangent_dot = dot(
+                        normalize(tuple(float(value) for value in target_port.axis)),
+                        tuple(
+                            -value
+                            for value in normalize(
+                                tuple(float(value) for value in other_port.axis)
+                            )
+                        ),
+                    )
+                    if position_error > state.modeling_tolerance:
+                        errors.append(
+                            "seam connect_ports requires coincident endpoint positions"
+                        )
+                    if tangent_dot < 1.0 - 1e-7:
+                        errors.append(
+                            "seam connect_ports requires compatible traversal tangents"
+                        )
+        elif params.get("path_kind") == "line":
             if waypoints:
                 errors.append("line connect_ports does not accept waypoints")
             if any(
@@ -884,18 +1011,13 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
                 errors.append(
                     "circular_arc connect_ports does not accept spline parameters"
                 )
-            minimum_radius = _float_param(
-                params, "minimum_curvature_radius", errors
+            minimum_radius = _float_param(params, "minimum_curvature_radius", errors)
+            _check_circular_sweep_radius(
+                errors,
+                minimum_radius,
+                (target_port.outer_diameter / 2.0 if target_port is not None else None),
+                field_name="connect_ports minimum_curvature_radius",
             )
-            if (
-                minimum_radius is not None
-                and target_port is not None
-                and minimum_radius
-                <= target_port.outer_diameter / 2.0 + state.modeling_tolerance
-            ):
-                errors.append(
-                    "connect_ports minimum_curvature_radius must exceed the pipe outer radius by the modeling tolerance"
-                )
         else:
             _require_authored(
                 params,
@@ -904,9 +1026,7 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
             )
             if not waypoints:
                 errors.append("curved connect_ports requires at least one waypoint")
-            minimum_radius = _float_param(
-                params, "minimum_curvature_radius", errors
-            )
+            minimum_radius = _float_param(params, "minimum_curvature_radius", errors)
             if (
                 minimum_radius is not None
                 and target_port is not None
@@ -964,8 +1084,12 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
             params.get("flange_reference_axis"),
         )
         if component_type == "flange" and any(value is None for value in flange_values):
-            errors.append("flange requires authored bolt count, circle, and hole diameter")
-        if component_type != "flange" and any(value is not None for value in flange_values):
+            errors.append(
+                "flange requires authored bolt count, circle, and hole diameter"
+            )
+        if component_type != "flange" and any(
+            value is not None for value in flange_values
+        ):
             errors.append("flange bolt parameters are valid only for flange")
         union_values = (
             params.get("union_ring_outer_diameter"),
@@ -973,7 +1097,9 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
         )
         if component_type == "union" and any(value is None for value in union_values):
             errors.append("union requires authored ring diameter and length")
-        if component_type != "union" and any(value is not None for value in union_values):
+        if component_type != "union" and any(
+            value is not None for value in union_values
+        ):
             errors.append("union ring parameters are valid only for union")
         connector_type = params.get("connector_type_out")
         if connector_type not in {"plain", component_type}:
@@ -1022,6 +1148,66 @@ def validate_draft(draft: ActionDraft, state: PipeState) -> ValidationResult:
     return ValidationResult(valid=not errors, errors=errors)
 
 
+def _nested_numeric_values(
+    value: Any,
+    path: str = "",
+) -> list[tuple[str, float]]:
+    """Return finite authored numbers with stable JSON-style parameter paths."""
+
+    if isinstance(value, bool):
+        return []
+    if isinstance(value, (int, float)):
+        numeric = float(value)
+        return [(path or "<root>", numeric)] if math.isfinite(numeric) else []
+    if isinstance(value, dict):
+        result: list[tuple[str, float]] = []
+        for key, child in value.items():
+            child_path = f"{path}.{key}" if path else str(key)
+            result.extend(_nested_numeric_values(child, child_path))
+        return result
+    if isinstance(value, (list, tuple)):
+        result = []
+        for index, child in enumerate(value):
+            child_path = f"{path}[{index}]" if path else f"[{index}]"
+            result.extend(_nested_numeric_values(child, child_path))
+        return result
+    return []
+
+
+def _state_scaled_authored_numeric_limit(state: PipeState) -> float:
+    """Bound implementation numbers relative to the immutable design scale.
+
+    The bound is intentionally generous and never rewrites a candidate.  Its
+    purpose is to reject decimal-object scale explosions (observed at 10^13×)
+    before they reach geometry resolution.  Explicitly large user contracts
+    raise the bound because their values are present in the state itself.
+    """
+
+    values: list[float] = [
+        float(state.global_spec.outer_diameter),
+        float(state.global_spec.wall_thickness),
+        float(state.modeling_tolerance),
+    ]
+    for port in state.open_ports:
+        values.extend(float(component) for component in port.position)
+        values.extend(float(component) for component in port.axis)
+        values.extend((float(port.outer_diameter), float(port.wall_thickness)))
+    if state.reserved_start_anchor is not None:
+        anchor = state.reserved_start_anchor
+        values.extend(float(component) for component in anchor.position)
+        values.extend(float(component) for component in anchor.axis)
+        values.extend((float(anchor.outer_diameter), float(anchor.wall_thickness)))
+    for goal in state.remaining_goals:
+        values.extend(
+            numeric
+            for _path, numeric in _nested_numeric_values(
+                goal.model_dump(mode="python", exclude_none=True)
+            )
+        )
+    scale = max((abs(value) for value in values if math.isfinite(value)), default=1.0)
+    return max(1_000_000.0, scale * 1_000.0)
+
+
 def _require_authored(
     params: dict[str, Any],
     names: tuple[str, ...],
@@ -1035,13 +1221,44 @@ def _require_authored(
             errors.append(f"Missing LLM-authored param: {name}")
 
 
+def _spline_implicated_parameter_paths(
+    critical_span_index: int | None,
+    point_count: int,
+) -> list[str]:
+    """Return the smallest local point/tangent neighborhood that defines a span."""
+
+    paths = ["/resolved_action/params/minimum_curvature_radius"]
+    if critical_span_index is None or point_count < 2:
+        return [*paths, "/params/waypoints"]
+
+    # A cubic span uses both endpoint handles.  An interior handle's tangent and
+    # local chord scale depend on the immediately adjacent points as well, so
+    # report the one-point halo rather than misleadingly naming only p0/p3.
+    first_point = max(0, critical_span_index - 1)
+    last_point = min(point_count - 1, critical_span_index + 2)
+    for point_index in range(first_point, last_point + 1):
+        paths.append(
+            "/resolved_action/params/start_position"
+            if point_index == 0
+            else f"/params/waypoints/{point_index - 1}"
+        )
+    if critical_span_index == 0:
+        paths.append("/resolved_action/params/initial_tangent")
+    if critical_span_index + 1 == point_count - 1:
+        paths.append("/resolved_action/params/final_tangent")
+    return paths
+
+
 def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResult:
     """파생값까지 포함된 행동이 현재 포트와 primitive 불변식을 지키는지 검사한다."""
 
     errors: list[str] = []
+    diagnostics: list[ValidationDiagnostic] = []
     spec = MODULE_REGISTRY.get(action.module)
     if spec is None:
-        return ValidationResult(valid=False, errors=[f"Unknown module: {action.module}"])
+        return ValidationResult(
+            valid=False, errors=[f"Unknown module: {action.module}"]
+        )
 
     open_port_ids = {port.id for port in state.open_ports}
     target_port = next(
@@ -1061,7 +1278,14 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
     _validate_completion_claims(set(action.completed_goal_ids), state, errors)
     affected = set(action.affected_goal_ids)
     completed = set(action.completed_goal_ids)
-    _validate_goal_order_claims(affected, completed, state, errors)
+    _validate_goal_order_claims(
+        affected,
+        completed,
+        state,
+        errors,
+        module=action.module,
+        params=action.params,
+    )
     if action.module in {
         "route",
         "transition",
@@ -1102,27 +1326,45 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
     if outer_diameter is not None and wall_thickness is not None:
         if outer_diameter <= wall_thickness * 2:
             errors.append("outer diameter must be greater than twice wall thickness")
-        if action.module in {
-            "route",
-            "transition",
-            "junction",
-            "connect_ports",
-            "terminate",
-            "inline_component",
-        } and wall_thickness <= 0:
+        if (
+            action.module
+            in {
+                "route",
+                "transition",
+                "junction",
+                "connect_ports",
+                "terminate",
+                "inline_component",
+            }
+            and wall_thickness <= 0
+        ):
             errors.append("hollow pipe wall thickness must be greater than zero")
-        if action.module in {
-            "route",
-            "transition",
-            "junction",
-            "connect_ports",
-            "terminate",
-            "inline_component",
-        } and target_port is not None:
-            if abs(outer_diameter - target_port.outer_diameter) > state.modeling_tolerance:
-                errors.append("authored inlet outer diameter does not match target port")
-            if abs(wall_thickness - target_port.wall_thickness) > state.modeling_tolerance:
-                errors.append("authored inlet wall thickness does not match target port")
+        if (
+            action.module
+            in {
+                "route",
+                "transition",
+                "junction",
+                "connect_ports",
+                "terminate",
+                "inline_component",
+            }
+            and target_port is not None
+        ):
+            if (
+                abs(outer_diameter - target_port.outer_diameter)
+                > state.modeling_tolerance
+            ):
+                errors.append(
+                    "authored inlet outer diameter does not match target port"
+                )
+            if (
+                abs(wall_thickness - target_port.wall_thickness)
+                > state.modeling_tolerance
+            ):
+                errors.append(
+                    "authored inlet wall thickness does not match target port"
+                )
 
     if action.module == "bend_pipe":
         angle = _float_param(params, "angle", errors)
@@ -1132,14 +1374,12 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         if bend_radius is not None and bend_radius <= 0:
             errors.append("bend radius must be greater than zero")
         outer_radius = (outer_diameter or 0.0) / 2.0
-        if (
-            bend_radius is not None
-            and outer_radius > 0
-            and bend_radius <= outer_radius + state.modeling_tolerance
-        ):
-            errors.append(
-                "bend radius must exceed the outer pipe radius by the modeling tolerance"
-            )
+        _check_circular_sweep_radius(
+            errors,
+            bend_radius,
+            outer_radius if outer_radius > 0.0 else None,
+            field_name="bend radius",
+        )
         segment_resolution = _int_param(params, "segment_resolution", errors)
         if segment_resolution is not None and segment_resolution < 4:
             errors.append("segment_resolution must be at least 4")
@@ -1152,12 +1392,20 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         outlet_vectors = _vector_list_param(params, "outlet_vectors", errors)
         required_vectors = _vector_list_param(params, "required_outlet_vectors", errors)
         vector_count = len(outlet_vectors or required_vectors)
-        if outlet_vectors and required_vectors and not _same_vector_list(
-            outlet_vectors,
-            required_vectors,
+        if (
+            outlet_vectors
+            and required_vectors
+            and not _same_vector_list(
+                outlet_vectors,
+                required_vectors,
+            )
         ):
-            errors.append("outlet_vectors must match required_outlet_vectors when both are provided")
-        if vector_count == 0 and (not isinstance(branch_angles, list) or not branch_angles):
+            errors.append(
+                "outlet_vectors must match required_outlet_vectors when both are provided"
+            )
+        if vector_count == 0 and (
+            not isinstance(branch_angles, list) or not branch_angles
+        ):
             errors.append("branch_angles must be a non-empty list")
         elif isinstance(branch_angles, list):
             for index, angle in enumerate(branch_angles):
@@ -1170,7 +1418,10 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         if include_primary is not None and not isinstance(include_primary, bool):
             errors.append("include_primary_outlet must be a boolean")
         junction_style = params.get("junction_style")
-        if junction_style is not None and junction_style not in {"hard_fuse", "smooth_hub"}:
+        if junction_style is not None and junction_style not in {
+            "hard_fuse",
+            "smooth_hub",
+        }:
             errors.append("junction_style must be hard_fuse or smooth_hub")
         blend_radius = _float_param(params, "blend_radius", errors)
         if blend_radius is not None and blend_radius <= 0:
@@ -1195,7 +1446,9 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 errors.append(f"{key} must be non-negative")
         if diameter_out is not None and wall_thickness_out is not None:
             if diameter_out <= wall_thickness_out * 2:
-                errors.append("output diameter must be greater than twice output wall thickness")
+                errors.append(
+                    "output diameter must be greater than twice output wall thickness"
+                )
 
     if action.module == "connector_pipe":
         coupling_outer = _float_param(params, "coupling_outer_diameter", errors)
@@ -1215,10 +1468,20 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         cap_thickness = _float_param(params, "cap_thickness", errors)
         if cap_thickness is not None and cap_thickness < 0:
             errors.append("cap_thickness must be non-negative")
-        if params.get("end_type") == "cap" and cap_thickness is not None and cap_thickness <= 0:
+        if (
+            params.get("end_type") == "cap"
+            and cap_thickness is not None
+            and cap_thickness <= 0
+        ):
             errors.append("cap_thickness must be greater than zero for capped ends")
-        if params.get("end_type") == "cap" and cap_thickness is not None and cap_thickness <= 2.0:
-            errors.append("cap_thickness must be greater than bore extension for capped ends")
+        if (
+            params.get("end_type") == "cap"
+            and cap_thickness is not None
+            and cap_thickness <= 2.0
+        ):
+            errors.append(
+                "cap_thickness must be greater than bore extension for capped ends"
+            )
 
     if action.module == "route":
         kind = params.get("path_kind")
@@ -1230,11 +1493,12 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         elif kind == "circular_arc":
             radius = _float_param(params, "bend_radius", errors)
             angle = _float_param(params, "sweep_angle", errors)
-            if radius is not None and outer_diameter is not None:
-                if radius <= outer_diameter / 2.0 + state.modeling_tolerance:
-                    errors.append(
-                        "bend_radius must exceed the outer pipe radius by the modeling tolerance"
-                    )
+            _check_circular_sweep_radius(
+                errors,
+                radius,
+                outer_diameter / 2.0 if outer_diameter is not None else None,
+                field_name="bend_radius",
+            )
             if angle is not None and (abs(angle) <= 1e-6 or abs(angle) >= 360.0):
                 errors.append("sweep_angle magnitude must be in (0, 360)")
             _validate_vector_value(params.get("plane_normal"), "plane_normal", errors)
@@ -1291,12 +1555,12 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                     "resolved circular_arc canonical frame is invalid: " + str(exc)
                 )
         elif kind == "spline":
-            waypoints = _vector_list_param(
-                params, "waypoints", errors, allow_zero=True
-            )
+            waypoints = _vector_list_param(params, "waypoints", errors, allow_zero=True)
             if len(waypoints) < 2:
                 errors.append("spline route requires at least two valid waypoints")
-            _validate_vector_value(params.get("initial_tangent"), "initial_tangent", errors)
+            _validate_vector_value(
+                params.get("initial_tangent"), "initial_tangent", errors
+            )
             _validate_vector_value(params.get("final_tangent"), "final_tangent", errors)
             try:
                 expected_initial = normalize(
@@ -1360,10 +1624,7 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 pass
             minimum_radius = _float_param(params, "minimum_curvature_radius", errors)
             if minimum_radius is not None and outer_diameter is not None:
-                if (
-                    minimum_radius
-                    <= outer_diameter / 2.0 + state.modeling_tolerance
-                ):
+                if minimum_radius <= outer_diameter / 2.0 + state.modeling_tolerance:
                     errors.append(
                         "minimum_curvature_radius must exceed the outer pipe radius by the modeling tolerance"
                     )
@@ -1372,11 +1633,12 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
             # expected/actual 수치를 그대로 다음 planner repair에 돌려준다.
             if minimum_radius is not None:
                 try:
+                    spline_points = [
+                        vec(params["start_position"]),
+                        *[vec(point) for point in params["waypoints"]],
+                    ]
                     prediction = predict_c1_spline(
-                        [
-                            vec(params["start_position"]),
-                            *[vec(point) for point in params["waypoints"]],
-                        ],
+                        spline_points,
                         vec(params["initial_tangent"]),
                         vec(params["final_tangent"]),
                         modeling_tolerance=state.modeling_tolerance,
@@ -1385,6 +1647,57 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                         prediction.minimum_radius + state.modeling_tolerance
                         < minimum_radius
                     ):
+                        critical_span_index = prediction.critical_span_index
+                        critical_span_endpoints = (
+                            (
+                                spline_points[critical_span_index],
+                                spline_points[critical_span_index + 1],
+                            )
+                            if critical_span_index is not None
+                            and 0 <= critical_span_index < len(spline_points) - 1
+                            else None
+                        )
+                        diagnostics.append(
+                            ValidationDiagnostic(
+                                code="SPLINE_CURVATURE_PREFLIGHT",
+                                check_name="spline_curvature_preflight",
+                                evaluator_id="predict_c1_spline",
+                                evaluator_version="c1-cubic-sampling-v1",
+                                calculation_method=(
+                                    "kappa=|r_prime cross r_double_prime|/"
+                                    "|r_prime|^3; minimum_radius=1/max(kappa)"
+                                ),
+                                metric="minimum_curvature_radius",
+                                comparator=">=",
+                                required=minimum_radius,
+                                actual=prediction.minimum_radius,
+                                gap=max(
+                                    0.0,
+                                    minimum_radius - prediction.minimum_radius,
+                                ),
+                                ratio=(
+                                    minimum_radius / prediction.minimum_radius
+                                    if prediction.minimum_radius > 0.0
+                                    else None
+                                ),
+                                units="mm",
+                                modeling_tolerance=state.modeling_tolerance,
+                                critical_span_index=critical_span_index,
+                                critical_t=prediction.critical_t,
+                                critical_span_endpoints=critical_span_endpoints,
+                                critical_location=prediction.critical_position,
+                                handle_factors=list(prediction.handle_factors),
+                                curve_length=prediction.curve_length,
+                                polyline_length=prediction.polyline_length,
+                                minimum_chord=prediction.minimum_chord,
+                                implicated_parameter_paths=(
+                                    _spline_implicated_parameter_paths(
+                                        critical_span_index,
+                                        len(spline_points),
+                                    )
+                                ),
+                            )
+                        )
                         errors.append(
                             "spline curvature preflight failed: "
                             f"expected minimum_radius>={minimum_radius:.12g} mm; "
@@ -1396,15 +1709,15 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                             "because they shorten cubic handles and increase curvature."
                         )
                 except (KeyError, TypeError, ValueError) as exc:
-                    errors.append("spline curvature preflight could not run: " + str(exc))
+                    errors.append(
+                        "spline curvature preflight could not run: " + str(exc)
+                    )
             if params.get("interpolation") != "bspline":
                 errors.append("spline route interpolation must be bspline")
             if not isinstance(params.get("frenet"), bool):
                 errors.append("spline route frenet must be a boolean")
             if params.get("waypoint_frame", "global") != "global":
-                errors.append(
-                    "resolved spline waypoint_frame must be canonical global"
-                )
+                errors.append("resolved spline waypoint_frame must be canonical global")
         else:
             errors.append("route path_kind must be line, circular_arc, or spline")
 
@@ -1413,7 +1726,9 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         wall_out = _float_param(params, "wall_thickness_out", errors)
         if diameter_out is not None and wall_out is not None:
             if diameter_out <= 2.0 * wall_out:
-                errors.append("output diameter must be greater than twice output wall thickness")
+                errors.append(
+                    "output diameter must be greater than twice output wall thickness"
+                )
             if wall_out <= 0:
                 errors.append("output wall thickness must be greater than zero")
         _validate_vector_value(params.get("offset"), "offset", errors, allow_zero=True)
@@ -1430,9 +1745,7 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
             axis = normalize(_canonical_vector(params.get("axis")) or (0.0, 0.0, 0.0))
             offset = _canonical_vector(params.get("offset"))
             if length is not None and offset is not None:
-                axial_offset = sum(
-                    offset[index] * axis[index] for index in range(3)
-                )
+                axial_offset = sum(offset[index] * axis[index] for index in range(3))
                 if abs(axial_offset) > 1e-6:
                     errors.append(
                         "transition offset must be perpendicular to the pipe axis; use length for axial displacement"
@@ -1466,7 +1779,11 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         max_hub = _float_param(params, "max_hub_radius", errors)
         if blend_radius is not None and max_hub is not None and blend_radius > max_hub:
             errors.append("blend_radius must not exceed max_hub_radius")
-        if inner_blend_radius is not None and max_hub is not None and inner_blend_radius > max_hub:
+        if (
+            inner_blend_radius is not None
+            and max_hub is not None
+            and inner_blend_radius > max_hub
+        ):
             errors.append("inner_blend_radius must not exceed max_hub_radius")
         outlets = params.get("outlets")
         if isinstance(outlets, list):
@@ -1493,12 +1810,16 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 if axis_value is not None:
                     normalized_axis = normalize(axis_value)
                     normalized_axes.append(normalized_axis)
-                    if target_port is not None and dot(
-                        normalized_axis,
-                        normalize(
-                            tuple(float(value) for value in target_port.axis)
-                        ),
-                    ) <= -0.999:
+                    if (
+                        target_port is not None
+                        and dot(
+                            normalized_axis,
+                            normalize(
+                                tuple(float(value) for value in target_port.axis)
+                            ),
+                        )
+                        <= -0.999
+                    ):
                         errors.append(
                             f"outlets[{index}].axis must not retrace the consumed "
                             "target-port axis"
@@ -1518,7 +1839,11 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 )
                 if length_value is not None and length_value <= 0:
                     errors.append(f"outlets[{index}].length must be greater than zero")
-                if od_value is not None and wall_value is not None and od_value <= 2 * wall_value:
+                if (
+                    od_value is not None
+                    and wall_value is not None
+                    and od_value <= 2 * wall_value
+                ):
                     errors.append(
                         f"outlets[{index}] outer diameter must exceed twice wall thickness"
                     )
@@ -1543,7 +1868,9 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                     label=f"outlets[{index}]",
                 )
             for left_index, left in enumerate(normalized_axes):
-                for right_index, right in enumerate(normalized_axes[left_index + 1 :], start=left_index + 1):
+                for right_index, right in enumerate(
+                    normalized_axes[left_index + 1 :], start=left_index + 1
+                ):
                     if sum(a * b for a, b in zip(left, right)) > 0.999:
                         errors.append(
                             "junction outlet axes must be distinct: "
@@ -1552,23 +1879,70 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
 
     if action.module == "connect_ports":
         path_kind = params.get("path_kind")
-        if path_kind not in {"line", "circular_arc", "spline"}:
-            errors.append("connect_ports path_kind must be line, circular_arc, or spline")
+        if path_kind not in {"seam", "line", "circular_arc", "spline"}:
+            errors.append(
+                "connect_ports path_kind must be seam, line, circular_arc, or spline"
+            )
         other_id = params.get("other_port_id")
-        other_port = next((port for port in state.open_ports if port.id == other_id), None)
+        start_anchor_claimed = _claims_start_anchor_connection(affected, state)
+        reserved_anchor = state.reserved_start_anchor
+        other_port = next(
+            (port for port in state.open_ports if port.id == other_id),
+            None,
+        )
+        if (
+            other_port is None
+            and start_anchor_claimed
+            and reserved_anchor is not None
+            and reserved_anchor.id == other_id
+        ):
+            other_port = reserved_anchor
         if other_id == action.target_port:
             errors.append("connect_ports requires distinct ports")
-        if other_port is None:
-            errors.append(f"Second target port is not open: {other_id}")
+        if start_anchor_claimed and reserved_anchor is None:
+            errors.append("start_anchor connection has no reserved inlet")
+        elif (
+            start_anchor_claimed
+            and reserved_anchor is not None
+            and other_id != reserved_anchor.id
+        ):
+            errors.append(
+                "resolved start_anchor connection targets the wrong reserved inlet"
+            )
+        elif other_port is None:
+            errors.append(f"Second target port is not connectable: {other_id}")
         elif outer_diameter is not None and wall_thickness is not None:
-            if abs(other_port.outer_diameter - outer_diameter) > state.modeling_tolerance:
+            if (
+                abs(other_port.outer_diameter - outer_diameter)
+                > state.modeling_tolerance
+            ):
                 errors.append("connect_ports endpoint outer diameters are incompatible")
-            if abs(other_port.wall_thickness - wall_thickness) > state.modeling_tolerance:
-                errors.append("connect_ports endpoint wall thicknesses are incompatible")
-        waypoints = _vector_list_param(
-            params, "waypoints", errors, allow_zero=True
-        )
-        if path_kind == "line":
+            if (
+                abs(other_port.wall_thickness - wall_thickness)
+                > state.modeling_tolerance
+            ):
+                errors.append(
+                    "connect_ports endpoint wall thicknesses are incompatible"
+                )
+        waypoints = _vector_list_param(params, "waypoints", errors, allow_zero=True)
+        if path_kind == "seam":
+            if waypoints:
+                errors.append("seam connect_ports does not accept waypoints")
+            if any(
+                params.get(name) is not None
+                for name in (
+                    "initial_tangent",
+                    "final_tangent",
+                    "interpolation",
+                    "frenet",
+                    "minimum_curvature_radius",
+                    "bend_radius",
+                    "sweep_angle",
+                    "plane_normal",
+                )
+            ):
+                errors.append("seam connect_ports does not accept path geometry")
+        elif path_kind == "line":
             if waypoints:
                 errors.append("line connect_ports does not accept waypoints")
             if any(
@@ -1599,44 +1973,79 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 errors.append(
                     "circular_arc connect_ports does not accept spline parameters"
                 )
-            minimum_radius = _float_param(
-                params, "minimum_curvature_radius", errors
+            minimum_radius = _float_param(params, "minimum_curvature_radius", errors)
+            outer_profile_radius = (
+                outer_diameter / 2.0 if outer_diameter is not None else None
+            )
+            _check_circular_sweep_radius(
+                errors,
+                minimum_radius,
+                outer_profile_radius,
+                field_name="connect_ports minimum_curvature_radius",
+            )
+            bend_radius = _float_param(params, "bend_radius", errors)
+            _check_circular_sweep_radius(
+                errors,
+                bend_radius,
+                outer_profile_radius,
+                field_name="connect_ports bend_radius",
             )
             if (
-                minimum_radius is not None
-                and outer_diameter is not None
-                and minimum_radius
-                <= outer_diameter / 2.0 + state.modeling_tolerance
+                bend_radius is not None
+                and minimum_radius is not None
+                and bend_radius + state.modeling_tolerance < minimum_radius
             ):
                 errors.append(
-                    "connect_ports minimum_curvature_radius must exceed the pipe outer radius by the modeling tolerance"
+                    "connect_ports bend_radius is smaller than its required "
+                    "minimum_curvature_radius"
                 )
         else:
             _validate_vector_value(
                 params.get("initial_tangent"), "initial_tangent", errors
             )
-            _validate_vector_value(
-                params.get("final_tangent"), "final_tangent", errors
-            )
+            _validate_vector_value(params.get("final_tangent"), "final_tangent", errors)
             if params.get("interpolation") != "bspline":
                 errors.append("curved connect_ports interpolation must be bspline")
             if not isinstance(params.get("frenet"), bool):
                 errors.append("curved connect_ports frenet must be a boolean")
             if not waypoints:
-                errors.append("curved connect_ports requires at least one valid waypoint")
-            minimum_radius = _float_param(
-                params, "minimum_curvature_radius", errors
-            )
+                errors.append(
+                    "curved connect_ports requires at least one valid waypoint"
+                )
+            minimum_radius = _float_param(params, "minimum_curvature_radius", errors)
             if (
                 minimum_radius is not None
                 and outer_diameter is not None
-                and minimum_radius
-                <= outer_diameter / 2.0 + state.modeling_tolerance
+                and minimum_radius <= outer_diameter / 2.0 + state.modeling_tolerance
             ):
                 errors.append(
                     "connect_ports minimum_curvature_radius must exceed the pipe outer radius by the modeling tolerance"
                 )
         if target_port is not None and other_port is not None:
+            if path_kind == "seam":
+                position_error = vector_length(
+                    sub(
+                        tuple(float(value) for value in target_port.position),
+                        tuple(float(value) for value in other_port.position),
+                    )
+                )
+                tangent_dot = dot(
+                    normalize(tuple(float(value) for value in target_port.axis)),
+                    tuple(
+                        -value
+                        for value in normalize(
+                            tuple(float(value) for value in other_port.axis)
+                        )
+                    ),
+                )
+                if position_error > state.modeling_tolerance:
+                    errors.append(
+                        "resolved seam connect_ports endpoint positions are not coincident"
+                    )
+                if tangent_dot < 1.0 - 1e-7:
+                    errors.append(
+                        "resolved seam connect_ports traversal tangents are incompatible"
+                    )
             if path_kind == "spline":
                 try:
                     initial = normalize(
@@ -1665,35 +2074,37 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 except (KeyError, TypeError, ValueError):
                     # Field-level validation above reports malformed tangents.
                     pass
-            path_points = [
-                tuple(float(value) for value in target_port.position),
-                *waypoints,
-                tuple(float(value) for value in other_port.position),
-            ]
-            if any(
-                math.sqrt(sum((b - a) ** 2 for a, b in zip(left, right)))
-                <= 1e-6
-                for left, right in zip(path_points, path_points[1:])
-            ):
-                errors.append("connect_ports path contains coincident consecutive points")
-            if path_kind == "circular_arc" and len(path_points) == 3:
-                first = tuple(
-                    path_points[1][index] - path_points[0][index]
-                    for index in range(3)
-                )
-                second = tuple(
-                    path_points[2][index] - path_points[0][index]
-                    for index in range(3)
-                )
-                cross_value = (
-                    first[1] * second[2] - first[2] * second[1],
-                    first[2] * second[0] - first[0] * second[2],
-                    first[0] * second[1] - first[1] * second[0],
-                )
-                if math.sqrt(sum(value * value for value in cross_value)) <= 1e-6:
+            if path_kind != "seam":
+                path_points = [
+                    tuple(float(value) for value in target_port.position),
+                    *waypoints,
+                    tuple(float(value) for value in other_port.position),
+                ]
+                if any(
+                    math.sqrt(sum((b - a) ** 2 for a, b in zip(left, right))) <= 1e-6
+                    for left, right in zip(path_points, path_points[1:])
+                ):
                     errors.append(
-                        "circular_arc connect_ports start, midpoint, and end must be non-collinear"
+                        "connect_ports path contains coincident consecutive points"
                     )
+                if path_kind == "circular_arc" and len(path_points) == 3:
+                    first = tuple(
+                        path_points[1][index] - path_points[0][index]
+                        for index in range(3)
+                    )
+                    second = tuple(
+                        path_points[2][index] - path_points[0][index]
+                        for index in range(3)
+                    )
+                    cross_value = (
+                        first[1] * second[2] - first[2] * second[1],
+                        first[2] * second[0] - first[0] * second[2],
+                        first[0] * second[1] - first[1] * second[0],
+                    )
+                    if math.sqrt(sum(value * value for value in cross_value)) <= 1e-6:
+                        errors.append(
+                            "circular_arc connect_ports start, midpoint, and end must be non-collinear"
+                        )
 
     if action.module == "terminate":
         if params.get("termination_type") not in {"cap", "plug"}:
@@ -1741,16 +2152,31 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
         actuator_height = _float_param(params, "actuator_height", errors)
         actuator_axis = params.get("actuator_axis")
         if component_type == "valve":
-            if actuator_diameter is None or actuator_height is None or actuator_axis is None:
+            if (
+                actuator_diameter is None
+                or actuator_height is None
+                or actuator_axis is None
+            ):
                 errors.append("valve requires positive actuator dimensions and axis")
             axis_value = _validate_vector_value(actuator_axis, "actuator_axis", errors)
             pipe_axis = _canonical_vector(params.get("axis"))
             if axis_value is not None and pipe_axis is not None:
                 normalized_actuator = normalize(axis_value)
                 normalized_pipe = normalize(pipe_axis)
-                if abs(sum(a * b for a, b in zip(normalized_actuator, normalized_pipe))) > 1e-3:
-                    errors.append("valve actuator_axis must be perpendicular to pipe axis")
-        elif actuator_diameter is not None or actuator_height is not None or actuator_axis is not None:
+                if (
+                    abs(
+                        sum(a * b for a, b in zip(normalized_actuator, normalized_pipe))
+                    )
+                    > 1e-3
+                ):
+                    errors.append(
+                        "valve actuator_axis must be perpendicular to pipe axis"
+                    )
+        elif (
+            actuator_diameter is not None
+            or actuator_height is not None
+            or actuator_axis is not None
+        ):
             errors.append("actuator parameters are valid only for valve")
         flange_count = _int_param(params, "flange_bolt_count", errors)
         flange_circle = _float_param(params, "flange_bolt_circle_diameter", errors)
@@ -1768,14 +2194,28 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 or flange_circle - flange_hole <= outer_diameter
                 or flange_circle + flange_hole >= body_outer
             ):
-                errors.append("flange bolt circle/holes must fit inside the flange annulus")
+                errors.append(
+                    "flange bolt circle/holes must fit inside the flange annulus"
+                )
             reference_value = _validate_vector_value(
                 flange_reference, "flange_reference_axis", errors
             )
             pipe_axis = _canonical_vector(params.get("axis"))
             if reference_value is not None and pipe_axis is not None:
-                if abs(sum(a * b for a, b in zip(normalize(reference_value), normalize(pipe_axis)))) > 1e-3:
-                    errors.append("flange_reference_axis must be perpendicular to pipe axis")
+                if (
+                    abs(
+                        sum(
+                            a * b
+                            for a, b in zip(
+                                normalize(reference_value), normalize(pipe_axis)
+                            )
+                        )
+                    )
+                    > 1e-3
+                ):
+                    errors.append(
+                        "flange_reference_axis must be perpendicular to pipe axis"
+                    )
         elif (
             flange_count is not None
             or flange_circle is not None
@@ -1794,7 +2234,9 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 or body_length is None
                 or ring_length * 2.0 > body_length
             ):
-                errors.append("union rings must exceed the body and fit twice inside body_length")
+                errors.append(
+                    "union rings must exceed the body and fit twice inside body_length"
+                )
         elif ring_outer is not None or ring_length is not None:
             errors.append("union ring parameters are valid only for union")
         connector_type = params.get("connector_type_out")
@@ -1838,7 +2280,11 @@ def validate_action(action: ResolvedAction, state: PipeState) -> ValidationResul
                 "a non-plain output connector requires flange/coupling geometry touching the output end"
             )
 
-    return ValidationResult(valid=not errors, errors=errors)
+    return ValidationResult(
+        valid=not errors,
+        errors=errors,
+        diagnostics=diagnostics,
+    )
 
 
 def _validate_completion_claims(
@@ -1870,6 +2316,20 @@ def _validate_completion_claims(
                 f"one action cannot complete multiple {group} goals without "
                 f"double-counting geometry: {goal_ids}"
             )
+
+
+def _claims_start_anchor_connection(
+    affected_goal_ids: set[str],
+    state: PipeState,
+) -> bool:
+    """Return whether this action owns the typed START-seam closure goal."""
+
+    return any(
+        goal.goal_id in affected_goal_ids
+        and goal.type == "connect"
+        and goal.connection_target == "start_anchor"
+        for goal in state.remaining_goals
+    )
 
 
 def _validate_atomic_goal_binding(
@@ -1939,9 +2399,7 @@ def _validate_atomic_goal_binding(
             roles = []
             if isinstance(outlets, list):
                 roles = [
-                    outlet.get("role")
-                    for outlet in outlets
-                    if isinstance(outlet, dict)
+                    outlet.get("role") for outlet in outlets if isinstance(outlet, dict)
                 ]
             actual_primary_count = roles.count("primary")
             actual_branch_count = roles.count("branch")
@@ -1955,6 +2413,29 @@ def _validate_atomic_goal_binding(
                     f"expected primary={expected_primary_count}, "
                     f"branch={expected_branch_count}; actual roles={roles}"
                 )
+        if goal.type == "connect":
+            if module != "connect_ports":
+                errors.append(
+                    f"connect goal {goal_id} must be realized by connect_ports, not {module}"
+                )
+                continue
+            other_port_id = params.get("other_port_id")
+            anchor = state.reserved_start_anchor
+            if goal.connection_target == "start_anchor":
+                if anchor is None:
+                    errors.append(
+                        f"start_anchor connect goal {goal_id} has no reserved first inlet"
+                    )
+                elif other_port_id != anchor.id:
+                    errors.append(
+                        f"start_anchor connect goal {goal_id} must target reserved "
+                        f"port {anchor.id}, not {other_port_id}"
+                    )
+            elif anchor is not None and other_port_id == anchor.id:
+                errors.append(
+                    f"connect goal {goal_id} targets the reserved START inlet but "
+                    "declares connection_target=another_open_port"
+                )
 
 
 def _validate_goal_order_claims(
@@ -1962,17 +2443,33 @@ def _validate_goal_order_claims(
     completed_goal_ids: set[str],
     state: PipeState,
     errors: list[str],
+    *,
+    module: str,
+    params: dict[str, Any],
 ) -> None:
     completed_history = {
         goal_id
         for historical_action in state.action_history
         for goal_id in historical_action.completed_goal_ids
     }
+    goals_by_id = {
+        goal.goal_id: goal for goal in state.remaining_goals if goal.goal_id is not None
+    }
     for index, goal in enumerate(state.remaining_goals):
         goal_id = goal.goal_id
         if goal_id is None or goal_id not in affected_goal_ids:
             continue
-        missing_dependencies = set(goal.depends_on_goal_ids) - completed_history
+        missing_dependencies = {
+            dependency_id
+            for dependency_id in set(goal.depends_on_goal_ids) - completed_history
+            if not _same_action_dependency_is_provable(
+                dependent_goal=goal,
+                dependency_goal=goals_by_id.get(dependency_id),
+                completed_goal_ids=completed_goal_ids,
+                module=module,
+                params=params,
+            )
+        }
         if missing_dependencies:
             errors.append(
                 f"goal {goal_id} has incomplete dependencies: {sorted(missing_dependencies)}"
@@ -1982,13 +2479,34 @@ def _validate_goal_order_claims(
         bypassed = [
             str(prior.goal_id)
             for prior in state.remaining_goals[:index]
-            if prior.goal_id is not None
-            and prior.goal_id not in completed_goal_ids
+            if prior.goal_id is not None and prior.goal_id not in completed_goal_ids
         ]
         if bypassed:
             errors.append(
                 f"goal {goal_id} cannot bypass earlier pending goals {bypassed}"
             )
+
+
+def _same_action_dependency_is_provable(
+    *,
+    dependent_goal: Any,
+    dependency_goal: Any,
+    completed_goal_ids: set[str],
+    module: str,
+    params: dict[str, Any],
+) -> bool:
+    """Allow only a closure arc whose geometry proves its final turn dependency."""
+
+    if dependency_goal is None or dependency_goal.goal_id not in completed_goal_ids:
+        return False
+    return bool(
+        dependent_goal.type == "connect"
+        and dependent_goal.connection_target == "start_anchor"
+        and dependency_goal.type == "turn"
+        and dependent_goal.goal_id in completed_goal_ids
+        and module == "connect_ports"
+        and params.get("path_kind") == "circular_arc"
+    )
 
 
 def _validate_plain_connector_fields(
@@ -2020,7 +2538,10 @@ def _validate_vector_value(
     if vector is None:
         errors.append(f"{label} must be a 3D vector")
         return None
-    if not allow_zero and math.sqrt(sum(component * component for component in vector)) <= 1e-9:
+    if (
+        not allow_zero
+        and math.sqrt(sum(component * component for component in vector)) <= 1e-9
+    ):
         errors.append(f"{label} must not be a zero vector")
         return None
     return vector

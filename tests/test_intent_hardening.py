@@ -10,7 +10,11 @@ import pytest
 import cadgen.pipeline as pipeline
 from cadgen.config import load_settings
 from cadgen.gemini_client import (
+    GeminiBudgetError,
+    GeminiConfigError,
     GeminiInvalidRequestError,
+    GeminiRequestError,
+    HostContractValidationError,
     StructuredOutputIncompleteError,
 )
 from cadgen.prompts import intent_prompt, intent_system_instruction
@@ -18,7 +22,11 @@ from cadgen.schemas import (
     BranchGoalOutletSpec,
     GlobalSpec,
     Goal,
+    IntentRepairAdvice,
+    IntentRepairAdviceWire,
     IntentResult,
+    LLMIntentJSONEnvelope,
+    LLMProductionIntent,
     ProductionIntent,
 )
 
@@ -107,6 +115,70 @@ def _production_intent(
             "design_notes": [],
         }
     )
+
+
+def _llm_intent_envelope() -> LLMIntentJSONEnvelope:
+    wire = LLMProductionIntent.model_validate(
+        {
+            "global_spec": {
+                "outer_diameter": 20.0,
+                "wall_thickness": 2.0,
+                "is_hollow": True,
+                "units": "mm",
+            },
+            "start_position": [0.0, 0.0, 0.0],
+            "start_axis": [1.0, 0.0, 0.0],
+            "target_behavior": [
+                {
+                    "goal_id": "initial_straight_section",
+                    "depends_on_goal_ids": [],
+                    "allow_parallel": False,
+                    "type": "move",
+                    "direction": "+X",
+                    "length": 80.0,
+                },
+                {
+                    "goal_id": "coupling_installation",
+                    "depends_on_goal_ids": ["initial_straight_section"],
+                    "allow_parallel": False,
+                    "type": "connector",
+                    "length": 30.0,
+                    "component": "coupling",
+                },
+                {
+                    "goal_id": "diameter_reduction",
+                    "depends_on_goal_ids": ["coupling_installation"],
+                    "allow_parallel": False,
+                    "type": "diameter_change",
+                    "diameter_out": 12.0,
+                    "wall_thickness_out": 1.5,
+                    "transition_length": 40.0,
+                },
+                {
+                    "goal_id": "final_straight_section",
+                    "depends_on_goal_ids": ["diameter_reduction"],
+                    "allow_parallel": False,
+                    "type": "move",
+                    "direction": "+X",
+                    "length": 60.0,
+                },
+                {
+                    "goal_id": "end_cap",
+                    "depends_on_goal_ids": ["final_straight_section"],
+                    "allow_parallel": False,
+                    "type": "end",
+                    "end_type": "cap",
+                },
+            ],
+            "expected_open_ports": 0,
+            "expected_open_ports_source": "derived",
+            "required_components": ["coupling"],
+            "hard_constraints": [],
+            "geometric_constraints": [],
+            "design_notes": [],
+        }
+    )
+    return LLMIntentJSONEnvelope(intent_json=wire.model_dump_json())
 
 
 def test_intent_safety_rejects_tiny_dimension_and_lost_explicit_mm_values():
@@ -278,6 +350,78 @@ def test_sequential_heading_check_stops_at_parallel_goal_boundary():
     )
 
     assert pipeline._sequential_heading_issues(intent, _settings()) == []
+
+
+def test_branch_successor_preflight_rejects_latest_fixed_spline_contract():
+    intent = IntentResult(
+        global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
+        start_axis=(1.0, 0.0, 0.0),
+        target_behavior=[
+            Goal(goal_id="inlet", type="move", direction="+X", length=40.0),
+            Goal(
+                goal_id="first_junction",
+                depends_on_goal_ids=["inlet"],
+                type="branch",
+                required_outlet_directions=["+Y"],
+                include_primary_outlet=True,
+            ),
+            Goal(
+                goal_id="central_spline",
+                depends_on_goal_ids=["first_junction"],
+                type="route",
+                path_kind="spline",
+                waypoint_frame="relative_to_target",
+                waypoint_scale_policy="fixed",
+                required_waypoints=[
+                    (30.0, 0.0, 0.0),
+                    (60.0, 20.0, 20.0),
+                    (90.0, 0.0, 0.0),
+                ],
+            ),
+        ],
+    )
+
+    with pytest.raises(
+        ValueError,
+        match=r"central_spline fixed required-anchor spline is infeasible.*14\.242135",
+    ):
+        pipeline._validate_intent_safety(
+            "Create a Y branch followed by a qualitative spline.",
+            intent,
+            _settings(),
+        )
+
+
+def test_branch_successor_preflight_accepts_when_one_authored_outlet_is_feasible():
+    intent = IntentResult(
+        global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
+        start_axis=(1.0, 0.0, 0.0),
+        target_behavior=[
+            Goal(goal_id="inlet", type="move", direction="+X", length=40.0),
+            Goal(
+                goal_id="first_junction",
+                depends_on_goal_ids=["inlet"],
+                type="branch",
+                required_outlet_directions=["+Y"],
+                include_primary_outlet=True,
+            ),
+            Goal(
+                goal_id="central_spline",
+                depends_on_goal_ids=["first_junction"],
+                type="route",
+                path_kind="spline",
+                waypoint_frame="relative_to_target",
+                waypoint_scale_policy="fixed",
+                required_waypoints=[
+                    (30.0, 0.0, 0.0),
+                    (60.0, 0.0, 0.0),
+                    (90.0, 0.0, 0.0),
+                ],
+            ),
+        ],
+    )
+
+    assert pipeline._branch_successor_spline_issues(intent, _settings()) == []
 
 
 def test_relative_spline_curvature_uses_current_post_transition_diameter():
@@ -621,10 +765,920 @@ def test_intent_extraction_repairs_schema_valid_contract_without_lineage_reset()
     assert "[20.0, 2.0, 80.0, 30.0, 40.0, 12.0, 1.5, 60.0]" in (gemini.calls[1])
 
 
+def test_intent_scope_rejection_runs_advisor_then_reenters_authoring_loop(tmp_path):
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.prompts: list[str] = []
+            self.intent_calls = 0
+
+        def stream_structured(self, prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            self.prompts.append(prompt)
+            if part == "intent_repair_advisor":
+                return IntentRepairAdvice(
+                    diagnosis_class="candidate_contract_error",
+                    disposition="retry_intent",
+                    candidate_fixable=True,
+                    summary="The candidate invented an unsupported hard constraint.",
+                    causal_chain=[
+                        "The source request contains no such requirement.",
+                        "hard_constraints therefore blocks scope validation.",
+                    ],
+                    preserve_requirements=["all source-authored measurements"],
+                    change_fields=["/hard_constraints"],
+                    avoid=["dropping any source-authored requirement"],
+                    intent_instruction=(
+                        "Remove only the model-invented constraint and preserve the "
+                        "complete agenda."
+                    ),
+                )
+            self.intent_calls += 1
+            return _production_intent(
+                hard_constraints=(
+                    ["unsupported:model-invented decorative loop"]
+                    if self.intent_calls == 1
+                    else []
+                )
+            )
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+    attempts_path = tmp_path / "intent_attempts.json"
+    diagnostics_path = tmp_path / "intent_diagnostics.json"
+    gemini = FakeGemini()
+
+    result = pipeline._extract_intent(
+        PROMPT,
+        _settings(),
+        dry_run=False,
+        gemini=gemini,
+        attempt_journal=attempts,
+        attempt_journal_path=attempts_path,
+        diagnostic_journal=diagnostics,
+        diagnostic_journal_path=diagnostics_path,
+    )
+
+    assert result.hard_constraints == []
+    assert gemini.parts == ["intent", "intent_repair_advisor", "intent"]
+    assert [item["status"] for item in attempts] == ["rejected", "accepted"]
+    assert attempts[0]["phase"] == "intent_scope"
+    assert attempts[0]["issue_codes"] == ["UNSUPPORTED_HARD_CONSTRAINT"]
+    assert attempts[0]["advisor_status"] == "complete"
+    assert attempts[0]["advisor_disposition"] == "retry_intent"
+    assert attempts[1]["scope_validated"] is True
+    assert diagnostics[0]["rejected_candidate"]["hard_constraints"] == [
+        "unsupported:model-invented decorative loop"
+    ]
+    assert diagnostics[0]["advisor"]["disposition"] == "retry_intent"
+    assert diagnostics[0]["will_retry"] is True
+    retry_prompt = gemini.prompts[-1]
+    assert "UNSUPPORTED_HARD_CONSTRAINT" in retry_prompt
+    assert "model-invented decorative loop" in retry_prompt
+    assert "independent_advisor" in retry_prompt
+    assert json.loads(attempts_path.read_text(encoding="utf-8")) == attempts
+    assert json.loads(diagnostics_path.read_text(encoding="utf-8")) == diagnostics
+
+
+def test_explicit_closed_loop_capability_gap_is_diagnosed_without_blind_retry(
+    tmp_path,
+):
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            if part == "intent":
+                return _production_intent(
+                    hard_constraints=[
+                        "unsupported:마지막 구간은 시작 구간과 연결한 폐곡선이어야 한다"
+                    ]
+                )
+            return IntentRepairAdvice(
+                diagnosis_class="unsupported_user_requirement",
+                disposition="stop_contract_infeasible",
+                candidate_fixable=False,
+                summary=(
+                    "The anchored catalog cannot close one unbranched front back "
+                    "onto START without deleting the requested topology."
+                ),
+                causal_chain=[
+                    "The request explicitly requires one closed loop.",
+                    "The catalog begins with one construction front.",
+                    "connect requires two distinct open fronts.",
+                ],
+                preserve_requirements=["closed-loop path"],
+                change_fields=[],
+                avoid=["silently deleting the closed-loop requirement"],
+                intent_instruction="Do not retry until the catalog supports closure.",
+            )
+
+        def reset_lineage(self, unused_part):
+            raise AssertionError("a terminal capability diagnosis must not reset")
+
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+    gemini = FakeGemini()
+
+    with pytest.raises(
+        pipeline._IntentScopeValidationError,
+        match="UNSUPPORTED_HARD_CONSTRAINT",
+    ):
+        pipeline._extract_intent(
+            PROMPT + " 마지막 구간은 시작 구간과 연결한 폐곡선이어야 한다.",
+            replace(_settings(), intent_repair_attempts=5),
+            dry_run=False,
+            gemini=gemini,
+            attempt_journal=attempts,
+            diagnostic_journal=diagnostics,
+            diagnostic_journal_path=tmp_path / "intent_diagnostics.json",
+        )
+
+    assert gemini.parts == ["intent", "intent_repair_advisor"]
+    assert [item["status"] for item in attempts] == ["rejected"]
+    assert attempts[0]["will_retry"] is False
+    assert attempts[0]["terminal_reason"] == "stop_contract_infeasible"
+    assert diagnostics[0]["advisor"]["diagnosis_class"] == (
+        "unsupported_user_requirement"
+    )
+    assert diagnostics[0]["rejected_candidate"]["hard_constraints"] == [
+        "unsupported:마지막 구간은 시작 구간과 연결한 폐곡선이어야 한다"
+    ]
+
+
+def test_pipeline_preserves_scope_issue_and_reports_intent_advisor_audit(
+    monkeypatch,
+    tmp_path,
+):
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            if part == "intent":
+                return _production_intent(
+                    hard_constraints=[
+                        "unsupported:마지막 구간은 시작 구간과 연결한 폐곡선이어야 한다"
+                    ]
+                )
+            return IntentRepairAdvice(
+                diagnosis_class="unsupported_user_requirement",
+                disposition="stop_contract_infeasible",
+                candidate_fixable=False,
+                summary="The current catalog cannot realize closure to START.",
+                causal_chain=[
+                    "One unbranched construction front cannot satisfy connect."
+                ],
+                preserve_requirements=["closed-loop path"],
+                change_fields=[],
+                avoid=["dropping the closed-loop requirement"],
+                intent_instruction="Stop until a closure primitive is available.",
+            )
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    fake = FakeGemini()
+    monkeypatch.setattr(pipeline, "GeminiClient", lambda unused_settings: fake)
+    settings = replace(
+        _settings().with_overrides(output_dir=tmp_path, skip_freecad=True),
+        intent_repair_attempts=5,
+        stream_thinking_summary=False,
+    )
+
+    with pytest.raises(pipeline.StaticValidationError) as exc_info:
+        pipeline.run_pipeline(
+            PROMPT + " 마지막 구간은 시작 구간과 연결한 폐곡선이어야 한다.",
+            settings,
+        )
+
+    report_path = Path(exc_info.value.artifact_path)
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    attempts = json.loads(
+        (report_path.parent / "intent_attempts.json").read_text(encoding="utf-8")
+    )
+    diagnostics = json.loads(
+        (report_path.parent / "intent_diagnostics.json").read_text(encoding="utf-8")
+    )
+
+    assert fake.parts == ["intent", "intent_repair_advisor"]
+    assert report["failed_stage"] == "intent_scope"
+    assert report["top_issues"] == ["FINAL_01_UNSUPPORTED_HARD_CONSTRAINT"]
+    assert report["intent_attempt_count"] == 1
+    assert report["intent_repair_count"] == 0
+    assert report["intent_advisor_call_count"] == 1
+    assert report["intent_advisor_success_count"] == 1
+    assert report["intent_advisor_failure_count"] == 0
+    assert report["artifacts"]["intent_diagnostics_path"].endswith(
+        "intent_diagnostics.json"
+    )
+    assert attempts[0]["status"] == "rejected"
+    assert attempts[0]["phase"] == "intent_scope"
+    assert diagnostics[0]["advisor"]["disposition"] == ("stop_contract_infeasible")
+
+
+def test_identical_intent_and_scope_failure_stops_after_one_lineage_reset():
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.reset_calls: list[str] = []
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            if part == "intent":
+                return _production_intent(
+                    hard_constraints=["unsupported:model-invented constraint"]
+                )
+            return IntentRepairAdvice(
+                diagnosis_class="candidate_contract_error",
+                disposition="retry_intent",
+                candidate_fixable=True,
+                summary="Retry by changing the hard constraint mapping.",
+                causal_chain=["The same candidate field blocks intent scope."],
+                preserve_requirements=["all user-authored requirements"],
+                change_fields=["/hard_constraints"],
+                avoid=["repeating the identical candidate"],
+                intent_instruction="Return a materially changed complete intent.",
+            )
+
+        def reset_lineage(self, part):
+            self.reset_calls.append(part)
+
+    gemini = FakeGemini()
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+
+    with pytest.raises(pipeline._IntentScopeValidationError):
+        pipeline._extract_intent(
+            PROMPT,
+            replace(_settings(), intent_repair_attempts=8),
+            dry_run=False,
+            gemini=gemini,
+            attempt_journal=attempts,
+            diagnostic_journal=diagnostics,
+        )
+
+    assert gemini.parts == [
+        "intent",
+        "intent_repair_advisor",
+        "intent",
+        "intent_repair_advisor",
+        "intent",
+    ]
+    assert gemini.reset_calls == ["intent"]
+    assert len(attempts) == 3
+    assert [item["exact_failure_repeat_count"] for item in attempts] == [1, 2, 3]
+    assert attempts[-1]["will_retry"] is False
+    assert attempts[-1]["terminal_reason"] == ("identical_intent_failure_stagnation")
+    assert diagnostics[-1]["terminal_reason"] == ("identical_intent_failure_stagnation")
+
+
+def _noncardinal_straight_candidate(*, repaired: bool) -> IntentResult:
+    straight_after_turn = (
+        Goal(
+            goal_id="G3",
+            depends_on_goal_ids=["G2"],
+            type="route",
+            path_kind="line",
+            length=40.0,
+        )
+        if repaired
+        else Goal(
+            goal_id="G3",
+            depends_on_goal_ids=["G2"],
+            type="move",
+            direction="+X",
+            length=40.0,
+        )
+    )
+    return IntentResult(
+        global_spec=GlobalSpec(outer_diameter=20.0, wall_thickness=2.0),
+        start_axis=(1.0, 0.0, 0.0),
+        target_behavior=[
+            Goal(goal_id="G1", type="move", direction="+X", length=40.0),
+            Goal(
+                goal_id="G2",
+                depends_on_goal_ids=["G1"],
+                type="turn",
+                angle=60.0,
+                plane_normal=(0.0, 0.0, 1.0),
+                bend_radius=20.0,
+            ),
+            straight_after_turn,
+        ],
+        expected_open_ports=1,
+        expected_open_ports_source="derived",
+        hard_constraints=(
+            [] if repaired else ["unsupported:latent candidate constraint"]
+        ),
+    )
+
+
+def test_advisor_host_rejections_feed_secondary_reviewer_and_author_retry():
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_intent_repair_reviewer = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.prompts: list[str] = []
+            self.intent_calls = 0
+
+        def stream_structured(self, prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            self.prompts.append(prompt)
+            if part == "intent":
+                self.intent_calls += 1
+                return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+            if part == "intent_repair_advisor":
+                return IntentRepairAdvice(
+                    diagnosis_class="unsupported_user_requirement",
+                    disposition="stop_contract_infeasible",
+                    candidate_fixable=False,
+                    summary="Incorrectly focused on a latent candidate field.",
+                    causal_chain=["A latent hard constraint was present."],
+                    preserve_requirements=["all measurements"],
+                    change_fields=[],
+                    avoid=["retry"],
+                    intent_instruction="Stop.",
+                )
+            return IntentRepairAdvice(
+                diagnosis_class="candidate_contract_error",
+                disposition="retry_intent",
+                candidate_fixable=True,
+                summary="The current heading failure is repairable.",
+                causal_chain=[
+                    "A cardinal move cannot follow a non-cardinal turn tangent."
+                ],
+                preserve_requirements=["both 40 mm straight lengths", "60 degree turn"],
+                change_fields=["/target_behavior/2"],
+                avoid=["resetting the straight to +X"],
+                intent_instruction=(
+                    "Use a length-only line route that inherits the incoming tangent."
+                ),
+            )
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    gemini = FakeGemini()
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        _settings(),
+        dry_run=False,
+        gemini=gemini,
+        attempt_journal=attempts,
+        diagnostic_journal=diagnostics,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    assert gemini.parts == [
+        "intent",
+        "intent_repair_advisor",
+        "intent_repair_advisor",
+        "intent_repair_reviewer",
+        "intent",
+    ]
+    second_advisor_prompt = json.loads(gemini.prompts[2])
+    assert len(second_advisor_prompt["prior_advisor_rejections"]) == 1
+    assert (
+        second_advisor_prompt["prior_advisor_rejections"][0]["host_rejection"]["code"]
+        == "CURRENT_BLOCKER_REQUIRES_REPAIR"
+    )
+    assert attempts[0]["will_retry"] is True
+    assert attempts[0]["advisor_source"] == "secondary_reviewer"
+    assert diagnostics[0]["advisor_fallback_used"] is True
+    assert [item["status"] for item in diagnostics[0]["advisor_attempts"]] == [
+        "host_rejected",
+        "host_rejected",
+        "accepted",
+    ]
+
+
+def test_required_advisor_chain_failure_degrades_to_evidence_only_author_retry():
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_intent_repair_reviewer = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.intent_calls = 0
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            if part == "intent":
+                self.intent_calls += 1
+                return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+            raise GeminiRequestError(f"{part} unavailable")
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    gemini = FakeGemini()
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        replace(_settings(), intent_repair_advisor_required=True),
+        dry_run=False,
+        gemini=gemini,
+        attempt_journal=attempts,
+        diagnostic_journal=diagnostics,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    assert gemini.parts == [
+        "intent",
+        "intent_repair_advisor",
+        "intent_repair_advisor",
+        "intent_repair_reviewer",
+        "intent",
+    ]
+    assert attempts[0]["will_retry"] is True
+    assert attempts[0]["terminal_reason"] is None
+    assert attempts[0]["advisor_source"] == "deterministic_evidence_only"
+    assert attempts[0]["advisor_fallback_used"] is True
+    assert diagnostics[0]["advisor_status"] == "degraded_fallback"
+    assert diagnostics[0]["advisor_required"] is True
+
+
+def _terminal_capability_advice() -> IntentRepairAdvice:
+    return IntentRepairAdvice(
+        diagnosis_class="unsupported_user_requirement",
+        disposition="stop_contract_infeasible",
+        candidate_fixable=False,
+        summary="The current catalog cannot realize the requirement.",
+        causal_chain=["The current issue reports an unsupported capability."],
+        preserve_requirements=["the unsupported requirement"],
+        change_fields=[],
+        avoid=["dropping the requirement"],
+        intent_instruction="Preserve the blocking requirement.",
+    )
+
+
+def test_mixed_scope_issues_cannot_grant_advisor_terminal_authority():
+    validation_details = [
+        {
+            "issue_code": "NON_BINARY_BRANCH_CONTRACT",
+            "actual": {"nonbinary_branch_goal_ids": ["branch"]},
+        },
+        {
+            "issue_code": "UNSUPPORTED_HARD_CONSTRAINT",
+            "actual": {"source_provenance_complete": True},
+        },
+    ]
+
+    with pytest.raises(
+        pipeline._IntentAdvisorAuthorityError,
+        match="only current unsupported capability issues",
+    ) as exc_info:
+        pipeline._validate_intent_repair_advice_authority(
+            _terminal_capability_advice(),
+            validation_details,
+        )
+
+    assert exc_info.value.code == "CURRENT_BLOCKER_REQUIRES_REPAIR"
+
+
+def test_unsupported_scope_requires_deterministic_source_provenance_to_stop():
+    validation_details = [
+        {
+            "issue_code": "UNSUPPORTED_HARD_CONSTRAINT",
+            "actual": {
+                "hard_constraints": ["unsupported:model-invented constraint"],
+                "source_provenance_complete": False,
+            },
+        }
+    ]
+
+    with pytest.raises(pipeline._IntentAdvisorAuthorityError) as exc_info:
+        pipeline._validate_intent_repair_advice_authority(
+            _terminal_capability_advice(),
+            validation_details,
+        )
+
+    assert exc_info.value.code == "TERMINAL_SOURCE_PROVENANCE_REQUIRED"
+
+
+@pytest.mark.parametrize(
+    "advisor_error",
+    [GeminiBudgetError("advisor budget"), GeminiConfigError("advisor config")],
+    ids=["budget", "config"],
+)
+def test_advisor_capacity_failure_skips_reviewer_and_retries_author(
+    advisor_error,
+):
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_intent_repair_reviewer = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.intent_calls = 0
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            if part == "intent":
+                self.intent_calls += 1
+                return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+            raise advisor_error
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    gemini = FakeGemini()
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        _settings(),
+        dry_run=False,
+        gemini=gemini,
+        attempt_journal=attempts,
+        diagnostic_journal=diagnostics,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    assert gemini.parts == ["intent", "intent_repair_advisor", "intent"]
+    assert attempts[0]["advisor_source"] == "deterministic_evidence_only"
+    assert diagnostics[0]["advisor_attempts"][0]["status"] == "provider_failed"
+
+
+def test_advisor_call_reserve_bypasses_advisors_for_author_retry():
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_intent_repair_reviewer = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.intent_calls = 0
+
+        def remaining_call_budget(self):
+            return 1
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            assert part == "intent"
+            self.intent_calls += 1
+            return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    gemini = FakeGemini()
+    diagnostics: list[dict] = []
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        _settings(),
+        dry_run=False,
+        gemini=gemini,
+        diagnostic_journal=diagnostics,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    assert gemini.parts == ["intent", "intent"]
+    assert diagnostics[0]["advisor_source"] == "deterministic_evidence_only"
+    assert diagnostics[0]["advisor_attempts"][0]["status"] == (
+        "skipped_author_call_reserve"
+    )
+
+
+def test_last_author_attempt_does_not_spend_advisor_calls():
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_intent_repair_reviewer = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            assert part == "intent"
+            return _noncardinal_straight_candidate(repaired=False)
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    gemini = FakeGemini()
+    attempts: list[dict] = []
+    diagnostics: list[dict] = []
+    with pytest.raises(pipeline._IntentSafetyValidationError):
+        pipeline._extract_intent(
+            "Create two 40 mm straights separated by a 60 degree turn.",
+            replace(_settings(), intent_repair_attempts=0),
+            dry_run=False,
+            gemini=gemini,
+            attempt_journal=attempts,
+            diagnostic_journal=diagnostics,
+        )
+
+    assert gemini.parts == ["intent"]
+    assert attempts[0]["advisor_status"] == "skipped_no_author_repair_budget"
+    assert attempts[0]["terminal_reason"] == "intent_repair_budget_exhausted"
+
+
+def test_wire_host_rejection_preserves_raw_response_for_advisor_retry():
+    class FakeGemini:
+        supports_intent_repair_advisor = True
+        supports_intent_repair_reviewer = True
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.prompts: list[str] = []
+            self.intent_calls = 0
+            self.advisor_calls = 0
+
+        def stream_structured(self, prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            self.prompts.append(prompt)
+            if part == "intent":
+                self.intent_calls += 1
+                return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+            assert part == "intent_repair_advisor"
+            self.advisor_calls += 1
+            if self.advisor_calls == 1:
+                return IntentRepairAdviceWire(
+                    diagnosis_class="candidate_contract_error",
+                    disposition="retry_intent",
+                    candidate_fixable=False,
+                    summary="Relationally invalid retry response.",
+                    causal_chain=["The response omitted a valid repair scope."],
+                    preserve_requirements=["all source requirements"],
+                    change_fields=[],
+                    avoid=["repeating the candidate"],
+                    intent_instruction="Retry.",
+                )
+            return IntentRepairAdvice(
+                diagnosis_class="candidate_contract_error",
+                disposition="retry_intent",
+                candidate_fixable=True,
+                summary="Repair the current heading contract.",
+                causal_chain=["The straight direction contradicts its inlet."],
+                preserve_requirements=["all source requirements"],
+                change_fields=["/target_behavior/2"],
+                avoid=["repeating the cardinal direction"],
+                intent_instruction="Use a route that inherits the inlet heading.",
+            )
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    gemini = FakeGemini()
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        _settings(),
+        dry_run=False,
+        gemini=gemini,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    retry_context = json.loads(gemini.prompts[2])
+    rejected_response = retry_context["prior_advisor_rejections"][0][
+        "rejected_response"
+    ]
+    assert rejected_response["disposition"] == "retry_intent"
+    assert rejected_response["candidate_fixable"] is False
+
+
+def test_disabled_advisor_records_deterministic_evidence_fallback():
+    class FakeGemini:
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.parts: list[str] = []
+            self.intent_calls = 0
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            part = kwargs["part"]
+            self.parts.append(part)
+            assert part == "intent"
+            self.intent_calls += 1
+            return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    diagnostics: list[dict] = []
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        replace(_settings(), intent_repair_advisor_enabled=False),
+        dry_run=False,
+        gemini=FakeGemini(),
+        diagnostic_journal=diagnostics,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    assert diagnostics[0]["advisor_status"] == "disabled"
+    assert diagnostics[0]["advisor_source"] == "deterministic_evidence_only"
+    assert diagnostics[0]["advisor_fallback_used"] is True
+
+
+def test_unsupported_advisor_client_records_deterministic_evidence_fallback():
+    class FakeGemini:
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.intent_calls = 0
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            assert kwargs["part"] == "intent"
+            self.intent_calls += 1
+            return _noncardinal_straight_candidate(repaired=self.intent_calls > 1)
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    diagnostics: list[dict] = []
+    result = pipeline._extract_intent(
+        "Create two 40 mm straights separated by a 60 degree turn.",
+        _settings(),
+        dry_run=False,
+        gemini=FakeGemini(),
+        diagnostic_journal=diagnostics,
+    )
+
+    assert result.target_behavior[-1].type == "route"
+    assert diagnostics[0]["advisor_status"] == "unsupported_by_client"
+    assert diagnostics[0]["advisor_source"] == "deterministic_evidence_only"
+    assert diagnostics[0]["advisor_fallback_used"] is True
+
+
+def test_semantic_exhaustion_reports_validator_issue_instead_of_generic_error(
+    monkeypatch,
+    tmp_path,
+):
+    class FakeGemini:
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            assert kwargs["part"] == "intent"
+            return _noncardinal_straight_candidate(repaired=False)
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    monkeypatch.setattr(pipeline, "GeminiClient", lambda unused_settings: FakeGemini())
+    settings = replace(
+        _settings().with_overrides(output_dir=tmp_path, skip_freecad=True),
+        intent_repair_attempts=1,
+        stream_thinking_summary=False,
+    )
+
+    with pytest.raises(pipeline.StaticValidationError) as exc_info:
+        pipeline.run_pipeline(
+            "Create two 40 mm straights separated by a 60 degree turn.",
+            settings,
+        )
+
+    report = json.loads(Path(exc_info.value.artifact_path).read_text(encoding="utf-8"))
+    assert report["failed_stage"] == "intent_semantic_validation"
+    assert report["top_issues"] == ["FINAL_01_INTENT_SAFETY_CONTRACT"]
+    assert report["intent_attempt_count"] == 2
+    assert report["intent_repair_count"] == 1
+
+
+def test_host_contract_exhaustion_preserves_actual_validator_issue(
+    monkeypatch,
+    tmp_path,
+):
+    class FakeGemini:
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            assert kwargs["part"] == "intent"
+            raise HostContractValidationError(
+                "intent",
+                {"candidate": "provider-wire-valid"},
+                ValueError("host relational contract mismatch"),
+            )
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    monkeypatch.setattr(pipeline, "GeminiClient", lambda unused_settings: FakeGemini())
+    settings = replace(
+        _settings().with_overrides(output_dir=tmp_path, skip_freecad=True),
+        intent_repair_attempts=1,
+        stream_thinking_summary=False,
+    )
+
+    with pytest.raises(pipeline.StaticValidationError) as exc_info:
+        pipeline.run_pipeline("Create a valid hollow pipe.", settings)
+
+    report = json.loads(Path(exc_info.value.artifact_path).read_text(encoding="utf-8"))
+    assert report["failed_stage"] == "intent_semantic_validation"
+    assert report["top_issues"] == ["FINAL_01_INTENT_STRUCTURED_OR_HOST_CONTRACT"]
+    critic = json.loads(
+        (Path(exc_info.value.artifact_path).parent / "critic_report.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert critic["issues"][0]["actual"]["error_type"] == (
+        "HostContractValidationError"
+    )
+    diagnostics = json.loads(
+        (
+            Path(exc_info.value.artifact_path).parent / "intent_diagnostics.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert len(diagnostics) == 2
+    assert diagnostics[-1]["issue_codes"] == ["INTENT_STRUCTURED_OR_HOST_CONTRACT"]
+
+
+def test_budget_after_semantic_rejection_preserves_last_validator_issue(
+    monkeypatch,
+    tmp_path,
+):
+    class FakeGemini:
+        supports_system_instruction = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.intent_calls = 0
+
+        def stream_structured(self, unused_prompt, unused_schema, **kwargs):
+            assert kwargs["part"] == "intent"
+            self.intent_calls += 1
+            if self.intent_calls == 1:
+                return _noncardinal_straight_candidate(repaired=False)
+            raise GeminiBudgetError("global call ceiling reached")
+
+        def reset_lineage(self, unused_part):
+            return None
+
+    monkeypatch.setattr(pipeline, "GeminiClient", lambda unused_settings: FakeGemini())
+    settings = replace(
+        _settings().with_overrides(output_dir=tmp_path, skip_freecad=True),
+        intent_repair_attempts=2,
+        intent_repair_advisor_enabled=False,
+        stream_thinking_summary=False,
+    )
+
+    with pytest.raises(pipeline.StaticValidationError) as exc_info:
+        pipeline.run_pipeline(
+            "Create two 40 mm straights separated by a 60 degree turn.",
+            settings,
+        )
+
+    report = json.loads(Path(exc_info.value.artifact_path).read_text(encoding="utf-8"))
+    assert report["failed_stage"] == "intent_semantic_validation"
+    assert report["top_issues"] == ["FINAL_01_INTENT_SAFETY_CONTRACT"]
+
+
 def test_incomplete_intent_is_discarded_and_retried_as_fresh_llm_output():
     class FakeGemini:
         supports_interaction_controls = True
         supports_numeric_literals = True
+        supports_numeric_schema_modes = True
 
         def __init__(self):
             self.calls = []
@@ -637,9 +1691,10 @@ def test_incomplete_intent_is_discarded_and_retried_as_fresh_llm_output():
             *,
             part,
             thinking_level,
-            numeric_literals,
+            numeric_schema_mode,
         ):
-            del schema, numeric_literals
+            del schema
+            assert numeric_schema_mode == "plain"
             self.calls.append((prompt, part, thinking_level))
             if len(self.calls) == 1:
                 raise StructuredOutputIncompleteError(
@@ -676,7 +1731,7 @@ def test_incomplete_intent_is_discarded_and_retried_as_fresh_llm_output():
     assert "thought_tokens=16000" in retry_prompt
 
 
-def test_spline_semantic_repair_escalates_reasoning_without_losing_signed_enum(
+def test_spline_semantic_repair_escalates_reasoning_with_plain_schema_sticky(
     tmp_path,
 ):
     def candidate(points):
@@ -699,6 +1754,7 @@ def test_spline_semantic_repair_escalates_reasoning_without_losing_signed_enum(
     class FakeGemini:
         supports_interaction_controls = True
         supports_numeric_literals = True
+        supports_numeric_schema_modes = True
         supports_system_instruction = True
 
         def __init__(self):
@@ -730,9 +1786,11 @@ def test_spline_semantic_repair_escalates_reasoning_without_losing_signed_enum(
     assert result.target_behavior[0].required_waypoints[-1] == (60.0, 30.0, 0.0)
     assert len(gemini.calls) == 2
     assert gemini.calls[0][1]["thinking_level"] == "low"
-    assert "numeric_literals" in gemini.calls[0][1]
+    assert gemini.calls[0][1]["numeric_schema_mode"] == "plain"
+    assert "numeric_literals" not in gemini.calls[0][1]
     assert gemini.calls[1][1]["thinking_level"] == "medium"
-    assert "numeric_literals" in gemini.calls[1][1]
+    assert gemini.calls[1][1]["numeric_schema_mode"] == "plain"
+    assert "numeric_literals" not in gemini.calls[1][1]
     assert "bounded decimal-object representation" not in gemini.calls[1][0]
     assert "Validation diagnostic history" in gemini.calls[1][0]
     assert gemini.reset_calls == []
@@ -759,6 +1817,7 @@ def test_persistent_incomplete_intent_exhausts_llm_attempts_without_fallback(
     class FakeGemini:
         supports_interaction_controls = True
         supports_numeric_literals = True
+        supports_numeric_schema_modes = True
 
         def __init__(self):
             self.calls = []
@@ -771,9 +1830,10 @@ def test_persistent_incomplete_intent_exhausts_llm_attempts_without_fallback(
             *,
             part,
             thinking_level,
-            numeric_literals,
+            numeric_schema_mode,
         ):
-            del schema, numeric_literals
+            del schema
+            assert numeric_schema_mode == "plain"
             self.calls.append((prompt, part, thinking_level))
             raise StructuredOutputIncompleteError(
                 "intent",
@@ -802,18 +1862,100 @@ def test_persistent_incomplete_intent_exhausts_llm_attempts_without_fallback(
     assert all("DO_NOT_ECHO" not in call[0] for call in gemini.calls)
 
 
-def test_oversized_intent_numeric_vocabulary_uses_encoded_decimal_schema(
+def test_wire_success_domain_failure_uses_semantic_repair_not_protocol_retry():
+    def wire(*, inverted_box: bool) -> LLMProductionIntent:
+        return LLMProductionIntent.model_validate(
+            {
+                "global_spec": {
+                    "outer_diameter": 20.0,
+                    "wall_thickness": 2.0,
+                    "is_hollow": True,
+                    "units": "mm",
+                },
+                "start_position": [0.0, 0.0, 0.0],
+                "start_axis": [1.0, 0.0, 0.0],
+                "target_behavior": [
+                    {
+                        "goal_id": "G1",
+                        "depends_on_goal_ids": [],
+                        "allow_parallel": False,
+                        "type": "move",
+                        "direction": "+X",
+                        "length": 80.0,
+                    }
+                ],
+                "expected_open_ports": 1,
+                "expected_open_ports_source": "derived",
+                "required_components": [],
+                "hard_constraints": [],
+                "geometric_constraints": [
+                    {
+                        "constraint_id": "box",
+                        "type": "bounding_box",
+                        "minimum": (
+                            [10.0, 10.0, 10.0]
+                            if inverted_box
+                            else [-10.0, -10.0, -10.0]
+                        ),
+                        "maximum": [0.0, 0.0, 0.0]
+                        if inverted_box
+                        else [100.0, 10.0, 10.0],
+                    }
+                ],
+                "design_notes": [],
+            }
+        )
+
+    class FakeGemini:
+        supports_interaction_controls = True
+        supports_numeric_literals = True
+
+        def __init__(self):
+            self.calls = []
+
+        def stream_structured(self, prompt, unused_schema, **kwargs):
+            self.calls.append((prompt, kwargs))
+            return wire(inverted_box=len(self.calls) == 1)
+
+        def reset_lineage(self, unused_part):
+            raise AssertionError("first semantic correction should keep lineage")
+
+    journal = []
+    result = pipeline._extract_intent(
+        "Create an 80 mm straight pipe inside the authored bounds.",
+        _settings(),
+        dry_run=False,
+        gemini=FakeGemini(),
+        attempt_journal=journal,
+    )
+
+    assert result.target_behavior[0].length == 80.0
+    assert [item["phase"] for item in journal] == [
+        "semantic_validation",
+        "semantic_validation",
+    ]
+    assert journal[0]["provider_response_received"] is True
+    assert journal[0]["parsed_intent"] is False
+    assert journal[0]["consumes_semantic_budget"] is True
+    assert journal[0]["structured_retry_attempt"] == 0
+    assert "bounding_box" in journal[0]["diagnostic"]
+
+
+def test_intent_plain_numeric_schema_does_not_depend_on_enum_capacity(
     monkeypatch,
 ):
     monkeypatch.setattr(
         pipeline,
         "_intent_numeric_literals",
-        lambda prompt, settings: [str(index) for index in range(97)],
+        lambda prompt, settings: (_ for _ in ()).throw(
+            AssertionError("plain intent schema must not build a numeric enum")
+        ),
     )
 
     class FakeGemini:
         supports_interaction_controls = True
         supports_numeric_literals = True
+        supports_numeric_schema_modes = True
 
         def __init__(self):
             self.calls = []
@@ -834,27 +1976,28 @@ def test_oversized_intent_numeric_vocabulary_uses_encoded_decimal_schema(
     assert result.target_behavior[0].length == 80.0
     assert len(gemini.calls) == 1
     assert "numeric_literals" not in gemini.calls[0][1]
-    assert "bounded decimal-object representation" in gemini.calls[0][0]
+    assert gemini.calls[0][1]["numeric_schema_mode"] == "plain"
+    assert "bounded decimal-object representation" not in gemini.calls[0][0]
 
 
-def test_intent_invalid_enum_request_falls_back_once_to_encoded_schema():
+def test_intent_invalid_plain_request_falls_back_to_host_validated_envelope():
     class FakeGemini:
         supports_interaction_controls = True
         supports_numeric_literals = True
+        supports_numeric_schema_modes = True
 
         def __init__(self):
             self.calls = []
             self.reset_calls = []
 
         def stream_structured(self, prompt, schema, **kwargs):
-            del schema
-            self.calls.append((prompt, kwargs))
+            self.calls.append((prompt, schema, kwargs))
             if len(self.calls) == 1:
                 raise GeminiInvalidRequestError(
                     "400 invalid_argument: response schema could not compile",
                     provider_code="invalid_argument",
                 )
-            return _production_intent()
+            return _llm_intent_envelope()
 
         def reset_lineage(self, part):
             self.reset_calls.append(part)
@@ -869,10 +2012,14 @@ def test_intent_invalid_enum_request_falls_back_once_to_encoded_schema():
 
     assert result.target_behavior[0].length == 80.0
     assert len(gemini.calls) == 2
-    assert "numeric_literals" in gemini.calls[0][1]
-    assert "numeric_literals" not in gemini.calls[1][1]
+    assert gemini.calls[0][1] is LLMProductionIntent
+    assert gemini.calls[1][1] is LLMIntentJSONEnvelope
+    assert gemini.calls[0][2]["numeric_schema_mode"] == "plain"
+    assert gemini.calls[1][2]["numeric_schema_mode"] == "plain"
+    assert "numeric_literals" not in gemini.calls[0][2]
+    assert "numeric_literals" not in gemini.calls[1][2]
     assert gemini.reset_calls == ["intent"]
-    assert "bounded decimal-object representation" in gemini.calls[1][0]
+    assert "Set intent_json to a JSON-encoded string" in gemini.calls[1][0]
 
 
 def test_intent_schema_fallback_does_not_consume_zero_semantic_repair_budget():
@@ -881,20 +2028,20 @@ def test_intent_schema_fallback_does_not_consume_zero_semantic_repair_budget():
     class FakeGemini:
         supports_interaction_controls = True
         supports_numeric_literals = True
+        supports_numeric_schema_modes = True
 
         def __init__(self):
             self.calls = []
             self.reset_calls = []
 
         def stream_structured(self, prompt, schema, **kwargs):
-            del schema
-            self.calls.append((prompt, kwargs))
+            self.calls.append((prompt, schema, kwargs))
             if len(self.calls) == 1:
                 raise GeminiInvalidRequestError(
                     "400 invalid_argument: response schema could not compile",
                     provider_code="invalid_argument",
                 )
-            return _production_intent()
+            return _llm_intent_envelope()
 
         def reset_lineage(self, part):
             self.reset_calls.append(part)
@@ -910,8 +2057,94 @@ def test_intent_schema_fallback_does_not_consume_zero_semantic_repair_budget():
     assert result.target_behavior[0].length == 80.0
     assert len(gemini.calls) == 2
     assert gemini.reset_calls == ["intent"]
-    assert "numeric_literals" in gemini.calls[0][1]
-    assert "numeric_literals" not in gemini.calls[1][1]
+    assert gemini.calls[0][2]["numeric_schema_mode"] == "plain"
+    assert gemini.calls[1][2]["numeric_schema_mode"] == "plain"
+
+
+def test_schema_negotiation_does_not_consume_malformed_output_retry_budget():
+    class FakeGemini:
+        supports_interaction_controls = True
+        supports_numeric_literals = True
+        supports_numeric_schema_modes = True
+
+        def __init__(self):
+            self.calls = []
+            self.reset_calls = []
+
+        def stream_structured(self, prompt, schema, **kwargs):
+            self.calls.append((prompt, schema, kwargs))
+            if len(self.calls) == 1:
+                raise GeminiInvalidRequestError(
+                    "400 invalid_argument: response schema could not compile",
+                    provider_code="invalid_argument",
+                )
+            if len(self.calls) == 2:
+                return LLMIntentJSONEnvelope(intent_json='{"global_spec":')
+            return _llm_intent_envelope()
+
+        def reset_lineage(self, part):
+            self.reset_calls.append(part)
+
+    gemini = FakeGemini()
+    result = pipeline._extract_intent(
+        PROMPT,
+        _settings(),
+        dry_run=False,
+        gemini=gemini,
+    )
+
+    assert result.target_behavior[0].length == 80.0
+    assert [call[1] for call in gemini.calls] == [
+        LLMProductionIntent,
+        LLMIntentJSONEnvelope,
+        LLMIntentJSONEnvelope,
+    ]
+    assert all(call[2]["numeric_schema_mode"] == "plain" for call in gemini.calls)
+    assert all("numeric_literals" not in call[2] for call in gemini.calls)
+    assert "The prior attempt was discarded" in gemini.calls[2][0]
+    assert gemini.reset_calls == ["intent", "intent"]
+
+
+def test_all_intent_provider_schema_profiles_rejected_are_fully_journaled():
+    class FakeGemini:
+        supports_interaction_controls = True
+        supports_numeric_schema_modes = True
+
+        def __init__(self):
+            self.calls = []
+            self.reset_calls = []
+
+        def stream_structured(self, prompt, schema, **kwargs):
+            self.calls.append((prompt, schema, kwargs))
+            raise GeminiInvalidRequestError(
+                "400 invalid_argument: response schema could not compile",
+                provider_code="invalid_argument",
+            )
+
+        def reset_lineage(self, part):
+            self.reset_calls.append(part)
+
+    journal = []
+    gemini = FakeGemini()
+    with pytest.raises(GeminiInvalidRequestError):
+        pipeline._extract_intent(
+            PROMPT,
+            replace(_settings(), intent_repair_attempts=0),
+            dry_run=False,
+            gemini=gemini,
+            attempt_journal=journal,
+        )
+
+    assert [call[1] for call in gemini.calls] == [
+        LLMProductionIntent,
+        LLMIntentJSONEnvelope,
+    ]
+    assert [item["status"] for item in journal] == [
+        "schema_retry",
+        "schema_rejected",
+    ]
+    assert [item["schema_retry_attempt"] for item in journal] == [1, 2]
+    assert all(item["consumes_semantic_budget"] is False for item in journal)
 
 
 def test_intent_repair_diagnostic_does_not_echo_malformed_raw_json():

@@ -105,14 +105,90 @@ def _branch_payload(outlet_contract: dict) -> dict:
     return payload
 
 
+def test_geometric_constraint_variants_are_structurally_closed_at_provider_boundary():
+    schema = gemini_json_schema(LLMProductionIntent)
+    items = schema["properties"]["geometric_constraints"]["items"]
+    variants = {
+        schema["$defs"][item["$ref"].rsplit("/", 1)[-1]]["properties"]["type"]["enum"][
+            0
+        ]: schema["$defs"][item["$ref"].rsplit("/", 1)[-1]]
+        for item in items["anyOf"]
+    }
+
+    assert set(variants["max_extent"]["required"]) == {
+        "constraint_id",
+        "type",
+        "axis",
+        "value",
+    }
+    assert set(variants["bounding_box"]["required"]) == {
+        "constraint_id",
+        "type",
+        "minimum",
+        "maximum",
+    }
+    assert all(
+        variant["additionalProperties"] is False for variant in variants.values()
+    )
+
+    actual_failure = _exact_prompt_payload()
+    actual_failure["geometric_constraints"] = [
+        {
+            "constraint_id": "limit_star_extent",
+            "type": "max_extent",
+            "minimum": [0.0, 0.0, 0.0],
+            "maximum": [1000.0, 1000.0, 1000.0],
+        }
+    ]
+    with pytest.raises(JSONSchemaValidationError):
+        Draft202012Validator(schema).validate(actual_failure)
+
+    fractional_count = _exact_prompt_payload()
+    fractional_count["geometric_constraints"] = [
+        {
+            "constraint_id": "module_limit",
+            "type": "max_module_count",
+            "value": 3.5,
+        }
+    ]
+    with pytest.raises(JSONSchemaValidationError):
+        Draft202012Validator(schema).validate(fractional_count)
+
+
+def test_geometric_constraint_wire_and_domain_semantics_are_separate():
+    valid = _exact_prompt_payload()
+    valid["geometric_constraints"] = [
+        {
+            "constraint_id": "x_limit",
+            "type": "max_extent",
+            "axis": "+X",
+            "value": 1000.0,
+        }
+    ]
+    intent = LLMProductionIntent.model_validate(valid).to_production_intent()
+    assert intent.geometric_constraints[0].axis == "+X"
+    assert intent.geometric_constraints[0].value == 1000.0
+
+    inverted = _exact_prompt_payload()
+    inverted["geometric_constraints"] = [
+        {
+            "constraint_id": "box",
+            "type": "bounding_box",
+            "minimum": [500.0, 500.0, 0.0],
+            "maximum": [-500.0, -500.0, 1.0],
+        }
+    ]
+    wire = LLMProductionIntent.model_validate(inverted)
+    with pytest.raises(ValidationError, match="minimum must be below maximum"):
+        wire.to_production_intent()
+
+
 def test_connector_schema_exposes_only_compatible_contract_fields():
     connector = _intent_goal_schemas()["connector"]
 
     assert connector["additionalProperties"] is False
     assert {"component", "type", "goal_id"} <= set(connector["required"])
-    assert not {"offset", "path_kind", "plane_normal"} & set(
-        connector["properties"]
-    )
+    assert not {"offset", "path_kind", "plane_normal"} & set(connector["properties"])
 
     payload = _exact_prompt_payload()
     payload["target_behavior"][1].update(
@@ -134,9 +210,7 @@ def test_connector_schema_exposes_only_compatible_contract_fields():
 
 def test_diameter_change_schema_structurally_requires_output_diameter():
     diameter_change = _intent_goal_schemas()["diameter_change"]
-    assert {"diameter_out", "transition_length"} <= set(
-        diameter_change["required"]
-    )
+    assert {"diameter_out", "transition_length"} <= set(diameter_change["required"])
 
     payload = _exact_prompt_payload()
     del payload["target_behavior"][2]["diameter_out"]
@@ -266,8 +340,9 @@ def test_route_schema_structurally_requires_measurable_geometry_contracts():
             {"mode": "direction", "direction": "+Z"},
         ]
     )
-    with pytest.raises(ValidationError, match="must be unique"):
-        LLMProductionIntent.model_validate(duplicate)
+    duplicate_wire = LLMProductionIntent.model_validate(duplicate)
+    with pytest.raises(ValueError, match="duplicate route geometry contract"):
+        duplicate_wire.to_production_intent()
 
 
 def test_route_geometry_contracts_flatten_losslessly():
@@ -286,9 +361,11 @@ def test_route_geometry_contracts_flatten_losslessly():
             {"mode": "terminal_axis", "terminal_axis": [-1.0, 0.0, 1.0]},
         ]
     )
-    route = LLMProductionIntent.model_validate(
-        payload
-    ).to_production_intent().target_behavior[0]
+    route = (
+        LLMProductionIntent.model_validate(payload)
+        .to_production_intent()
+        .target_behavior[0]
+    )
 
     assert route.path_kind == "spline"
     assert route.waypoint_scale_policy == "fixed"
@@ -414,8 +491,9 @@ def test_branch_boundary_rejects_legacy_mixed_and_zero_vector_contracts():
             "required_outlet_vectors": [[0.0, 0.0, 0.0], [1.0, 0.0, 1.0]],
         }
     )
+    zero_wire = LLMProductionIntent.model_validate(zero)
     with pytest.raises(ValidationError, match="finite non-zero"):
-        LLMProductionIntent.model_validate(zero)
+        zero_wire.to_production_intent()
 
 
 def test_existing_flat_production_branch_contract_remains_compatible_and_safe():
@@ -471,8 +549,7 @@ def test_two_llm_authored_binary_goals_represent_four_total_open_ends():
         "right_binary_y",
     ]
     assert all(
-        len(goal.required_outlet_vectors) == 2
-        and goal.include_primary_outlet is False
+        len(goal.required_outlet_vectors) == 2 and goal.include_primary_outlet is False
         for goal in production.target_behavior
     )
 
@@ -487,8 +564,9 @@ def test_higher_degree_llm_branch_is_rejected_without_auto_decomposition():
     payload["target_behavior"][0]["include_primary_outlet"] = True
     payload["expected_open_ports"] = 3
 
+    wire = LLMProductionIntent.model_validate(payload)
     with pytest.raises(ValidationError, match="exactly one binary split"):
-        LLMProductionIntent.model_validate(payload)
+        wire.to_production_intent()
 
 
 def test_exact_user_prompt_contract_converts_through_existing_runtime_validators():

@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 import math
-from typing import Any, TypeVar
+from typing import Any, TypeVar, get_args
 
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError as JSONSchemaValidationError
@@ -25,10 +25,25 @@ T = TypeVar("T", bound=BaseModel)
 # grammar capacity when a design contains many independent coordinates.  Both
 # boundaries therefore support the same exact bounded decimal-object fallback.
 _ENCODED_DECIMAL_PARTS = {"intent", "step_planner"}
+# Diagnostic episodes carry their complete typed context in one request.  They
+# must never inherit another CAD step's conversational state or persist a
+# lineage that could later be restored from a checkpoint.
+_STATELESS_PARTS = {
+    "intent_repair_advisor",
+    "intent_repair_reviewer",
+    "step_repair_advisor",
+}
 _DECIMAL_TAG = "k"
 _DECIMAL_COEFFICIENT = "c"
 _DECIMAL_PLACES = "p"
 _MAX_EXACT_INTEGER = (1 << 53) - 1
+# Python/JSON float round-trips commonly need more than nine decimal places.
+# Nine made values such as 33.67006979750809 impossible to spell and caused a
+# real planner response to shift the decimal point by 10^13.  Fifteen keeps the
+# coefficient inside the exactly representable integer range for ordinary CAD
+# magnitudes while recovering sub-nanometre decimal detail when it is present in
+# an immutable state value.
+MAX_ENCODED_DECIMAL_PLACES = 15
 MAX_STRUCTURED_NUMBER_LITERALS = 96
 # Gemini 3 Flash accepted the same planner schema at a 686-byte enum and
 # rejected a longer 821-byte enum before generation, while other literal sets
@@ -78,14 +93,36 @@ class GeminiLineageError(GeminiRequestError):
 
 
 class StructuredOutputError(RuntimeError):
-    """응답 JSON이 schema 또는 Pydantic 계약을 통과하지 못했음을 나타낸다."""
+    """응답이 provider에 광고한 JSON 문법/schema를 통과하지 못했다."""
 
     def __init__(self, part: str, raw_text: str, cause: Exception):
         self.part = part
         self.raw_text = raw_text
         self.cause = cause
         compact = raw_text[:500].replace("\n", " ")
-        super().__init__(f"Gemini structured output failed for {part}: {cause}; raw={compact!r}")
+        super().__init__(
+            f"Gemini structured output failed for {part}: {cause}; raw={compact!r}"
+        )
+
+
+class HostContractValidationError(RuntimeError):
+    """Provider-schema-valid JSON failed a stricter host/domain contract.
+
+    This is deliberately distinct from ``StructuredOutputError``.  The latter
+    means the model did not satisfy the JSON grammar advertised to Gemini;
+    this error means it did, but a local semantic or relational validator found
+    a problem that the provider schema could not express.  Callers must spend a
+    semantic repair turn, not a transport/schema retry.
+    """
+
+    def __init__(self, part: str, payload: Any, cause: Exception):
+        self.part = part
+        self.payload = payload
+        self.cause = cause
+        super().__init__(
+            f"Gemini JSON passed the advertised schema for {part} but failed "
+            f"the host contract: {cause}"
+        )
 
 
 class StructuredOutputIncompleteError(StructuredOutputError):
@@ -129,7 +166,13 @@ class GeminiClient:
 
     supports_interaction_controls = True
     supports_numeric_literals = True
+    supports_numeric_schema_modes = True
     supports_system_instruction = True
+    supports_intent_repair_advisor = True
+    supports_intent_repair_reviewer = True
+    supports_step_repair_advisor = True
+    # Backward-compatible capability flag used by the parameter-part prototype.
+    supports_repair_advisor = True
 
     def __init__(self, settings: Settings):
         if not settings.gemini_api_key:
@@ -137,11 +180,18 @@ class GeminiClient:
                 "GEMINI_API_KEY or GOOGLE_API_KEY is required unless --dry-run is used."
             )
         from google import genai
+        from google.genai import types
 
-        self._client = genai.Client(api_key=settings.gemini_api_key)
+        self._client = genai.Client(
+            api_key=settings.gemini_api_key,
+            http_options=types.HttpOptions(
+                timeout=max(1, int(settings.gemini_request_timeout_sec * 1000.0)),
+            ),
+        )
         self._settings = settings
         self._lineages: dict[str, _Lineage] = {}
         self._usage = LLMUsage()
+        self._transport_retry_count = 0
 
     def stream_structured(
         self,
@@ -151,17 +201,36 @@ class GeminiClient:
         part: str,
         thinking_level: str = "low",
         numeric_literals: list[str] | None = None,
+        numeric_schema_mode: str | None = None,
         system_instruction: str | None = None,
     ) -> T:
         """한 interaction을 실행하고 JSON Schema까지 통과한 모델 객체를 반환한다."""
 
-        lineage = self._usable_lineage(part)
+        lineage = None if part in _STATELESS_PARTS else self._usable_lineage(part)
+        if numeric_schema_mode is None:
+            numeric_schema_mode = (
+                "enum"
+                if numeric_literals is not None
+                else "encoded"
+                if part in _ENCODED_DECIMAL_PARTS
+                else "plain"
+            )
+        if numeric_schema_mode not in {"plain", "enum", "encoded"}:
+            raise GeminiConfigError(
+                f"Unknown numeric schema mode: {numeric_schema_mode}"
+            )
+        if numeric_schema_mode == "enum" and numeric_literals is None:
+            raise GeminiConfigError("enum numeric schema requires numeric_literals")
+        if numeric_schema_mode != "enum" and numeric_literals is not None:
+            raise GeminiConfigError(
+                f"{numeric_schema_mode} numeric schema forbids numeric_literals"
+            )
         response_schema = gemini_json_schema(
             schema,
-            encode_decimals=(
-                part in _ENCODED_DECIMAL_PARTS and numeric_literals is None
+            encode_decimals=numeric_schema_mode == "encoded",
+            number_literals=(
+                numeric_literals if numeric_schema_mode == "enum" else None
             ),
-            number_literals=numeric_literals,
         )
         request_output_limit = self._request_output_limit(
             prompt,
@@ -188,29 +257,45 @@ class GeminiClient:
             # previous_interaction_id. System instructions are interaction-scoped
             # and must be re-specified on every repair continuation.
             body["system_instruction"] = system_instruction
-        if self._settings.gemini_stateful:
+        if self._settings.gemini_stateful and part not in _STATELESS_PARTS:
             if lineage is not None:
                 body["previous_interaction_id"] = lineage.interaction_id
         else:
             body["store"] = False
 
-        try:
-            interaction = self._client.interactions.create(**body)
-        except Exception as exc:
-            if "previous_interaction_id" in body and _lineage_rejected(exc):
-                self.reset_lineage(part)
-                raise GeminiLineageError(
-                    "Gemini rejected the previous interaction; retry with full context"
+        interaction = None
+        for transport_attempt in range(self._settings.provider_transport_retries + 1):
+            try:
+                interaction = self._client.interactions.create(**body)
+                break
+            except Exception as exc:
+                if "previous_interaction_id" in body and _lineage_rejected(exc):
+                    self.reset_lineage(part)
+                    raise GeminiLineageError(
+                        "Gemini rejected the previous interaction; retry with full context"
+                    ) from exc
+                invalid_request = _invalid_request_metadata(exc)
+                if invalid_request is not None:
+                    status_code, provider_code = invalid_request
+                    raise GeminiInvalidRequestError(
+                        f"Gemini interaction request was rejected: {exc}",
+                        status_code=status_code,
+                        provider_code=provider_code,
+                    ) from exc
+                if (
+                    transport_attempt < self._settings.provider_transport_retries
+                    and _retryable_transport_error(exc)
+                ):
+                    self._transport_retry_count = (
+                        getattr(self, "_transport_retry_count", 0) + 1
+                    )
+                    continue
+                raise GeminiRequestError(
+                    f"Gemini interaction request failed after "
+                    f"{transport_attempt + 1} transport attempt(s): {exc}"
                 ) from exc
-            invalid_request = _invalid_request_metadata(exc)
-            if invalid_request is not None:
-                status_code, provider_code = invalid_request
-                raise GeminiInvalidRequestError(
-                    f"Gemini interaction request was rejected: {exc}",
-                    status_code=status_code,
-                    provider_code=provider_code,
-                ) from exc
-            raise GeminiRequestError(f"Gemini interaction request failed: {exc}") from exc
+        if interaction is None:  # pragma: no cover - loop either returns or raises.
+            raise GeminiRequestError("Gemini transport retry loop produced no result")
         raw_json = (getattr(interaction, "output_text", None) or "").strip()
         usage_values = _interaction_usage_values(interaction)
         self._record_usage(usage_values)
@@ -240,20 +325,24 @@ class GeminiClient:
                 raw_json,
                 RuntimeError("Gemini returned an empty structured response"),
             )
+        # Every structured response crosses two intentionally explicit gates.
+        # Gate 1 is exactly the grammar advertised to Gemini. Gate 2 contains
+        # host/domain semantics that JSON Schema cannot always express. Never
+        # collapse a Gate-2 miss into a Gate-1 protocol failure.
         try:
-            # 모든 구조화 응답은 동일한 경계를 통과한다. 먼저 엄격한 JSON
-            # 문법(비표준 숫자 및 중복 객체 키 금지)을 확인하고, 공급자에게
-            # 전달한 JSON Schema를 검증한 뒤에만 Pydantic 모델로 변환한다.
             json_payload = _strict_json_loads(raw_json)
             Draft202012Validator(response_schema).validate(json_payload)
+        except (JSONSchemaValidationError, ValueError) as exc:
+            raise StructuredOutputError(part, raw_json, exc) from exc
+        try:
             payload = (
                 _decode_decimal_numbers(json_payload)
-                if part in _ENCODED_DECIMAL_PARTS and numeric_literals is None
+                if numeric_schema_mode == "encoded"
                 else json_payload
             )
             return schema.model_validate(payload)
-        except (JSONSchemaValidationError, ValidationError, ValueError) as exc:
-            raise StructuredOutputError(part, raw_json, exc) from exc
+        except (ValidationError, ValueError) as exc:
+            raise HostContractValidationError(part, json_payload, exc) from exc
 
     def has_previous(self, part: str) -> bool:
         if not self._settings.gemini_stateful:
@@ -266,6 +355,8 @@ class GeminiClient:
     def restore_lineage(self, snapshot: dict[str, Any]) -> None:
         restored: dict[str, _Lineage] = {}
         for part, raw in snapshot.items():
+            if str(part) in _STATELESS_PARTS:
+                continue
             if isinstance(raw, dict):
                 interaction_id = raw.get("interaction_id")
                 turns = int(raw.get("turns", 0) or 0)
@@ -291,6 +382,7 @@ class GeminiClient:
                 "last_input_tokens": lineage.last_input_tokens,
             }
             for part, lineage in self._lineages.items()
+            if part not in _STATELESS_PARTS
         }
 
     def restore_usage(self, snapshot: LLMUsage | dict[str, Any]) -> None:
@@ -303,12 +395,59 @@ class GeminiClient:
     def usage_snapshot(self) -> LLMUsage:
         return self._usage.model_copy(deep=True)
 
+    def remaining_call_budget(self) -> int:
+        """Return audited call capacity before the configured global ceiling."""
+
+        if not self._usage.accounting_complete:
+            return 0
+        return max(0, self._settings.gemini_max_calls - self._usage.calls)
+
     def policy_snapshot(self) -> dict[str, Any]:
         """감사를 위해 실제 요청에 사용되는 모델 매핑을 반환한다."""
 
+        agent_parts = ("intent", "step_planner", "step_repair_advisor")
         return {
-            "models": dict(self._settings.gemini_models),
+            "models": {
+                part: self._settings.model_for(part)
+                for part in self._settings.gemini_models
+            },
             "default_model": self._settings.gemini_default_model,
+            "agents": {
+                "intent_agent": {
+                    "part": "intent",
+                    "model": self._settings.model_for("intent"),
+                    "stateful": True,
+                },
+                "intent_validation_advisor_agent": {
+                    "part": "intent_repair_advisor",
+                    "model": self._settings.model_for("intent_repair_advisor"),
+                    "stateful": False,
+                },
+                "intent_repair_reviewer_agent": {
+                    "part": "intent_repair_reviewer",
+                    "model": self._settings.model_for("intent_repair_reviewer"),
+                    "stateful": False,
+                },
+                "parameter_planner_agent": {
+                    "part": "step_planner",
+                    "model": self._settings.model_for("step_planner"),
+                    "stateful": True,
+                },
+                "geometry_validation_advisor_agent": {
+                    "part": "step_repair_advisor",
+                    "model": self._settings.model_for("step_repair_advisor"),
+                    "stateful": False,
+                },
+            },
+            "agent_parts_are_distinct": len(
+                {self._settings.model_for(part) for part in agent_parts}
+            )
+            == len(agent_parts),
+            "provider_transport_retries": {
+                "configured_per_call": self._settings.provider_transport_retries,
+                "used": getattr(self, "_transport_retry_count", 0),
+                "geometry_repair_budget_consumed": False,
+            },
         }
 
     def _usable_lineage(self, part: str) -> _Lineage | None:
@@ -396,9 +535,14 @@ class GeminiClient:
         interaction: Any,
         usage_values: dict[str, int],
     ) -> None:
+        if part in _STATELESS_PARTS:
+            self._lineages.pop(part, None)
+            return
         interaction_id = getattr(interaction, "id", None)
         if self._settings.gemini_stateful and interaction_id:
-            previous_turns = self._lineages.get(part).turns if part in self._lineages else 0
+            previous_turns = (
+                self._lineages.get(part).turns if part in self._lineages else 0
+            )
             self._lineages[part] = _Lineage(
                 interaction_id=str(interaction_id),
                 turns=previous_turns + 1,
@@ -420,9 +564,94 @@ def gemini_json_schema(
         raw_schema = _lock_planner_inlet_sections(raw_schema)
     if encode_decimals:
         raw_schema = _encode_decimal_number_schema(raw_schema)
+        # The decimal-object profile is a provider-compatibility fallback.  It
+        # must be materially smaller than the schema which the provider just
+        # rejected; descriptive annotations do not affect the wire contract
+        # and can push otherwise valid structured-output grammars over opaque
+        # provider complexity/size limits.
+        raw_schema = _strip_schema_annotations(raw_schema)
     elif number_literals is not None:
         raw_schema = _encode_number_literal_schema(raw_schema, number_literals)
-    return _sanitize_schema_node(raw_schema)
+    sanitized = _sanitize_schema_node(raw_schema)
+    if getattr(schema, "provider_wire_contract", False):
+        _assert_provider_wire_parity(schema, raw_schema, sanitized)
+    return sanitized
+
+
+def _strip_schema_annotations(value: Any) -> Any:
+    """Remove non-contract JSON Schema annotations from fallback grammars."""
+
+    if isinstance(value, list):
+        return [_strip_schema_annotations(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    return {
+        key: _strip_schema_annotations(item)
+        for key, item in value.items()
+        if key not in {"description", "title", "examples", "$comment", "default"}
+    }
+
+
+def _assert_provider_wire_parity(
+    schema: type[BaseModel],
+    raw_schema: dict[str, Any],
+    provider_schema: dict[str, Any],
+) -> None:
+    """Fail before an API call if a marked wire hides host-only validation."""
+
+    seen: set[type[BaseModel]] = set()
+    stack: list[type[BaseModel]] = [schema]
+    hidden_validators: list[str] = []
+
+    def enqueue_models(annotation: Any) -> None:
+        if isinstance(annotation, type) and issubclass(annotation, BaseModel):
+            stack.append(annotation)
+            return
+        for candidate in get_args(annotation):
+            enqueue_models(candidate)
+
+    while stack:
+        model = stack.pop()
+        if model in seen:
+            continue
+        seen.add(model)
+        decorators = model.__pydantic_decorators__
+        validator_names = sorted(
+            {
+                *decorators.model_validators,
+                *decorators.field_validators,
+            }
+        )
+        if validator_names:
+            hidden_validators.append(f"{model.__name__}({','.join(validator_names)})")
+        for field in model.model_fields.values():
+            enqueue_models(field.annotation)
+
+    # These keywords are intentionally unsupported by the Gemini sanitizer and
+    # would make the local wire parser stricter than the advertised grammar.
+    weakening_keywords = (
+        "exclusiveMinimum",
+        "exclusiveMaximum",
+        "minLength",
+        "maxLength",
+    )
+    raw_text = json.dumps(raw_schema, separators=(",", ":"))
+    provider_text = json.dumps(provider_schema, separators=(",", ":"))
+    lost_keywords = [
+        keyword
+        for keyword in weakening_keywords
+        if f'"{keyword}"' in raw_text and f'"{keyword}"' not in provider_text
+    ]
+    if hidden_validators or lost_keywords:
+        details = []
+        if hidden_validators:
+            details.append("host-only validators=" + ";".join(hidden_validators))
+        if lost_keywords:
+            details.append("sanitized constraints=" + ",".join(lost_keywords))
+        raise GeminiConfigError(
+            f"Provider wire schema {schema.__name__} is not parity-safe: "
+            + "; ".join(details)
+        )
 
 
 def _lock_planner_inlet_sections(schema: dict[str, Any]) -> dict[str, Any]:
@@ -568,7 +797,9 @@ def _encode_decimal_number_schema(schema: dict[str, Any]) -> dict[str, Any]:
         definitions[definition_names[kind]] = {
             "type": "object",
             "description": (
-                "Decimal c*10^(-p): 1.5 => {k:d,c:15,p:1}."
+                "Decimal c*10^(-p): 1.5 => {k:d,c:15,p:1}. Preserve "
+                "the source decimal point; p may be 0..15 and must never be "
+                "reduced merely to fit c."
             ),
             "properties": {
                 _DECIMAL_TAG: {"type": "string", "enum": ["d"]},
@@ -580,7 +811,7 @@ def _encode_decimal_number_schema(schema: dict[str, Any]) -> dict[str, Any]:
                 _DECIMAL_PLACES: {
                     "type": "integer",
                     "minimum": 0,
-                    "maximum": 9,
+                    "maximum": MAX_ENCODED_DECIMAL_PLACES,
                 },
             },
             "required": [_DECIMAL_TAG, _DECIMAL_COEFFICIENT, _DECIMAL_PLACES],
@@ -607,12 +838,12 @@ def _decode_decimal_numbers(value: Any) -> Any:
             or not isinstance(coefficient, int)
             or isinstance(places, bool)
             or not isinstance(places, int)
-            or not 0 <= places <= 9
+            or not 0 <= places <= MAX_ENCODED_DECIMAL_PLACES
             or abs(coefficient) > _MAX_EXACT_INTEGER
         ):
             raise ValueError("invalid encoded decimal")
         try:
-            decoded = coefficient / (10 ** places)
+            decoded = coefficient / (10**places)
         except OverflowError as exc:
             raise ValueError("encoded decimal is outside float range") from exc
         if not math.isfinite(decoded):
@@ -639,11 +870,27 @@ def _reject_duplicate_object_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any
 def _strict_json_loads(raw_json: str) -> Any:
     """표준 JSON만 읽고 모든 깊이의 중복 객체 키를 거부한다."""
 
-    return json.loads(
+    payload = json.loads(
         raw_json,
         parse_constant=_reject_nonstandard_json_constant,
         object_pairs_hook=_reject_duplicate_object_keys,
     )
+
+    def reject_nonfinite(value: Any) -> None:
+        if isinstance(value, float) and not math.isfinite(value):
+            raise ValueError("non-finite JSON number is forbidden")
+        if isinstance(value, dict):
+            for item in value.values():
+                reject_nonfinite(item)
+        elif isinstance(value, list):
+            for item in value:
+                reject_nonfinite(item)
+
+    # JSON permits large exponents such as 1e999 even though Python decodes
+    # them to infinity. Reject them at the advertised-grammar gate so they can
+    # never become a later host-only Pydantic failure.
+    reject_nonfinite(payload)
+    return payload
 
 
 def _sanitize_schema_node(value: Any, *, property_map: bool = False) -> Any:
@@ -671,16 +918,12 @@ def _sanitize_schema_node(value: Any, *, property_map: bool = False) -> Any:
             # the ordinary boundary remotely and enforce strictness in the
             # local Pydantic/intent safety validators.
             result["minimum"] = (
-                int(item) + 1
-                if value.get("type") == "integer"
-                else float(item)
+                int(item) + 1 if value.get("type") == "integer" else float(item)
             )
             continue
         if key == "exclusiveMaximum":
             result["maximum"] = (
-                int(item) - 1
-                if value.get("type") == "integer"
-                else float(item)
+                int(item) - 1 if value.get("type") == "integer" else float(item)
             )
             continue
         if key in {
@@ -793,6 +1036,32 @@ def _lineage_rejected(exc: Exception) -> bool:
     message = str(exc).lower()
     return "previous_interaction_id" in message and any(
         marker in message for marker in ("expired", "invalid", "not found", "unknown")
+    )
+
+
+def _retryable_transport_error(exc: Exception) -> bool:
+    """Classify transient transport/server failures, never schema HTTP 400s."""
+
+    status_code = getattr(exc, "status_code", None)
+    if status_code is None:
+        legacy_code = getattr(exc, "code", None)
+        status_code = legacy_code if isinstance(legacy_code, int) else None
+    if status_code in {408, 409, 425, 429}:
+        return True
+    if isinstance(status_code, int) and 500 <= status_code <= 599:
+        return True
+    message = str(exc).lower()
+    return any(
+        marker in message
+        for marker in (
+            "timed out",
+            "timeout",
+            "connection reset",
+            "connection aborted",
+            "temporarily unavailable",
+            "service unavailable",
+            "server disconnected",
+        )
     )
 
 

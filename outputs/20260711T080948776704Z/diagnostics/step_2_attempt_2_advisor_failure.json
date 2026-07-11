@@ -1,0 +1,13 @@
+{
+  "case_id": "bfb0615e17551b46a24010ef0f4060984d630781b14fcca81352c6dd644a916c",
+  "diagnostic_context_digest": "3c65bed584f67d4d698d1ee7e6c9ea0e1bbbeb95424e37b5d200c7607f86ce36",
+  "failure_signature": "c08d577116cf045b7974cc27cd291d75f7358779758ac0210df0676d9463a89c",
+  "failure_reason": "provider_error",
+  "call_attempted": true,
+  "error_type": "GeminiInvalidRequestError",
+  "error": "Gemini interaction request was rejected: Error code: 400 - {'error': {'message': 'Request contains an invalid argument.', 'code': 'invalid_request'}}",
+  "advisor_response": null,
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-11T08:11:39.498332+00:00",
+  "artifact_digest": "7f41ec974c41e67fa3ad95ef8034046e3ae34b91981dc0e1e77199bd525b6566"
+}

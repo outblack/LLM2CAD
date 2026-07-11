@@ -1,0 +1,263 @@
+{
+  "run_id": "20260711T141106772905Z",
+  "status": "failed",
+  "failed_stage": "intent",
+  "dry_run": false,
+  "freecad_opened": false,
+  "freecad_mcp_used": true,
+  "freecad_mcp_error": null,
+  "verification_status": "failed",
+  "static_error_count": 1,
+  "static_warning_count": 0,
+  "critic_passed": false,
+  "skipped_mcp_reason": null,
+  "top_issues": [
+    "FINAL_01_INTENT_EXTRACTION_FAILED"
+  ],
+  "llm_usage": {
+    "calls": 0,
+    "input_tokens": 0,
+    "cached_tokens": 0,
+    "output_tokens": 0,
+    "thought_tokens": 0,
+    "tool_use_tokens": 0,
+    "total_tokens": 0,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "llm_policy": {
+    "models": {
+      "text": "gemini-3-flash-preview",
+      "intent": "gemini-3.1-flash-lite",
+      "intent_repair_advisor": "gemini-3.1-pro-preview",
+      "intent_repair_reviewer": "gemini-3.5-flash",
+      "step_planner": "gemini-3.5-flash",
+      "step_repair_advisor": "gemini-3.1-pro-preview",
+      "parameter": "gemini-3-flash-preview",
+      "visual_validator": "gemini-3-flash-preview",
+      "patch": "gemini-3-flash-preview",
+      "mcp": "gemini-3-flash-preview"
+    },
+    "default_model": "gemini-3-flash-preview",
+    "agents": {
+      "intent_agent": {
+        "part": "intent",
+        "model": "gemini-3.1-flash-lite",
+        "stateful": true
+      },
+      "intent_validation_advisor_agent": {
+        "part": "intent_repair_advisor",
+        "model": "gemini-3.1-pro-preview",
+        "stateful": false
+      },
+      "intent_repair_reviewer_agent": {
+        "part": "intent_repair_reviewer",
+        "model": "gemini-3.5-flash",
+        "stateful": false
+      },
+      "parameter_planner_agent": {
+        "part": "step_planner",
+        "model": "gemini-3.5-flash",
+        "stateful": true
+      },
+      "geometry_validation_advisor_agent": {
+        "part": "step_repair_advisor",
+        "model": "gemini-3.1-pro-preview",
+        "stateful": false
+      }
+    },
+    "agent_parts_are_distinct": true
+  },
+  "intent_attempt_count": 1,
+  "intent_repair_count": 0,
+  "intent_protocol_retry_count": 1,
+  "intent_advisor_call_count": 0,
+  "intent_advisor_success_count": 0,
+  "intent_advisor_failure_count": 0,
+  "intent_futile_retry_avoided_count": 0,
+  "action_repair_count": 0,
+  "repair_attempt_count": 0,
+  "step_repair_advisor_count": 0,
+  "advisor_call_count": 0,
+  "advisor_success_count": 0,
+  "advisor_failure_count": 0,
+  "advisor_cache_hit_count": 0,
+  "advisor_artifact_paths": [],
+  "futile_retry_avoided_count": 0,
+  "artifacts": {
+    "run_id": "20260711T141106772905Z",
+    "output_dir": "outputs/20260711T141106772905Z",
+    "prompt_path": "outputs/20260711T141106772905Z/prompt.txt",
+    "intent_path": "outputs/20260711T141106772905Z/intent.json",
+    "intent_attempts_path": "outputs/20260711T141106772905Z/intent_attempts.json",
+    "intent_diagnostics_path": "outputs/20260711T141106772905Z/intent_diagnostics.json",
+    "actions_path": "outputs/20260711T141106772905Z/actions.json",
+    "state_path": "outputs/20260711T141106772905Z/state.json",
+    "freecad_script_path": "outputs/20260711T141106772905Z/freecad_script.py",
+    "report_path": "outputs/20260711T141106772905Z/run_report.json",
+    "step_verification_path": "outputs/20260711T141106772905Z/step_verification.json",
+    "critic_report_path": "outputs/20260711T141106772905Z/critic_report.json",
+    "mcp_result_path": null,
+    "action_attempts_path": "outputs/20260711T141106772905Z/action_attempts.json",
+    "repair_advice_path": "outputs/20260711T141106772905Z/repair_advice.json",
+    "diagnostics_index_path": "outputs/20260711T141106772905Z/diagnostics/index.json",
+    "advisor_artifact_paths": [],
+    "checkpoint_path": "outputs/20260711T141106772905Z/checkpoint.json",
+    "freecad_validation_path": null,
+    "freecad_document_path": null,
+    "visual_evidence_paths": []
+  },
+  "artifact_statuses": [
+    {
+      "name": "prompt",
+      "path": "outputs/20260711T141106772905Z/prompt.txt",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent",
+      "path": "outputs/20260711T141106772905Z/intent.json",
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "intent_attempts",
+      "path": "outputs/20260711T141106772905Z/intent_attempts.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "intent_diagnostics",
+      "path": "outputs/20260711T141106772905Z/intent_diagnostics.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "actions",
+      "path": "outputs/20260711T141106772905Z/actions.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "action_attempts",
+      "path": "outputs/20260711T141106772905Z/action_attempts.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "repair_advice",
+      "path": "outputs/20260711T141106772905Z/repair_advice.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "diagnostics_index",
+      "path": "outputs/20260711T141106772905Z/diagnostics/index.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "state",
+      "path": "outputs/20260711T141106772905Z/state.json",
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "step_verification",
+      "path": "outputs/20260711T141106772905Z/step_verification.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "critic_report",
+      "path": "outputs/20260711T141106772905Z/critic_report.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "freecad_script",
+      "path": "outputs/20260711T141106772905Z/freecad_script.py",
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "checkpoint",
+      "path": "outputs/20260711T141106772905Z/checkpoint.json",
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "run_report",
+      "path": "outputs/20260711T141106772905Z/run_report.json",
+      "status": "available",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [],
+      "unavailable_reason": null
+    },
+    {
+      "name": "mcp_result",
+      "path": null,
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "freecad_validation",
+      "path": null,
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    },
+    {
+      "name": "freecad_document",
+      "path": null,
+      "status": "unavailable",
+      "producer_stage": "intent",
+      "blocking_issue_ids": [
+        "FINAL_01_INTENT_EXTRACTION_FAILED"
+      ],
+      "unavailable_reason": "Artifact was not produced."
+    }
+  ],
+  "summary": "Stopped before CAD state initialization."
+}

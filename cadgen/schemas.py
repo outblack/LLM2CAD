@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections import Counter
 import math
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing_extensions import TypeAliasType
@@ -20,7 +20,14 @@ class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
 
 
+class ProviderWireModel(StrictModel):
+    """Marker for DTOs whose host parser must equal the advertised JSON Schema."""
+
+    provider_wire_contract: ClassVar[bool] = True
+
+
 Direction = Literal["+X", "-X", "+Y", "-Y", "+Z", "-Z"]
+ConnectionTarget = Literal["another_open_port", "start_anchor"]
 WaypointFrame = Literal["global", "relative_to_target"]
 WaypointScalePolicy = Literal["fixed", "uniform_expand_for_safety"]
 Vector3 = tuple[float, float, float]
@@ -62,7 +69,10 @@ class GeometricConstraint(StrictModel):
     def validate_constraint(self) -> "GeometricConstraint":
         if self.type == "max_extent" and (self.axis is None or self.value is None):
             raise ValueError("max_extent requires axis and value")
-        if self.type in {"max_module_count", "max_total_centerline_length"} and self.value is None:
+        if (
+            self.type in {"max_module_count", "max_total_centerline_length"}
+            and self.value is None
+        ):
             raise ValueError(f"{self.type} requires value")
         if self.type == "max_module_count" and self.value is not None:
             if abs(self.value - round(self.value)) > 1e-9:
@@ -75,6 +85,43 @@ class GeometricConstraint(StrictModel):
             if any(low >= high for low, high in zip(self.minimum, self.maximum)):
                 raise ValueError("bounding_box minimum must be below maximum")
         return self
+
+
+class IntentMaxExtentConstraint(StrictModel):
+    """Provider wire form whose type structurally requires axis and value."""
+
+    constraint_id: str
+    type: Literal["max_extent"]
+    axis: Direction
+    value: float
+
+
+class IntentMaxModuleCountConstraint(StrictModel):
+    constraint_id: str
+    type: Literal["max_module_count"]
+    value: int = Field(ge=1)
+
+
+class IntentMaxCenterlineLengthConstraint(StrictModel):
+    constraint_id: str
+    type: Literal["max_total_centerline_length"]
+    value: float
+
+
+class IntentBoundingBoxConstraint(StrictModel):
+    constraint_id: str
+    type: Literal["bounding_box"]
+    minimum: LLMVector3
+    maximum: LLMVector3
+
+
+IntentGeometricConstraint = Annotated[
+    IntentMaxExtentConstraint
+    | IntentMaxModuleCountConstraint
+    | IntentMaxCenterlineLengthConstraint
+    | IntentBoundingBoxConstraint,
+    Field(discriminator="type"),
+]
 
 
 class ComponentGoalSpec(StrictModel):
@@ -178,7 +225,9 @@ class Goal(StrictModel):
     branch_angles: list[float] = Field(default_factory=list)
     branch_plane_normal: Vector3 | None = None
     required_outlet_directions: list[Direction] = Field(default_factory=list)
-    required_outlet_vectors: list[tuple[float, float, float]] = Field(default_factory=list)
+    required_outlet_vectors: list[tuple[float, float, float]] = Field(
+        default_factory=list
+    )
     required_outlets: list[BranchGoalOutletSpec] = Field(default_factory=list)
     include_primary_outlet: bool | None = None
     junction_style: Literal["hard_fuse", "smooth_hub"] | None = None
@@ -202,6 +251,7 @@ class Goal(StrictModel):
     terminal_position: Vector3 | None = None
     terminal_axis: Vector3 | None = None
     minimum_curvature_radius: float | None = Field(default=None, gt=0)
+    connection_target: ConnectionTarget = "another_open_port"
     notes: str | None = None
 
     @model_validator(mode="after")
@@ -211,10 +261,10 @@ class Goal(StrictModel):
             raise ValueError("waypoint_frame requires required_waypoints")
         if self.waypoint_scale_policy is not None and not self.required_waypoints:
             raise ValueError("waypoint_scale_policy requires required_waypoints")
-        if (
-            self.waypoint_frame == "global"
-            and self.waypoint_scale_policy not in {None, "fixed"}
-        ):
+        if self.waypoint_frame == "global" and self.waypoint_scale_policy not in {
+            None,
+            "fixed",
+        }:
             raise ValueError("global waypoints require waypoint_scale_policy=fixed")
         if self.component_spec is not None and (
             self.type != "connector"
@@ -224,6 +274,114 @@ class Goal(StrictModel):
                 "component_spec requires a connector goal with the same component type"
             )
         return self
+
+
+ConstraintPriority = Literal["safety", "topology", "driving", "preference"]
+ConstraintRelation = Literal["exact", "minimum", "maximum", "range", "derived"]
+ProofStrength = Literal["proved", "independently_measured", "heuristic", "unknown"]
+PreflightStatus = Literal["exact", "adjusted", "infeasible", "unknown"]
+
+
+class ConstraintRecord(StrictModel):
+    """Source-bound design constraint used by deterministic preflight.
+
+    The LLM may interpret the source into a goal, but it does not decide whether
+    this record is geometrically satisfiable or silently weaken it later.
+    """
+
+    constraint_id: str
+    constraint_type: str
+    source_goal_id: str | None = None
+    source_field: str | None = None
+    source_span: str | None = None
+    priority: ConstraintPriority
+    relation: ConstraintRelation
+    value: Any = None
+    relaxable: bool = False
+    tolerance: float | None = Field(default=None, ge=0)
+    variable_ids: list[str] = Field(default_factory=list)
+
+
+class ConstraintDeviation(StrictModel):
+    """Auditable difference between the authored and verified realization."""
+
+    deviation_id: str
+    constraint_id: str
+    goal_id: str | None = None
+    field_path: str
+    authored_value: float
+    realized_value: float
+    absolute_change: float = Field(ge=0)
+    relative_change: float = Field(ge=0)
+    reason_code: str
+    reason: str
+    priority: ConstraintPriority = "driving"
+
+
+class ConflictCertificate(StrictModel):
+    """One versioned, machine-checkable reason a realization was rejected."""
+
+    certificate_id: str
+    conflict_type: Literal[
+        "provider",
+        "protocol",
+        "intent_contract",
+        "topology",
+        "local_geometry",
+        "closure",
+        "clearance",
+        "backend",
+        "resource",
+    ]
+    failed_predicate: str
+    proof_strength: ProofStrength
+    constraint_ids: list[str] = Field(default_factory=list)
+    primitive_ids: list[str] = Field(default_factory=list)
+    candidate_digest: str | None = None
+    evidence_digest: str | None = None
+    measured: float | None = None
+    required: float | None = None
+    gap: float | None = Field(default=None, ge=0)
+    units: str | None = None
+    causal_decision_ids: list[str] = Field(default_factory=list)
+    earliest_backjump_step: int | None = Field(default=None, ge=1)
+    mutable_fields: list[str] = Field(default_factory=list)
+    allowed_routes: list[
+        Literal[
+            "retry_protocol",
+            "reauthor_current",
+            "change_primitive",
+            "probe",
+            "backjump",
+            "repair_intent",
+            "retry_infrastructure",
+            "relax_driving_constraint",
+            "proven_infeasible",
+        ]
+    ] = Field(default_factory=list)
+    message: str
+
+
+class ConstraintLedger(StrictModel):
+    """Content-addressed projection of the accepted semantic contract."""
+
+    schema_version: int = 1
+    ledger_digest: str
+    constraints: list[ConstraintRecord]
+
+
+class GlobalPreflightResult(StrictModel):
+    """Tri-state feasibility result plus an explicit best-effort realization."""
+
+    method_version: str
+    status: PreflightStatus
+    ledger_digest: str
+    authored_program_digest: str | None = None
+    realized_program_digest: str | None = None
+    scale_factor: float = Field(default=1.0, gt=0)
+    deviations: list[ConstraintDeviation] = Field(default_factory=list)
+    conflicts: list[ConflictCertificate] = Field(default_factory=list)
+    notes: list[str] = Field(default_factory=list)
 
 
 class IntentResult(StrictModel):
@@ -239,6 +397,8 @@ class IntentResult(StrictModel):
     hard_constraints: list[str] = Field(default_factory=list)
     geometric_constraints: list[GeometricConstraint] = Field(default_factory=list)
     design_notes: list[str] = Field(default_factory=list)
+    constraint_ledger: ConstraintLedger | None = None
+    global_preflight: GlobalPreflightResult | None = None
     prompt_sha256: str | None = None
     contract_digest: str | None = None
 
@@ -307,12 +467,15 @@ class ProductionGoal(StrictModel):
     terminal_position: Vector3 | None = None
     terminal_axis: Vector3 | None = None
     minimum_curvature_radius: float | None = Field(default=None, gt=0)
+    connection_target: ConnectionTarget = "another_open_port"
     notes: str | None = None
 
     @model_validator(mode="after")
     def validate_goal_contract(self) -> "ProductionGoal":
         if self.goal_id != self.goal_id.strip():
-            raise ValueError("goal_id must be non-empty and must not contain surrounding whitespace")
+            raise ValueError(
+                "goal_id must be non-empty and must not contain surrounding whitespace"
+            )
         if len(self.depends_on_goal_ids) != len(set(self.depends_on_goal_ids)):
             raise ValueError("depends_on_goal_ids must be unique")
         if any(
@@ -350,8 +513,7 @@ class ProductionGoal(StrictModel):
         if self.type == "move" and (self.direction is None or self.length is None):
             raise ValueError("move goal requires direction and length")
         if self.type == "turn" and (
-            self.angle is None
-            or (self.direction is None and self.plane_normal is None)
+            self.angle is None or (self.direction is None and self.plane_normal is None)
         ):
             raise ValueError(
                 "turn goal requires angle plus either a cardinal terminal direction "
@@ -363,7 +525,9 @@ class ProductionGoal(StrictModel):
             or self.required_outlet_vectors
             or self.required_outlets
         ):
-            raise ValueError("branch goal requires an outlet count or outlet directions")
+            raise ValueError(
+                "branch goal requires an outlet count or outlet directions"
+            )
         if self.type == "branch":
             outlet_representations = sum(
                 bool(values)
@@ -374,9 +538,7 @@ class ProductionGoal(StrictModel):
                 )
             )
             if outlet_representations > 1:
-                raise ValueError(
-                    "use exactly one explicit outlet-axis representation"
-                )
+                raise ValueError("use exactly one explicit outlet-axis representation")
             explicit_counts = [
                 count
                 for count in (
@@ -430,8 +592,7 @@ class ProductionGoal(StrictModel):
                     left_size = _vector_size(left)
                     for right in vectors[index + 1 :]:
                         score = sum(
-                            float(a) * float(b)
-                            for a, b in zip(left, right)
+                            float(a) * float(b) for a, b in zip(left, right)
                         ) / (left_size * _vector_size(right))
                         if score > 0.999:
                             raise ValueError(
@@ -468,17 +629,20 @@ class ProductionGoal(StrictModel):
             raise ValueError("waypoint_frame requires required_waypoints")
         if self.waypoint_scale_policy is not None and not self.required_waypoints:
             raise ValueError("waypoint_scale_policy requires required_waypoints")
-        if (
-            self.waypoint_frame == "global"
-            and self.waypoint_scale_policy not in {None, "fixed"}
-        ):
+        if self.waypoint_frame == "global" and self.waypoint_scale_policy not in {
+            None,
+            "fixed",
+        }:
             raise ValueError("global waypoints require waypoint_scale_policy=fixed")
         if self.branch_plane_normal is not None and (
             not _finite_vector(self.branch_plane_normal)
             or _vector_size(self.branch_plane_normal) <= 1e-12
         ):
             raise ValueError("branch_plane_normal must be a finite non-zero vector")
-        for label, value in (("plane_normal", self.plane_normal), ("offset", self.offset)):
+        for label, value in (
+            ("plane_normal", self.plane_normal),
+            ("offset", self.offset),
+        ):
             if value is not None and not _finite_vector(value):
                 raise ValueError(f"{label} must be finite")
         if self.plane_normal is not None and _vector_size(self.plane_normal) <= 1e-12:
@@ -490,7 +654,9 @@ class ProductionGoal(StrictModel):
             or self.terminal_position is not None
             or self.terminal_axis is not None
         ):
-            raise ValueError("route goal requires at least one measurable path contract")
+            raise ValueError(
+                "route goal requires at least one measurable path contract"
+            )
         return self
 
     def to_goal(self) -> Goal:
@@ -536,7 +702,7 @@ def _validate_goal_field_compatibility(goal: Any) -> None:
             "transition_length",
             "offset",
         },
-        "connect": {"required_waypoints"},
+        "connect": {"required_waypoints", "connection_target"},
         "end": {"end_type", "termination_thickness"},
         "connector": {"direction", "length", "component", "component_spec"},
     }
@@ -574,14 +740,16 @@ def _validate_goal_field_compatibility(goal: Any) -> None:
         "terminal_position",
         "terminal_axis",
         "minimum_curvature_radius",
+        "connection_target",
     }
     allowed = allowed_by_type[goal.type]
     for field_name in all_contract_fields - allowed:
         value = getattr(goal, field_name)
+        if field_name == "connection_target" and value == "another_open_port":
+            # The backward-compatible default is inert outside connect goals.
+            continue
         if value is not None and value != []:
-            raise ValueError(
-                f"{field_name} is not valid for goal type {goal.type}"
-            )
+            raise ValueError(f"{field_name} is not valid for goal type {goal.type}")
 
 
 class ProductionIntent(StrictModel):
@@ -602,7 +770,10 @@ class ProductionIntent(StrictModel):
     def validate_contract(self) -> "ProductionIntent":
         if not _finite_vector(self.start_position):
             raise ValueError("start_position must contain only finite values")
-        if not _finite_vector(self.start_axis) or _vector_size(self.start_axis) <= 1e-12:
+        if (
+            not _finite_vector(self.start_axis)
+            or _vector_size(self.start_axis) <= 1e-12
+        ):
             raise ValueError("start_axis must be non-zero")
         goal_ids = [goal.goal_id for goal in self.target_behavior]
         if len(goal_ids) != len(set(goal_ids)):
@@ -610,6 +781,19 @@ class ProductionIntent(StrictModel):
         if self.target_behavior[0].type == "end":
             raise ValueError(
                 "a production pipe agenda cannot terminate the anchored START before creating a hollow run"
+            )
+        start_anchor_goals = [
+            goal
+            for goal in self.target_behavior
+            if goal.type == "connect" and goal.connection_target == "start_anchor"
+        ]
+        if len(start_anchor_goals) > 1:
+            raise ValueError(
+                "a production pipe agenda may consume the anchored START seam only once"
+            )
+        if start_anchor_goals and self.target_behavior[0] is start_anchor_goals[0]:
+            raise ValueError(
+                "a start_anchor connection requires prior hollow-run geometry"
             )
         seen: set[str] = set()
         for goal in self.target_behavior:
@@ -637,13 +821,11 @@ class ProductionIntent(StrictModel):
                 include_primary = (
                     goal.include_primary_outlet
                     if goal.include_primary_outlet is not None
-                    else not bool(
-                        goal.required_outlet_vectors or goal.required_outlets
-                    )
+                    else not bool(goal.required_outlet_vectors or goal.required_outlets)
                 )
                 open_port_count += branch_count + int(include_primary) - 1
             elif goal.type == "connect":
-                open_port_count -= 2
+                open_port_count -= 1 if goal.connection_target == "start_anchor" else 2
             elif goal.type == "end":
                 open_port_count -= 1
             if open_port_count < 0:
@@ -687,16 +869,72 @@ class ProductionIntent(StrictModel):
 class _LLMProductionGoalBase(StrictModel):
     """Fields common to every Gemini-authored production goal."""
 
-    goal_id: str = Field(min_length=1)
+    goal_id: str
     depends_on_goal_ids: list[str]
     allow_parallel: bool
     notes: str | None = None
 
 
+class IntentGlobalSpec(StrictModel):
+    """JSON-schema-only wire; section relations are domain semantics."""
+
+    outer_diameter: float
+    wall_thickness: float
+    is_hollow: Literal[True]
+    units: Literal["mm"]
+
+
+class _IntentComponentSpecBase(StrictModel):
+    body_outer_diameter: float | None = None
+    body_start_offset: float | None = None
+    body_length: float | None = None
+
+
+class IntentFlangeComponentSpec(_IntentComponentSpecBase):
+    component_type: Literal["flange"]
+    flange_bolt_count: int | None = Field(default=None, ge=3, le=32)
+    flange_bolt_circle_diameter: float | None = None
+    flange_bolt_hole_diameter: float | None = None
+    flange_reference_axis: LLMVector3 | None = None
+
+
+class IntentCouplingComponentSpec(_IntentComponentSpecBase):
+    component_type: Literal["coupling"]
+
+
+class IntentUnionComponentSpec(_IntentComponentSpecBase):
+    component_type: Literal["union"]
+    union_ring_outer_diameter: float | None = None
+    union_ring_length: float | None = None
+
+
+class IntentValveComponentSpec(_IntentComponentSpecBase):
+    component_type: Literal["valve"]
+    actuator_diameter: float | None = None
+    actuator_height: float | None = None
+    actuator_axis: LLMVector3 | None = None
+
+
+IntentComponentSpec = Annotated[
+    IntentFlangeComponentSpec
+    | IntentCouplingComponentSpec
+    | IntentUnionComponentSpec
+    | IntentValveComponentSpec,
+    Field(discriminator="component_type"),
+]
+
+
+class IntentBranchOutletSpec(StrictModel):
+    axis: LLMVector3
+    length: float | None = None
+    outer_diameter: float | None = None
+    wall_thickness: float | None = None
+
+
 class IntentMoveGoal(_LLMProductionGoalBase):
     type: Literal["move"]
     direction: Direction
-    length: float = Field(gt=0)
+    length: float
 
 
 class IntentTurnCardinalContract(StrictModel):
@@ -719,15 +957,6 @@ class IntentTurnSignedPlaneContract(StrictModel):
         ),
     )
 
-    @model_validator(mode="after")
-    def validate_plane_normal(self) -> "IntentTurnSignedPlaneContract":
-        if (
-            not _finite_vector(self.plane_normal)
-            or _vector_size(self.plane_normal) <= 1e-12
-        ):
-            raise ValueError("plane_normal must be a finite non-zero vector")
-        return self
-
 
 IntentTurnOrientationContract = Annotated[
     IntentTurnCardinalContract | IntentTurnSignedPlaneContract,
@@ -744,7 +973,7 @@ class IntentTurnGoal(_LLMProductionGoalBase):
             "outlet tangent from this angle and orientation.plane_normal."
         )
     )
-    bend_radius: float | None = Field(default=None, gt=0)
+    bend_radius: float | None = None
 
     def to_production_payload(self) -> dict[str, Any]:
         payload = self.model_dump(mode="python", exclude={"orientation"})
@@ -762,7 +991,7 @@ class IntentTurnGoal(_LLMProductionGoalBase):
 
 class IntentRouteLengthContract(StrictModel):
     mode: Literal["length"]
-    length: float = Field(gt=0)
+    length: float
 
 
 class IntentRouteDirectionContract(StrictModel):
@@ -786,50 +1015,15 @@ class IntentRouteWaypointsContract(StrictModel):
     )
     required_waypoints: list[LLMVector3] = Field(min_length=1)
 
-    @model_validator(mode="after")
-    def validate_waypoints(self) -> "IntentRouteWaypointsContract":
-        if (
-            self.waypoint_frame == "global"
-            and self.waypoint_scale_policy != "fixed"
-        ):
-            raise ValueError("global waypoints require waypoint_scale_policy=fixed")
-        if any(not _finite_vector(point) for point in self.required_waypoints):
-            raise ValueError("required_waypoints must contain only finite vectors")
-        if any(
-            _vector_size(tuple(b - a for a, b in zip(left, right))) <= 1e-12
-            for left, right in zip(
-                self.required_waypoints, self.required_waypoints[1:]
-            )
-        ):
-            raise ValueError(
-                "required_waypoints must not contain consecutive duplicates"
-            )
-        return self
-
 
 class IntentRouteTerminalPositionContract(StrictModel):
     mode: Literal["terminal_position"]
     terminal_position: LLMVector3
 
-    @model_validator(mode="after")
-    def validate_terminal_position(self) -> "IntentRouteTerminalPositionContract":
-        if not _finite_vector(self.terminal_position):
-            raise ValueError("terminal_position must be finite")
-        return self
-
 
 class IntentRouteTerminalAxisContract(StrictModel):
     mode: Literal["terminal_axis"]
     terminal_axis: LLMVector3
-
-    @model_validator(mode="after")
-    def validate_terminal_axis(self) -> "IntentRouteTerminalAxisContract":
-        if (
-            not _finite_vector(self.terminal_axis)
-            or _vector_size(self.terminal_axis) <= 1e-12
-        ):
-            raise ValueError("terminal_axis must be a finite non-zero vector")
-        return self
 
 
 IntentRouteGeometryContract = Annotated[
@@ -853,14 +1047,7 @@ class IntentRouteGoal(_LLMProductionGoalBase):
             "must include a waypoints contract with LLM-designed shape anchors."
         ),
     )
-    minimum_curvature_radius: float | None = Field(default=None, gt=0)
-
-    @model_validator(mode="after")
-    def validate_unique_contract_modes(self) -> "IntentRouteGoal":
-        modes = [contract.mode for contract in self.geometry_contracts]
-        if len(modes) != len(set(modes)):
-            raise ValueError("route geometry_contract modes must be unique")
-        return self
+    minimum_curvature_radius: float | None = None
 
     def to_production_payload(self) -> dict[str, Any]:
         payload = self.model_dump(mode="python", exclude={"geometry_contracts"})
@@ -890,21 +1077,10 @@ class IntentBranchVectorsContract(StrictModel):
     mode: Literal["vectors"]
     required_outlet_vectors: list[LLMVector3] = Field(min_length=1, max_length=2)
 
-    @model_validator(mode="after")
-    def validate_vectors(self) -> "IntentBranchVectorsContract":
-        if any(
-            not _finite_vector(vector) or _vector_size(vector) <= 1e-12
-            for vector in self.required_outlet_vectors
-        ):
-            raise ValueError(
-                "required_outlet_vectors must contain finite non-zero vectors"
-            )
-        return self
-
 
 class IntentBranchOutletsContract(StrictModel):
     mode: Literal["outlets"]
-    required_outlets: list[BranchGoalOutletSpec] = Field(
+    required_outlets: list[IntentBranchOutletSpec] = Field(
         min_length=1,
         max_length=2,
     )
@@ -922,38 +1098,17 @@ IntentBranchOutletContract = Annotated[
 class IntentBranchGoal(_LLMProductionGoalBase):
     type: Literal["branch"]
     direction: Direction | None = None
-    length: float | None = Field(default=None, gt=0)
+    length: float | None = None
     branch_angles: list[float] = Field(default_factory=list)
     branch_plane_normal: LLMVector3 | None = None
     outlet_contract: IntentBranchOutletContract
     include_primary_outlet: bool
     junction_style: Literal["hard_fuse", "smooth_hub"] | None = None
-    blend_radius: float | None = Field(default=None, gt=0)
-    inner_blend_radius: float | None = Field(default=None, gt=0)
-    max_hub_radius: float | None = Field(default=None, gt=0)
-    branch_outer_diameter: float | None = Field(default=None, gt=0)
-    branch_wall_thickness: float | None = Field(default=None, gt=0)
-
-    @model_validator(mode="after")
-    def validate_binary_contract(self) -> "IntentBranchGoal":
-        contract = self.outlet_contract
-        if isinstance(contract, IntentBranchCountContract):
-            authored_outlets = contract.branch_count
-        elif isinstance(contract, IntentBranchDirectionsContract):
-            authored_outlets = len(contract.required_outlet_directions)
-        elif isinstance(contract, IntentBranchVectorsContract):
-            authored_outlets = len(contract.required_outlet_vectors)
-        elif isinstance(contract, IntentBranchOutletsContract):
-            authored_outlets = len(contract.required_outlets)
-        else:  # pragma: no cover - the discriminated union is closed above.
-            raise TypeError(
-                f"unsupported branch outlet contract: {type(contract).__name__}"
-            )
-        if authored_outlets + int(self.include_primary_outlet) != 2:
-            raise ValueError(
-                "branch goal must represent exactly one binary split with two total outlets"
-            )
-        return self
+    blend_radius: float | None = None
+    inner_blend_radius: float | None = None
+    max_hub_radius: float | None = None
+    branch_outer_diameter: float | None = None
+    branch_wall_thickness: float | None = None
 
     def to_production_payload(self) -> dict[str, Any]:
         payload = self.model_dump(mode="python", exclude={"outlet_contract"})
@@ -961,13 +1116,13 @@ class IntentBranchGoal(_LLMProductionGoalBase):
         if isinstance(contract, IntentBranchCountContract):
             payload["branch_count"] = contract.branch_count
         elif isinstance(contract, IntentBranchDirectionsContract):
-            payload["required_outlet_directions"] = (
-                contract.required_outlet_directions
-            )
+            payload["required_outlet_directions"] = contract.required_outlet_directions
         elif isinstance(contract, IntentBranchVectorsContract):
             payload["required_outlet_vectors"] = contract.required_outlet_vectors
         elif isinstance(contract, IntentBranchOutletsContract):
-            payload["required_outlets"] = contract.required_outlets
+            payload["required_outlets"] = [
+                outlet.model_dump(mode="python") for outlet in contract.required_outlets
+            ]
         else:  # pragma: no cover - the discriminated union is closed above.
             raise TypeError(
                 f"unsupported branch outlet contract: {type(contract).__name__}"
@@ -978,29 +1133,30 @@ class IntentBranchGoal(_LLMProductionGoalBase):
 class IntentDiameterChangeGoal(_LLMProductionGoalBase):
     type: Literal["diameter_change"]
     direction: Direction | None = None
-    diameter_out: float = Field(gt=0)
-    wall_thickness_out: float | None = Field(default=None, gt=0)
-    transition_length: float = Field(gt=0)
+    diameter_out: float
+    wall_thickness_out: float | None = None
+    transition_length: float
     offset: LLMVector3 | None = None
 
 
 class IntentConnectGoal(_LLMProductionGoalBase):
     type: Literal["connect"]
     required_waypoints: list[LLMVector3] = Field(default_factory=list)
+    connection_target: ConnectionTarget = "another_open_port"
 
 
 class IntentEndGoal(_LLMProductionGoalBase):
     type: Literal["end"]
     end_type: Literal["cap", "plug"]
-    termination_thickness: float | None = Field(default=None, gt=0)
+    termination_thickness: float | None = None
 
 
 class IntentConnectorGoal(_LLMProductionGoalBase):
     type: Literal["connector"]
     direction: Direction | None = None
-    length: float | None = Field(default=None, gt=0)
+    length: float | None = None
     component: str
-    component_spec: ComponentGoalSpec | None = None
+    component_spec: IntentComponentSpec | None = None
 
 
 LLMProductionGoal = Annotated[
@@ -1016,14 +1172,14 @@ LLMProductionGoal = Annotated[
 ]
 
 
-class LLMProductionIntent(StrictModel):
+class LLMProductionIntent(ProviderWireModel):
     """Structurally narrow intent schema used only at the Gemini boundary.
 
     Conversion deliberately re-validates through ``ProductionIntent`` instead
     of duplicating its graph, topology, component, and geometric invariants.
     """
 
-    global_spec: ProductionGlobalSpec
+    global_spec: IntentGlobalSpec
     start_position: LLMVector3
     start_axis: LLMVector3
     target_behavior: list[LLMProductionGoal] = Field(min_length=1)
@@ -1031,7 +1187,7 @@ class LLMProductionIntent(StrictModel):
     expected_open_ports_source: Literal["explicit", "derived"]
     required_components: list[str]
     hard_constraints: list[str]
-    geometric_constraints: list[GeometricConstraint]
+    geometric_constraints: list[IntentGeometricConstraint]
     design_notes: list[str] = Field(default_factory=list)
 
     def to_production_intent(self) -> ProductionIntent:
@@ -1046,6 +1202,17 @@ class LLMProductionIntent(StrictModel):
 
     def to_intent_result(self) -> IntentResult:
         return self.to_production_intent().to_intent_result()
+
+
+class LLMIntentJSONEnvelope(ProviderWireModel):
+    """Minimal provider grammar used only if the full intent schema is rejected."""
+
+    intent_json: str = Field(
+        description=(
+            "One complete LLMProductionIntent JSON object serialized as a JSON "
+            "string. The host strictly parses and validates this inner object."
+        )
+    )
 
 
 class Port(StrictModel):
@@ -1223,8 +1390,8 @@ class RouteParamsV2(StrictModel):
         ):
             raise ValueError("waypoints must not contain consecutive duplicates")
         if self.path_kind == "line":
-            if self.length is None or self.direction is None:
-                raise ValueError("line route requires length and direction")
+            if self.length is None:
+                raise ValueError("line route requires length")
             if (
                 self.bend_radius is not None
                 or self.sweep_angle is not None
@@ -1261,10 +1428,14 @@ class RouteParamsV2(StrictModel):
             or self.frenet is not None
             or self.minimum_curvature_radius is not None
         ):
-            raise ValueError("circular_arc route does not accept line/spline parameters")
+            raise ValueError(
+                "circular_arc route does not accept line/spline parameters"
+            )
         if self.path_kind == "circular_arc" and self.sweep_angle is not None:
             if abs(self.sweep_angle) <= 1e-6 or abs(self.sweep_angle) >= 360.0:
-                raise ValueError("circular_arc sweep_angle magnitude must be in (0, 360)")
+                raise ValueError(
+                    "circular_arc sweep_angle magnitude must be in (0, 360)"
+                )
         if self.path_kind == "spline" and (
             len(self.waypoints) < 2
             or self.final_tangent is None
@@ -1313,11 +1484,19 @@ class _PlannerRouteBase(StrictModel):
 class RouteLine(_PlannerRouteBase):
     path_kind: Literal["line"]
     length: float = Field(gt=0)
-    direction: LLMVector3
+    direction: LLMVector3 | None = Field(
+        default=None,
+        description=(
+            "Omit for a tangent continuation inherited from target_port.axis; "
+            "provide only for an immutable explicit route-direction contract."
+        ),
+    )
 
     @model_validator(mode="after")
     def validate_direction(self) -> "RouteLine":
-        if not _finite_vector(self.direction) or _vector_size(self.direction) <= 1e-12:
+        if self.direction is not None and (
+            not _finite_vector(self.direction) or _vector_size(self.direction) <= 1e-12
+        ):
             raise ValueError("direction must be a finite non-zero vector")
         return self
 
@@ -1367,6 +1546,7 @@ class RouteSpline(_PlannerRouteBase):
             "the last item is terminal."
         ),
     )
+
     @model_validator(mode="after")
     def validate_spline(self) -> "RouteSpline":
         if any(not _finite_vector(point) for point in self.waypoints):
@@ -1433,7 +1613,9 @@ class JunctionParamsV2(StrictModel):
             raise ValueError("hard junction must omit unused blend radii")
         for index, outlet in enumerate(self.outlets):
             if not _finite_vector(outlet.axis) or _vector_size(outlet.axis) <= 1e-12:
-                raise ValueError(f"outlets[{index}].axis must be a finite non-zero vector")
+                raise ValueError(
+                    f"outlets[{index}].axis must be a finite non-zero vector"
+                )
         return self
 
 
@@ -1452,7 +1634,9 @@ class _PlannerJunctionBase(StrictModel):
         _validate_junction_outlet_roles(self.outlets)
         for index, outlet in enumerate(self.outlets):
             if not _finite_vector(outlet.axis) or _vector_size(outlet.axis) <= 1e-12:
-                raise ValueError(f"outlets[{index}].axis must be a finite non-zero vector")
+                raise ValueError(
+                    f"outlets[{index}].axis must be a finite non-zero vector"
+                )
         return self
 
 
@@ -1474,7 +1658,7 @@ PlannerJunctionParamsV2 = Annotated[
 
 class ConnectPortsParamsV2(StrictModel):
     other_port_id: str
-    path_kind: Literal["line", "circular_arc", "spline"]
+    path_kind: Literal["seam", "line", "circular_arc", "spline"]
     section_source: SectionSource
     outer_diameter: float | None = Field(default=None, gt=0)
     wall_thickness: float | None = Field(default=None, gt=0)
@@ -1484,6 +1668,9 @@ class ConnectPortsParamsV2(StrictModel):
     interpolation: Literal["bspline"] | None = None
     frenet: bool | None = None
     minimum_curvature_radius: float | None = Field(default=None, gt=0)
+    bend_radius: float | None = Field(default=None, gt=0)
+    sweep_angle: float | None = None
+    plane_normal: Vector3 | None = None
 
     @model_validator(mode="after")
     def validate_variant(self) -> "ConnectPortsParamsV2":
@@ -1492,11 +1679,34 @@ class ConnectPortsParamsV2(StrictModel):
         )
         if any(not _finite_vector(point) for point in self.waypoints):
             raise ValueError("waypoints must contain only finite vectors")
+        if self.plane_normal is not None and (
+            not _finite_vector(self.plane_normal)
+            or _vector_size(self.plane_normal) <= 1e-12
+        ):
+            raise ValueError("plane_normal must be a finite non-zero vector")
         if any(
             _vector_size(tuple(b - a for a, b in zip(left, right))) <= 1e-12
             for left, right in zip(self.waypoints, self.waypoints[1:])
         ):
             raise ValueError("waypoints must not contain consecutive duplicates")
+        if self.path_kind == "seam":
+            if self.waypoints or any(
+                value is not None
+                for value in (
+                    self.initial_tangent,
+                    self.final_tangent,
+                    self.interpolation,
+                    self.frenet,
+                    self.minimum_curvature_radius,
+                    self.bend_radius,
+                    self.sweep_angle,
+                    self.plane_normal,
+                )
+            ):
+                raise ValueError(
+                    "seam connect_ports represents coincident compatible ports and accepts no path geometry"
+                )
+            return self
         if self.path_kind == "line":
             if self.waypoints:
                 raise ValueError("line connect_ports does not accept waypoints")
@@ -1508,6 +1718,9 @@ class ConnectPortsParamsV2(StrictModel):
                     self.interpolation,
                     self.frenet,
                     self.minimum_curvature_radius,
+                    self.bend_radius,
+                    self.sweep_angle,
+                    self.plane_normal,
                 )
             ):
                 raise ValueError(
@@ -1536,6 +1749,13 @@ class ConnectPortsParamsV2(StrictModel):
                     "circular_arc connect_ports requires minimum_curvature_radius"
                 )
             return self
+        if any(
+            value is not None
+            for value in (self.bend_radius, self.sweep_angle, self.plane_normal)
+        ):
+            raise ValueError(
+                "spline connect_ports does not accept circular-arc parameters"
+            )
         if (
             self.interpolation != "bspline"
             or self.frenet is None
@@ -1657,17 +1877,26 @@ class InlineComponentParamsV2(StrictModel):
         )
         body_end = self.body_start_offset + self.body_length
         if body_end > self.length + 1e-9:
-            raise ValueError("component body must remain inside the authored axial length")
-        if self.outer_diameter is not None and self.body_outer_diameter <= self.outer_diameter:
+            raise ValueError(
+                "component body must remain inside the authored axial length"
+            )
+        if (
+            self.outer_diameter is not None
+            and self.body_outer_diameter <= self.outer_diameter
+        ):
             raise ValueError("body_outer_diameter must exceed the mating pipe diameter")
         actuator_values = (
             self.actuator_diameter,
             self.actuator_height,
             self.actuator_axis,
         )
-        if self.component_type == "valve" and any(value is None for value in actuator_values):
+        if self.component_type == "valve" and any(
+            value is None for value in actuator_values
+        ):
             raise ValueError("valve requires actuator dimensions and actuator_axis")
-        if self.component_type != "valve" and any(value is not None for value in actuator_values):
+        if self.component_type != "valve" and any(
+            value is not None for value in actuator_values
+        ):
             raise ValueError("actuator parameters are valid only for valve")
         flange_values = (
             self.flange_bolt_count,
@@ -1675,9 +1904,15 @@ class InlineComponentParamsV2(StrictModel):
             self.flange_bolt_hole_diameter,
             self.flange_reference_axis,
         )
-        if self.component_type == "flange" and any(value is None for value in flange_values):
-            raise ValueError("flange requires authored bolt count, circle, and hole diameter")
-        if self.component_type != "flange" and any(value is not None for value in flange_values):
+        if self.component_type == "flange" and any(
+            value is None for value in flange_values
+        ):
+            raise ValueError(
+                "flange requires authored bolt count, circle, and hole diameter"
+            )
+        if self.component_type != "flange" and any(
+            value is not None for value in flange_values
+        ):
             raise ValueError("flange bolt parameters are valid only for flange")
         if self.flange_reference_axis is not None and (
             not _finite_vector(self.flange_reference_axis)
@@ -1685,9 +1920,13 @@ class InlineComponentParamsV2(StrictModel):
         ):
             raise ValueError("flange_reference_axis must be a finite non-zero vector")
         union_values = (self.union_ring_outer_diameter, self.union_ring_length)
-        if self.component_type == "union" and any(value is None for value in union_values):
+        if self.component_type == "union" and any(
+            value is None for value in union_values
+        ):
             raise ValueError("union requires authored ring diameter and length")
-        if self.component_type != "union" and any(value is not None for value in union_values):
+        if self.component_type != "union" and any(
+            value is not None for value in union_values
+        ):
             raise ValueError("union ring parameters are valid only for union")
         if self.actuator_axis is not None and (
             not _finite_vector(self.actuator_axis)
@@ -1706,7 +1945,9 @@ class InlineComponentParamsV2(StrictModel):
         if self.component_type in {"union", "valve"} and not (
             self.body_start_offset > 1e-9 and body_end < self.length - 1e-9
         ):
-            raise ValueError(f"{self.component_type} body must lie between two pipe necks")
+            raise ValueError(
+                f"{self.component_type} body must lie between two pipe necks"
+            )
         return self
 
 
@@ -1818,6 +2059,227 @@ class PlannerDecision(PlannerDecisionBase):
     choice: PlannerChoice
 
 
+class _PlannerWireSection(StrictModel):
+    """Planner wire always inherits the selected target-port section."""
+
+    section_source: Literal["inherit_target"]
+
+
+class PlannerRouteLineWire(_PlannerWireSection):
+    path_kind: Literal["line"]
+    length: float
+    direction: LLMVector3 | None = None
+
+
+class PlannerRouteArcWire(_PlannerWireSection):
+    path_kind: Literal["circular_arc"]
+    bend_radius: float
+    sweep_angle: float
+    plane_normal: LLMVector3
+
+
+class PlannerRouteSplineWire(_PlannerWireSection):
+    path_kind: Literal["spline"]
+    waypoint_frame: WaypointFrame
+    waypoints: list[LLMVector3] = Field(min_length=2)
+
+
+PlannerRouteWire = Annotated[
+    PlannerRouteLineWire | PlannerRouteArcWire | PlannerRouteSplineWire,
+    Field(discriminator="path_kind"),
+]
+
+
+class PlannerTransitionWire(_PlannerWireSection):
+    diameter_out: float
+    wall_thickness_out: float | None = None
+    length: float
+    offset: LLMVector3 | None = None
+
+
+class PlannerJunctionOutletWire(StrictModel):
+    role: Literal["primary", "branch"]
+    axis: LLMVector3
+    length: float
+    outer_diameter: float
+    wall_thickness: float
+
+
+class _PlannerJunctionWireBase(_PlannerWireSection):
+    outlets: list[PlannerJunctionOutletWire] = Field(min_length=2, max_length=2)
+    max_hub_radius: float
+
+
+class PlannerJunctionHardWire(_PlannerJunctionWireBase):
+    blend_mode: Literal["hard"]
+
+
+class PlannerJunctionFilletWire(_PlannerJunctionWireBase):
+    blend_mode: Literal["fillet"]
+    blend_radius: float
+    inner_blend_radius: float
+
+
+PlannerJunctionWire = Annotated[
+    PlannerJunctionHardWire | PlannerJunctionFilletWire,
+    Field(discriminator="blend_mode"),
+]
+
+
+class PlannerConnectLineWire(_PlannerWireSection):
+    path_kind: Literal["line"]
+    other_port_id: str
+
+
+class PlannerConnectArcWire(_PlannerWireSection):
+    path_kind: Literal["circular_arc"]
+    other_port_id: str
+    waypoints: list[LLMVector3] = Field(min_length=1, max_length=1)
+
+
+class PlannerConnectSplineWire(_PlannerWireSection):
+    path_kind: Literal["spline"]
+    other_port_id: str
+    waypoints: list[LLMVector3] = Field(min_length=1)
+
+
+PlannerConnectWire = Annotated[
+    PlannerConnectLineWire | PlannerConnectArcWire | PlannerConnectSplineWire,
+    Field(discriminator="path_kind"),
+]
+
+
+class PlannerTerminateWire(_PlannerWireSection):
+    termination_type: Literal["cap", "plug"]
+    thickness: float
+
+
+class _PlannerInlineWireBase(_PlannerWireSection):
+    length: float
+    body_outer_diameter: float
+    body_start_offset: float
+    body_length: float
+    connector_type_out: str
+    connector_gender_out: Literal["neutral", "male", "female"]
+    connector_standard_out: str | None
+
+
+class PlannerFlangeWire(_PlannerInlineWireBase):
+    component_type: Literal["flange"]
+    flange_bolt_count: int = Field(ge=3, le=32)
+    flange_bolt_circle_diameter: float
+    flange_bolt_hole_diameter: float
+    flange_reference_axis: LLMVector3
+
+
+class PlannerCouplingWire(_PlannerInlineWireBase):
+    component_type: Literal["coupling"]
+
+
+class PlannerUnionWire(_PlannerInlineWireBase):
+    component_type: Literal["union"]
+    union_ring_outer_diameter: float
+    union_ring_length: float
+
+
+class PlannerValveWire(_PlannerInlineWireBase):
+    component_type: Literal["valve"]
+    actuator_diameter: float
+    actuator_height: float
+    actuator_axis: LLMVector3
+
+
+PlannerInlineWire = Annotated[
+    PlannerFlangeWire | PlannerCouplingWire | PlannerUnionWire | PlannerValveWire,
+    Field(discriminator="component_type"),
+]
+
+
+class PlannerRouteChoiceWire(StrictModel):
+    module: Literal["route"]
+    params: PlannerRouteWire
+
+
+class PlannerTransitionChoiceWire(StrictModel):
+    module: Literal["transition"]
+    params: PlannerTransitionWire
+
+
+class PlannerJunctionChoiceWire(StrictModel):
+    module: Literal["junction"]
+    params: PlannerJunctionWire
+
+
+class PlannerConnectChoiceWire(StrictModel):
+    module: Literal["connect_ports"]
+    params: PlannerConnectWire
+
+
+class PlannerTerminateChoiceWire(StrictModel):
+    module: Literal["terminate"]
+    params: PlannerTerminateWire
+
+
+class PlannerInlineChoiceWire(StrictModel):
+    module: Literal["inline_component"]
+    params: PlannerInlineWire
+
+
+PlannerChoiceWire = Annotated[
+    PlannerRouteChoiceWire
+    | PlannerTransitionChoiceWire
+    | PlannerJunctionChoiceWire
+    | PlannerConnectChoiceWire
+    | PlannerTerminateChoiceWire
+    | PlannerInlineChoiceWire,
+    Field(discriminator="module"),
+]
+CorePlannerChoiceWire = Annotated[
+    PlannerRouteChoiceWire
+    | PlannerTransitionChoiceWire
+    | PlannerJunctionChoiceWire
+    | PlannerConnectChoiceWire
+    | PlannerTerminateChoiceWire,
+    Field(discriminator="module"),
+]
+
+
+class PlannerDecisionWireBase(ProviderWireModel):
+    catalog_schema_version: Literal[2]
+    target_port: str
+    affected_goal_ids: list[str] = Field(min_length=1)
+    completed_goal_ids: list[str]
+    rationale: str | None = None
+
+    def to_action_draft(self) -> ActionDraft:
+        params = self.choice.params.model_dump(  # type: ignore[attr-defined]
+            mode="json",
+            exclude_none=True,
+        )
+        if isinstance(
+            self.choice.params,  # type: ignore[attr-defined]
+            _PlannerInlineWireBase,
+        ):
+            params["connector_standard_out"] = self.choice.params.connector_standard_out  # type: ignore[attr-defined]
+        return ActionDraft(
+            target_port=self.target_port,
+            module=self.choice.module,  # type: ignore[attr-defined]
+            params=params,
+            catalog_schema_version=self.catalog_schema_version,
+            affected_goal_ids=self.affected_goal_ids,
+            completed_goal_ids=self.completed_goal_ids,
+            rationale=self.rationale,
+        )
+
+
+class CorePlannerDecisionWire(PlannerDecisionWireBase):
+    choice: CorePlannerChoiceWire
+
+
+class PlannerDecisionWire(PlannerDecisionWireBase):
+    choice: PlannerChoiceWire
+
+
 class AgendaRepairDirective(StrictModel):
     """최종 오류를 고칠 rollback 단계와 국소 repair 범위를 지정한다."""
 
@@ -1839,6 +2301,17 @@ class AgendaRepairDirective(StrictModel):
             ):
                 raise ValueError(f"{label} must contain unique, non-empty, trimmed IDs")
         return self
+
+
+class AgendaRepairDirectiveWire(ProviderWireModel):
+    """Provider-only shape; localization semantics are bound by the host."""
+
+    scope: Literal["agenda"]
+    rollback_step: int = Field(ge=1)
+    target_issue_ids: list[str] = Field(min_length=1, max_length=8)
+    target_module_ids: list[str] = Field(default_factory=list, max_length=8)
+    repair_hint: str
+    rationale: str
 
 
 class VisualCriticIssue(StrictModel):
@@ -1866,6 +2339,16 @@ class VisualCriticResult(StrictModel):
         return self
 
 
+class VisualCriticResultWire(ProviderWireModel):
+    """Provider-only visual result before passed/issues semantic binding."""
+
+    state_id: str
+    payload_digest: str
+    evidence_sha256: list[str]
+    passed: bool
+    issues: list[VisualCriticIssue] = Field(default_factory=list)
+
+
 class ResolvedAction(StrictModel):
     """대상 상태에 맞춰 모든 resolver 소유 파라미터가 계산된 행동이다."""
 
@@ -1880,11 +2363,39 @@ class ResolvedAction(StrictModel):
     satisfied_components: list[str] = Field(default_factory=list)
 
 
+class ValidationDiagnostic(StrictModel):
+    """검증 실패의 수치 계약과 기하적 발생 위치를 기계 판독 가능하게 담는다."""
+
+    code: str
+    check_name: str
+    evaluator_id: str
+    evaluator_version: str
+    calculation_method: str
+    metric: str
+    comparator: Literal[">=", ">", "<=", "<", "=="]
+    required: float
+    actual: float
+    gap: float = Field(ge=0)
+    ratio: float | None = Field(default=None, ge=0)
+    units: str | None = None
+    modeling_tolerance: float = Field(gt=0)
+    critical_span_index: int | None = Field(default=None, ge=0)
+    critical_t: float | None = Field(default=None, ge=0, le=1)
+    critical_span_endpoints: tuple[Vector3, Vector3] | None = None
+    critical_location: Vector3 | None = None
+    handle_factors: list[float] = Field(default_factory=list)
+    curve_length: float | None = Field(default=None, ge=0)
+    polyline_length: float | None = Field(default=None, ge=0)
+    minimum_chord: float | None = Field(default=None, gt=0)
+    implicated_parameter_paths: list[str] = Field(default_factory=list)
+
+
 class ValidationResult(StrictModel):
     """registry 검사의 통과 여부와 구체적인 오류 목록을 담는다."""
 
     valid: bool
     errors: list[str] = Field(default_factory=list)
+    diagnostics: list[ValidationDiagnostic] = Field(default_factory=list)
 
 
 class PipeState(StrictModel):
@@ -1904,6 +2415,7 @@ class PipeState(StrictModel):
     module_measurements: dict[str, dict[str, float]] = Field(default_factory=dict)
     placed_modules: list[ModuleRef] = Field(default_factory=list)
     open_ports: list[Port] = Field(default_factory=list)
+    reserved_start_anchor: Port | None = None
     port_nodes: dict[str, Port] = Field(default_factory=dict)
     connection_edges: list[ConnectionEdge] = Field(default_factory=list)
     module_incidence_edges: list[ModuleIncidenceEdge] = Field(default_factory=list)
@@ -1993,12 +2505,718 @@ class ActionAttempt(StrictModel):
     step_index: int
     attempt_index: int
     state_id: str
+    state_digest: str | None = None
     phase: str
     status: Literal["rejected", "accepted"]
     draft: dict[str, Any] | None = None
     resolved: dict[str, Any] | None = None
     issue_codes: list[str] = Field(default_factory=list)
     observations: list[dict[str, Any]] = Field(default_factory=list)
+
+
+class IntentRepairAdvice(StrictModel):
+    """검증된 intent 후보를 다시 작성하게 하는 비실행형 진단 지시다.
+
+    Advisor는 intent를 직접 만들거나 승인하지 않는다. 이 객체는 현재 후보에서
+    보존할 요구와 다시 작성할 필드만 제한하며, 수정 후보는 동일한 결정론적
+    intent 검증을 처음부터 다시 통과해야 한다.
+    """
+
+    diagnosis_class: Literal[
+        "candidate_contract_error",
+        "candidate_topology_error",
+        "unsupported_user_requirement",
+        "validator_policy_mismatch",
+        "insufficient_evidence",
+    ]
+    disposition: Literal[
+        "retry_intent",
+        "stop_contract_infeasible",
+        "escalate_validator_review",
+        "stop_futile_retry",
+    ]
+    candidate_fixable: bool
+    summary: str
+    causal_chain: list[str] = Field(min_length=1, max_length=6)
+    preserve_requirements: list[str] = Field(default_factory=list, max_length=12)
+    change_fields: list[str] = Field(default_factory=list, max_length=12)
+    avoid: list[str] = Field(default_factory=list, max_length=12)
+    intent_instruction: str
+
+    @model_validator(mode="after")
+    def validate_advice(self) -> "IntentRepairAdvice":
+        for label, value in (
+            ("summary", self.summary),
+            ("intent_instruction", self.intent_instruction),
+        ):
+            if not value.strip():
+                raise ValueError(f"intent repair advice {label} must not be blank")
+        for label, values in (
+            ("causal_chain", self.causal_chain),
+            ("preserve_requirements", self.preserve_requirements),
+            ("change_fields", self.change_fields),
+            ("avoid", self.avoid),
+        ):
+            if any(not str(value).strip() for value in values):
+                raise ValueError(
+                    f"intent repair advice {label} must not contain blank values"
+                )
+            if len(values) != len(set(values)):
+                raise ValueError(
+                    f"intent repair advice {label} must contain unique values"
+                )
+
+        if self.disposition == "retry_intent":
+            if not self.candidate_fixable:
+                raise ValueError("retry_intent requires candidate_fixable=true")
+            if not self.change_fields:
+                raise ValueError("retry_intent requires at least one change field")
+        elif self.disposition == "stop_contract_infeasible":
+            if self.diagnosis_class != "unsupported_user_requirement":
+                raise ValueError(
+                    "stop_contract_infeasible requires unsupported_user_requirement"
+                )
+            if self.candidate_fixable:
+                raise ValueError(
+                    "stop_contract_infeasible requires candidate_fixable=false"
+                )
+        elif self.candidate_fixable:
+            raise ValueError(f"{self.disposition} requires candidate_fixable=false")
+        return self
+
+
+class IntentRepairAdviceWire(ProviderWireModel):
+    """Provider-safe intent diagnosis body before host semantic validation."""
+
+    diagnosis_class: Literal[
+        "candidate_contract_error",
+        "candidate_topology_error",
+        "unsupported_user_requirement",
+        "validator_policy_mismatch",
+        "insufficient_evidence",
+    ]
+    disposition: Literal[
+        "retry_intent",
+        "stop_contract_infeasible",
+        "escalate_validator_review",
+        "stop_futile_retry",
+    ]
+    candidate_fixable: bool
+    summary: str
+    causal_chain: list[str] = Field(min_length=1, max_length=6)
+    preserve_requirements: list[str] = Field(default_factory=list, max_length=12)
+    change_fields: list[str] = Field(default_factory=list, max_length=12)
+    avoid: list[str] = Field(default_factory=list, max_length=12)
+    intent_instruction: str
+
+
+class StepRepairAdvice(StrictModel):
+    """독립 진단 모델이 planner에 넘기는 비실행형 교정 지시다.
+
+    이 객체는 CAD 상태나 action을 직접 변경할 권한이 없다. 실제 후보는
+    기존 step planner schema를 다시 통과해야 한다.
+    """
+
+    diagnosis_class: Literal[
+        "planner_parameter",
+        "planner_topology",
+        "contract_infeasible",
+        "validator_or_kernel",
+        "infrastructure",
+        "unknown",
+    ]
+    candidate_fixable: bool
+    diagnosis: str
+    preserve: list[str] = Field(default_factory=list)
+    change: list[str] = Field(default_factory=list)
+    avoid: list[str] = Field(default_factory=list)
+    verification_target: str
+    planner_instruction: str
+
+    @model_validator(mode="after")
+    def validate_advice(self) -> "StepRepairAdvice":
+        text_fields = (
+            self.diagnosis,
+            self.verification_target,
+            self.planner_instruction,
+        )
+        if any(not value.strip() for value in text_fields):
+            raise ValueError("repair advice text fields must not be blank")
+        for name, values in (
+            ("preserve", self.preserve),
+            ("change", self.change),
+            ("avoid", self.avoid),
+        ):
+            if len(values) > 12 or any(not str(value).strip() for value in values):
+                raise ValueError(f"repair advice {name} must contain 0..12 labels")
+        return self
+
+
+class StepRepairAdviceWire(ProviderWireModel):
+    diagnosis_class: Literal[
+        "planner_parameter",
+        "planner_topology",
+        "contract_infeasible",
+        "validator_or_kernel",
+        "infrastructure",
+        "unknown",
+    ]
+    candidate_fixable: bool
+    diagnosis: str
+    preserve: list[str] = Field(default_factory=list)
+    change: list[str] = Field(default_factory=list)
+    avoid: list[str] = Field(default_factory=list)
+    verification_target: str
+    planner_instruction: str
+
+
+_SHA256_PATTERN = r"^[0-9a-f]{64}$"
+
+
+def _diagnostic_nonblank(value: str, label: str) -> str:
+    if not value.strip():
+        raise ValueError(f"{label} must not be blank")
+    return value
+
+
+def _diagnostic_unique_nonblank(values: list[str], label: str) -> list[str]:
+    if any(not str(value).strip() for value in values):
+        raise ValueError(f"{label} must not contain blank values")
+    if len(values) != len(set(values)):
+        raise ValueError(f"{label} must contain unique values")
+    return values
+
+
+def _validate_diagnostic_pointer(path: str, label: str) -> str:
+    """Validate the RFC 6901 shape used by diagnostic field ownership.
+
+    Ownership cards may use ``*`` for an array slot, but otherwise paths are
+    ordinary JSON pointers.  Empty path segments are rejected because they are
+    ambiguous in planner-facing repair directives.
+    """
+
+    if not path.startswith("/") or path == "/":
+        raise ValueError(f"{label} must be a non-root JSON pointer")
+    for token in path[1:].split("/"):
+        if not token:
+            raise ValueError(f"{label} must not contain empty path segments")
+        index = 0
+        while index < len(token):
+            if token[index] == "~":
+                if index + 1 >= len(token) or token[index + 1] not in {"0", "1"}:
+                    raise ValueError(f"{label} contains an invalid JSON pointer escape")
+                index += 2
+                continue
+            index += 1
+    return path
+
+
+def _validate_diagnostic_finite_tree(value: Any, label: str) -> None:
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError(f"{label} must contain only finite numbers")
+    if isinstance(value, dict):
+        for child in value.values():
+            _validate_diagnostic_finite_tree(child, label)
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            _validate_diagnostic_finite_tree(child, label)
+
+
+DiagnosticFactKind = Literal[
+    "measurement",
+    "relationship",
+    "validator_policy",
+    "parameter_effect",
+    "attempt_delta",
+    "immutable_contract",
+    "passed_check",
+    "kernel_error",
+]
+DiagnosticOwner = Literal[
+    "user_immutable",
+    "goal_derived_immutable",
+    "planner_authored",
+    "resolver_owned",
+    "validator_policy",
+    "downstream_state_sensitive",
+]
+RepairStrategyKind = Literal[
+    "parameter_change",
+    "mode_change",
+    "primitive_change",
+    "topology_change",
+    "rollback_earlier_step",
+    "evidence_probe",
+    "validator_review",
+    "kernel_review",
+    "infrastructure_retry",
+    "stop_futile_retry",
+]
+
+
+class DiagnosticBinding(StrictModel):
+    """Immutable provenance binding for one rejected transition candidate."""
+
+    protocol_version: Literal[1] = 1
+    run_id: str
+    state_id: str
+    state_digest: str = Field(pattern=_SHA256_PATTERN)
+    contract_digest: str = Field(pattern=_SHA256_PATTERN)
+    step_index: int = Field(ge=0)
+    attempt_index: int = Field(ge=0)
+    action_digest: str = Field(pattern=_SHA256_PATTERN)
+    failure_signature: str = Field(pattern=_SHA256_PATTERN)
+    evidence_digest: str = Field(pattern=_SHA256_PATTERN)
+    generator_version: str
+    validator_schema_version: int = Field(ge=1)
+    validator_policy_digest: str = Field(pattern=_SHA256_PATTERN)
+    repair_epoch: int = Field(ge=0)
+
+    @model_validator(mode="after")
+    def validate_binding_labels(self) -> "DiagnosticBinding":
+        for label, value in (
+            ("run_id", self.run_id),
+            ("state_id", self.state_id),
+            ("generator_version", self.generator_version),
+        ):
+            _diagnostic_nonblank(value, label)
+        return self
+
+
+class Fact(StrictModel):
+    """One evidence-addressable fact supplied to the diagnostician."""
+
+    evidence_id: str
+    kind: DiagnosticFactKind
+    statement: str
+    data: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def validate_fact(self) -> "Fact":
+        _diagnostic_nonblank(self.evidence_id, "evidence_id")
+        _diagnostic_nonblank(self.statement, "statement")
+        _validate_diagnostic_finite_tree(self.data, "fact data")
+        return self
+
+
+# The design document originally used DiagnosticFact.  Keep both public names
+# so callers can migrate without maintaining two subtly different contracts.
+DiagnosticFact = Fact
+
+
+class FieldOwnership(StrictModel):
+    """Authority and mutability of one planner-visible JSON pointer."""
+
+    path: str
+    owner: DiagnosticOwner
+    mutable_in_current_repair: bool
+    reason: str
+
+    @model_validator(mode="after")
+    def validate_ownership(self) -> "FieldOwnership":
+        _validate_diagnostic_pointer(self.path, "field ownership path")
+        _diagnostic_nonblank(self.reason, "field ownership reason")
+        if self.mutable_in_current_repair and self.owner != "planner_authored":
+            raise ValueError(
+                "only planner_authored fields may be mutable in the current repair"
+            )
+        return self
+
+
+class ParameterCausality(StrictModel):
+    """Evidence-backed causal assessment for one candidate parameter."""
+
+    parameter_path: str
+    influence: Literal["direct", "conditional", "non_causal", "unproven"]
+    observed_metric_response: Literal[
+        "improved",
+        "worsened",
+        "unchanged",
+        "not_comparable",
+    ]
+    directive: Literal[
+        "change",
+        "keep",
+        "avoid_repeating",
+        "change_mode_first",
+        "collect_probe",
+        "unknown",
+    ]
+    explanation: str
+    evidence_ids: list[str] = Field(min_length=1, max_length=8)
+
+    @model_validator(mode="after")
+    def validate_causality(self) -> "ParameterCausality":
+        _validate_diagnostic_pointer(self.parameter_path, "parameter_path")
+        _diagnostic_nonblank(self.explanation, "causality explanation")
+        _diagnostic_unique_nonblank(self.evidence_ids, "causality evidence_ids")
+        return self
+
+
+class RepairStrategy(StrictModel):
+    """A bounded, non-executing repair strategy ranked by the diagnostician."""
+
+    priority: int = Field(ge=1, le=3)
+    kind: RepairStrategyKind
+    target_fields: list[str] = Field(default_factory=list, max_length=8)
+    instruction: str
+    expected_effect: str
+    verification_checks: list[str] = Field(min_length=1, max_length=8)
+    risks: list[str] = Field(default_factory=list, max_length=6)
+
+    @model_validator(mode="after")
+    def validate_strategy(self) -> "RepairStrategy":
+        _diagnostic_nonblank(self.instruction, "strategy instruction")
+        _diagnostic_nonblank(self.expected_effect, "strategy expected_effect")
+        _diagnostic_unique_nonblank(self.target_fields, "strategy target_fields")
+        _diagnostic_unique_nonblank(
+            self.verification_checks, "strategy verification_checks"
+        )
+        _diagnostic_unique_nonblank(self.risks, "strategy risks")
+        for path in self.target_fields:
+            _validate_diagnostic_pointer(path, "strategy target field")
+        if self.kind in {"parameter_change", "mode_change"} and not self.target_fields:
+            raise ValueError(f"{self.kind} requires at least one target field")
+        return self
+
+
+class DiagnosticEvidenceUse(StrictModel):
+    evidence_id: str
+    supports: str
+
+    @model_validator(mode="after")
+    def validate_evidence_use(self) -> "DiagnosticEvidenceUse":
+        _diagnostic_nonblank(self.evidence_id, "evidence_id")
+        _diagnostic_nonblank(self.supports, "evidence support")
+        return self
+
+
+class StepRepairDiagnosticContext(StrictModel):
+    """Typed, digest-bound and failure-specific advisor input."""
+
+    # This value participates in the context digest.  Changing the provider
+    # transport or its host binding therefore invalidates stale resumable
+    # failure artifacts instead of suppressing the upgraded advisor call.
+    advisor_protocol_version: Literal[2] = 2
+    binding: DiagnosticBinding
+    issue_ids: list[str] = Field(min_length=1, max_length=8)
+    current_state: dict[str, Any]
+    immutable_goal_slice: dict[str, Any]
+    rejected_draft: dict[str, Any]
+    resolved_action: dict[str, Any] | None = None
+    implicated_modules: list[dict[str, Any]] = Field(default_factory=list)
+    failed_checks: list[dict[str, Any]] = Field(min_length=1)
+    passed_check_summary: list[str] = Field(default_factory=list)
+    facts: list[Fact] = Field(min_length=1)
+    field_ownership: list[FieldOwnership] = Field(min_length=1)
+    parameter_trials: list[dict[str, Any]] = Field(default_factory=list)
+    deterministic_recommendations: list[dict[str, Any]] = Field(default_factory=list)
+    allowed_strategy_kinds: list[RepairStrategyKind] = Field(min_length=1)
+
+    @property
+    def ownership(self) -> list[FieldOwnership]:
+        """Compatibility spelling for early Phase-1 callers."""
+
+        return self.field_ownership
+
+    @model_validator(mode="after")
+    def validate_context(self) -> "StepRepairDiagnosticContext":
+        _diagnostic_unique_nonblank(self.issue_ids, "diagnostic issue_ids")
+        _diagnostic_unique_nonblank(self.passed_check_summary, "passed_check_summary")
+        _diagnostic_unique_nonblank(
+            list(self.allowed_strategy_kinds), "allowed_strategy_kinds"
+        )
+        evidence_ids = [fact.evidence_id for fact in self.facts]
+        if len(evidence_ids) != len(set(evidence_ids)):
+            raise ValueError("diagnostic facts must have unique evidence IDs")
+        ownership_paths = [card.path for card in self.field_ownership]
+        if len(ownership_paths) != len(set(ownership_paths)):
+            raise ValueError("field ownership paths must be unique")
+        for label, value in (
+            ("current_state", self.current_state),
+            ("immutable_goal_slice", self.immutable_goal_slice),
+            ("rejected_draft", self.rejected_draft),
+            ("implicated_modules", self.implicated_modules),
+            ("failed_checks", self.failed_checks),
+            ("parameter_trials", self.parameter_trials),
+            ("deterministic_recommendations", self.deterministic_recommendations),
+        ):
+            _validate_diagnostic_finite_tree(value, label)
+        return self
+
+
+class ParameterRangeRecommendation(StrictModel):
+    """An evidence-traceable search range, never a planner-authored value.
+
+    Bounds are nullable because a one-sided inequality or an unresolved search
+    surface can still be useful to the ordinary planner.  The host validates
+    every supplied number against the cited structured evidence before the
+    recommendation is allowed into planner context.
+    """
+
+    path: str
+    lower: float | None = None
+    upper: float | None = None
+    preferred: float | None = None
+    unit: str | None = None
+    classification: Literal["feasible", "promising", "avoid", "unresolved"]
+    rationale: str
+    evidence_ids: list[str] = Field(min_length=1, max_length=8)
+
+    @model_validator(mode="after")
+    def validate_parameter_range(self) -> "ParameterRangeRecommendation":
+        _validate_diagnostic_pointer(self.path, "parameter range path")
+        _diagnostic_nonblank(self.rationale, "parameter range rationale")
+        _diagnostic_unique_nonblank(self.evidence_ids, "parameter range evidence_ids")
+        if self.unit is not None:
+            _diagnostic_nonblank(self.unit, "parameter range unit")
+        values = [
+            value
+            for value in (self.lower, self.upper, self.preferred)
+            if value is not None
+        ]
+        if any(not math.isfinite(value) for value in values):
+            raise ValueError("parameter range values must be finite")
+        if (
+            self.lower is not None
+            and self.upper is not None
+            and self.lower > self.upper
+        ):
+            raise ValueError("parameter range lower must not exceed upper")
+        if self.preferred is not None:
+            if self.lower is not None and self.preferred < self.lower:
+                raise ValueError("parameter range preferred must be at least lower")
+            if self.upper is not None and self.preferred > self.upper:
+                raise ValueError("parameter range preferred must not exceed upper")
+        return self
+
+
+class GeometryAdvisorRecommendationWire(StrictModel):
+    """One compact field recommendation accepted by Gemini structured output."""
+
+    path: str
+    action: Literal[
+        "increase",
+        "decrease",
+        "replace",
+        "keep",
+        "avoid",
+        "collect_probe",
+        "none",
+    ]
+    bound_mode: Literal["none", "lower", "upper", "closed"]
+    lower_text: str
+    upper_text: str
+    preferred_text: str
+    unit: str
+    classification: Literal["feasible", "promising", "avoid", "unresolved"]
+    rationale: str
+    evidence_id: str
+
+
+class GeometryValidationAdvisorResponse(ProviderWireModel):
+    """Small provider wire DTO for the independent validation agent."""
+
+    diagnosis_class: Literal[
+        "candidate_parameter",
+        "candidate_variant_or_topology",
+        "immutable_contract_conflict",
+        "validator_policy_mismatch",
+        "kernel_operation_failure",
+        "infrastructure_failure",
+        "insufficient_evidence",
+    ]
+    disposition: Literal[
+        "retry_planner",
+        "change_primitive_or_mode",
+        "collect_more_evidence",
+        "escalate_validator_review",
+        "escalate_kernel_review",
+        "retry_infrastructure",
+        "stop_contract_infeasible",
+        "stop_futile_retry",
+    ]
+    confidence: Literal["low", "medium", "high"]
+    summary: str
+    causal_chain: list[str] = Field(min_length=1, max_length=6)
+    evidence_ids: list[str] = Field(min_length=1, max_length=12)
+    recommendations: list[GeometryAdvisorRecommendationWire] = Field(max_length=8)
+    strategy_kind: Literal[
+        "none",
+        "parameter_change",
+        "mode_change",
+        "primitive_change",
+        "topology_change",
+        "rollback_earlier_step",
+        "evidence_probe",
+        "validator_review",
+        "kernel_review",
+        "infrastructure_retry",
+        "stop_futile_retry",
+    ]
+    strategy_instruction: str
+    verification_checks: list[str] = Field(max_length=8)
+    missing_evidence: list[str] = Field(max_length=8)
+    planner_instruction: str
+
+
+class ParameterDirectionRecommendation(StrictModel):
+    """Evidence-backed direction supplied to the ordinary parameter planner."""
+
+    path: str
+    direction: Literal["increase", "decrease", "replace", "keep", "avoid", "none"]
+    rationale: str
+    evidence_ids: list[str] = Field(min_length=1, max_length=8)
+
+    @model_validator(mode="after")
+    def validate_direction(self) -> "ParameterDirectionRecommendation":
+        _validate_diagnostic_pointer(self.path, "parameter direction path")
+        _diagnostic_nonblank(self.rationale, "parameter direction rationale")
+        _diagnostic_unique_nonblank(self.evidence_ids, "direction evidence IDs")
+        return self
+
+
+class StepRepairDiagnosisBody(StrictModel):
+    """LLM-authored diagnosis content without host-owned identity fields.
+
+    The model is deliberately not asked to copy state IDs or SHA-256 digests.
+    The host binds this body to the exact diagnostic case after structured
+    generation, eliminating a non-semantic source of advisor failures.
+    """
+
+    diagnosis_class: Literal[
+        "candidate_parameter",
+        "candidate_variant_or_topology",
+        "immutable_contract_conflict",
+        "validator_policy_mismatch",
+        "kernel_operation_failure",
+        "infrastructure_failure",
+        "insufficient_evidence",
+    ]
+    disposition: Literal[
+        "retry_planner",
+        "change_primitive_or_mode",
+        "collect_more_evidence",
+        "escalate_validator_review",
+        "escalate_kernel_review",
+        "retry_infrastructure",
+        "stop_contract_infeasible",
+        "stop_futile_retry",
+    ]
+    confidence: Literal["low", "medium", "high"]
+    summary: str
+    causal_chain: list[str] = Field(min_length=1, max_length=6)
+    evidence_uses: list[DiagnosticEvidenceUse] = Field(min_length=1, max_length=12)
+    parameter_causality: list[ParameterCausality] = Field(default_factory=list)
+    direction_guidance: list[ParameterDirectionRecommendation] = Field(
+        default_factory=list, max_length=12
+    )
+    parameter_ranges: list[ParameterRangeRecommendation] = Field(
+        default_factory=list, max_length=8
+    )
+    strategies: list[RepairStrategy] = Field(default_factory=list, max_length=3)
+    missing_evidence: list[str] = Field(default_factory=list, max_length=8)
+    planner_instruction: str
+
+    @model_validator(mode="after")
+    def validate_diagnosis_body_shape(self) -> "StepRepairDiagnosisBody":
+        _diagnostic_nonblank(self.summary, "diagnosis summary")
+        _diagnostic_nonblank(self.planner_instruction, "planner_instruction")
+        _diagnostic_unique_nonblank(self.causal_chain, "causal_chain")
+        _diagnostic_unique_nonblank(self.missing_evidence, "missing_evidence")
+        evidence_ids = [use.evidence_id for use in self.evidence_uses]
+        if len(evidence_ids) != len(set(evidence_ids)):
+            raise ValueError("evidence_uses must reference each evidence ID once")
+        paths = [item.parameter_path for item in self.parameter_causality]
+        if len(paths) != len(set(paths)):
+            raise ValueError(
+                "a parameter path may not carry contradictory causality directives"
+            )
+        range_paths = [item.path for item in self.parameter_ranges]
+        if len(range_paths) != len(set(range_paths)):
+            raise ValueError(
+                "a parameter path may carry at most one range recommendation"
+            )
+        direction_paths = [item.path for item in self.direction_guidance]
+        if len(direction_paths) != len(set(direction_paths)):
+            raise ValueError("a parameter path may carry at most one direction")
+        priorities = [strategy.priority for strategy in self.strategies]
+        if len(priorities) != len(set(priorities)):
+            raise ValueError("repair strategy priorities must be unique")
+        if self.disposition in {"retry_planner", "change_primitive_or_mode"}:
+            if not self.strategies:
+                raise ValueError(f"{self.disposition} requires a repair strategy")
+        geometry_kinds = {
+            "parameter_change",
+            "mode_change",
+            "primitive_change",
+            "topology_change",
+            "rollback_earlier_step",
+        }
+        if self.diagnosis_class == "infrastructure_failure" and any(
+            strategy.kind in geometry_kinds for strategy in self.strategies
+        ):
+            raise ValueError(
+                "infrastructure_failure must not include a geometry repair strategy"
+            )
+        return self
+
+
+class StepRepairDiagnosis(StepRepairDiagnosisBody):
+    """Host-bound causal diagnosis; it is never an executable CAD action."""
+
+    protocol_version: Literal[1] = 1
+    state_id: str
+    contract_digest: str = Field(pattern=_SHA256_PATTERN)
+    diagnostic_context_digest: str = Field(pattern=_SHA256_PATTERN)
+    failure_signature: str = Field(pattern=_SHA256_PATTERN)
+    issue_ids: list[str] = Field(min_length=1, max_length=8)
+
+    @model_validator(mode="after")
+    def validate_bound_diagnosis(self) -> "StepRepairDiagnosis":
+        _diagnostic_nonblank(self.state_id, "state_id")
+        _diagnostic_unique_nonblank(self.issue_ids, "diagnosis issue_ids")
+        return self
+
+
+class DiagnosticRecordRef(StrictModel):
+    case_id: str = Field(pattern=_SHA256_PATTERN)
+    diagnostic_context_digest: str = Field(pattern=_SHA256_PATTERN)
+    failure_signature: str = Field(pattern=_SHA256_PATTERN)
+    state_id: str
+    step_index: int = Field(ge=0)
+    attempt_index: int = Field(ge=0)
+    repair_epoch: int = Field(ge=0)
+    status: Literal["pending", "complete", "failed", "skipped"]
+    artifact_path: str | None = None
+    failure_reason: str | None = None
+
+    @model_validator(mode="after")
+    def validate_record(self) -> "DiagnosticRecordRef":
+        _diagnostic_nonblank(self.state_id, "state_id")
+        if self.artifact_path is not None:
+            _diagnostic_nonblank(self.artifact_path, "artifact_path")
+        if self.failure_reason is not None:
+            _diagnostic_nonblank(self.failure_reason, "failure_reason")
+        return self
+
+
+class DiagnosticJournal(StrictModel):
+    records: list[DiagnosticRecordRef] = Field(default_factory=list)
+    calls_by_step: dict[str, int] = Field(default_factory=dict)
+    cache_hit_count: int = Field(default=0, ge=0)
+    futile_retry_avoided_count: int = Field(default=0, ge=0)
+
+    @model_validator(mode="after")
+    def validate_journal(self) -> "DiagnosticJournal":
+        case_ids = [record.case_id for record in self.records]
+        if len(case_ids) != len(set(case_ids)):
+            raise ValueError("diagnostic journal case IDs must be unique")
+        for key, count in self.calls_by_step.items():
+            _diagnostic_nonblank(key, "diagnostic journal step key")
+            if count < 0:
+                raise ValueError("diagnostic journal call counts must be non-negative")
+        return self
 
 
 class LLMUsage(StrictModel):
@@ -2062,6 +3280,7 @@ class GenerationArtifacts(StrictModel):
     prompt_path: str
     intent_path: str
     intent_attempts_path: str | None = None
+    intent_diagnostics_path: str | None = None
     actions_path: str
     state_path: str
     freecad_script_path: str
@@ -2070,6 +3289,12 @@ class GenerationArtifacts(StrictModel):
     critic_report_path: str | None = None
     mcp_result_path: str | None = None
     action_attempts_path: str | None = None
+    repair_advice_path: str | None = None
+    diagnostics_index_path: str | None = None
+    constraint_ledger_path: str | None = None
+    global_preflight_path: str | None = None
+    search_events_path: str | None = None
+    advisor_artifact_paths: list[str] = Field(default_factory=list)
     checkpoint_path: str | None = None
     freecad_validation_path: str | None = None
     freecad_document_path: str | None = None
@@ -2094,7 +3319,18 @@ class RunReport(StrictModel):
     """실행 상태, 검증 수준, artifact 가용성과 LLM 사용량의 최종 요약이다."""
 
     run_id: str
-    status: Literal["success", "partial", "failed"] = "success"
+    status: Literal[
+        "success",
+        "success_with_deviations",
+        "partial",
+        "paused",
+        "failed",
+    ] = "success"
+    realization_status: PreflightStatus | Literal["not_run"] = "not_run"
+    deviation_count: int = 0
+    pause_reason: str | None = None
+    resume_command: str | None = None
+    recovery_state: dict[str, Any] = Field(default_factory=dict)
     failed_stage: str | None = None
     dry_run: bool
     freecad_opened: bool
@@ -2111,8 +3347,19 @@ class RunReport(StrictModel):
     intent_attempt_count: int = 0
     intent_repair_count: int = 0
     intent_protocol_retry_count: int = 0
+    intent_advisor_call_count: int = 0
+    intent_advisor_success_count: int = 0
+    intent_advisor_failure_count: int = 0
+    intent_futile_retry_avoided_count: int = 0
     action_repair_count: int = 0
     repair_attempt_count: int = 0
+    step_repair_advisor_count: int = 0
+    advisor_call_count: int = 0
+    advisor_success_count: int = 0
+    advisor_failure_count: int = 0
+    advisor_cache_hit_count: int = 0
+    advisor_artifact_paths: list[str] = Field(default_factory=list)
+    futile_retry_avoided_count: int = 0
     artifacts: GenerationArtifacts
     artifact_statuses: list[ArtifactStatus] = Field(default_factory=list)
     summary: str

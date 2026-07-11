@@ -1,0 +1,146 @@
+{
+  "case_id": "72cf5205a5410e4d6fdc685de75a3058cd996c4fc4695df5b556f9082b603e45",
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260711T131057594174Z",
+    "state_id": "S1",
+    "state_digest": "873a057598e69ec5d9cf3b3bc02df45bc8c7028e26953e6ff908ac784d0baa3a",
+    "contract_digest": "5cdf6743c890bfdecd4dedeaf0c289503fe3f933419c5ac8697893ab200466a3",
+    "step_index": 2,
+    "attempt_index": 1,
+    "action_digest": "4cec0ae3281295ae9daec01107e317d2d41a3ed087be404b6e0544ee8f000da8",
+    "failure_signature": "02874ba38374b0912e32d618070d84049aaca2864445380cf3c4dbeffe0ed974",
+    "evidence_digest": "584d55eec577d2372f8cf5d2e24e6e221c6edfb9e74b6b8fce7d91c07c359b00",
+    "generator_version": "cadgen02-freecad-v21",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "287bef99cde36a01250fc736311eaff46a51b6e1b7439dc460a4564e031cfa41",
+    "repair_epoch": 0
+  },
+  "advisor_response_body": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "summary": "The requested bend_radius of 10.0 in the turn_1 goal conflicts with the outer pipe radius of 10.0 (derived from outer_diameter 20.0). The bend radius must exceed the pipe radius to prevent self-intersection and inner radius collapse.",
+    "causal_chain": [
+      "The goal turn_1 specifies a bend_radius of 10.0.",
+      "The target port M1.out has an outer_diameter of 20.0, meaning the pipe's outer radius is 10.0.",
+      "The rejected candidate attempts to create a circular arc with bend_radius 10.0 and outer_diameter 20.0.",
+      "The registry_validation check fails because the bend_radius (10.0) does not exceed the outer pipe radius (10.0)."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E004"
+    ],
+    "recommendations": [
+      {
+        "path": "/params/bend_radius",
+        "action": "none",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "",
+        "unit": "mm",
+        "classification": "unresolved",
+        "rationale": "Cannot satisfy the goal's bend_radius of 10.0 without violating the physical constraint that bend_radius must exceed the pipe's outer radius of 10.0.",
+        "evidence_id": "E003"
+      }
+    ],
+    "strategy_kind": "none",
+    "strategy_instruction": "Stop execution. The contract is infeasible because the specified goal bend_radius equals the pipe radius, creating a solid modeling failure.",
+    "verification_checks": [
+      "Verify that inner radius > 0 is enforced by the kernel."
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Do not retry. The intent dictates a physically impossible bend radius for the given pipe diameter."
+  },
+  "diagnosis": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "summary": "The requested bend_radius of 10.0 in the turn_1 goal conflicts with the outer pipe radius of 10.0 (derived from outer_diameter 20.0). The bend radius must exceed the pipe radius to prevent self-intersection and inner radius collapse.",
+    "causal_chain": [
+      "The goal turn_1 specifies a bend_radius of 10.0.",
+      "The target port M1.out has an outer_diameter of 20.0, meaning the pipe's outer radius is 10.0.",
+      "The rejected candidate attempts to create a circular arc with bend_radius 10.0 and outer_diameter 20.0.",
+      "The registry_validation check fails because the bend_radius (10.0) does not exceed the outer pipe radius (10.0)."
+    ],
+    "evidence_uses": [
+      {
+        "evidence_id": "E001",
+        "supports": "The requested bend_radius of 10.0 in the turn_1 goal conflicts with the outer pipe radius of 10.0 (derived from outer_diameter 20.0). The bend radius must exceed the pipe radius to prevent self-intersection and inner radius collapse."
+      },
+      {
+        "evidence_id": "E003",
+        "supports": "The requested bend_radius of 10.0 in the turn_1 goal conflicts with the outer pipe radius of 10.0 (derived from outer_diameter 20.0). The bend radius must exceed the pipe radius to prevent self-intersection and inner radius collapse."
+      },
+      {
+        "evidence_id": "E004",
+        "supports": "The requested bend_radius of 10.0 in the turn_1 goal conflicts with the outer pipe radius of 10.0 (derived from outer_diameter 20.0). The bend radius must exceed the pipe radius to prevent self-intersection and inner radius collapse."
+      }
+    ],
+    "parameter_causality": [
+      {
+        "parameter_path": "/params/bend_radius",
+        "influence": "unproven",
+        "observed_metric_response": "not_comparable",
+        "directive": "unknown",
+        "explanation": "Cannot satisfy the goal's bend_radius of 10.0 without violating the physical constraint that bend_radius must exceed the pipe's outer radius of 10.0.",
+        "evidence_ids": [
+          "E003"
+        ]
+      }
+    ],
+    "direction_guidance": [],
+    "parameter_ranges": [],
+    "strategies": [],
+    "missing_evidence": [],
+    "planner_instruction": "Do not retry. The intent dictates a physically impossible bend radius for the given pipe diameter.",
+    "protocol_version": 1,
+    "state_id": "S1",
+    "contract_digest": "5cdf6743c890bfdecd4dedeaf0c289503fe3f933419c5ac8697893ab200466a3",
+    "diagnostic_context_digest": "6aec9ac953afae0dabad43a3eeb5356d6bd43563f933a100a98450941a5b8bbc",
+    "failure_signature": "02874ba38374b0912e32d618070d84049aaca2864445380cf3c4dbeffe0ed974",
+    "issue_ids": [
+      "STEP_0002_01_REGISTRY_VALIDATION_FAILED"
+    ]
+  },
+  "validated": true,
+  "model_part": "step_repair_advisor",
+  "model": "gemini-3.1-pro-preview",
+  "created_at": "2026-07-11T13:11:43.859437+00:00",
+  "usage_delta": {
+    "calls": 1,
+    "input_tokens": 3754,
+    "cached_tokens": 0,
+    "output_tokens": 522,
+    "thought_tokens": 884,
+    "tool_use_tokens": 0,
+    "total_tokens": 5160,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "protocol_attempt_count": 1,
+  "protocol_errors": [],
+  "planner_directive": {
+    "context_type": "step_geometry_diagnosis",
+    "state_id": "S1",
+    "diagnostic_context_digest": "6aec9ac953afae0dabad43a3eeb5356d6bd43563f933a100a98450941a5b8bbc",
+    "failure_signature": "02874ba38374b0912e32d618070d84049aaca2864445380cf3c4dbeffe0ed974",
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "repair_scope": "params",
+    "change_fields": [],
+    "keep_fields": [],
+    "avoid_repeating_fields": [],
+    "direction_guidance": [],
+    "parameter_ranges": [],
+    "strategies": [],
+    "advisor_explanation": "Do not retry. The intent dictates a physically impossible bend radius for the given pipe diameter.",
+    "planner_instruction": "Select and author the next complete Action using the structured direction_guidance, parameter_ranges, and strategies in this diagnosis. Preserve keep_fields, do not repeat avoid fields, and revalidate the resulting candidate through every existing gate.",
+    "planner_selection_authority": "Ranges are advisory evidence only. The ordinary step planner must choose every final exact parameter and author the replacement Action.",
+    "validation_authority": "This diagnosis cannot accept the candidate or waive any check. The replacement action must pass every existing validator again."
+  },
+  "artifact_digest": "99612e432e5f1bf9d3ada35e82709ae6b0a97b4e89b94a9477d122cc009cbd95"
+}

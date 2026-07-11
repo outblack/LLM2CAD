@@ -1,0 +1,691 @@
+{
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "target_behavior": [
+    {
+      "goal_id": "move_01",
+      "depends_on_goal_ids": [],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+X",
+      "path_kind": null,
+      "length": 100.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "turn_01",
+      "depends_on_goal_ids": [
+        "move_01"
+      ],
+      "allow_parallel": false,
+      "type": "turn",
+      "direction": "+Y",
+      "path_kind": null,
+      "length": null,
+      "angle": 90.0,
+      "bend_radius": 30.0,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "move_02",
+      "depends_on_goal_ids": [
+        "turn_01"
+      ],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+Y",
+      "path_kind": null,
+      "length": 50.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "turn_02",
+      "depends_on_goal_ids": [
+        "move_02"
+      ],
+      "allow_parallel": false,
+      "type": "turn",
+      "direction": "-X",
+      "path_kind": null,
+      "length": null,
+      "angle": 90.0,
+      "bend_radius": 30.0,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "move_03",
+      "depends_on_goal_ids": [
+        "turn_02"
+      ],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "-X",
+      "path_kind": null,
+      "length": 100.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "turn_03",
+      "depends_on_goal_ids": [
+        "move_03"
+      ],
+      "allow_parallel": false,
+      "type": "turn",
+      "direction": "-Y",
+      "path_kind": null,
+      "length": null,
+      "angle": 90.0,
+      "bend_radius": 30.0,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "connect_loop",
+      "depends_on_goal_ids": [
+        "turn_03"
+      ],
+      "allow_parallel": false,
+      "type": "connect",
+      "direction": null,
+      "path_kind": null,
+      "length": null,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "start_anchor",
+      "notes": null
+    }
+  ],
+  "start_position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "start_axis": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "expected_open_ports": 0,
+  "expected_open_ports_source": "explicit",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [],
+  "design_notes": [
+    "Rectangular pipe loop (100mm x 50mm) per user request for rectangular geometry."
+  ],
+  "constraint_ledger": {
+    "schema_version": 1,
+    "ledger_digest": "da85bf52f6010f47b26fadf3b0311ad93327d053e14cef564e39ac231e415273",
+    "constraints": [
+      {
+        "constraint_id": "section.outer_diameter",
+        "constraint_type": "circular_section_outer_diameter",
+        "source_goal_id": null,
+        "source_field": "global_spec.outer_diameter",
+        "source_span": null,
+        "priority": "safety",
+        "relation": "exact",
+        "value": 20.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "section.outer_diameter"
+        ]
+      },
+      {
+        "constraint_id": "section.wall_thickness",
+        "constraint_type": "positive_hollow_wall",
+        "source_goal_id": null,
+        "source_field": "global_spec.wall_thickness",
+        "source_span": null,
+        "priority": "safety",
+        "relation": "exact",
+        "value": 2.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "section.wall_thickness"
+        ]
+      },
+      {
+        "constraint_id": "topology.connected",
+        "constraint_type": "single_connected_pipe_network",
+        "source_goal_id": null,
+        "source_field": null,
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": true,
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "topology.graph"
+        ]
+      },
+      {
+        "constraint_id": "geometry.no_self_intersection",
+        "constraint_type": "positive_swept_envelope_clearance",
+        "source_goal_id": null,
+        "source_field": null,
+        "source_span": null,
+        "priority": "safety",
+        "relation": "minimum",
+        "value": 0.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "centerline.program"
+        ]
+      },
+      {
+        "constraint_id": "topology.expected_open_ports",
+        "constraint_type": "open_port_count",
+        "source_goal_id": null,
+        "source_field": null,
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": 0,
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "topology.open_ports"
+        ]
+      },
+      {
+        "constraint_id": "move_01.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "move_01",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "move",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "move_01.primitive"
+        ]
+      },
+      {
+        "constraint_id": "move_01.length",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "move_01",
+        "source_field": "target_behavior[0].length",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 100.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "move_01.length"
+        ]
+      },
+      {
+        "constraint_id": "turn_01.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "turn_01",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "turn",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "turn_01.primitive"
+        ]
+      },
+      {
+        "constraint_id": "turn_01.angle",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_01",
+        "source_field": "target_behavior[1].angle",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 90.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_01.angle"
+        ]
+      },
+      {
+        "constraint_id": "turn_01.bend_radius",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_01",
+        "source_field": "target_behavior[1].bend_radius",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 30.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_01.bend_radius"
+        ]
+      },
+      {
+        "constraint_id": "move_02.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "move_02",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "move",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "move_02.primitive"
+        ]
+      },
+      {
+        "constraint_id": "move_02.length",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "move_02",
+        "source_field": "target_behavior[2].length",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 50.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "move_02.length"
+        ]
+      },
+      {
+        "constraint_id": "turn_02.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "turn_02",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "turn",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "turn_02.primitive"
+        ]
+      },
+      {
+        "constraint_id": "turn_02.angle",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_02",
+        "source_field": "target_behavior[3].angle",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 90.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_02.angle"
+        ]
+      },
+      {
+        "constraint_id": "turn_02.bend_radius",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_02",
+        "source_field": "target_behavior[3].bend_radius",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 30.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_02.bend_radius"
+        ]
+      },
+      {
+        "constraint_id": "move_03.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "move_03",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "move",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "move_03.primitive"
+        ]
+      },
+      {
+        "constraint_id": "move_03.length",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "move_03",
+        "source_field": "target_behavior[4].length",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 100.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "move_03.length"
+        ]
+      },
+      {
+        "constraint_id": "turn_03.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "turn_03",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "turn",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "turn_03.primitive"
+        ]
+      },
+      {
+        "constraint_id": "turn_03.angle",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_03",
+        "source_field": "target_behavior[5].angle",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 90.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_03.angle"
+        ]
+      },
+      {
+        "constraint_id": "turn_03.bend_radius",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_03",
+        "source_field": "target_behavior[5].bend_radius",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 30.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_03.bend_radius"
+        ]
+      },
+      {
+        "constraint_id": "connect_loop.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "connect_loop",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "connect",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "connect_loop.primitive"
+        ]
+      }
+    ]
+  },
+  "global_preflight": {
+    "method_version": "global-centerline-preflight/1",
+    "status": "unknown",
+    "ledger_digest": "da85bf52f6010f47b26fadf3b0311ad93327d053e14cef564e39ac231e415273",
+    "authored_program_digest": null,
+    "realized_program_digest": null,
+    "scale_factor": 1.0,
+    "deviations": [],
+    "conflicts": [],
+    "notes": [
+      "turn_01 arc requires angle, bend_radius and plane_normal"
+    ]
+  },
+  "prompt_sha256": "4d5014e0217f9642827e3c09303441674d26d4e2805fe81cc78e4b39010095b0",
+  "contract_digest": "1cdc7d76e26acf816513b1a1bf1fe2b0fc9588e2cdc2ebfb129c5acc5c3590ae"
+}

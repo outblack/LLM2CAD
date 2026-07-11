@@ -1,0 +1,584 @@
+[
+  {
+    "transition": {
+      "step_index": 1,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "line_1",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "line_1",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S0",
+      "state_after_id": "S1",
+      "action_id": "A1",
+      "module": "route",
+      "target_port_before": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M1",
+      "produced_port_ids": [
+        "M1.out"
+      ],
+      "removed_port_ids": [
+        "START"
+      ],
+      "consumed_port_ids": [
+        "START"
+      ],
+      "connection_edge_ids": [],
+      "affected_goal_ids": [
+        "line_1"
+      ],
+      "completed_goal_ids": [
+        "line_1"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "START"
+      ],
+      "open_port_ids_after": [
+        "M1.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  },
+  {
+    "transition": {
+      "step_index": 2,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "turn_1",
+        "depends_on_goal_ids": [
+          "line_1"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "angle": -120.0,
+        "bend_radius": 10.0,
+        "plane_normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "turn_1",
+          "depends_on_goal_ids": [
+            "line_1"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "angle": -120.0,
+          "bend_radius": 10.0,
+          "plane_normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S1",
+      "state_after_id": "S2",
+      "action_id": "A2",
+      "module": "route",
+      "target_port_before": {
+        "id": "M1.out",
+        "position": [
+          20.00000699375367,
+          0.0,
+          34.64101211353104
+        ],
+        "axis": [
+          0.5000001748438417,
+          0.0,
+          0.8660253028382761
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M2",
+      "produced_port_ids": [
+        "M2.out"
+      ],
+      "removed_port_ids": [
+        "M1.out"
+      ],
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "connection_edge_ids": [
+        "E1"
+      ],
+      "affected_goal_ids": [
+        "turn_1"
+      ],
+      "completed_goal_ids": [
+        "turn_1"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M1.out"
+      ],
+      "open_port_ids_after": [
+        "M2.out"
+      ]
+    },
+    "status": "passed",
+    "issues": [
+      {
+        "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 2,
+        "action_id": "A2",
+        "module_id": "M2",
+        "port_ids": [],
+        "target_port_id": "M1.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M2",
+                "M1"
+              ],
+              "segments": [
+                "segment_1",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  20.238471132431272,
+                  0.0,
+                  35.07890549185535
+                ],
+                [
+                  20.454811658130502,
+                  0.0,
+                  35.52814099040339
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ]
+              ],
+              "centerline_separation": 0.49861383476146104,
+              "required_separation": 20.0,
+              "clearance": -19.50138616523854
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "passed",
+    "mcp_required": false,
+    "mcp_result_path": "outputs/20260711T143542851312Z/step_mcp/step_2_attempt_1.json",
+    "mcp_error": null,
+    "skipped_mcp_reason": null,
+    "freecad_validation_path": "outputs/20260711T143542851312Z/step_mcp/step_2_validation_1.json",
+    "mcp_measurements": {
+      "M1": {
+        "centerline_length": 40.0
+      },
+      "M2": {
+        "centerline_length": 20.943951023931945,
+        "minimum_curvature_radius": 10.0
+      }
+    },
+    "mcp_assembly_bounds": {
+      "minimum": [
+        -8.66025302838276,
+        -10.0,
+        -5.000001748438417
+      ],
+      "maximum": [
+        32.24996670527306,
+        10.0,
+        61.28885786781689
+      ]
+    }
+  },
+  {
+    "transition": {
+      "step_index": 3,
+      "consumed_goal_index": 0,
+      "consumed_goal": {
+        "goal_id": "line_2",
+        "depends_on_goal_ids": [
+          "turn_1"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "path_kind": "line",
+        "length": 40.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      },
+      "affected_goals": [
+        {
+          "goal_id": "line_2",
+          "depends_on_goal_ids": [
+            "turn_1"
+          ],
+          "allow_parallel": false,
+          "type": "route",
+          "path_kind": "line",
+          "length": 40.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        }
+      ],
+      "state_before_id": "S2",
+      "state_after_id": "S3",
+      "action_id": "A3",
+      "module": "route",
+      "target_port_before": {
+        "id": "M2.out",
+        "position": [
+          11.339755984293808,
+          0.0,
+          49.64101386196925
+        ],
+        "axis": [
+          -0.9999999999999797,
+          0.0,
+          2.0189229010814105e-07
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "produced_module_id": "M3",
+      "produced_port_ids": [
+        "M3.out"
+      ],
+      "removed_port_ids": [
+        "M2.out"
+      ],
+      "consumed_port_ids": [
+        "M2.out"
+      ],
+      "connection_edge_ids": [
+        "E2"
+      ],
+      "affected_goal_ids": [
+        "line_2"
+      ],
+      "completed_goal_ids": [
+        "line_2"
+      ],
+      "satisfied_components": [],
+      "open_port_ids_before": [
+        "M2.out"
+      ],
+      "open_port_ids_after": [
+        "M3.out"
+      ]
+    },
+    "status": "failed",
+    "issues": [
+      {
+        "issue_id": "STEP_0003_01_MODULE_INPUT_AXIS_MISMATCH",
+        "severity": "error",
+        "issue_code": "MODULE_INPUT_AXIS_MISMATCH",
+        "check_name": "module_connection",
+        "message": "Produced module input axis is not opposite the target port axis.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [
+          "M3.in",
+          "M2.out"
+        ],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {
+          "input_axis": [
+            0.9999999999999797,
+            -0.0,
+            -2.0189229010814105e-07
+          ]
+        },
+        "actual": {
+          "input_axis": [
+            0.9999621541207926,
+            -0.0,
+            -0.008700018741600559
+          ],
+          "axis_alignment": 0.999962155877239,
+          "outer_rim_error": 0.08699899167344086,
+          "modeling_tolerance": 0.0001
+        },
+        "suggestion": {
+          "operation": "align_module_axis",
+          "target_port": "M2.out"
+        }
+      },
+      {
+        "issue_id": "STEP_0003_02_PORT_CONTRACT_MISMATCH",
+        "severity": "error",
+        "issue_code": "PORT_CONTRACT_MISMATCH",
+        "check_name": "port_contract",
+        "message": "Mating ports violate position, axis, or section compatibility.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [
+          "M2.out",
+          "M3.in"
+        ],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {
+          "position_tolerance": 0.0001,
+          "anti_parallel_axis_dot": 0.9999,
+          "section_tolerance": 0.0001,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "stored_edge": {
+            "edge_id": "E2",
+            "port_a_id": "M2.out",
+            "port_b_id": "M3.in",
+            "action_id": "A3",
+            "position_error": 0.0,
+            "anti_parallel_axis_dot": 0.999962155877239,
+            "axis_angle_error": 0.008699926604248717,
+            "od_error": 0.0,
+            "id_error": 0.0,
+            "wall_error": 0.0,
+            "outer_rim_error": 0.08699899167344086,
+            "inner_rim_error": 0.06959919333875268,
+            "connector_type_match": true,
+            "connector_gender_match": true,
+            "connector_standard_match": true,
+            "engagement": 0.0
+          },
+          "recomputed_interface": {
+            "position_error": 0.0,
+            "anti_parallel_axis_dot": 0.999962155877239,
+            "axis_angle_error": 0.008699926604248717,
+            "od_error": 0.0,
+            "id_error": 0.0,
+            "wall_error": 0.0,
+            "outer_rim_error": 0.08699899167344086,
+            "inner_rim_error": 0.06959919333875268
+          }
+        },
+        "suggestion": {}
+      },
+      {
+        "issue_id": "STEP_0003_03_ROUTE_START_TANGENT_MISMATCH",
+        "severity": "error",
+        "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+        "check_name": "route_continuity",
+        "message": "Route centerline is not tangent to the selected target port.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [
+          "M2.out"
+        ],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.999962155877,
+          "outer_rim_error": 0.08699899167344086
+        },
+        "suggestion": {}
+      },
+      {
+        "issue_id": "STEP_0003_04_STATIC_COLLISION_REQUIRES_FREECAD",
+        "severity": "warning",
+        "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+        "check_name": "conservative_collision",
+        "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+        "step_index": 3,
+        "action_id": "A3",
+        "module_id": "M3",
+        "port_ids": [],
+        "target_port_id": "M2.out",
+        "consumed_goal_index": 0,
+        "expected": {},
+        "actual": {
+          "candidates": [
+            {
+              "module_ids": [
+                "M3",
+                "M1"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  11.339755984293808,
+                  0.0,
+                  49.64101386196925
+                ],
+                [
+                  -28.658730180537894,
+                  0.0,
+                  49.98901461163327
+                ]
+              ],
+              "existing_segment": [
+                [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ]
+              ],
+              "centerline_separation": 17.32050807568877,
+              "required_separation": 20.0,
+              "clearance": -2.679491924311229
+            },
+            {
+              "module_ids": [
+                "M3",
+                "M2"
+              ],
+              "segments": [
+                "segment_0",
+                "segment_0"
+              ],
+              "candidate_segment": [
+                [
+                  11.339755984293808,
+                  0.0,
+                  49.64101386196925
+                ],
+                [
+                  -28.658730180537894,
+                  0.0,
+                  49.98901461163327
+                ]
+              ],
+              "existing_segment": [
+                [
+                  20.00000699375367,
+                  0.0,
+                  34.64101211353104
+                ],
+                [
+                  20.238471132431272,
+                  0.0,
+                  35.07890549185535
+                ]
+              ],
+              "centerline_separation": 17.065817632643107,
+              "required_separation": 20.0,
+              "clearance": -2.934182367356893
+            }
+          ]
+        },
+        "suggestion": {}
+      }
+    ],
+    "mcp_status": "skipped",
+    "mcp_required": false,
+    "mcp_result_path": null,
+    "mcp_error": null,
+    "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+    "freecad_validation_path": null,
+    "mcp_measurements": {},
+    "mcp_assembly_bounds": null
+  }
+]

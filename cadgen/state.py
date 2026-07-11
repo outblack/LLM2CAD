@@ -53,9 +53,7 @@ class StateEngine:
 
         start_axis = normalize(vec(intent.start_axis))
         goals = [
-            goal
-            if goal.goal_id
-            else goal.model_copy(update={"goal_id": f"G{index}"})
+            goal if goal.goal_id else goal.model_copy(update={"goal_id": f"G{index}"})
             for index, goal in enumerate(intent.target_behavior, start=1)
         ]
         start_port = Port(
@@ -105,14 +103,20 @@ class StateEngine:
                     params.get("direction"),
                     default=target.axis,
                 )
-            params.setdefault("length", 10.0 if draft.module == "connector_pipe" else 100.0)
+            params.setdefault(
+                "length", 10.0 if draft.module == "connector_pipe" else 100.0
+            )
             params.setdefault("outer_diameter", target.outer_diameter)
             params.setdefault("wall_thickness", target.wall_thickness)
             if draft.module == "connector_pipe":
-                params.setdefault("coupling_outer_diameter", target.outer_diameter * 1.25)
+                params.setdefault(
+                    "coupling_outer_diameter", target.outer_diameter * 1.25
+                )
                 params.setdefault("sleeve_overlap", target.outer_diameter * 0.25)
         elif draft.module == "bend_pipe":
-            out_axis = self._resolve_bend_out_axis(params.get("turn_direction"), target.axis)
+            out_axis = self._resolve_bend_out_axis(
+                params.get("turn_direction"), target.axis
+            )
             params.setdefault("angle", 90.0)
             params.setdefault("bend_radius", self.settings.default_bend_radius)
             params.setdefault("outer_diameter", target.outer_diameter)
@@ -146,7 +150,9 @@ class StateEngine:
         elif draft.module == "reducer_pipe":
             params.setdefault("length", 50.0)
             params.setdefault("diameter_in", target.outer_diameter)
-            params.setdefault("diameter_out", params.get("diameter_out") or global_spec.outer_diameter)
+            params.setdefault(
+                "diameter_out", params.get("diameter_out") or global_spec.outer_diameter
+            )
             params.setdefault("wall_thickness_in", target.wall_thickness)
             params.setdefault("wall_thickness_out", global_spec.wall_thickness)
         elif draft.module == "cap_pipe":
@@ -158,7 +164,13 @@ class StateEngine:
             _resolve_section(params, target)
             kind = params["path_kind"]
             if kind == "line":
-                params["axis"] = normalize(vec(params["direction"]))
+                # A length-only straight continuation has no independent
+                # heading: its tangent is the selected construction front.
+                # An explicit direction remains available for an immutable
+                # route-direction contract and is checked downstream.
+                route_direction = params.get("direction", target.axis)
+                params["direction"] = normalize(vec(route_direction))
+                params["axis"] = params["direction"]
             elif kind == "circular_arc":
                 plane_normal, _start_tangent, terminal_tangent = (
                     canonical_circular_arc_frame(
@@ -175,8 +187,7 @@ class StateEngine:
                 authored_waypoints = [vec(point) for point in params["waypoints"]]
                 if waypoint_frame == "relative_to_target":
                     params["waypoints"] = [
-                        add(target.position, offset)
-                        for offset in authored_waypoints
+                        add(target.position, offset) for offset in authored_waypoints
                     ]
                 elif waypoint_frame == "global":
                     params["waypoints"] = authored_waypoints
@@ -194,7 +205,10 @@ class StateEngine:
                     if goal.goal_id in affected_goal_ids and goal.type == "route"
                 ]
                 terminal_goal = route_goals[-1] if route_goals else None
-                if terminal_goal is not None and terminal_goal.terminal_axis is not None:
+                if (
+                    terminal_goal is not None
+                    and terminal_goal.terminal_axis is not None
+                ):
                     final_tangent = vec(terminal_goal.terminal_axis)
                 elif (
                     terminal_goal is not None
@@ -238,22 +252,20 @@ class StateEngine:
                     and goal.minimum_curvature_radius is not None
                 ]
                 authored_bound = params.get("minimum_curvature_radius")
-                params["minimum_curvature_radius"] = (
-                    minimum_spline_curvature_radius(
-                        float(params["outer_diameter"]),
-                        state.modeling_tolerance,
-                        max(
-                            [
-                                *required_goal_radii,
-                                *(
-                                    [float(authored_bound)]
-                                    if authored_bound is not None
-                                    else []
-                                ),
-                            ],
-                            default=None,
-                        ),
-                    )
+                params["minimum_curvature_radius"] = minimum_spline_curvature_radius(
+                    float(params["outer_diameter"]),
+                    state.modeling_tolerance,
+                    max(
+                        [
+                            *required_goal_radii,
+                            *(
+                                [float(authored_bound)]
+                                if authored_bound is not None
+                                else []
+                            ),
+                        ],
+                        default=None,
+                    ),
                 )
         elif draft.module == "transition":
             _resolve_section(params, target)
@@ -283,12 +295,47 @@ class StateEngine:
             ]
         elif draft.module == "connect_ports":
             _resolve_section(params, target)
-            other = self._find_port(str(params["other_port_id"]), state)
+            other = self._find_connectable_port(str(params["other_port_id"]), state)
             params["end_position"] = other.position
             params["end_axis"] = other.axis
-            params["waypoints"] = [
-                vec(point) for point in params.get("waypoints", [])
-            ]
+            params["waypoints"] = [vec(point) for point in params.get("waypoints", [])]
+            if params.get("path_kind") == "circular_arc":
+                try:
+                    radius, traversal_normal, positive_sweep = (
+                        _three_point_arc_geometry(
+                            target.position,
+                            params["waypoints"][0],
+                            other.position,
+                        )
+                    )
+                except ValueError:
+                    # Keep the invalid authored midpoint intact so registry
+                    # validation can return its normal repair diagnostic.
+                    radius = traversal_normal = positive_sweep = None
+                if radius is not None and traversal_normal is not None:
+                    params["bend_radius"] = radius
+                    affected = set(draft.affected_goal_ids)
+                    turn_goal = next(
+                        (
+                            goal
+                            for goal in state.remaining_goals
+                            if goal.goal_id in affected
+                            and goal.type == "turn"
+                            and goal.plane_normal is not None
+                        ),
+                        None,
+                    )
+                    if turn_goal is not None:
+                        goal_normal = normalize(vec(turn_goal.plane_normal))
+                        params["plane_normal"] = goal_normal
+                        params["sweep_angle"] = (
+                            positive_sweep
+                            if dot(goal_normal, traversal_normal) >= 0.0
+                            else -positive_sweep
+                        )
+                    else:
+                        params["plane_normal"] = traversal_normal
+                        params["sweep_angle"] = positive_sweep
             if params.get("path_kind") in {"circular_arc", "spline"}:
                 required_goal_radii = [
                     float(goal.minimum_curvature_radius)
@@ -297,23 +344,33 @@ class StateEngine:
                     and goal.minimum_curvature_radius is not None
                 ]
                 authored_bound = params.get("minimum_curvature_radius")
-                params["minimum_curvature_radius"] = (
-                    minimum_spline_curvature_radius(
-                        float(params["outer_diameter"]),
-                        state.modeling_tolerance,
-                        max(
-                            [
-                                *required_goal_radii,
-                                *(
-                                    [float(authored_bound)]
-                                    if authored_bound is not None
-                                    else []
-                                ),
-                            ],
-                            default=None,
+                authored_minimum = max(
+                    [
+                        *required_goal_radii,
+                        *(
+                            [float(authored_bound)]
+                            if authored_bound is not None
+                            else []
                         ),
-                    )
+                    ],
+                    default=None,
                 )
+                if params.get("path_kind") == "circular_arc":
+                    # An analytic circular torus supports the horn boundary
+                    # R == outer profile radius.  Do not apply the larger
+                    # freeform-spline visual reserve to an exact circular arc.
+                    params["minimum_curvature_radius"] = max(
+                        float(params["outer_diameter"]) / 2.0,
+                        float(authored_minimum or 0.0),
+                    )
+                else:
+                    params["minimum_curvature_radius"] = (
+                        minimum_spline_curvature_radius(
+                            float(params["outer_diameter"]),
+                            state.modeling_tolerance,
+                            authored_minimum,
+                        )
+                    )
             if params.get("path_kind") == "spline":
                 params["interpolation"] = "bspline"
                 params["frenet"] = False
@@ -353,13 +410,21 @@ class StateEngine:
         target = self._find_port(action.target_port, state)
         module_id = f"M{state.state_version + 1}"
         module, new_ports = self._create_module_ref(module_id, action, target, state)
+        start_anchor_bootstrap = self._is_start_anchor_bootstrap(action, state)
+        if start_anchor_bootstrap:
+            # START is a construction cursor, not a second physical port in a
+            # closed loop. Keep the first module inlet unbound and reserve that
+            # real module port for the eventual two-ended closure primitive.
+            module.input_bindings.pop("in", None)
         consumed_ids = set(action.consumed_port_ids or [target.id])
         open_ports = [port for port in state.open_ports if port.id not in consumed_ids]
         open_ports.extend(new_ports)
         completed_ids = set(action.completed_goal_ids)
         if completed_ids:
             remaining_goals = [
-                goal for goal in state.remaining_goals if goal.goal_id not in completed_ids
+                goal
+                for goal in state.remaining_goals
+                if goal.goal_id not in completed_ids
             ]
         elif not action.affected_goal_ids:
             # Compatibility path for dry-run/v1 fixtures only.
@@ -371,7 +436,21 @@ class StateEngine:
         port_nodes = dict(state.port_nodes)
         if not port_nodes:
             port_nodes.update({port.id: port for port in state.open_ports})
+        if start_anchor_bootstrap:
+            port_nodes.pop("START", None)
         port_nodes.update({port.id: port for port in module.ports.values()})
+        reserved_start_anchor = state.reserved_start_anchor
+        if start_anchor_bootstrap:
+            reserved_start_anchor = module.ports.get("in")
+            if reserved_start_anchor is None:
+                raise ValueError(
+                    "start-anchor bootstrap module must expose one inlet port"
+                )
+        elif (
+            reserved_start_anchor is not None
+            and reserved_start_anchor.id in consumed_ids
+        ):
+            reserved_start_anchor = None
         incidence = [
             *state.module_incidence_edges,
             *[
@@ -411,6 +490,7 @@ class StateEngine:
             },
             placed_modules=[*state.placed_modules, module],
             open_ports=open_ports,
+            reserved_start_anchor=reserved_start_anchor,
             port_nodes=port_nodes,
             connection_edges=connection_edges,
             module_incidence_edges=incidence,
@@ -425,6 +505,31 @@ class StateEngine:
             if port.id == port_id:
                 return port
         raise ValueError(f"Open port not found: {port_id}")
+
+    def _find_connectable_port(self, port_id: str, state: PipeState) -> Port:
+        for port in state.open_ports:
+            if port.id == port_id:
+                return port
+        anchor = state.reserved_start_anchor
+        if anchor is not None and anchor.id == port_id:
+            return anchor
+        raise ValueError(f"Connectable port not found: {port_id}")
+
+    def _is_start_anchor_bootstrap(
+        self,
+        action: ResolvedAction,
+        state: PipeState,
+    ) -> bool:
+        return bool(
+            state.state_version == 0
+            and action.target_port == "START"
+            and action.module not in {"terminate", "cap_pipe", "connect_ports"}
+            and state.reserved_start_anchor is None
+            and any(
+                goal.type == "connect" and goal.connection_target == "start_anchor"
+                for goal in state.remaining_goals
+            )
+        )
 
     def _create_module_ref(
         self,
@@ -455,7 +560,9 @@ class StateEngine:
             )
             end_position = vec(params["end_position"])
             end_axis = normalize(vec(params["end_axis"]))
-            other_target = self._find_port(str(params["other_port_id"]), state)
+            other_target = self._find_connectable_port(
+                str(params["other_port_id"]), state
+            )
             in_b = Port(
                 id=f"{module_id}.in_b",
                 position=end_position,
@@ -473,7 +580,9 @@ class StateEngine:
             }
         else:
             inlet_outer = float(
-                params.get("diameter_in", params.get("outer_diameter", target.outer_diameter))
+                params.get(
+                    "diameter_in", params.get("outer_diameter", target.outer_diameter)
+                )
             )
             inlet_wall = float(
                 params.get(
@@ -529,9 +638,7 @@ class StateEngine:
                 rotate(
                     axis,
                     plane_axis,
-                    math.radians(
-                        max(1.0, min(abs(float(params["angle"])), 180.0))
-                    ),
+                    math.radians(max(1.0, min(abs(float(params["angle"])), 180.0))),
                 )
             )
             params["out_axis"] = final_axis
@@ -628,7 +735,9 @@ class StateEngine:
             ports["out"] = out_port
             new_ports.append(out_port)
         elif action.module == "transition":
-            end = add(add(start, mul(axis, float(params["length"]))), vec(params["offset"]))
+            end = add(
+                add(start, mul(axis, float(params["length"]))), vec(params["offset"])
+            )
             params["end_position"] = end
             out_port = Port(
                 id=f"{module_id}.out",
@@ -676,11 +785,15 @@ class StateEngine:
                 resolved_outlets.append(resolved_outlet)
             params["outlets"] = resolved_outlets
         elif action.module == "connect_ports":
-            params["path_points"] = [
-                start,
-                *[vec(point) for point in params["waypoints"]],
-                vec(params["end_position"]),
-            ]
+            params["path_points"] = (
+                []
+                if params.get("path_kind") == "seam"
+                else [
+                    start,
+                    *[vec(point) for point in params["waypoints"]],
+                    vec(params["end_position"]),
+                ]
+            )
         elif action.module == "terminate":
             params["end_position"] = start
         elif action.module == "inline_component":
@@ -702,8 +815,23 @@ class StateEngine:
         module = ModuleRef(
             id=module_id,
             type=action.module,
-            schema_version=2 if action.module in {"route", "transition", "junction", "connect_ports", "terminate", "inline_component"} else 1,
-            geometry_id=f"solid_{module_id}",
+            schema_version=2
+            if action.module
+            in {
+                "route",
+                "transition",
+                "junction",
+                "connect_ports",
+                "terminate",
+                "inline_component",
+            }
+            else 1,
+            geometry_id=(
+                None
+                if action.module == "connect_ports"
+                and params.get("path_kind") == "seam"
+                else f"solid_{module_id}"
+            ),
             params=params,
             ports=ports,
             input_bindings=input_bindings,
@@ -772,6 +900,56 @@ def _resolve_section(params: dict[str, Any], target: Port) -> None:
         params["wall_thickness"] = float(params["wall_thickness"])
         return
     raise ValueError("section_source must be explicitly selected")
+
+
+def _three_point_arc_geometry(
+    start: Vector,
+    middle: Vector,
+    end: Vector,
+) -> tuple[float, Vector, float]:
+    """Derive radius and one positive right-hand traversal from three points."""
+
+    start = vec(start)
+    middle = vec(middle)
+    end = vec(end)
+    chord_a = sub(middle, start)
+    chord_b = sub(end, start)
+    normal_raw = cross(chord_a, chord_b)
+    normal_squared = dot(normal_raw, normal_raw)
+    if normal_squared <= 1e-12:
+        raise ValueError(
+            "circular_arc connect_ports start, midpoint, and end must be non-collinear"
+        )
+    numerator = add(
+        mul(cross(chord_b, normal_raw), dot(chord_a, chord_a)),
+        mul(cross(normal_raw, chord_a), dot(chord_b, chord_b)),
+    )
+    center = add(start, mul(numerator, 1.0 / (2.0 * normal_squared)))
+    radii = [sub(point, center) for point in (start, middle, end)]
+    radius = length(radii[0])
+
+    def positive_sweep(normal: Vector) -> float:
+        total = 0.0
+        for left, right in zip(radii, radii[1:]):
+            total += (
+                math.atan2(
+                    dot(normal, cross(left, right)),
+                    dot(left, right),
+                )
+                % math.tau
+            )
+        return total
+
+    candidates = [normalize(normal_raw), mul(normalize(normal_raw), -1.0)]
+    valid = [
+        (positive_sweep(normal), normal)
+        for normal in candidates
+        if positive_sweep(normal) <= math.tau + 1e-9
+    ]
+    if not valid:
+        raise ValueError("circular_arc connect_ports has no finite directed sweep")
+    sweep_radians, traversal_normal = min(valid, key=lambda item: item[0])
+    return radius, traversal_normal, math.degrees(sweep_radians)
 
 
 def _connection_edge(
@@ -874,7 +1052,9 @@ def _backfill_junction_goal_params(params: dict[str, Any], goal: Any) -> None:
     if goal.branch_angles:
         params.setdefault("branch_angles", list(goal.branch_angles))
     if goal.required_outlet_directions:
-        params.setdefault("required_outlet_directions", list(goal.required_outlet_directions))
+        params.setdefault(
+            "required_outlet_directions", list(goal.required_outlet_directions)
+        )
     if goal.required_outlet_vectors:
         params.setdefault("required_outlet_vectors", list(goal.required_outlet_vectors))
         params.setdefault("outlet_vectors", list(goal.required_outlet_vectors))
@@ -887,7 +1067,9 @@ def _backfill_junction_goal_params(params: dict[str, Any], goal: Any) -> None:
 
 
 def _explicit_outlet_vectors(params: dict[str, Any]) -> list[Vector]:
-    raw_vectors = params.get("outlet_vectors") or params.get("required_outlet_vectors") or []
+    raw_vectors = (
+        params.get("outlet_vectors") or params.get("required_outlet_vectors") or []
+    )
     vectors: list[Vector] = []
     if not isinstance(raw_vectors, list):
         return vectors

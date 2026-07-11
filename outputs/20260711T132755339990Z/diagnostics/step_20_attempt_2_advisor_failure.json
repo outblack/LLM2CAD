@@ -1,0 +1,63 @@
+{
+  "case_id": "3b6160ef66fef4c3a30fdd6730c93a7f8384f670a590e8a1b55476e513651ebd",
+  "diagnostic_context_digest": "1f737139ba4a9b612d8be7b70786d35b3f7573a2dc9397573814a527a72d685e",
+  "failure_signature": "02874ba38374b0912e32d618070d84049aaca2864445380cf3c4dbeffe0ed974",
+  "failure_reason": "structured_output_error",
+  "call_attempted": true,
+  "error_type": "StructuredOutputIncompleteError",
+  "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=422, thought_tokens=3660",
+  "advisor_response": {
+    "diagnosis_class": "candidate_parameter",
+    "disposition": "retry_planner",
+    "confidence": "high",
+    "summary": "The provided waypoint resulted in a bend radius slightly less than the minimum required (10.0) due to floating-point truncation.",
+    "causal_chain": [
+      "The planner specified a circular_arc connection with a midpoint waypoint.",
+      "The coordinates of the waypoint ([1.9098, -5.8779, 0.0]) were truncated to 4 decimal places.",
+      "This truncation caused the resolved bend_radius to be calculated as 9.999778789280452.",
+      "The bend radius is strictly smaller than the minimum_curvature_radius of 10.0, which corresponds to the outer pipe radius.",
+      "The registry_validation check rejected the self-intersecting sweep."
+    ],
+    "evidence_ids": [
+      "E003",
+      "E004"
+    ],
+    "recommendations": [
+      {
+        "path": "/params/waypoints/0/0",
+        "action": "none",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "",
+        "unit": "",
+        "classification": "unresolved",
+        "rationale": "Floating point truncation caused the circle defined by the start, waypoint, and end points to have a radius below 10.0. The coordinates need more precision or a slight adjustment outward to ensure the radius equals or exceeds 10.0.",
+        "evidence_id": "E004"
+      }
+    ],
+    "strategy_kind": "parameter_change",
+    "strategy_instruction": "Re-calculate the waypoint for the circular arc using at least 8 decimal places, or intentionally push the waypoint slightly away from the center of curvature (e.g., C=[10.0, 0.0, 0.0]) so that the resulting computed bend radius is strictly >= 10.0.",
+    "verification_checks": [
+      "Verify that the computed bend_radius for the points is >= 10.0"
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Ensure the selected waypoint for the circular arc does not fall inside the minimum 10.0 radius curve. Use higher precision for your analytical coordinates or omit the waypoint if the system can resolve the tangent circular arc directly from start/end frames."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    },
+    {
+      "error_type": "StructuredOutputIncompleteError",
+      "failure_reason": "structured_output_error",
+      "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=422, thought_tokens=3660"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-11T13:53:03.760656+00:00",
+  "artifact_digest": "aa3b6b253f294de4f099da09998997dcbea6e02b0960b410bca61ec69b651ccf"
+}
