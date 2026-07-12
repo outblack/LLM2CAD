@@ -91,6 +91,9 @@ flowchart TD
   - [`uv`](https://docs.astral.sh/uv/) 설치
   - FreeCAD와 FreeCAD MCP 실행 환경
   - `.env.example`을 참고한 로컬 `.env` 파일
+
+### macOS / Linux (`run.sh`)
+
 - API key 설정:
 
 ```bash
@@ -121,11 +124,61 @@ cp .env.example .env
 ./run.sh --resume outputs/<실행 시각>
 ```
 
-  - 각 거절 직후 `checkpoint.json`과 `action_attempts.json`이 함께 갱신됨
-  - 진단 호출 전 `DiagnosticJournal`의 pending 상태가 checkpoint에 먼저 기록되고, 완료 artifact가 있으면 resume에서 유료 호출 없이 검증 후 재사용함
-  - 이전 generator/policy에서 거절된 draft는 새 LLM 호출 전에 동일 draft를 현재 FreeCAD generator로 먼저 재검증함
-  - `Ctrl-C`/`SIGTERM` 시 CLI가 재개 명령을 출력함
-  - Gemini 요청과 FreeCAD 호출에는 각각 독립 timeout이 적용됨
+### Windows CMD (`run.cmd`)
+
+- API key 설정:
+
+```bat
+copy .env.example .env
+```
+
+- 자연어 prompt로 실행:
+
+```bat
+run.cmd --prompt "외경 20mm, 두께 2mm인 속이 빈 파이프를 만들고 중간에 Y자 분기를 추가해줘"
+```
+
+- 긴 prompt를 파일로 실행:
+
+```bat
+run.cmd --prompt-file prompts\complex_two_y_manifold.txt
+```
+
+- API와 FreeCAD 없이 상태 전이만 확인:
+
+```bat
+run.cmd --prompt "직선 파이프를 만들어줘" --dry-run
+```
+
+- 중단된 실행 재개:
+
+```bat
+run.cmd --resume outputs\<실행 시각>
+```
+
+### 공통 실행 인자
+
+| 인자 | 설명 |
+| --- | --- |
+| `--prompt "요구사항"` | 명령행에서 자연어 CAD 요구사항을 직접 전달함 |
+| `--prompt-file PATH` | 긴 요구사항을 UTF-8 텍스트 파일에서 읽음 |
+| `--resume PATH` | 해당 실행 디렉터리의 `checkpoint.json`에서 중단된 작업을 재개함 |
+| `--env-file PATH` | 사용할 환경 파일을 지정함. 기본값은 `.env` |
+| `--output-dir PATH` | 실행 결과를 저장할 디렉터리를 변경함 |
+| `--max-iter N` | 이번 실행의 최대 accepted-action 수를 hard limit으로 지정함 |
+| `--dry-run` | Gemini와 FreeCAD를 호출하지 않고 로컬 휴리스틱으로 상태 전이만 확인함 |
+| `--skip-freecad` | Gemini 계획은 사용하되 FreeCAD 실행과 MCP 호출은 생략함 |
+| `--no-thinking-stream` | CLI의 진행 요약 출력을 끔 |
+
+`--prompt`, `--prompt-file`, `--resume`은 동시에 사용할 수 없습니다. 추가 인자는 두 실행 스크립트 모두 `cadgen.cli`에 그대로 전달합니다.
+
+### 재개 및 실행 결과 참고
+
+- 각 거절 직후 `checkpoint.json`과 `action_attempts.json`이 함께 갱신됨
+- 진단 호출 전 `DiagnosticJournal`의 pending 상태가 checkpoint에 먼저 기록되고, 완료 artifact가 있으면 resume에서 유료 호출 없이 검증 후 재사용함
+- 이전 generator/policy에서 거절된 draft는 새 LLM 호출 전에 동일 draft를 현재 FreeCAD generator로 먼저 재검증함
+- `Ctrl-C`/`SIGTERM` 시 CLI가 재개 명령을 출력함
+- Gemini 요청과 FreeCAD 호출에는 각각 독립 timeout이 적용됨
 
 - 실행 결과:
   - 매 실행은 `outputs/<실행 시각>/` 아래에 따로 저장됨
