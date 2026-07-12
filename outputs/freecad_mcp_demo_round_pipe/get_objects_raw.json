@@ -1,0 +1,22 @@
+{
+  "meta": null,
+  "content": [
+    {
+      "type": "text",
+      "text": "[\n  {\n    \"Name\": \"RoundPipe\",\n    \"Label\": \"RoundPipe\",\n    \"TypeId\": \"Part::Feature\",\n    \"Properties\": {\n      \"ExpressionEngine\": [],\n      \"Label\": \"RoundPipe\",\n      \"Label2\": \"\",\n      \"Placement\": {\n        \"Base\": {\n          \"x\": 0.0,\n          \"y\": 0.0,\n          \"z\": 0.0\n        },\n        \"Rotation\": {\n          \"Axis\": {\n            \"x\": 0.0,\n            \"y\": 0.0,\n            \"z\": 1.0\n          },\n          \"Angle\": 0.0\n        }\n      },\n      \"Shape\": \"<Compound object at 0x8723f5720>\",\n      \"ShapeMaterial\": \"<Material at 0x872481980>\",\n      \"Visibility\": true,\n      \"_ElementMapVersion\": \"15.70200.5\"\n    },\n    \"Placement\": {\n      \"Base\": {\n        \"x\": 0.0,\n        \"y\": 0.0,\n        \"z\": 0.0\n      },\n      \"Rotation\": {\n        \"Axis\": {\n          \"x\": 0.0,\n          \"y\": 0.0,\n          \"z\": 1.0\n        },\n        \"Angle\": 0.0\n      }\n    },\n    \"Shape\": {\n      \"Volume\": 9047.786842338603,\n      \"Area\": 9273.98151339707,\n      \"VertexCount\": 4,\n      \"EdgeCount\": 6,\n      \"FaceCount\": 4\n    },\n    \"ViewObject\": {\n      \"ShapeColor\": [\n        0.20000000298023224,\n        0.550000011920929,\n        0.8500000238418579,\n        1.0\n      ],\n      \"Transparency\": 0,\n      \"Visibility\": true\n    }\n  }\n]",
+      "annotations": null,
+      "meta": null
+    }
+  ],
+  "structuredContent": {
+    "result": [
+      {
+        "type": "text",
+        "text": "[\n  {\n    \"Name\": \"RoundPipe\",\n    \"Label\": \"RoundPipe\",\n    \"TypeId\": \"Part::Feature\",\n    \"Properties\": {\n      \"ExpressionEngine\": [],\n      \"Label\": \"RoundPipe\",\n      \"Label2\": \"\",\n      \"Placement\": {\n        \"Base\": {\n          \"x\": 0.0,\n          \"y\": 0.0,\n          \"z\": 0.0\n        },\n        \"Rotation\": {\n          \"Axis\": {\n            \"x\": 0.0,\n            \"y\": 0.0,\n            \"z\": 1.0\n          },\n          \"Angle\": 0.0\n        }\n      },\n      \"Shape\": \"<Compound object at 0x8723f5720>\",\n      \"ShapeMaterial\": \"<Material at 0x872481980>\",\n      \"Visibility\": true,\n      \"_ElementMapVersion\": \"15.70200.5\"\n    },\n    \"Placement\": {\n      \"Base\": {\n        \"x\": 0.0,\n        \"y\": 0.0,\n        \"z\": 0.0\n      },\n      \"Rotation\": {\n        \"Axis\": {\n          \"x\": 0.0,\n          \"y\": 0.0,\n          \"z\": 1.0\n        },\n        \"Angle\": 0.0\n      }\n    },\n    \"Shape\": {\n      \"Volume\": 9047.786842338603,\n      \"Area\": 9273.98151339707,\n      \"VertexCount\": 4,\n      \"EdgeCount\": 6,\n      \"FaceCount\": 4\n    },\n    \"ViewObject\": {\n      \"ShapeColor\": [\n        0.20000000298023224,\n        0.550000011920929,\n        0.8500000238418579,\n        1.0\n      ],\n      \"Transparency\": 0,\n      \"Visibility\": true\n    }\n  }\n]",
+        "annotations": null,
+        "_meta": null
+      }
+    ]
+  },
+  "isError": false
+}

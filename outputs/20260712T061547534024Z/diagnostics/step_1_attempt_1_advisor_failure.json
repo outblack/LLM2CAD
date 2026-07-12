@@ -1,0 +1,26 @@
+{
+  "case_id": "aea0a8d9e61bb95d6615fe9023735a8bbfed7ea4d6670631a6a28a37515136ba",
+  "diagnostic_context_digest": "b32920a289c330a955f414650cd30af7c6de2dc4134dcc1201ed5e06eb570a80",
+  "failure_signature": "497f331e58315d1026f47df8b15cdda1bd6fba6513b22ad3fd1a62488293c31a",
+  "failure_reason": "structured_output_error",
+  "call_attempted": true,
+  "error_type": "StructuredOutputIncompleteError",
+  "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=152, thought_tokens=3930",
+  "advisor_response": null,
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "StructuredOutputIncompleteError",
+      "failure_reason": "structured_output_error",
+      "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=150, thought_tokens=3932"
+    },
+    {
+      "error_type": "StructuredOutputIncompleteError",
+      "failure_reason": "structured_output_error",
+      "error": "Gemini structured output incomplete for step_repair_advisor: status=incomplete, output_limit=4096, output_tokens=152, thought_tokens=3930"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-12T06:18:07.487111+00:00",
+  "artifact_digest": "40b98cd93aa800fdc3f9c67a488f132d23349d2eff6b7d7fada5085651805bca"
+}

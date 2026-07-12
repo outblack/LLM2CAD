@@ -1,0 +1,672 @@
+{
+  "attempt_id": 4,
+  "candidate_document": "CadGenCandidate_20260712T094540686615Z_7_4_57558f8c801a",
+  "candidate_shape_fingerprints": {
+    "PipeAssembly": "ade1df3c691f64f4bd86dd7d2fb7ba3b3b37d2e4f179f093e5e5800e7b2598f5",
+    "solid_M1": "69a7f222cbe051b5de2e69530811ea263d7ad082d8ee57d1efc7858e546bb0bd",
+    "solid_M2": "f94abfa46369e1339a40d199a87550f810d80846e0caa3c1205551a440f993fd",
+    "solid_M3": "1b95e78d4505026378017815db6062b4a1b7af5c656bb8e4915e4b7960680696",
+    "solid_M4": "fbd262ca78a971d0ecc2a2c3cf201c60509b0c67af106b8c98a46f4e71bf5268",
+    "solid_M5": "68def031ba3ea8816aba0a926d87f3bfb9365ade919122531ef576c7976067c6",
+    "solid_M6": "87a801f14d7ffe5922fa5cb383aa934e6d9d4dae58ec8f70a4bd1ce51ecf56eb",
+    "solid_M7": "fffc54814a2890c79b08ee4427915cc4f53b1ecc7f47a68529176f55c9221435"
+  },
+  "checks": {
+    "adjacent_interface_overlaps": [
+      {
+        "child_module_id": "M3",
+        "common_bounds": {
+          "maximum": [
+            -27.575750252693332,
+            6.0,
+            -25.819805105900627
+          ],
+          "minimum": [
+            -36.062445840513924,
+            -6.0,
+            -36.062445840513924
+          ]
+        },
+        "common_volume": 69.36923721444371,
+        "generator_version": "cadgen02-freecad-v25",
+        "interface_downstream_depth": 0.004,
+        "interface_upstream_depth": 6.004,
+        "minimum_outlet_forward_dot": 0.7071067811865476,
+        "module_ids": [
+          "M2",
+          "M3"
+        ],
+        "outside_interface_allowance": 6.936923721444372e-07,
+        "outside_interface_volume": 0.0,
+        "parent_child_binding": {
+          "child_input_name": "in",
+          "parent_port_id": "M2.out"
+        },
+        "parent_module_id": "M2",
+        "policy": "resolver_local_interface_band",
+        "policy_digest": "70596f8945dd863eeb85abc1a06da624913390f7a7a65b8f934f29f71945f9e6",
+        "policy_id": "resolver-local-interface-band-v1"
+      },
+      {
+        "child_module_id": "M7",
+        "common_bounds": {
+          "maximum": [
+            -133.3476687511815,
+            6.0,
+            -95.8178051533946
+          ],
+          "minimum": [
+            -143.81980515339464,
+            -6.0,
+            -95.81980515339464
+          ]
+        },
+        "common_volume": 0.08761170362698481,
+        "generator_version": "cadgen02-freecad-v25",
+        "interface_downstream_depth": 0.004,
+        "interface_upstream_depth": 6.004,
+        "minimum_outlet_forward_dot": 0.0,
+        "module_ids": [
+          "M6",
+          "M7"
+        ],
+        "outside_interface_allowance": 8.761170362698481e-10,
+        "outside_interface_volume": 0.0,
+        "parent_child_binding": {
+          "child_input_name": "in",
+          "parent_port_id": "M6.out"
+        },
+        "parent_module_id": "M6",
+        "policy": "resolver_local_interface_band",
+        "policy_digest": "70596f8945dd863eeb85abc1a06da624913390f7a7a65b8f934f29f71945f9e6",
+        "policy_id": "resolver-local-interface-band-v1"
+      }
+    ],
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          11.879393923933998,
+          16.799999999999997,
+          11.879393923933998
+        ],
+        "minimum": [
+          -146.29157116216646,
+          -16.799999999999997,
+          -159.29980515339463
+        ]
+      },
+      "construction_method": "module_boolean_fallback",
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 22597.46515440908
+    },
+    "assembly_errors": [],
+    "backend_fallbacks": [],
+    "bore_network": {
+      "assembly_intrusion_allowance": 0.00018370531873897054,
+      "assembly_intrusion_volume": 0.0,
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          2.8298413383085634,
+          4.0,
+          2.8298413383085634
+        ],
+        "minimum": [
+          -144.12678676158168,
+          -4.0,
+          -159.30180515339464
+        ]
+      },
+      "intrusion_check_method": "outer_minus_bore_construction_invariant",
+      "intrusion_module_ids": [],
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 18370.531873897053
+    },
+    "centerlines": {
+      "M1": {
+        "circular_sweep": null,
+        "curve_length": 5.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M2": {
+        "circular_sweep": null,
+        "curve_length": 40.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M3": {
+        "circular_sweep": null,
+        "curve_length": 84.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M4": {
+        "circular_sweep": null,
+        "curve_length": 40.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M5": {
+        "circular_sweep": {
+          "analytic_frame_origin": [
+            -113.81980515339463,
+            0.0,
+            -55.819805153394654
+          ],
+          "analytic_frame_radial_axis": [
+            -5.921189464667498e-16,
+            0.0,
+            1.0
+          ],
+          "analytic_frame_tangent_axis": [
+            -1.0,
+            -0.0,
+            -5.921189464667498e-16
+          ],
+          "authored_plane_normal_dot": -1.0,
+          "authored_signed_sweep_degrees": -90.0,
+          "canonical_centerline_radius": 24.000000000000014,
+          "centerline_radius": 24.000000000000014,
+          "classification": "regular",
+          "construction_method": "analytic_torus_segment_outer_minus_bore",
+          "derived_sweep_magnitude_degrees": 89.99999999999993,
+          "directed_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "equality_roundoff_band": 2.2737367544323206e-13,
+          "outer_profile_radius": 6.0,
+          "radial_clearance": 18.000000000000014,
+          "raw_radial_clearance": 18.000000000000014,
+          "supported": true
+        },
+        "curvature_method": "dense_piecewise_curve_sampling",
+        "curvature_proof": "sampled_not_global_extremum",
+        "curvature_repair_hint": "The circular arc is tighter than its required curvature bound. Increase the independent bend radius or, for connect_ports, move the midpoint farther from the endpoint chord.",
+        "curve_length": 37.69911184307751,
+        "endpoint_tangency_passed": true,
+        "endpoint_tangent_dots": null,
+        "minimum_join_tangent_dot": 1.0,
+        "minimum_nonlocal_distance": 18.504770584508083,
+        "minimum_radius": 24.00000000000001,
+        "minimum_radius_location": {
+          "edge_parameter": [
+            0,
+            0.00613592315154256
+          ],
+          "position": [
+            -113.96706638497434,
+            0.0,
+            -31.820256946612215
+          ],
+          "sample_index": 1
+        },
+        "minimum_radius_nearest_path_point_index": 0,
+        "optimized_handle_factors": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": 12.0001,
+        "sample_count": 257,
+        "self_clearance_closest_pair": {
+          "edge_parameters": [
+            [
+              0,
+              0.2822524649709578
+            ],
+            [
+              0,
+              1.0799224746714906
+            ]
+          ],
+          "intervening_centerline_length": 18.996788276285322,
+          "segment_indices": [
+            46,
+            176
+          ]
+        },
+        "self_clearance_method": "dense_nonlocal_segment_sampling",
+        "self_clearance_passed": true,
+        "tangent_continuity_passed": true,
+        "zero_curvature": false
+      },
+      "M6": {
+        "circular_sweep": null,
+        "curve_length": 40.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      },
+      "M7": {
+        "circular_sweep": null,
+        "curve_length": 126.95999999999998,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 3,
+    "deferred_to_l2": [
+      "anchored_inlet_bore_failures",
+      "terminal_bore_failures",
+      "termination_seal_failures"
+    ],
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            11.879393923933998,
+            16.799999999999997,
+            11.879393923933998
+          ],
+          "minimum": [
+            -15.414927829866736,
+            -16.799999999999997,
+            -15.414927829866736
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 4108.801067035788
+      },
+      "M2": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            0.7071067811865479,
+            6.0,
+            0.7071067811865479
+          ],
+          "minimum": [
+            -36.062445840513924,
+            -6.0,
+            -36.062445840513924
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 2513.274122871835
+      },
+      "M3": {
+        "blend_fallback_error": "exact compact junction fillet failed: {\"surface\":\"outer\",\"radius\":0.8400000000000001,\"edge_center\":[-29.118856204923393,6.230193294758224e-16,-34.52075410186587],\"edge_length\":18.849555921539313,\"adjacent_cylinder_radii\":[6.0,6.0],\"error\":\"16Standard_Failure There are no suitable edges for chamfer or fillet\"}",
+        "blend_realized": "hard_fallback",
+        "blend_requested": "fillet",
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            -27.575750252693332,
+            6.0,
+            -25.81980515339464
+          ],
+          "minimum": [
+            -73.81980515339464,
+            -6.0,
+            -65.76093065034893
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 4788.657881792292
+      },
+      "M4": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            -73.81980515339464,
+            6.0,
+            -25.81980515339464
+          ],
+          "minimum": [
+            -113.81980515339464,
+            -6.0,
+            -37.81980515339464
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 2513.274122871834
+      },
+      "M5": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            -113.81980515339464,
+            6.0,
+            -23.348039144622817
+          ],
+          "minimum": [
+            -146.29157116216646,
+            -6.0,
+            -55.81980515339465
+          ]
+        },
+        "circular_sweep": {
+          "analytic_frame_origin": [
+            -113.81980515339463,
+            0.0,
+            -55.819805153394654
+          ],
+          "analytic_frame_radial_axis": [
+            -5.921189464667498e-16,
+            0.0,
+            1.0
+          ],
+          "analytic_frame_tangent_axis": [
+            -1.0,
+            -0.0,
+            -5.921189464667498e-16
+          ],
+          "authored_plane_normal_dot": -1.0,
+          "authored_signed_sweep_degrees": -90.0,
+          "canonical_centerline_radius": 24.000000000000014,
+          "centerline_radius": 24.000000000000014,
+          "classification": "regular",
+          "construction_method": "analytic_torus_segment_outer_minus_bore",
+          "derived_sweep_magnitude_degrees": 89.99999999999993,
+          "directed_normal": [
+            0.0,
+            -1.0,
+            0.0
+          ],
+          "equality_roundoff_band": 2.2737367544323206e-13,
+          "outer_profile_radius": 6.0,
+          "radial_clearance": 18.000000000000014,
+          "raw_radial_clearance": 18.000000000000014,
+          "supported": true
+        },
+        "construction_method": "analytic_torus_segment_outer_minus_bore",
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 2368.7050562614468
+      },
+      "M6": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            -131.81980515339464,
+            6.0,
+            -55.81980515339464
+          ],
+          "minimum": [
+            -143.81980515339464,
+            -6.0,
+            -95.81980515339464
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 2513.274122871835
+      },
+      "M7": {
+        "blend_fallback_error": "exact compact junction fillet failed: {\"surface\":\"outer\",\"radius\":0.4725,\"edge_center\":[-141.63952378760007,3.8197186342054934,-95.81980515339461],\"edge_length\":9.424777960769408,\"adjacent_cylinder_radii\":[6.0,6.0],\"error\":\"16Standard_Failure There are no suitable edges for chamfer or fillet\"}",
+        "blend_realized": "hard_fallback",
+        "blend_requested": "fillet",
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            -131.80912762895858,
+            6.0,
+            -95.8178051533946
+          ],
+          "minimum": [
+            -143.81980515339464,
+            -6.0,
+            -159.29980515339463
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 3932.1147210936833
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          11.879393923933998,
+          16.799999999999997,
+          11.879393923933998
+        ],
+        "minimum": [
+          -146.29157116216646,
+          -16.799999999999997,
+          -159.29980515339463
+        ]
+      },
+      "construction_method": "module_outer_fuse_fallback",
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 38060.485881097906
+    },
+    "required_internal_section_module_count": 7,
+    "sampled_internal_section_count": 28,
+    "sampled_internal_sections_by_module": {
+      "M1": 1,
+      "M2": 1,
+      "M3": 4,
+      "M4": 1,
+      "M5": 16,
+      "M6": 1,
+      "M7": 4
+    },
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "validation_tier": "step_local",
+    "wall_section_failures": [
+      {
+        "authored_wall_thickness": 2.0,
+        "failures": [
+          {
+            "kind": "missing_wall_material",
+            "sample": 0
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 1
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 2
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 3
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 4
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 5
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 6
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 7
+          }
+        ],
+        "module_id": "M7",
+        "port": "out_1"
+      },
+      {
+        "failures": [
+          {
+            "kind": "missing_wall_material",
+            "sample": 0
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 1
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 2
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 3
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 4
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 5
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 6
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 7
+          }
+        ],
+        "module_id": "M7",
+        "section": "outlet_1_0.4175803402646503"
+      },
+      {
+        "failures": [
+          {
+            "kind": "missing_wall_material",
+            "sample": 0
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 1
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 2
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 3
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 4
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 5
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 6
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 7
+          }
+        ],
+        "module_id": "M7",
+        "section": "outlet_1_0.775992438563327"
+      }
+    ]
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v25",
+  "module_ids": [
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5",
+    "M6",
+    "M7"
+  ],
+  "passed": false,
+  "payload_digest": "57558f8c801a4f34d12819b6046e975ceea51f44b3eb50994023d3fc4ab32b5d",
+  "run_id": "20260712T094540686615Z",
+  "schema_version": 3,
+  "state_id": "S7",
+  "state_version": 7,
+  "validator_policy": {
+    "generator_version": "cadgen02-freecad-v25",
+    "policy_digest": "70596f8945dd863eeb85abc1a06da624913390f7a7a65b8f934f29f71945f9e6",
+    "policy_id": "cadgen02-freecad-validator-v25",
+    "validation_schema_version": 3
+  }
+}

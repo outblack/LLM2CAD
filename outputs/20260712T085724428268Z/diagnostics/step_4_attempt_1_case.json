@@ -1,0 +1,607 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260712T085724428268Z",
+    "state_id": "S3",
+    "state_digest": "b988d6a421fa23142a123554e4d2fb24d300f0ec212090c0e847810aff17b8d6",
+    "contract_digest": "7db3c88edae1595d614cf1c5435ede77a527ef29e3ac3b04ffff7ce3fb4f085b",
+    "step_index": 4,
+    "attempt_index": 1,
+    "action_digest": "4d547b704b71041915a04c47cc964d97aab55f26f28982964a7fa2500151b12c",
+    "failure_signature": "d36a38ee46e7c57a36b7a24d77737769f4c1d23c9bd6d0c7476b8913f0e1bff4",
+    "evidence_digest": "a73078e88728d27a2c94a857a26cd024bf258a5353b8051a32f10056c40780d1",
+    "generator_version": "cadgen02-freecad-v25",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "70596f8945dd863eeb85abc1a06da624913390f7a7a65b8f934f29f71945f9e6",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0004_01_MODULE_INPUT_AXIS_MISMATCH",
+    "STEP_0004_02_PORT_CONTRACT_MISMATCH",
+    "STEP_0004_03_ROUTE_START_TANGENT_MISMATCH"
+  ],
+  "current_state": {
+    "state_id": "S3",
+    "state_version": 3,
+    "contract_digest": "7db3c88edae1595d614cf1c5435ede77a527ef29e3ac3b04ffff7ce3fb4f085b",
+    "remaining_goal_ids": [
+      "g4",
+      "g5",
+      "g6",
+      "g7",
+      "g8",
+      "g9",
+      "g10",
+      "g11",
+      "g12",
+      "g13",
+      "g14",
+      "g15",
+      "g16",
+      "g17"
+    ],
+    "open_ports": [
+      {
+        "id": "M3.out",
+        "position": [
+          -70.71067811865476,
+          0.0,
+          -70.71067811865476
+        ],
+        "axis": [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0
+      },
+      {
+        "id": "M3.out_1",
+        "position": [
+          -83.01219330881976,
+          0.0,
+          -41.01219330881976
+        ],
+        "axis": [
+          -1.0,
+          0.0,
+          0.0
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2",
+      "M3"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E3",
+        "port_a_id": "M2.out",
+        "port_b_id": "M3.in",
+        "action_id": "A3",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "7db3c88edae1595d614cf1c5435ede77a527ef29e3ac3b04ffff7ce3fb4f085b",
+    "goal_ids": [
+      "g4"
+    ],
+    "goals": [
+      {
+        "goal_id": "g4",
+        "depends_on_goal_ids": [
+          "g3"
+        ],
+        "allow_parallel": false,
+        "type": "route",
+        "direction": "-X",
+        "path_kind": "line",
+        "length": 50.0,
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "derived"
+  },
+  "rejected_draft": {
+    "target_port": "M3.out",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 50.0,
+      "direction": [
+        -1.0,
+        0.0,
+        0.0
+      ]
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "g4"
+    ],
+    "completed_goal_ids": [
+      "g4"
+    ],
+    "satisfied_components": [],
+    "rationale": "Host compiler applied legal_candidate_menu:host_recompile_0",
+    "authorship": "host_menu"
+  },
+  "resolved_action": {
+    "action_id": "A4",
+    "action_type": "ADD_MODULE",
+    "target_port": "M3.out",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 50.0,
+      "direction": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "start_position": [
+        -70.71067811865476,
+        0.0,
+        -70.71067811865476
+      ],
+      "axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M3.out"
+    ],
+    "affected_goal_ids": [
+      "g4"
+    ],
+    "completed_goal_ids": [
+      "g4"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [],
+  "failed_checks": [
+    {
+      "check_name": "module_connection",
+      "issue_id": "STEP_0004_01_MODULE_INPUT_AXIS_MISMATCH",
+      "issue_code": "MODULE_INPUT_AXIS_MISMATCH",
+      "expected": {
+        "input_axis": [
+          0.7071067811865476,
+          -0.0,
+          0.7071067811865476
+        ]
+      },
+      "actual": {
+        "input_axis": [
+          1.0,
+          -0.0,
+          -0.0
+        ],
+        "axis_alignment": 0.7071067811865476,
+        "outer_rim_error": 4.592201188381077,
+        "modeling_tolerance": 0.0001
+      }
+    },
+    {
+      "check_name": "port_contract",
+      "issue_id": "STEP_0004_02_PORT_CONTRACT_MISMATCH",
+      "issue_code": "PORT_CONTRACT_MISMATCH",
+      "expected": {
+        "position_tolerance": 0.0001,
+        "anti_parallel_axis_dot": 0.9999,
+        "section_tolerance": 0.0001,
+        "maximum_rim_error": 0.0001
+      },
+      "actual": {
+        "stored_edge": {
+          "edge_id": "E4",
+          "port_a_id": "M3.out",
+          "port_b_id": "M4.in",
+          "action_id": "A4",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 0.7071067811865476,
+          "axis_angle_error": 0.7853981633974483,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 4.592201188381077,
+          "inner_rim_error": 3.0614674589207183,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        },
+        "recomputed_interface": {
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 0.7071067811865476,
+          "axis_angle_error": 0.7853981633974483,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 4.592201188381077,
+          "inner_rim_error": 3.0614674589207183
+        }
+      }
+    },
+    {
+      "check_name": "route_continuity",
+      "issue_id": "STEP_0004_03_ROUTE_START_TANGENT_MISMATCH",
+      "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+      "expected": {
+        "dot": 0.9999,
+        "maximum_rim_error": 0.0001
+      },
+      "actual": {
+        "dot": 0.707106781187,
+        "outer_rim_error": 4.592201188381077
+      }
+    }
+  ],
+  "passed_check_summary": [],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S3",
+        "contract_digest": "7db3c88edae1595d614cf1c5435ede77a527ef29e3ac3b04ffff7ce3fb4f085b",
+        "goal_ids": [
+          "g4"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "policy_id": "cadgen02-freecad-validator-v25",
+        "policy_digest": "70596f8945dd863eeb85abc1a06da624913390f7a7a65b8f934f29f71945f9e6",
+        "generator_version": "cadgen02-freecad-v25",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0004_01_MODULE_INPUT_AXIS_MISMATCH",
+        "issue_code": "MODULE_INPUT_AXIS_MISMATCH",
+        "check_name": "module_connection",
+        "expected": {
+          "input_axis": [
+            0.7071067811865476,
+            -0.0,
+            0.7071067811865476
+          ]
+        },
+        "actual": {
+          "input_axis": [
+            1.0,
+            -0.0,
+            -0.0
+          ],
+          "axis_alignment": 0.7071067811865476,
+          "outer_rim_error": 4.592201188381077,
+          "modeling_tolerance": 0.0001
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0004_02_PORT_CONTRACT_MISMATCH",
+        "issue_code": "PORT_CONTRACT_MISMATCH",
+        "check_name": "port_contract",
+        "expected": {
+          "position_tolerance": 0.0001,
+          "anti_parallel_axis_dot": 0.9999,
+          "section_tolerance": 0.0001,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "stored_edge": {
+            "edge_id": "E4",
+            "port_a_id": "M3.out",
+            "port_b_id": "M4.in",
+            "action_id": "A4",
+            "position_error": 0.0,
+            "anti_parallel_axis_dot": 0.7071067811865476,
+            "axis_angle_error": 0.7853981633974483,
+            "od_error": 0.0,
+            "id_error": 0.0,
+            "wall_error": 0.0,
+            "outer_rim_error": 4.592201188381077,
+            "inner_rim_error": 3.0614674589207183,
+            "connector_type_match": true,
+            "connector_gender_match": true,
+            "connector_standard_match": true,
+            "engagement": 0.0
+          },
+          "recomputed_interface": {
+            "position_error": 0.0,
+            "anti_parallel_axis_dot": 0.7071067811865476,
+            "axis_angle_error": 0.7853981633974483,
+            "od_error": 0.0,
+            "id_error": 0.0,
+            "wall_error": 0.0,
+            "outer_rim_error": 4.592201188381077,
+            "inner_rim_error": 3.0614674589207183
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0004_03_ROUTE_START_TANGENT_MISMATCH",
+        "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+        "check_name": "route_continuity",
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.707106781187,
+          "outer_rim_error": 4.592201188381077
+        }
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check module_connection supplied failure evidence.",
+      "data": {
+        "check_name": "module_connection",
+        "issue_id": "STEP_0004_01_MODULE_INPUT_AXIS_MISMATCH",
+        "issue_code": "MODULE_INPUT_AXIS_MISMATCH",
+        "expected": {
+          "input_axis": [
+            0.7071067811865476,
+            -0.0,
+            0.7071067811865476
+          ]
+        },
+        "actual": {
+          "input_axis": [
+            1.0,
+            -0.0,
+            -0.0
+          ],
+          "axis_alignment": 0.7071067811865476,
+          "outer_rim_error": 4.592201188381077,
+          "modeling_tolerance": 0.0001
+        }
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check port_contract supplied failure evidence.",
+      "data": {
+        "check_name": "port_contract",
+        "issue_id": "STEP_0004_02_PORT_CONTRACT_MISMATCH",
+        "issue_code": "PORT_CONTRACT_MISMATCH",
+        "expected": {
+          "position_tolerance": 0.0001,
+          "anti_parallel_axis_dot": 0.9999,
+          "section_tolerance": 0.0001,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "stored_edge": {
+            "edge_id": "E4",
+            "port_a_id": "M3.out",
+            "port_b_id": "M4.in",
+            "action_id": "A4",
+            "position_error": 0.0,
+            "anti_parallel_axis_dot": 0.7071067811865476,
+            "axis_angle_error": 0.7853981633974483,
+            "od_error": 0.0,
+            "id_error": 0.0,
+            "wall_error": 0.0,
+            "outer_rim_error": 4.592201188381077,
+            "inner_rim_error": 3.0614674589207183,
+            "connector_type_match": true,
+            "connector_gender_match": true,
+            "connector_standard_match": true,
+            "engagement": 0.0
+          },
+          "recomputed_interface": {
+            "position_error": 0.0,
+            "anti_parallel_axis_dot": 0.7071067811865476,
+            "axis_angle_error": 0.7853981633974483,
+            "od_error": 0.0,
+            "id_error": 0.0,
+            "wall_error": 0.0,
+            "outer_rim_error": 4.592201188381077,
+            "inner_rim_error": 3.0614674589207183
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E008",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check route_continuity supplied failure evidence.",
+      "data": {
+        "check_name": "route_continuity",
+        "issue_id": "STEP_0004_03_ROUTE_START_TANGENT_MISMATCH",
+        "issue_code": "ROUTE_START_TANGENT_MISMATCH",
+        "expected": {
+          "dot": 0.9999,
+          "maximum_rim_error": 0.0001
+        },
+        "actual": {
+          "dot": 0.707106781187,
+          "outer_rim_error": 4.592201188381077
+        }
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/path_kind",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/direction/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/direction/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/direction/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [
+    {
+      "operation": "align_module_axis",
+      "target_port": "M3.out"
+    }
+  ],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

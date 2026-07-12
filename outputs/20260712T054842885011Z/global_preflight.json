@@ -1,0 +1,13 @@
+{
+  "method_version": "global-centerline-preflight/1",
+  "status": "unknown",
+  "ledger_digest": "502c77494c9a914f5ce00952890157a00b125345cdd045e22675ac16ca7d3d3d",
+  "authored_program_digest": null,
+  "realized_program_digest": null,
+  "scale_factor": 1.0,
+  "deviations": [],
+  "conflicts": [],
+  "notes": [
+    "ur_junction (branch/None) is outside global preflight v1"
+  ]
+}

@@ -4,6 +4,7 @@
 
 - 자연어로 입력한 파이프 요구사항을 한 번에 FreeCAD 코드로 바꾸는 방식이 아님
 - 복잡한 CAD를 작은 조립 단위인 `Primitive`로 나눈 뒤, 한 단계씩 선택·계산·검증하면서 이어 붙이는 방식
+- 2026-07-12 PAPR 보강: junction 이후 multi-port에서도 host가 primary 포트를 고르고 branch를 compile하며, geometry repair 중에도 host가 연속 수치를 소유한다 (LLM 숫자 walk 루프 차단). 설계: `docs/2026-07-12_papr_architecture_ko.md`
 - 기본 경로는 `LLM semantic compiler → deterministic geometry compiler`로 분리됨:
   - `Intent Agent` (`intent`): 전체 설계 목표와 순서만 구조화함
   - `Intent Validation Advisor Agent` (`intent_repair_advisor`): scope/계약 거절을 후보 오류·카탈로그 capability gap·validator gap으로 분류하고 intent 작성자에게 제한된 수정 지시만 제공함
@@ -160,6 +161,7 @@ cp .env.example .env
   - 실행 결과와 검증 근거를 재현하기 위해 이 저장소에서는 포함함
   - `diagnostics/index.json`에는 진단 journal과 호출 상태가 기록됨
   - `intent_diagnostics.json`에는 scope-invalid intent 후보, 결정론적 issue, 반복 signature, primary advisor의 host 거절 chain, reviewer 사용 여부, evidence-only fallback, 최종 host retry/terminal 판단이 기록됨
+  - `source_measurement_contract.json`에는 사용자 원문에서 한 번만 추출해 LLM 작성과 semantic validator가 함께 사용하는 수치 역할·범위·합성 길이 계약과 digest가 기록됨
   - `constraint_ledger.json`에는 source span/goal/field, 안전·topology·driving 우선순위, strict/relaxable 정책이 기록됨
   - `global_preflight.json`에는 전역 centerline digest, 충돌 certificate, 실현 scale과 모든 authored→realized 편차가 기록됨
   - `search_events.jsonl`에는 candidate accept/reject, exact nogood, causal backjump, pause/resume 상태가 append-only로 기록됨

@@ -1,0 +1,77 @@
+{
+  "case_id": "f335ef620fa5b36d8c34e2c963b2fba2d535651db453ca2fa3aceefbb7eb56c8",
+  "diagnostic_context_digest": "02f92bb3a4780028469e8a312bd3e3760de45b9caf128301cf16c0eae2832cae",
+  "failure_signature": "3118bf861e200fafb2ccd22cda1a4c90fd225511764d127868e1b55c38f68423",
+  "failure_reason": "unknown_evidence_reference",
+  "call_attempted": true,
+  "error_type": "DiagnosticValidationError",
+  "error": "parameter range has no cited numeric evidence",
+  "advisor_response": {
+    "diagnosis_class": "kernel_operation_failure",
+    "disposition": "retry_planner",
+    "confidence": "high",
+    "summary": "FreeCAD junction material construction failed, likely due to boolean topology errors arising from the acute 45-degree angle between the primary and branch outlets combined with a large max_hub_radius and fillet blending.",
+    "causal_chain": [
+      "The junction primitive is configured with a 45-degree angle between the primary axis [-0.707, 0, -0.707] and branch axis [0, 0, -1].",
+      "A blend_mode of 'fillet', blend_radius of 3.0, and max_hub_radius of 15.0 are requested.",
+      "Such parameters on an acute angle often cause self-intersecting fillets or invalid boolean unions in FreeCAD.",
+      "This caused the junction_material_construction stage to fail, resulting in a JUNCTION_RAW_MATERIAL_INVALID error and missing module shape."
+    ],
+    "evidence_ids": [
+      "E004",
+      "E005",
+      "E006"
+    ],
+    "recommendations": [
+      {
+        "path": "/params/blend_mode",
+        "action": "replace",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "none",
+        "unit": "mode",
+        "classification": "promising",
+        "rationale": "Removing the fillet blend simplifies the geometry and avoids topological errors associated with filleting acute junction angles.",
+        "evidence_id": "E005"
+      },
+      {
+        "path": "/params/max_hub_radius",
+        "action": "decrease",
+        "bound_mode": "upper",
+        "lower_text": "",
+        "upper_text": "12.0",
+        "preferred_text": "9.0",
+        "unit": "mm",
+        "classification": "promising",
+        "rationale": "Decreasing the maximum hub radius brings the hub closer to the pipe OD (12mm) reducing the likelihood of boolean failures at the 45-degree intersection.",
+        "evidence_id": "E005"
+      }
+    ],
+    "strategy_kind": "parameter_change",
+    "strategy_instruction": "Retry the junction with 'blend_mode' set to 'none' and a reduced 'max_hub_radius' to avoid boolean operation failures caused by the acute angle.",
+    "verification_checks": [
+      "module_errors",
+      "wall_section_failures",
+      "freecad_semantic_validation"
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Update the junction parameters to use blend_mode='none' and a reduced max_hub_radius (e.g., 9.0) to ensure the raw junction solid can be constructed without boolean union or filleting failures."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    },
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "unknown_evidence_reference",
+      "error": "parameter range has no cited numeric evidence"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-12T06:53:38.041160+00:00",
+  "artifact_digest": "cfee48d4c47c17e81fa2056329cdb6507ccabd7cc03bd454fa08964a6c9f1622"
+}

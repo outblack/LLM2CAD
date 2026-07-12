@@ -1,0 +1,23 @@
+[
+  {
+    "module": "route",
+    "target": "START",
+    "completed": [
+      "G1"
+    ]
+  },
+  {
+    "module": "junction",
+    "target": "M1.out",
+    "completed": [
+      "G2"
+    ]
+  },
+  {
+    "module": "route",
+    "target": "M2.out",
+    "completed": [
+      "G3"
+    ]
+  }
+]

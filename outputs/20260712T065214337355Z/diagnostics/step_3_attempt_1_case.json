@@ -1,0 +1,982 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260712T065214337355Z",
+    "state_id": "S2",
+    "state_digest": "a373cd0c5050d6864f7c0271b733ed389f258fb5fef37a8aecd8964b57544f91",
+    "contract_digest": "c988ee124cb72494b0b15872ede2da2f72c740ebdfdc96f25545c3ba5d482242",
+    "step_index": 3,
+    "attempt_index": 1,
+    "action_digest": "980894e09cb57deb09503b5753e89b91c6e098cf7b0b8e05570fda31155af83d",
+    "failure_signature": "3118bf861e200fafb2ccd22cda1a4c90fd225511764d127868e1b55c38f68423",
+    "evidence_digest": "a59b274c01ffede6434f796c513fe95767922043f5aeaebe46c2da3170ff8fa6",
+    "generator_version": "cadgen02-freecad-v24",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+  ],
+  "current_state": {
+    "state_id": "S2",
+    "state_version": 2,
+    "contract_digest": "c988ee124cb72494b0b15872ede2da2f72c740ebdfdc96f25545c3ba5d482242",
+    "remaining_goal_ids": [
+      "branch_UR",
+      "horizontal_upper",
+      "turn_UL",
+      "vertical_left_upper",
+      "branch_ML",
+      "vertical_right_upper",
+      "branch_MR",
+      "coupling_middle",
+      "connect_middle_loop",
+      "vertical_left_lower",
+      "turn_LL",
+      "vertical_right_lower",
+      "coupling_lower",
+      "connect_lower_loop"
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out",
+        "position": [
+          16.058874503045715,
+          0.0,
+          16.058874503045715
+        ],
+        "axis": [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "c988ee124cb72494b0b15872ede2da2f72c740ebdfdc96f25545c3ba5d482242",
+    "goal_ids": [
+      "branch_UR"
+    ],
+    "goals": [
+      {
+        "goal_id": "branch_UR",
+        "depends_on_goal_ids": [
+          "diag_supply"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "branch_angles": [],
+        "required_outlet_directions": [
+          "-Z"
+        ],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": true,
+        "junction_style": "smooth_hub",
+        "required_waypoints": [],
+        "connection_target": "another_open_port",
+        "notes": "Primary continues down, branch left."
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "explicit"
+  },
+  "rejected_draft": {
+    "target_port": "M2.out",
+    "module": "junction",
+    "params": {
+      "blend_mode": "fillet",
+      "blend_radius": 3.0,
+      "inner_blend_radius": 1.7999999999999998,
+      "max_hub_radius": 15.0,
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "primary",
+          "axis": [
+            -0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0
+        },
+        {
+          "role": "branch",
+          "axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0
+        }
+      ]
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "branch_UR"
+    ],
+    "completed_goal_ids": [
+      "branch_UR"
+    ],
+    "satisfied_components": [],
+    "rationale": "Host compiler bound the LLM-selected binary junction primitive."
+  },
+  "resolved_action": {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "junction",
+    "params": {
+      "blend_mode": "fillet",
+      "blend_radius": 3.0,
+      "inner_blend_radius": 1.7999999999999998,
+      "max_hub_radius": 15.0,
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "primary",
+          "axis": [
+            -0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "role": "branch",
+          "axis": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "start_position": [
+        16.058874503045715,
+        0.0,
+        16.058874503045715
+      ],
+      "axis": [
+        -0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0,
+      "branch_count": 1,
+      "include_primary_outlet": true,
+      "outlet_vectors": [
+        [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0
+        ]
+      ]
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "branch_UR"
+    ],
+    "completed_goal_ids": [
+      "branch_UR"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [
+    {
+      "id": "M1",
+      "type": "inline_component",
+      "schema_version": 2,
+      "geometry_id": "solid_M1",
+      "params": {
+        "section_source": "inherit_target",
+        "component_type": "flange",
+        "connector_type_out": "plain",
+        "connector_gender_out": "neutral",
+        "length": 8.0,
+        "body_outer_diameter": 33.599999999999994,
+        "body_start_offset": 0.0,
+        "body_length": 8.0,
+        "flange_bolt_count": 4,
+        "flange_bolt_circle_diameter": 25.959999999999997,
+        "flange_bolt_hole_diameter": 2.16,
+        "flange_reference_axis": [
+          0.0,
+          1.0,
+          -0.0
+        ],
+        "start_position": [
+          50.0,
+          0.0,
+          50.0
+        ],
+        "axis": [
+          -0.7071067811865475,
+          0.0,
+          -0.7071067811865475
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0,
+        "end_position": [
+          44.34314575050762,
+          0.0,
+          44.34314575050762
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M1.in",
+          "position": [
+            50.0,
+            0.0,
+            50.0
+          ],
+          "axis": [
+            0.7071067811865476,
+            -0.0,
+            0.7071067811865476
+          ],
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M1.out",
+          "position": [
+            44.34314575050762,
+            0.0,
+            44.34314575050762
+          ],
+          "axis": [
+            -0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "START"
+      }
+    },
+    {
+      "id": "M2",
+      "type": "route",
+      "schema_version": 2,
+      "geometry_id": "solid_M2",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 40.0,
+        "start_position": [
+          44.34314575050762,
+          0.0,
+          44.34314575050762
+        ],
+        "axis": [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0,
+        "direction": [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ],
+        "path_points": [
+          [
+            44.34314575050762,
+            0.0,
+            44.34314575050762
+          ],
+          [
+            16.058874503045715,
+            0.0,
+            16.058874503045715
+          ]
+        ],
+        "end_position": [
+          16.058874503045715,
+          0.0,
+          16.058874503045715
+        ],
+        "out_axis": [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ]
+      },
+      "ports": {
+        "in": {
+          "id": "M2.in",
+          "position": [
+            44.34314575050762,
+            0.0,
+            44.34314575050762
+          ],
+          "axis": [
+            0.7071067811865476,
+            -0.0,
+            0.7071067811865476
+          ],
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "out": {
+          "id": "M2.out",
+          "position": [
+            16.058874503045715,
+            0.0,
+            16.058874503045715
+          ],
+          "axis": [
+            -0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "input_bindings": {
+        "in": "M1.out"
+      }
+    }
+  ],
+  "failed_checks": [
+    {
+      "check_name": "wall_section_failures",
+      "evidence": [
+        {
+          "error": "module shape is missing",
+          "module_id": "M3"
+        },
+        {
+          "error": "one or more geometry-bearing modules have no internal wall sample",
+          "module_ids": [
+            "M3"
+          ]
+        }
+      ]
+    },
+    {
+      "check_name": "module_errors",
+      "evidence": [
+        {
+          "details": {
+            "module_type": "junction"
+          },
+          "error": "raw compact junction is not one valid closed solid",
+          "failure_code": "JUNCTION_RAW_MATERIAL_INVALID",
+          "module_id": "M3",
+          "stage": "junction_material_construction"
+        }
+      ]
+    },
+    {
+      "check_name": "freecad_semantic_validation",
+      "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "expected": {
+        "freecad_checks": "all implicated checks pass"
+      },
+      "actual": {
+        "error": "FreeCAD module_errors evidence is not empty",
+        "evidence_artifact_path": "outputs/20260712T065214337355Z/step_mcp/step_3_validation_1.json",
+        "evidence_digest": "a59b274c01ffede6434f796c513fe95767922043f5aeaebe46c2da3170ff8fa6",
+        "evidence": {
+          "module_ids": [
+            "M3"
+          ],
+          "failed_checks": {
+            "assembly": {
+              "bop_errors": [
+                "assembly not built"
+              ],
+              "is_closed": false,
+              "is_null": true,
+              "is_valid": false,
+              "passed": false,
+              "solid_count": 0,
+              "volume": 0.0
+            },
+            "outer_network": {
+              "passed": false,
+              "reason": "outer network not built"
+            },
+            "bore_network": {
+              "passed": false,
+              "reason": "bore network not built"
+            },
+            "modules": {
+              "M3": {
+                "error": "raw compact junction is not one valid closed solid",
+                "passed": false
+              }
+            },
+            "module_errors": [
+              {
+                "details": {
+                  "module_type": "junction"
+                },
+                "error": "raw compact junction is not one valid closed solid",
+                "failure_code": "JUNCTION_RAW_MATERIAL_INVALID",
+                "module_id": "M3",
+                "stage": "junction_material_construction"
+              }
+            ],
+            "wall_section_failures": [
+              {
+                "error": "module shape is missing",
+                "module_id": "M3"
+              },
+              {
+                "error": "one or more geometry-bearing modules have no internal wall sample",
+                "module_ids": [
+                  "M3"
+                ]
+              }
+            ]
+          },
+          "validator_policy": {
+            "generator_version": "cadgen02-freecad-v24",
+            "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+            "policy_id": "cadgen02-freecad-validator-v24",
+            "validation_schema_version": 3
+          },
+          "generator_version": "cadgen02-freecad-v24",
+          "validation_schema_version": 3,
+          "centerline_context": {
+            "M3": {
+              "passed": true,
+              "required_radius": null,
+              "minimum_radius": null,
+              "required_self_clearance": null,
+              "minimum_nonlocal_distance": null,
+              "curve_length": 80.0
+            }
+          }
+        }
+      }
+    }
+  ],
+  "passed_check_summary": [
+    "anchored_inlet_bore_failures",
+    "assembly_errors",
+    "connection_failures",
+    "non_adjacent_overlaps",
+    "terminal_bore_failures",
+    "termination_seal_failures"
+  ],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S2",
+        "contract_digest": "c988ee124cb72494b0b15872ede2da2f72c740ebdfdc96f25545c3ba5d482242",
+        "goal_ids": [
+          "branch_UR"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "generator_version": "cadgen02-freecad-v24",
+        "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+        "policy_id": "cadgen02-freecad-validator-v24",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "check_name": "freecad_semantic_validation",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD module_errors evidence is not empty",
+          "evidence_artifact_path": "outputs/20260712T065214337355Z/step_mcp/step_3_validation_1.json",
+          "evidence_digest": "a59b274c01ffede6434f796c513fe95767922043f5aeaebe46c2da3170ff8fa6",
+          "evidence": {
+            "module_ids": [
+              "M3"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "assembly not built"
+                ],
+                "is_closed": false,
+                "is_null": true,
+                "is_valid": false,
+                "passed": false,
+                "solid_count": 0,
+                "volume": 0.0
+              },
+              "outer_network": {
+                "passed": false,
+                "reason": "outer network not built"
+              },
+              "bore_network": {
+                "passed": false,
+                "reason": "bore network not built"
+              },
+              "modules": {
+                "M3": {
+                  "error": "raw compact junction is not one valid closed solid",
+                  "passed": false
+                }
+              },
+              "module_errors": [
+                {
+                  "details": {
+                    "module_type": "junction"
+                  },
+                  "error": "raw compact junction is not one valid closed solid",
+                  "failure_code": "JUNCTION_RAW_MATERIAL_INVALID",
+                  "module_id": "M3",
+                  "stage": "junction_material_construction"
+                }
+              ],
+              "wall_section_failures": [
+                {
+                  "error": "module shape is missing",
+                  "module_id": "M3"
+                },
+                {
+                  "error": "one or more geometry-bearing modules have no internal wall sample",
+                  "module_ids": [
+                    "M3"
+                  ]
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v24",
+              "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+              "policy_id": "cadgen02-freecad-validator-v24",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v24",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M3": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 80.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check wall_section_failures supplied failure evidence.",
+      "data": {
+        "check_name": "wall_section_failures",
+        "evidence": [
+          {
+            "error": "module shape is missing",
+            "module_id": "M3"
+          },
+          {
+            "error": "one or more geometry-bearing modules have no internal wall sample",
+            "module_ids": [
+              "M3"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "kernel_error",
+      "statement": "FreeCAD or host check module_errors supplied failure evidence.",
+      "data": {
+        "check_name": "module_errors",
+        "evidence": [
+          {
+            "details": {
+              "module_type": "junction"
+            },
+            "error": "raw compact junction is not one valid closed solid",
+            "failure_code": "JUNCTION_RAW_MATERIAL_INVALID",
+            "module_id": "M3",
+            "stage": "junction_material_construction"
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check freecad_semantic_validation supplied failure evidence.",
+      "data": {
+        "check_name": "freecad_semantic_validation",
+        "issue_id": "STEP_0003_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD module_errors evidence is not empty",
+          "evidence_artifact_path": "outputs/20260712T065214337355Z/step_mcp/step_3_validation_1.json",
+          "evidence_digest": "a59b274c01ffede6434f796c513fe95767922043f5aeaebe46c2da3170ff8fa6",
+          "evidence": {
+            "module_ids": [
+              "M3"
+            ],
+            "failed_checks": {
+              "assembly": {
+                "bop_errors": [
+                  "assembly not built"
+                ],
+                "is_closed": false,
+                "is_null": true,
+                "is_valid": false,
+                "passed": false,
+                "solid_count": 0,
+                "volume": 0.0
+              },
+              "outer_network": {
+                "passed": false,
+                "reason": "outer network not built"
+              },
+              "bore_network": {
+                "passed": false,
+                "reason": "bore network not built"
+              },
+              "modules": {
+                "M3": {
+                  "error": "raw compact junction is not one valid closed solid",
+                  "passed": false
+                }
+              },
+              "module_errors": [
+                {
+                  "details": {
+                    "module_type": "junction"
+                  },
+                  "error": "raw compact junction is not one valid closed solid",
+                  "failure_code": "JUNCTION_RAW_MATERIAL_INVALID",
+                  "module_id": "M3",
+                  "stage": "junction_material_construction"
+                }
+              ],
+              "wall_section_failures": [
+                {
+                  "error": "module shape is missing",
+                  "module_id": "M3"
+                },
+                {
+                  "error": "one or more geometry-bearing modules have no internal wall sample",
+                  "module_ids": [
+                    "M3"
+                  ]
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v24",
+              "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+              "policy_id": "cadgen02-freecad-validator-v24",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v24",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M3": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 80.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E007",
+      "kind": "passed_check",
+      "statement": "These checks passed for the same candidate and must not be casually invalidated.",
+      "data": {
+        "check_names": [
+          "anchored_inlet_bore_failures",
+          "assembly_errors",
+          "connection_failures",
+          "non_adjacent_overlaps",
+          "terminal_bore_failures",
+          "termination_seal_failures"
+        ]
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/blend_mode",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/blend_radius",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/inner_blend_radius",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/max_hub_radius",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/role",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/wall_thickness",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/role",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/wall_thickness",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change",
+    "kernel_review"
+  ]
+}

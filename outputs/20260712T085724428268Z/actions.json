@@ -1,0 +1,86 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "inline_component",
+    "params": {
+      "section_source": "inherit_target",
+      "component_type": "flange",
+      "connector_type_out": "plain",
+      "connector_gender_out": "neutral",
+      "length": 8.0,
+      "body_outer_diameter": 33.599999999999994,
+      "body_start_offset": 0.0,
+      "body_length": 8.0,
+      "flange_bolt_count": 4,
+      "flange_bolt_circle_diameter": 25.959999999999997,
+      "flange_bolt_hole_diameter": 2.16,
+      "flange_reference_axis": [
+        0.0,
+        1.0,
+        -0.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -0.7071067811865475,
+        0.0,
+        -0.7071067811865475
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "g1"
+    ],
+    "completed_goal_ids": [
+      "g1"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 50.0,
+      "start_position": [
+        -5.656854249492381,
+        0.0,
+        -5.656854249492381
+      ],
+      "axis": [
+        -0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0,
+      "direction": [
+        -0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ]
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "g2"
+    ],
+    "completed_goal_ids": [
+      "g2"
+    ],
+    "satisfied_components": []
+  }
+]

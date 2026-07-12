@@ -1,0 +1,622 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260712T060934050101Z",
+    "state_id": "S0",
+    "state_digest": "c5f228d17f5d6ea57b1fb56af3818271856a8c26c30bbf9d78bd13a92cd62ddd",
+    "contract_digest": "84aed024b11940e4194ac0e2c7baefd645ff6781372dc05f3eaab66458ea322c",
+    "step_index": 1,
+    "attempt_index": 1,
+    "action_digest": "a451afc1c042f596556b6635ae670ddebf871d4a030e115c1f9e06a4f5be6b64",
+    "failure_signature": "497f331e58315d1026f47df8b15cdda1bd6fba6513b22ad3fd1a62488293c31a",
+    "evidence_digest": "e5eb16344d4389102f076d0d2dec9e04f4be1520fcfc29c430f59cbe534795aa",
+    "generator_version": "cadgen02-freecad-v24",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED"
+  ],
+  "current_state": {
+    "state_id": "S0",
+    "state_version": 0,
+    "contract_digest": "84aed024b11940e4194ac0e2c7baefd645ff6781372dc05f3eaab66458ea322c",
+    "remaining_goal_ids": [
+      "flange_inlet",
+      "diag_supply_route",
+      "ur_junction",
+      "upper_horizontal_route",
+      "ul_elbow",
+      "left_vertical_upper_route",
+      "ml_junction",
+      "right_vertical_upper_route",
+      "mr_junction",
+      "middle_coupling",
+      "connect_middle_loop",
+      "left_vertical_lower_route",
+      "ll_elbow",
+      "lower_horizontal_route",
+      "lower_coupling",
+      "right_vertical_lower_route",
+      "connect_lower_loop"
+    ],
+    "open_ports": [
+      {
+        "id": "START",
+        "position": [
+          150.0,
+          0.0,
+          150.0
+        ],
+        "axis": [
+          -0.7071067811865475,
+          0.0,
+          -0.7071067811865475
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [],
+    "connection_edges": []
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "84aed024b11940e4194ac0e2c7baefd645ff6781372dc05f3eaab66458ea322c",
+    "goal_ids": [
+      "flange_inlet"
+    ],
+    "goals": [
+      {
+        "goal_id": "flange_inlet",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "connector",
+        "branch_angles": [],
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "component": "flange",
+        "required_waypoints": [],
+        "connection_target": "another_open_port"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "derived"
+  },
+  "rejected_draft": {
+    "target_port": "START",
+    "module": "inline_component",
+    "params": {
+      "section_source": "inherit_target",
+      "length": 10.0,
+      "body_outer_diameter": 30.0,
+      "body_start_offset": 0.0,
+      "body_length": 10.0,
+      "connector_type_out": "plain",
+      "connector_gender_out": "neutral",
+      "component_type": "flange",
+      "flange_bolt_count": 4,
+      "flange_bolt_circle_diameter": 20.0,
+      "flange_bolt_hole_diameter": 2.0,
+      "flange_reference_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "connector_standard_out": null
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "flange_inlet"
+    ],
+    "completed_goal_ids": [
+      "flange_inlet"
+    ],
+    "satisfied_components": [],
+    "rationale": "Placing the flange inline component to satisfy the flange_inlet goal at the START port."
+  },
+  "resolved_action": {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "inline_component",
+    "params": {
+      "section_source": "inherit_target",
+      "length": 10.0,
+      "body_outer_diameter": 30.0,
+      "body_start_offset": 0.0,
+      "body_length": 10.0,
+      "connector_type_out": "plain",
+      "connector_gender_out": "neutral",
+      "component_type": "flange",
+      "flange_bolt_count": 4,
+      "flange_bolt_circle_diameter": 20.0,
+      "flange_bolt_hole_diameter": 2.0,
+      "flange_reference_axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "start_position": [
+        150.0,
+        0.0,
+        150.0
+      ],
+      "axis": [
+        -0.7071067811865475,
+        0.0,
+        -0.7071067811865475
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "flange_inlet"
+    ],
+    "completed_goal_ids": [
+      "flange_inlet"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [],
+  "failed_checks": [
+    {
+      "check_name": "wall_section_failures",
+      "evidence": [
+        {
+          "failures": [
+            {
+              "kind": "missing_wall_material",
+              "sample": 0
+            },
+            {
+              "kind": "missing_wall_material",
+              "sample": 2
+            },
+            {
+              "kind": "missing_wall_material",
+              "sample": 4
+            },
+            {
+              "kind": "missing_wall_material",
+              "sample": 6
+            }
+          ],
+          "module_id": "M1",
+          "section": "component_body_mid"
+        }
+      ]
+    },
+    {
+      "check_name": "freecad_semantic_validation",
+      "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+      "expected": {
+        "freecad_checks": "all implicated checks pass"
+      },
+      "actual": {
+        "error": "FreeCAD wall_section_failures evidence is not empty",
+        "evidence_artifact_path": "outputs/20260712T060934050101Z/step_mcp/step_1_validation_1.json",
+        "evidence_digest": "e5eb16344d4389102f076d0d2dec9e04f4be1520fcfc29c430f59cbe534795aa",
+        "evidence": {
+          "module_ids": [
+            "M1"
+          ],
+          "failed_checks": {
+            "wall_section_failures": [
+              {
+                "failures": [
+                  {
+                    "kind": "missing_wall_material",
+                    "sample": 0
+                  },
+                  {
+                    "kind": "missing_wall_material",
+                    "sample": 2
+                  },
+                  {
+                    "kind": "missing_wall_material",
+                    "sample": 4
+                  },
+                  {
+                    "kind": "missing_wall_material",
+                    "sample": 6
+                  }
+                ],
+                "module_id": "M1",
+                "section": "component_body_mid"
+              }
+            ]
+          },
+          "validator_policy": {
+            "generator_version": "cadgen02-freecad-v24",
+            "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+            "policy_id": "cadgen02-freecad-validator-v24",
+            "validation_schema_version": 3
+          },
+          "generator_version": "cadgen02-freecad-v24",
+          "validation_schema_version": 3,
+          "centerline_context": {
+            "M1": {
+              "passed": true,
+              "required_radius": null,
+              "minimum_radius": null,
+              "required_self_clearance": null,
+              "minimum_nonlocal_distance": null,
+              "curve_length": 10.0
+            }
+          }
+        }
+      }
+    }
+  ],
+  "passed_check_summary": [
+    "anchored_inlet_bore_failures",
+    "assembly",
+    "assembly_errors",
+    "bore_network",
+    "connection_failures",
+    "module_errors",
+    "non_adjacent_overlaps",
+    "outer_network",
+    "terminal_bore_failures",
+    "termination_seal_failures"
+  ],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S0",
+        "contract_digest": "84aed024b11940e4194ac0e2c7baefd645ff6781372dc05f3eaab66458ea322c",
+        "goal_ids": [
+          "flange_inlet"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "generator_version": "cadgen02-freecad-v24",
+        "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+        "policy_id": "cadgen02-freecad-validator-v24",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "check_name": "freecad_semantic_validation",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD wall_section_failures evidence is not empty",
+          "evidence_artifact_path": "outputs/20260712T060934050101Z/step_mcp/step_1_validation_1.json",
+          "evidence_digest": "e5eb16344d4389102f076d0d2dec9e04f4be1520fcfc29c430f59cbe534795aa",
+          "evidence": {
+            "module_ids": [
+              "M1"
+            ],
+            "failed_checks": {
+              "wall_section_failures": [
+                {
+                  "failures": [
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 0
+                    },
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 2
+                    },
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 4
+                    },
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 6
+                    }
+                  ],
+                  "module_id": "M1",
+                  "section": "component_body_mid"
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v24",
+              "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+              "policy_id": "cadgen02-freecad-validator-v24",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v24",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M1": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 10.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check wall_section_failures supplied failure evidence.",
+      "data": {
+        "check_name": "wall_section_failures",
+        "evidence": [
+          {
+            "failures": [
+              {
+                "kind": "missing_wall_material",
+                "sample": 0
+              },
+              {
+                "kind": "missing_wall_material",
+                "sample": 2
+              },
+              {
+                "kind": "missing_wall_material",
+                "sample": 4
+              },
+              {
+                "kind": "missing_wall_material",
+                "sample": 6
+              }
+            ],
+            "module_id": "M1",
+            "section": "component_body_mid"
+          }
+        ]
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check freecad_semantic_validation supplied failure evidence.",
+      "data": {
+        "check_name": "freecad_semantic_validation",
+        "issue_id": "STEP_0001_01_FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "issue_code": "FREECAD_GEOMETRY_VALIDATION_FAILED",
+        "expected": {
+          "freecad_checks": "all implicated checks pass"
+        },
+        "actual": {
+          "error": "FreeCAD wall_section_failures evidence is not empty",
+          "evidence_artifact_path": "outputs/20260712T060934050101Z/step_mcp/step_1_validation_1.json",
+          "evidence_digest": "e5eb16344d4389102f076d0d2dec9e04f4be1520fcfc29c430f59cbe534795aa",
+          "evidence": {
+            "module_ids": [
+              "M1"
+            ],
+            "failed_checks": {
+              "wall_section_failures": [
+                {
+                  "failures": [
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 0
+                    },
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 2
+                    },
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 4
+                    },
+                    {
+                      "kind": "missing_wall_material",
+                      "sample": 6
+                    }
+                  ],
+                  "module_id": "M1",
+                  "section": "component_body_mid"
+                }
+              ]
+            },
+            "validator_policy": {
+              "generator_version": "cadgen02-freecad-v24",
+              "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+              "policy_id": "cadgen02-freecad-validator-v24",
+              "validation_schema_version": 3
+            },
+            "generator_version": "cadgen02-freecad-v24",
+            "validation_schema_version": 3,
+            "centerline_context": {
+              "M1": {
+                "passed": true,
+                "required_radius": null,
+                "minimum_radius": null,
+                "required_self_clearance": null,
+                "minimum_nonlocal_distance": null,
+                "curve_length": 10.0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "evidence_id": "E006",
+      "kind": "passed_check",
+      "statement": "These checks passed for the same candidate and must not be casually invalidated.",
+      "data": {
+        "check_names": [
+          "anchored_inlet_bore_failures",
+          "assembly",
+          "assembly_errors",
+          "bore_network",
+          "connection_failures",
+          "module_errors",
+          "non_adjacent_overlaps",
+          "outer_network",
+          "terminal_bore_failures",
+          "termination_seal_failures"
+        ]
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/body_outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/body_start_offset",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/body_length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/connector_type_out",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/connector_gender_out",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/component_type",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/flange_bolt_count",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/flange_bolt_circle_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/flange_bolt_hole_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/flange_reference_axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/flange_reference_axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/flange_reference_axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/connector_standard_out",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

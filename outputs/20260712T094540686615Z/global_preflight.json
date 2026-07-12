@@ -1,0 +1,13 @@
+{
+  "method_version": "global-centerline-preflight/1",
+  "status": "unknown",
+  "ledger_digest": "a64366e6318ba8f4668883808925285cc2ac9486aeb859cf9056c3e70e2106c4",
+  "authored_program_digest": null,
+  "realized_program_digest": null,
+  "scale_factor": 1.0,
+  "deviations": [],
+  "conflicts": [],
+  "notes": [
+    "supply_pipe (route/None) is outside global preflight v1"
+  ]
+}

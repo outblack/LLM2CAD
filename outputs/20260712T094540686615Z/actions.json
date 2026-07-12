@@ -1,0 +1,285 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "inline_component",
+    "params": {
+      "section_source": "inherit_target",
+      "component_type": "flange",
+      "connector_type_out": "plain",
+      "connector_gender_out": "neutral",
+      "length": 5.0,
+      "body_outer_diameter": 33.599999999999994,
+      "body_start_offset": 0.0,
+      "body_length": 5.0,
+      "flange_bolt_count": 4,
+      "flange_bolt_circle_diameter": 25.959999999999997,
+      "flange_bolt_hole_diameter": 2.16,
+      "flange_reference_axis": [
+        0.0,
+        1.0,
+        -0.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        -0.7071067811865475,
+        0.0,
+        -0.7071067811865475
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "start_flange"
+    ],
+    "completed_goal_ids": [
+      "start_flange"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 40.0,
+      "start_position": [
+        -3.5355339059327378,
+        0.0,
+        -3.5355339059327378
+      ],
+      "axis": [
+        -0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0,
+      "direction": [
+        -0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ]
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "supply_pipe"
+    ],
+    "completed_goal_ids": [
+      "supply_pipe"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "junction",
+    "params": {
+      "blend_mode": "fillet",
+      "blend_radius": 2.4000000000000004,
+      "inner_blend_radius": 1.3200000000000003,
+      "max_hub_radius": 10.2,
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "primary",
+          "axis": [
+            -0.7071067811865476,
+            0.0,
+            -0.7071067811865476
+          ],
+          "length": 42.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "role": "branch",
+          "axis": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "length": 42.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "start_position": [
+        -31.81980515339464,
+        0.0,
+        -31.81980515339464
+      ],
+      "axis": [
+        -0.7071067811865476,
+        0.0,
+        -0.7071067811865476
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0,
+      "branch_count": 1,
+      "include_primary_outlet": true,
+      "outlet_vectors": [
+        [
+          -0.7071067811865476,
+          0.0,
+          -0.7071067811865476
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "upper_right_junction"
+    ],
+    "completed_goal_ids": [
+      "upper_right_junction"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A4",
+    "action_type": "ADD_MODULE",
+    "target_port": "M3.out_1",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 40.0,
+      "direction": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "start_position": [
+        -73.81980515339464,
+        0.0,
+        -31.81980515339464
+      ],
+      "axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M3.out_1"
+    ],
+    "affected_goal_ids": [
+      "upper_horizontal_pipe"
+    ],
+    "completed_goal_ids": [
+      "upper_horizontal_pipe"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A5",
+    "action_type": "ADD_MODULE",
+    "target_port": "M4.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "bend_radius": 24.0,
+      "sweep_angle": -90.0,
+      "plane_normal": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "start_position": [
+        -113.81980515339464,
+        0.0,
+        -31.81980515339464
+      ],
+      "axis": [
+        -1.0,
+        0.0,
+        0.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0,
+      "terminal_axis": [
+        -6.123233995736766e-17,
+        0.0,
+        -1.0
+      ]
+    },
+    "consumed_port_ids": [
+      "M4.out"
+    ],
+    "affected_goal_ids": [
+      "upper_left_elbow"
+    ],
+    "completed_goal_ids": [
+      "upper_left_elbow"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A6",
+    "action_type": "ADD_MODULE",
+    "target_port": "M5.out",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 40.0,
+      "direction": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "start_position": [
+        -137.81980515339464,
+        0.0,
+        -55.81980515339464
+      ],
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "M5.out"
+    ],
+    "affected_goal_ids": [
+      "left_mid_section"
+    ],
+    "completed_goal_ids": [
+      "left_mid_section"
+    ],
+    "satisfied_components": []
+  }
+]

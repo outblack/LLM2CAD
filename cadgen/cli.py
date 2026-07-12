@@ -12,9 +12,9 @@ import signal
 import sys
 from pathlib import Path
 
-from cadgen.config import Settings, load_settings
-from cadgen.pipeline import run_pipeline
-from cadgen.stream import ThinkingStream
+from cadgen.runtime_settings import Settings, load_settings
+from cadgen.generation_pipeline import run_pipeline
+from cadgen.thinking_progress_stream import ThinkingStream
 
 
 def build_parser() -> argparse.ArgumentParser:

@@ -1,0 +1,82 @@
+[
+  {
+    "diagnostic_index": 1,
+    "recorded_at": "2026-07-12T06:52:36.921830+00:00",
+    "intent_attempt": 1,
+    "phase": "semantic_validation",
+    "candidate_digest": null,
+    "validation_signature": "6c945e866f636f8e8729571c0a284827f5ddecc014cf8bea48dbe84dd3650ca6",
+    "exact_failure_signature": null,
+    "validation_signature_repeat_count": 1,
+    "exact_failure_repeat_count": 0,
+    "issue_codes": [
+      "INTENT_STRUCTURED_OR_HOST_CONTRACT"
+    ],
+    "deterministic_issues": [
+      {
+        "issue_code": "INTENT_STRUCTURED_OR_HOST_CONTRACT",
+        "check_name": "intent_semantic_validation",
+        "message": "1 validation error for ProductionIntent\n  Value error, required_components multiplicity must match connector goals: required={'flange': 1, 'coupling': 1}, connector_goals={'flange': 1, 'coupling': 2} [type=value_error, input_value={'global_spec': {'outer_d...bottom seam closures.']}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "expected": {},
+        "actual": {
+          "error_type": "ValidationError"
+        },
+        "suggestion": {}
+      }
+    ],
+    "rejected_candidate": null,
+    "advisor_required": true,
+    "advisor_status": "not_applicable",
+    "advisor_protocol_attempts": 0,
+    "advisor": null,
+    "advisor_error": null,
+    "terminal_reason": null,
+    "will_retry": true,
+    "advisor_attempts": [],
+    "advisor_source": "not_applicable",
+    "advisor_fallback_used": false,
+    "retry_decision_source": "not_applicable",
+    "terminal_authority": null,
+    "lineage_reset": false
+  },
+  {
+    "diagnostic_index": 2,
+    "recorded_at": "2026-07-12T06:52:45.608797+00:00",
+    "intent_attempt": 2,
+    "phase": "semantic_validation",
+    "candidate_digest": null,
+    "validation_signature": "6c945e866f636f8e8729571c0a284827f5ddecc014cf8bea48dbe84dd3650ca6",
+    "exact_failure_signature": null,
+    "validation_signature_repeat_count": 2,
+    "exact_failure_repeat_count": 0,
+    "issue_codes": [
+      "INTENT_STRUCTURED_OR_HOST_CONTRACT"
+    ],
+    "deterministic_issues": [
+      {
+        "issue_code": "INTENT_STRUCTURED_OR_HOST_CONTRACT",
+        "check_name": "intent_semantic_validation",
+        "message": "1 validation error for ProductionIntent\n  Value error, required_components multiplicity must match connector goals: required={'flange': 1, 'coupling': 1}, connector_goals={'flange': 1, 'coupling': 2} [type=value_error, input_value={'global_spec': {'outer_d...bottom seam closures.']}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/value_error",
+        "expected": {},
+        "actual": {
+          "error_type": "ValidationError"
+        },
+        "suggestion": {}
+      }
+    ],
+    "rejected_candidate": null,
+    "advisor_required": true,
+    "advisor_status": "not_applicable",
+    "advisor_protocol_attempts": 0,
+    "advisor": null,
+    "advisor_error": null,
+    "terminal_reason": null,
+    "will_retry": true,
+    "advisor_attempts": [],
+    "advisor_source": "not_applicable",
+    "advisor_fallback_used": false,
+    "retry_decision_source": "not_applicable",
+    "terminal_authority": null,
+    "lineage_reset": true
+  }
+]

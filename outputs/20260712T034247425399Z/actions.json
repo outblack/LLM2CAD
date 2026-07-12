@@ -1,0 +1,84 @@
+[
+  {
+    "action_id": "A1",
+    "action_type": "ADD_MODULE",
+    "target_port": "START",
+    "module": "route",
+    "params": {
+      "path_kind": "line",
+      "section_source": "inherit_target",
+      "length": 80.0,
+      "direction": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "start_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0
+    },
+    "consumed_port_ids": [
+      "START"
+    ],
+    "affected_goal_ids": [
+      "move_straight_80"
+    ],
+    "completed_goal_ids": [
+      "move_straight_80"
+    ],
+    "satisfied_components": []
+  },
+  {
+    "action_id": "A2",
+    "action_type": "ADD_MODULE",
+    "target_port": "M1.out",
+    "module": "route",
+    "params": {
+      "section_source": "inherit_target",
+      "path_kind": "circular_arc",
+      "bend_radius": 30.0,
+      "sweep_angle": 90.0,
+      "plane_normal": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "start_position": [
+        0.0,
+        80.0,
+        0.0
+      ],
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "terminal_axis": [
+        1.0,
+        6.123233995736766e-17,
+        0.0
+      ]
+    },
+    "consumed_port_ids": [
+      "M1.out"
+    ],
+    "affected_goal_ids": [
+      "turn_90_deg"
+    ],
+    "completed_goal_ids": [
+      "turn_90_deg"
+    ],
+    "satisfied_components": []
+  }
+]

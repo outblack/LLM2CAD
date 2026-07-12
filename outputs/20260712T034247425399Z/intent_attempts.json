@@ -1,0 +1,16 @@
+[
+  {
+    "attempt_index": 1,
+    "status": "accepted",
+    "phase": "semantic_validation",
+    "scope_validated": true,
+    "semantic_attempt": 1,
+    "schema_retry_attempt": 0,
+    "consumes_semantic_budget": true,
+    "parsed_intent": true,
+    "candidate_digest": "dcee409c08fa9bac20264548d867f25dca9bbd776ee3607a7591a15961bf9e28",
+    "schema_profile": "preferred_plain_numeric",
+    "diagnostic": null,
+    "lineage_reset": false
+  }
+]

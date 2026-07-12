@@ -1,0 +1,33 @@
+{
+  "passed": false,
+  "verification_status": "failed",
+  "error_count": 1,
+  "warning_count": 0,
+  "expected_open_ports": 0,
+  "actual_open_ports": 2,
+  "expected_open_ports_source": "derived",
+  "issues": [
+    {
+      "issue_id": "STEP_0004_01_STEP_REPAIR_EXHAUSTED",
+      "severity": "error",
+      "issue_code": "STEP_REPAIR_EXHAUSTED",
+      "check_name": "planning",
+      "message": "No valid action was accepted within the repair budget.",
+      "step_index": 4,
+      "action_id": null,
+      "module_id": null,
+      "port_ids": [],
+      "target_port_id": null,
+      "consumed_goal_index": null,
+      "expected": {},
+      "actual": {},
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Fix STEP_REPAIR_EXHAUSTED: No valid action was accepted within the repair budget."
+  ]
+}

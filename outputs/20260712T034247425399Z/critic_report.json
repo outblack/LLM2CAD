@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "verification_status": "passed",
+  "error_count": 0,
+  "warning_count": 1,
+  "expected_open_ports": 1,
+  "actual_open_ports": 1,
+  "expected_open_ports_source": "derived",
+  "issues": [
+    {
+      "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+      "severity": "warning",
+      "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+      "check_name": "conservative_collision",
+      "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+      "step_index": 2,
+      "action_id": "A2",
+      "module_id": "M2",
+      "port_ids": [],
+      "target_port_id": "M1.out",
+      "consumed_goal_index": 0,
+      "expected": {},
+      "actual": {
+        "candidates": [
+          {
+            "module_ids": [
+              "M2",
+              "M1"
+            ],
+            "segments": [
+              "segment_1",
+              "segment_0"
+            ],
+            "candidate_segment": [
+              [
+                0.036136313844828294,
+                81.47203022982254,
+                0.0
+              ],
+              [
+                0.1444581998340908,
+                82.94051420988681,
+                0.0
+              ]
+            ],
+            "existing_segment": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                80.0,
+                0.0
+              ]
+            ],
+            "centerline_separation": 1.4724737113747333,
+            "required_separation": 20.0,
+            "clearance": -18.527526288625268
+          }
+        ]
+      },
+      "suggestion": {}
+    }
+  ],
+  "view_requests": [
+    {
+      "view_id": "front",
+      "camera": "front orthographic",
+      "target_module_ids": [
+        "M2"
+      ],
+      "target_port_ids": [
+        "M2.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "right",
+      "camera": "right orthographic",
+      "target_module_ids": [
+        "M2"
+      ],
+      "target_port_ids": [
+        "M2.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "top",
+      "camera": "top orthographic",
+      "target_module_ids": [
+        "M2"
+      ],
+      "target_port_ids": [
+        "M2.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    },
+    {
+      "view_id": "isometric",
+      "camera": "isometric overview",
+      "target_module_ids": [
+        "M2"
+      ],
+      "target_port_ids": [
+        "M2.out"
+      ],
+      "purpose": "Visually inspect topology, branch direction, open rims, and seams.",
+      "required": false,
+      "evidence_status": "pending",
+      "evidence_path": null,
+      "unavailable_reason": null
+    }
+  ],
+  "patch_suggestions": [],
+  "skipped_mcp_reason": null,
+  "next_actions": [
+    "Proceed to final FreeCAD MCP execution."
+  ]
+}

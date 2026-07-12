@@ -1,0 +1,62 @@
+{
+  "case_id": "2a4bb08997c958e5b5fb80a44d8a24c6125b46a3d2aba09491de328b8fee1d21",
+  "diagnostic_context_digest": "b040a48850fe32e4a09f56e461086f8ae2ce07f8a54ebcf81a2861c184605841",
+  "failure_signature": "444ba3ea26557d5bd9b79896a4da352339a68811684120c1c866c2713887b1e8",
+  "failure_reason": "host_validation_error",
+  "call_attempted": true,
+  "error_type": "DiagnosticValidationError",
+  "error": "advisor recommendation unit must not be blank",
+  "advisor_response": {
+    "diagnosis_class": "candidate_parameter",
+    "disposition": "retry_planner",
+    "confidence": "high",
+    "summary": "The junction blend mode 'hard' conflicts with the goal's 'smooth_hub' junction style requirement.",
+    "causal_chain": [
+      "The immutable goal 'ur_junction' requires a 'smooth_hub' junction style.",
+      "The candidate provided 'hard' for /params/blend_mode.",
+      "The deterministic branch_blend_style check failed with BRANCH_STYLE_MISMATCH."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E004"
+    ],
+    "recommendations": [
+      {
+        "path": "/params/blend_mode",
+        "action": "replace",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "smooth",
+        "unit": "",
+        "classification": "promising",
+        "rationale": "Change blend_mode to 'smooth' (or equivalent for smooth_hub) to satisfy the immutable junction style requirement.",
+        "evidence_id": "E004"
+      }
+    ],
+    "strategy_kind": "parameter_change",
+    "strategy_instruction": "Change /params/blend_mode from 'hard' to match the goal's required smooth_hub junction style.",
+    "verification_checks": [
+      "branch_blend_style"
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Update /params/blend_mode to 'smooth' to resolve the branch style mismatch and satisfy the goal requirements."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    },
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-12T05:50:34.932451+00:00",
+  "artifact_digest": "1bbcf5e13f53bf05cd3249f1d4cf676a38ce6f0671ee8debf3edcfed96b27546"
+}

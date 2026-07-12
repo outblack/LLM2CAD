@@ -1,0 +1,77 @@
+{
+  "steps": [
+    {
+      "ensure_freecad_open": true,
+      "launched_now": false
+    },
+    {
+      "probe_freecad_mcp": {
+        "passed": true,
+        "protocol": 1
+      }
+    }
+  ],
+  "views": {
+    "Isometric": {
+      "bytes": 31438,
+      "width": 800,
+      "height": 600,
+      "bit_depth": 8,
+      "color_type": 2,
+      "ok": true,
+      "path": "outputs/freecad_mcp_demo_round_pipe/isometric.png"
+    },
+    "Front": {
+      "bytes": 13849,
+      "width": 800,
+      "height": 600,
+      "bit_depth": 8,
+      "color_type": 2,
+      "ok": true,
+      "path": "outputs/freecad_mcp_demo_round_pipe/front.png"
+    },
+    "Top": {
+      "bytes": 3909,
+      "width": 800,
+      "height": 600,
+      "bit_depth": 8,
+      "color_type": 2,
+      "ok": true,
+      "path": "outputs/freecad_mcp_demo_round_pipe/top.png"
+    },
+    "Right": {
+      "bytes": 24415,
+      "width": 800,
+      "height": 600,
+      "bit_depth": 8,
+      "color_type": 2,
+      "ok": true,
+      "path": "outputs/freecad_mcp_demo_round_pipe/right.png"
+    }
+  },
+  "success": true,
+  "pipe": {
+    "bounds": {
+      "xmax": 80.0,
+      "xmin": 0.0,
+      "ymax": 10.0,
+      "ymin": -10.0,
+      "zmax": 10.0,
+      "zmin": -10.0
+    },
+    "document": "CadGenRoundPipeDemo",
+    "faces": 4,
+    "inner_diameter_mm": 16.0,
+    "is_solid": true,
+    "length_mm": 80.0,
+    "object": "RoundPipe",
+    "outer_diameter_mm": 20.0,
+    "passed": true,
+    "volume": 9047.786842338603
+  },
+  "get_objects_summary": {
+    "has_content": true,
+    "type": "dict"
+  },
+  "all_views_ok": true
+}

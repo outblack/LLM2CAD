@@ -1,0 +1,13 @@
+{
+  "method_version": "global-centerline-preflight/1",
+  "status": "unknown",
+  "ledger_digest": "0ddaad8788c3a41a0b729b89c92b86640764f7c9650f023e509f5d95dca5be3e",
+  "authored_program_digest": null,
+  "realized_program_digest": null,
+  "scale_factor": 1.0,
+  "deviations": [],
+  "conflicts": [],
+  "notes": [
+    "start_flange (connector/None) is outside global preflight v1"
+  ]
+}

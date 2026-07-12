@@ -1,0 +1,2950 @@
+{
+  "phase": "COMMITTED",
+  "run_id": "20260712T034247425399Z",
+  "intent": {
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "target_behavior": [
+      {
+        "goal_id": "move_straight_80",
+        "depends_on_goal_ids": [],
+        "allow_parallel": false,
+        "type": "move",
+        "direction": "+Y",
+        "path_kind": null,
+        "length": 80.0,
+        "angle": null,
+        "bend_radius": null,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "connection_target": "another_open_port",
+        "notes": null
+      },
+      {
+        "goal_id": "turn_90_deg",
+        "depends_on_goal_ids": [
+          "move_straight_80"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": "+X",
+        "path_kind": null,
+        "length": null,
+        "angle": 90.0,
+        "bend_radius": 30.0,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "connection_target": "another_open_port",
+        "notes": null
+      }
+    ],
+    "start_position": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "start_axis": [
+      0.0,
+      1.0,
+      0.0
+    ],
+    "expected_open_ports": 1,
+    "expected_open_ports_source": "derived",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [],
+    "constraint_ledger": {
+      "schema_version": 1,
+      "ledger_digest": "c110e0cd5632eb67609f204e5dd8ea5254837b44f4d875a74399b8c5f666b9f2",
+      "constraints": [
+        {
+          "constraint_id": "section.outer_diameter",
+          "constraint_type": "circular_section_outer_diameter",
+          "source_goal_id": null,
+          "source_field": "global_spec.outer_diameter",
+          "source_span": null,
+          "priority": "safety",
+          "relation": "exact",
+          "value": 20.0,
+          "relaxable": false,
+          "tolerance": 0.0001,
+          "variable_ids": [
+            "section.outer_diameter"
+          ]
+        },
+        {
+          "constraint_id": "section.wall_thickness",
+          "constraint_type": "positive_hollow_wall",
+          "source_goal_id": null,
+          "source_field": "global_spec.wall_thickness",
+          "source_span": null,
+          "priority": "safety",
+          "relation": "exact",
+          "value": 2.0,
+          "relaxable": false,
+          "tolerance": 0.0001,
+          "variable_ids": [
+            "section.wall_thickness"
+          ]
+        },
+        {
+          "constraint_id": "topology.connected",
+          "constraint_type": "single_connected_pipe_network",
+          "source_goal_id": null,
+          "source_field": null,
+          "source_span": null,
+          "priority": "topology",
+          "relation": "exact",
+          "value": true,
+          "relaxable": false,
+          "tolerance": 0.0,
+          "variable_ids": [
+            "topology.graph"
+          ]
+        },
+        {
+          "constraint_id": "geometry.no_self_intersection",
+          "constraint_type": "positive_swept_envelope_clearance",
+          "source_goal_id": null,
+          "source_field": null,
+          "source_span": null,
+          "priority": "safety",
+          "relation": "minimum",
+          "value": 0.0,
+          "relaxable": false,
+          "tolerance": 0.0001,
+          "variable_ids": [
+            "centerline.program"
+          ]
+        },
+        {
+          "constraint_id": "topology.expected_open_ports",
+          "constraint_type": "open_port_count",
+          "source_goal_id": null,
+          "source_field": null,
+          "source_span": null,
+          "priority": "topology",
+          "relation": "exact",
+          "value": 1,
+          "relaxable": false,
+          "tolerance": 0.0,
+          "variable_ids": [
+            "topology.open_ports"
+          ]
+        },
+        {
+          "constraint_id": "move_straight_80.primitive",
+          "constraint_type": "primitive_choice",
+          "source_goal_id": "move_straight_80",
+          "source_field": "type/path_kind",
+          "source_span": null,
+          "priority": "topology",
+          "relation": "exact",
+          "value": {
+            "type": "move",
+            "path_kind": null
+          },
+          "relaxable": false,
+          "tolerance": 0.0,
+          "variable_ids": [
+            "move_straight_80.primitive"
+          ]
+        },
+        {
+          "constraint_id": "move_straight_80.length",
+          "constraint_type": "authored_driving_dimension",
+          "source_goal_id": "move_straight_80",
+          "source_field": "target_behavior[0].length",
+          "source_span": null,
+          "priority": "driving",
+          "relation": "exact",
+          "value": 80.0,
+          "relaxable": true,
+          "tolerance": 0.0001,
+          "variable_ids": [
+            "move_straight_80.length"
+          ]
+        },
+        {
+          "constraint_id": "turn_90_deg.primitive",
+          "constraint_type": "primitive_choice",
+          "source_goal_id": "turn_90_deg",
+          "source_field": "type/path_kind",
+          "source_span": null,
+          "priority": "topology",
+          "relation": "exact",
+          "value": {
+            "type": "turn",
+            "path_kind": null
+          },
+          "relaxable": false,
+          "tolerance": 0.0,
+          "variable_ids": [
+            "turn_90_deg.primitive"
+          ]
+        },
+        {
+          "constraint_id": "turn_90_deg.angle",
+          "constraint_type": "authored_driving_dimension",
+          "source_goal_id": "turn_90_deg",
+          "source_field": "target_behavior[1].angle",
+          "source_span": null,
+          "priority": "driving",
+          "relation": "exact",
+          "value": 90.0,
+          "relaxable": false,
+          "tolerance": 0.0001,
+          "variable_ids": [
+            "turn_90_deg.angle"
+          ]
+        },
+        {
+          "constraint_id": "turn_90_deg.bend_radius",
+          "constraint_type": "authored_driving_dimension",
+          "source_goal_id": "turn_90_deg",
+          "source_field": "target_behavior[1].bend_radius",
+          "source_span": null,
+          "priority": "driving",
+          "relation": "exact",
+          "value": 30.0,
+          "relaxable": true,
+          "tolerance": 0.0001,
+          "variable_ids": [
+            "turn_90_deg.bend_radius"
+          ]
+        }
+      ]
+    },
+    "global_preflight": {
+      "method_version": "global-centerline-preflight/1",
+      "status": "unknown",
+      "ledger_digest": "c110e0cd5632eb67609f204e5dd8ea5254837b44f4d875a74399b8c5f666b9f2",
+      "authored_program_digest": null,
+      "realized_program_digest": null,
+      "scale_factor": 1.0,
+      "deviations": [],
+      "conflicts": [],
+      "notes": [
+        "turn_90_deg arc requires angle, bend_radius and plane_normal"
+      ]
+    },
+    "prompt_sha256": "33547f7cebc19f74f3d6cd4e594e1cab554f0a1717f88daaca531ce355d12522",
+    "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958"
+  },
+  "previous_state": {
+    "state_id": "S1",
+    "state_version": 1,
+    "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 1,
+    "expected_open_ports_source": "derived",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [],
+    "module_measurements": {},
+    "placed_modules": [
+      {
+        "id": "M1",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M1",
+        "params": {
+          "path_kind": "line",
+          "section_source": "inherit_target",
+          "length": 80.0,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "path_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              80.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "out_axis": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M1.in",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -0.0,
+              -1.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M1.out",
+            "position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "START"
+        }
+      }
+    ],
+    "open_ports": [
+      {
+        "id": "M1.out",
+        "position": [
+          0.0,
+          80.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "reserved_start_anchor": null,
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.in": {
+        "id": "M1.in",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -0.0,
+          -1.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.out": {
+        "id": "M1.out",
+        "position": [
+          0.0,
+          80.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "module_incidence_edges": [
+      {
+        "module_id": "M1",
+        "port_id": "M1.in"
+      },
+      {
+        "module_id": "M1",
+        "port_id": "M1.out"
+      }
+    ],
+    "open_port_ids": [
+      "M1.out"
+    ],
+    "used_ports": [
+      "START"
+    ],
+    "remaining_goals": [
+      {
+        "goal_id": "turn_90_deg",
+        "depends_on_goal_ids": [
+          "move_straight_80"
+        ],
+        "allow_parallel": false,
+        "type": "turn",
+        "direction": "+X",
+        "path_kind": null,
+        "length": null,
+        "angle": 90.0,
+        "bend_radius": 30.0,
+        "plane_normal": null,
+        "branch_count": null,
+        "branch_angles": [],
+        "branch_plane_normal": null,
+        "required_outlet_directions": [],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": null,
+        "junction_style": null,
+        "blend_radius": null,
+        "inner_blend_radius": null,
+        "max_hub_radius": null,
+        "diameter_out": null,
+        "wall_thickness_out": null,
+        "transition_length": null,
+        "offset": null,
+        "branch_outer_diameter": null,
+        "branch_wall_thickness": null,
+        "end_type": null,
+        "termination_thickness": null,
+        "component": null,
+        "component_spec": null,
+        "required_waypoints": [],
+        "waypoint_frame": null,
+        "waypoint_scale_policy": null,
+        "waypoint_safety_scale": null,
+        "terminal_position": null,
+        "terminal_axis": null,
+        "minimum_curvature_radius": null,
+        "connection_target": "another_open_port",
+        "notes": null
+      }
+    ],
+    "action_history": [
+      {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "path_kind": "line",
+          "section_source": "inherit_target",
+          "length": 80.0,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "move_straight_80"
+        ],
+        "completed_goal_ids": [
+          "move_straight_80"
+        ],
+        "satisfied_components": []
+      }
+    ]
+  },
+  "state": {
+    "state_id": "S2",
+    "state_version": 2,
+    "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958",
+    "modeling_tolerance": 0.0001,
+    "global_spec": {
+      "outer_diameter": 20.0,
+      "wall_thickness": 2.0,
+      "is_hollow": true,
+      "units": "mm"
+    },
+    "expected_open_ports": 1,
+    "expected_open_ports_source": "derived",
+    "required_components": [],
+    "hard_constraints": [],
+    "geometric_constraints": [],
+    "design_notes": [],
+    "module_measurements": {
+      "M1": {
+        "centerline_length": 80.0
+      },
+      "M2": {
+        "centerline_length": 47.123889803846886,
+        "minimum_curvature_radius": 30.0
+      }
+    },
+    "placed_modules": [
+      {
+        "id": "M1",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M1",
+        "params": {
+          "path_kind": "line",
+          "section_source": "inherit_target",
+          "length": 80.0,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "path_points": [
+            [
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              80.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "out_axis": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M1.in",
+            "position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              -0.0,
+              -1.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M1.out",
+            "position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "START"
+        }
+      },
+      {
+        "id": "M2",
+        "type": "route",
+        "schema_version": 2,
+        "geometry_id": "solid_M2",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "start_position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            1.0,
+            6.123233995736766e-17,
+            0.0
+          ],
+          "path_points": [
+            [
+              0.0,
+              80.0,
+              0.0
+            ],
+            [
+              0.036136313844828294,
+              81.47203022982254,
+              0.0
+            ],
+            [
+              0.1444581998340908,
+              82.94051420988681,
+              0.0
+            ],
+            [
+              0.324704701056568,
+              84.40191423366085,
+              0.0
+            ],
+            [
+              0.5764415879030871,
+              85.85270966048385,
+              0.0
+            ],
+            [
+              0.8990624041636792,
+              87.28940539709791,
+              0.0
+            ],
+            [
+              1.2917899280337366,
+              88.70854031763388,
+              0.0
+            ],
+            [
+              1.7536780445093747,
+              90.1066956017666,
+              0.0
+            ],
+            [
+              2.2836140246613965,
+              91.4805029709527,
+              0.0
+            ],
+            [
+              2.880321206296699,
+              92.82665280290846,
+              0.0
+            ],
+            [
+              3.5423620695493483,
+              94.14190210477993,
+              0.0
+            ],
+            [
+              4.268141699991837,
+              95.42308232579666,
+              0.0
+            ],
+            [
+              5.055911630923642,
+              96.66710699058807,
+              0.0
+            ],
+            [
+              5.9037740555806515,
+              97.870979134773,
+              0.0
+            ],
+            [
+              6.80968639911789,
+              99.03179852490936,
+              0.0
+            ],
+            [
+              7.7714662393512235,
+              100.14676864541055,
+              0.0
+            ],
+            [
+              8.786796564403573,
+              101.21320343559643,
+              0.0
+            ],
+            [
+              9.85323135458945,
+              102.22853376064877,
+              0.0
+            ],
+            [
+              10.968201475090634,
+              103.1903136008821,
+              0.0
+            ],
+            [
+              12.129020865226995,
+              104.09622594441934,
+              0.0
+            ],
+            [
+              13.332893009411933,
+              104.94408836907635,
+              0.0
+            ],
+            [
+              14.57691767420335,
+              105.73185830000816,
+              0.0
+            ],
+            [
+              15.858097895220066,
+              106.45763793045064,
+              0.0
+            ],
+            [
+              17.173347197091534,
+              107.1196787937033,
+              0.0
+            ],
+            [
+              18.519497029047304,
+              107.7163859753386,
+              0.0
+            ],
+            [
+              19.893304398233397,
+              108.24632195549063,
+              0.0
+            ],
+            [
+              21.29145968236613,
+              108.70821007196626,
+              0.0
+            ],
+            [
+              22.71059460290208,
+              109.10093759583631,
+              0.0
+            ],
+            [
+              24.14729033951615,
+              109.42355841209691,
+              0.0
+            ],
+            [
+              25.598085766339146,
+              109.67529529894344,
+              0.0
+            ],
+            [
+              27.05948579011318,
+              109.85554180016591,
+              0.0
+            ],
+            [
+              28.527969770177457,
+              109.96386368615518,
+              0.0
+            ],
+            [
+              29.999999999999996,
+              110.0,
+              0.0
+            ]
+          ],
+          "end_position": [
+            29.999999999999996,
+            110.0,
+            0.0
+          ],
+          "out_axis": [
+            1.0,
+            6.123233995736766e-17,
+            0.0
+          ]
+        },
+        "ports": {
+          "in": {
+            "id": "M2.in",
+            "position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "axis": [
+              -0.0,
+              -1.0,
+              -0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          },
+          "out": {
+            "id": "M2.out",
+            "position": [
+              29.999999999999996,
+              110.0,
+              0.0
+            ],
+            "axis": [
+              1.0,
+              6.123233995736766e-17,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "connector_type": "plain",
+            "connector_gender": "neutral",
+            "connector_standard": null
+          }
+        },
+        "input_bindings": {
+          "in": "M1.out"
+        }
+      }
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out",
+        "position": [
+          29.999999999999996,
+          110.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          6.123233995736766e-17,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    ],
+    "reserved_start_anchor": null,
+    "port_nodes": {
+      "START": {
+        "id": "START",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.in": {
+        "id": "M1.in",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          -0.0,
+          -1.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M1.out": {
+        "id": "M1.out",
+        "position": [
+          0.0,
+          80.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.in": {
+        "id": "M2.in",
+        "position": [
+          0.0,
+          80.0,
+          0.0
+        ],
+        "axis": [
+          -0.0,
+          -1.0,
+          -0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      },
+      "M2.out": {
+        "id": "M2.out",
+        "position": [
+          29.999999999999996,
+          110.0,
+          0.0
+        ],
+        "axis": [
+          1.0,
+          6.123233995736766e-17,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "connector_type": "plain",
+        "connector_gender": "neutral",
+        "connector_standard": null
+      }
+    },
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ],
+    "module_incidence_edges": [
+      {
+        "module_id": "M1",
+        "port_id": "M1.in"
+      },
+      {
+        "module_id": "M1",
+        "port_id": "M1.out"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.in"
+      },
+      {
+        "module_id": "M2",
+        "port_id": "M2.out"
+      }
+    ],
+    "open_port_ids": [
+      "M2.out"
+    ],
+    "used_ports": [
+      "START",
+      "M1.out"
+    ],
+    "remaining_goals": [],
+    "action_history": [
+      {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "path_kind": "line",
+          "section_source": "inherit_target",
+          "length": 80.0,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "move_straight_80"
+        ],
+        "completed_goal_ids": [
+          "move_straight_80"
+        ],
+        "satisfied_components": []
+      },
+      {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "start_position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            1.0,
+            6.123233995736766e-17,
+            0.0
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "turn_90_deg"
+        ],
+        "completed_goal_ids": [
+          "turn_90_deg"
+        ],
+        "satisfied_components": []
+      }
+    ]
+  },
+  "state_digest": "eb07fdaca25170b57ddfedb3a2018a9318df2686a995d9979ee12f43f75d08f1",
+  "geometry_digest": "08abdc274f873088baaaec3478928542fa3b81bc14b9233de4ac3071ecc8838a",
+  "freecad_verified": true,
+  "committed_states": [
+    {
+      "state_id": "S0",
+      "state_version": 0,
+      "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 1,
+      "expected_open_ports_source": "derived",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [],
+      "module_measurements": {},
+      "placed_modules": [],
+      "open_ports": [
+        {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "reserved_start_anchor": null,
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [],
+      "module_incidence_edges": [],
+      "open_port_ids": [
+        "START"
+      ],
+      "used_ports": [],
+      "remaining_goals": [
+        {
+          "goal_id": "move_straight_80",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+Y",
+          "path_kind": null,
+          "length": 80.0,
+          "angle": null,
+          "bend_radius": null,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "connection_target": "another_open_port",
+          "notes": null
+        },
+        {
+          "goal_id": "turn_90_deg",
+          "depends_on_goal_ids": [
+            "move_straight_80"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+X",
+          "path_kind": null,
+          "length": null,
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "connection_target": "another_open_port",
+          "notes": null
+        }
+      ],
+      "action_history": []
+    },
+    {
+      "state_id": "S1",
+      "state_version": 1,
+      "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 1,
+      "expected_open_ports_source": "derived",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [],
+      "module_measurements": {},
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "path_kind": "line",
+            "section_source": "inherit_target",
+            "length": 80.0,
+            "direction": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                80.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "out_axis": [
+              0.0,
+              1.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -0.0,
+                -1.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                0.0,
+                80.0,
+                0.0
+              ],
+              "axis": [
+                0.0,
+                1.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M1.out",
+          "position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "reserved_start_anchor": null,
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -0.0,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        }
+      ],
+      "open_port_ids": [
+        "M1.out"
+      ],
+      "used_ports": [
+        "START"
+      ],
+      "remaining_goals": [
+        {
+          "goal_id": "turn_90_deg",
+          "depends_on_goal_ids": [
+            "move_straight_80"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+X",
+          "path_kind": null,
+          "length": null,
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "plane_normal": null,
+          "branch_count": null,
+          "branch_angles": [],
+          "branch_plane_normal": null,
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "include_primary_outlet": null,
+          "junction_style": null,
+          "blend_radius": null,
+          "inner_blend_radius": null,
+          "max_hub_radius": null,
+          "diameter_out": null,
+          "wall_thickness_out": null,
+          "transition_length": null,
+          "offset": null,
+          "branch_outer_diameter": null,
+          "branch_wall_thickness": null,
+          "end_type": null,
+          "termination_thickness": null,
+          "component": null,
+          "component_spec": null,
+          "required_waypoints": [],
+          "waypoint_frame": null,
+          "waypoint_scale_policy": null,
+          "waypoint_safety_scale": null,
+          "terminal_position": null,
+          "terminal_axis": null,
+          "minimum_curvature_radius": null,
+          "connection_target": "another_open_port",
+          "notes": null
+        }
+      ],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "path_kind": "line",
+            "section_source": "inherit_target",
+            "length": 80.0,
+            "direction": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "move_straight_80"
+          ],
+          "completed_goal_ids": [
+            "move_straight_80"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    },
+    {
+      "state_id": "S2",
+      "state_version": 2,
+      "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958",
+      "modeling_tolerance": 0.0001,
+      "global_spec": {
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "is_hollow": true,
+        "units": "mm"
+      },
+      "expected_open_ports": 1,
+      "expected_open_ports_source": "derived",
+      "required_components": [],
+      "hard_constraints": [],
+      "geometric_constraints": [],
+      "design_notes": [],
+      "module_measurements": {
+        "M1": {
+          "centerline_length": 80.0
+        },
+        "M2": {
+          "centerline_length": 47.123889803846886,
+          "minimum_curvature_radius": 30.0
+        }
+      },
+      "placed_modules": [
+        {
+          "id": "M1",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M1",
+          "params": {
+            "path_kind": "line",
+            "section_source": "inherit_target",
+            "length": 80.0,
+            "direction": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "path_points": [
+              [
+                0.0,
+                0.0,
+                0.0
+              ],
+              [
+                0.0,
+                80.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "out_axis": [
+              0.0,
+              1.0,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M1.in",
+              "position": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "axis": [
+                -0.0,
+                -1.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M1.out",
+              "position": [
+                0.0,
+                80.0,
+                0.0
+              ],
+              "axis": [
+                0.0,
+                1.0,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "START"
+          }
+        },
+        {
+          "id": "M2",
+          "type": "route",
+          "schema_version": 2,
+          "geometry_id": "solid_M2",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "circular_arc",
+            "bend_radius": 30.0,
+            "sweep_angle": 90.0,
+            "plane_normal": [
+              0.0,
+              0.0,
+              -1.0
+            ],
+            "start_position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "terminal_axis": [
+              1.0,
+              6.123233995736766e-17,
+              0.0
+            ],
+            "path_points": [
+              [
+                0.0,
+                80.0,
+                0.0
+              ],
+              [
+                0.036136313844828294,
+                81.47203022982254,
+                0.0
+              ],
+              [
+                0.1444581998340908,
+                82.94051420988681,
+                0.0
+              ],
+              [
+                0.324704701056568,
+                84.40191423366085,
+                0.0
+              ],
+              [
+                0.5764415879030871,
+                85.85270966048385,
+                0.0
+              ],
+              [
+                0.8990624041636792,
+                87.28940539709791,
+                0.0
+              ],
+              [
+                1.2917899280337366,
+                88.70854031763388,
+                0.0
+              ],
+              [
+                1.7536780445093747,
+                90.1066956017666,
+                0.0
+              ],
+              [
+                2.2836140246613965,
+                91.4805029709527,
+                0.0
+              ],
+              [
+                2.880321206296699,
+                92.82665280290846,
+                0.0
+              ],
+              [
+                3.5423620695493483,
+                94.14190210477993,
+                0.0
+              ],
+              [
+                4.268141699991837,
+                95.42308232579666,
+                0.0
+              ],
+              [
+                5.055911630923642,
+                96.66710699058807,
+                0.0
+              ],
+              [
+                5.9037740555806515,
+                97.870979134773,
+                0.0
+              ],
+              [
+                6.80968639911789,
+                99.03179852490936,
+                0.0
+              ],
+              [
+                7.7714662393512235,
+                100.14676864541055,
+                0.0
+              ],
+              [
+                8.786796564403573,
+                101.21320343559643,
+                0.0
+              ],
+              [
+                9.85323135458945,
+                102.22853376064877,
+                0.0
+              ],
+              [
+                10.968201475090634,
+                103.1903136008821,
+                0.0
+              ],
+              [
+                12.129020865226995,
+                104.09622594441934,
+                0.0
+              ],
+              [
+                13.332893009411933,
+                104.94408836907635,
+                0.0
+              ],
+              [
+                14.57691767420335,
+                105.73185830000816,
+                0.0
+              ],
+              [
+                15.858097895220066,
+                106.45763793045064,
+                0.0
+              ],
+              [
+                17.173347197091534,
+                107.1196787937033,
+                0.0
+              ],
+              [
+                18.519497029047304,
+                107.7163859753386,
+                0.0
+              ],
+              [
+                19.893304398233397,
+                108.24632195549063,
+                0.0
+              ],
+              [
+                21.29145968236613,
+                108.70821007196626,
+                0.0
+              ],
+              [
+                22.71059460290208,
+                109.10093759583631,
+                0.0
+              ],
+              [
+                24.14729033951615,
+                109.42355841209691,
+                0.0
+              ],
+              [
+                25.598085766339146,
+                109.67529529894344,
+                0.0
+              ],
+              [
+                27.05948579011318,
+                109.85554180016591,
+                0.0
+              ],
+              [
+                28.527969770177457,
+                109.96386368615518,
+                0.0
+              ],
+              [
+                29.999999999999996,
+                110.0,
+                0.0
+              ]
+            ],
+            "end_position": [
+              29.999999999999996,
+              110.0,
+              0.0
+            ],
+            "out_axis": [
+              1.0,
+              6.123233995736766e-17,
+              0.0
+            ]
+          },
+          "ports": {
+            "in": {
+              "id": "M2.in",
+              "position": [
+                0.0,
+                80.0,
+                0.0
+              ],
+              "axis": [
+                -0.0,
+                -1.0,
+                -0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            },
+            "out": {
+              "id": "M2.out",
+              "position": [
+                29.999999999999996,
+                110.0,
+                0.0
+              ],
+              "axis": [
+                1.0,
+                6.123233995736766e-17,
+                0.0
+              ],
+              "outer_diameter": 20.0,
+              "wall_thickness": 2.0,
+              "connector_type": "plain",
+              "connector_gender": "neutral",
+              "connector_standard": null
+            }
+          },
+          "input_bindings": {
+            "in": "M1.out"
+          }
+        }
+      ],
+      "open_ports": [
+        {
+          "id": "M2.out",
+          "position": [
+            29.999999999999996,
+            110.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            6.123233995736766e-17,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "reserved_start_anchor": null,
+      "port_nodes": {
+        "START": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.in": {
+          "id": "M1.in",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            -0.0,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M1.out": {
+          "id": "M1.out",
+          "position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.in": {
+          "id": "M2.in",
+          "position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            -0.0,
+            -1.0,
+            -0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "M2.out": {
+          "id": "M2.out",
+          "position": [
+            29.999999999999996,
+            110.0,
+            0.0
+          ],
+          "axis": [
+            1.0,
+            6.123233995736766e-17,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      },
+      "connection_edges": [
+        {
+          "edge_id": "E1",
+          "port_a_id": "START",
+          "port_b_id": "M1.in",
+          "action_id": "A1",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        },
+        {
+          "edge_id": "E2",
+          "port_a_id": "M1.out",
+          "port_b_id": "M2.in",
+          "action_id": "A2",
+          "position_error": 0.0,
+          "anti_parallel_axis_dot": 1.0,
+          "axis_angle_error": 0.0,
+          "od_error": 0.0,
+          "id_error": 0.0,
+          "wall_error": 0.0,
+          "outer_rim_error": 0.0,
+          "inner_rim_error": 0.0,
+          "connector_type_match": true,
+          "connector_gender_match": true,
+          "connector_standard_match": true,
+          "engagement": 0.0
+        }
+      ],
+      "module_incidence_edges": [
+        {
+          "module_id": "M1",
+          "port_id": "M1.in"
+        },
+        {
+          "module_id": "M1",
+          "port_id": "M1.out"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.in"
+        },
+        {
+          "module_id": "M2",
+          "port_id": "M2.out"
+        }
+      ],
+      "open_port_ids": [
+        "M2.out"
+      ],
+      "used_ports": [
+        "START",
+        "M1.out"
+      ],
+      "remaining_goals": [],
+      "action_history": [
+        {
+          "action_id": "A1",
+          "action_type": "ADD_MODULE",
+          "target_port": "START",
+          "module": "route",
+          "params": {
+            "path_kind": "line",
+            "section_source": "inherit_target",
+            "length": 80.0,
+            "direction": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "start_position": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0
+          },
+          "consumed_port_ids": [
+            "START"
+          ],
+          "affected_goal_ids": [
+            "move_straight_80"
+          ],
+          "completed_goal_ids": [
+            "move_straight_80"
+          ],
+          "satisfied_components": []
+        },
+        {
+          "action_id": "A2",
+          "action_type": "ADD_MODULE",
+          "target_port": "M1.out",
+          "module": "route",
+          "params": {
+            "section_source": "inherit_target",
+            "path_kind": "circular_arc",
+            "bend_radius": 30.0,
+            "sweep_angle": 90.0,
+            "plane_normal": [
+              0.0,
+              0.0,
+              -1.0
+            ],
+            "start_position": [
+              0.0,
+              80.0,
+              0.0
+            ],
+            "axis": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "outer_diameter": 20.0,
+            "wall_thickness": 2.0,
+            "terminal_axis": [
+              1.0,
+              6.123233995736766e-17,
+              0.0
+            ]
+          },
+          "consumed_port_ids": [
+            "M1.out"
+          ],
+          "affected_goal_ids": [
+            "turn_90_deg"
+          ],
+          "completed_goal_ids": [
+            "turn_90_deg"
+          ],
+          "satisfied_components": []
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "action_id": "A1",
+      "action_type": "ADD_MODULE",
+      "target_port": "START",
+      "module": "route",
+      "params": {
+        "path_kind": "line",
+        "section_source": "inherit_target",
+        "length": 80.0,
+        "direction": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "start_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0
+      },
+      "consumed_port_ids": [
+        "START"
+      ],
+      "affected_goal_ids": [
+        "move_straight_80"
+      ],
+      "completed_goal_ids": [
+        "move_straight_80"
+      ],
+      "satisfied_components": []
+    },
+    {
+      "action_id": "A2",
+      "action_type": "ADD_MODULE",
+      "target_port": "M1.out",
+      "module": "route",
+      "params": {
+        "section_source": "inherit_target",
+        "path_kind": "circular_arc",
+        "bend_radius": 30.0,
+        "sweep_angle": 90.0,
+        "plane_normal": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "start_position": [
+          0.0,
+          80.0,
+          0.0
+        ],
+        "axis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "outer_diameter": 20.0,
+        "wall_thickness": 2.0,
+        "terminal_axis": [
+          1.0,
+          6.123233995736766e-17,
+          0.0
+        ]
+      },
+      "consumed_port_ids": [
+        "M1.out"
+      ],
+      "affected_goal_ids": [
+        "turn_90_deg"
+      ],
+      "completed_goal_ids": [
+        "turn_90_deg"
+      ],
+      "satisfied_components": []
+    }
+  ],
+  "step_verifications": [
+    {
+      "transition": {
+        "step_index": 1,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "move_straight_80",
+          "depends_on_goal_ids": [],
+          "allow_parallel": false,
+          "type": "move",
+          "direction": "+Y",
+          "length": 80.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        },
+        "affected_goals": [
+          {
+            "goal_id": "move_straight_80",
+            "depends_on_goal_ids": [],
+            "allow_parallel": false,
+            "type": "move",
+            "direction": "+Y",
+            "length": 80.0,
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [],
+            "required_waypoints": [],
+            "connection_target": "another_open_port"
+          }
+        ],
+        "state_before_id": "S0",
+        "state_after_id": "S1",
+        "action_id": "A1",
+        "module": "route",
+        "target_port_before": {
+          "id": "START",
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M1",
+        "produced_port_ids": [
+          "M1.out"
+        ],
+        "removed_port_ids": [
+          "START"
+        ],
+        "consumed_port_ids": [
+          "START"
+        ],
+        "connection_edge_ids": [
+          "E1"
+        ],
+        "affected_goal_ids": [
+          "move_straight_80"
+        ],
+        "completed_goal_ids": [
+          "move_straight_80"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "START"
+        ],
+        "open_port_ids_after": [
+          "M1.out"
+        ]
+      },
+      "status": "passed",
+      "issues": [],
+      "mcp_status": "skipped",
+      "mcp_required": false,
+      "mcp_result_path": null,
+      "mcp_error": null,
+      "skipped_mcp_reason": "Step FreeCAD MCP is disabled.",
+      "freecad_validation_path": null,
+      "mcp_measurements": {},
+      "mcp_assembly_bounds": null
+    },
+    {
+      "transition": {
+        "step_index": 2,
+        "consumed_goal_index": 0,
+        "consumed_goal": {
+          "goal_id": "turn_90_deg",
+          "depends_on_goal_ids": [
+            "move_straight_80"
+          ],
+          "allow_parallel": false,
+          "type": "turn",
+          "direction": "+X",
+          "angle": 90.0,
+          "bend_radius": 30.0,
+          "branch_angles": [],
+          "required_outlet_directions": [],
+          "required_outlet_vectors": [],
+          "required_outlets": [],
+          "required_waypoints": [],
+          "connection_target": "another_open_port"
+        },
+        "affected_goals": [
+          {
+            "goal_id": "turn_90_deg",
+            "depends_on_goal_ids": [
+              "move_straight_80"
+            ],
+            "allow_parallel": false,
+            "type": "turn",
+            "direction": "+X",
+            "angle": 90.0,
+            "bend_radius": 30.0,
+            "branch_angles": [],
+            "required_outlet_directions": [],
+            "required_outlet_vectors": [],
+            "required_outlets": [],
+            "required_waypoints": [],
+            "connection_target": "another_open_port"
+          }
+        ],
+        "state_before_id": "S1",
+        "state_after_id": "S2",
+        "action_id": "A2",
+        "module": "route",
+        "target_port_before": {
+          "id": "M1.out",
+          "position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        "produced_module_id": "M2",
+        "produced_port_ids": [
+          "M2.out"
+        ],
+        "removed_port_ids": [
+          "M1.out"
+        ],
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "connection_edge_ids": [
+          "E2"
+        ],
+        "affected_goal_ids": [
+          "turn_90_deg"
+        ],
+        "completed_goal_ids": [
+          "turn_90_deg"
+        ],
+        "satisfied_components": [],
+        "open_port_ids_before": [
+          "M1.out"
+        ],
+        "open_port_ids_after": [
+          "M2.out"
+        ]
+      },
+      "status": "passed",
+      "issues": [
+        {
+          "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+          "severity": "warning",
+          "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+          "check_name": "conservative_collision",
+          "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+          "step_index": 2,
+          "action_id": "A2",
+          "module_id": "M2",
+          "port_ids": [],
+          "target_port_id": "M1.out",
+          "consumed_goal_index": 0,
+          "expected": {},
+          "actual": {
+            "candidates": [
+              {
+                "module_ids": [
+                  "M2",
+                  "M1"
+                ],
+                "segments": [
+                  "segment_1",
+                  "segment_0"
+                ],
+                "candidate_segment": [
+                  [
+                    0.036136313844828294,
+                    81.47203022982254,
+                    0.0
+                  ],
+                  [
+                    0.1444581998340908,
+                    82.94051420988681,
+                    0.0
+                  ]
+                ],
+                "existing_segment": [
+                  [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    80.0,
+                    0.0
+                  ]
+                ],
+                "centerline_separation": 1.4724737113747333,
+                "required_separation": 20.0,
+                "clearance": -18.527526288625268
+              }
+            ]
+          },
+          "suggestion": {}
+        }
+      ],
+      "mcp_status": "passed",
+      "mcp_required": false,
+      "mcp_result_path": "outputs/20260712T034247425399Z/step_mcp/step_2_attempt_1.json",
+      "mcp_error": null,
+      "skipped_mcp_reason": null,
+      "freecad_validation_path": "outputs/20260712T034247425399Z/step_mcp/step_2_validation_1.json",
+      "mcp_measurements": {
+        "M1": {
+          "centerline_length": 80.0
+        },
+        "M2": {
+          "centerline_length": 47.123889803846886,
+          "minimum_curvature_radius": 30.0
+        }
+      },
+      "mcp_assembly_bounds": {
+        "minimum": [
+          -13.295688011695752,
+          0.0,
+          -10.0
+        ],
+        "maximum": [
+          29.999999999999996,
+          123.29568801169576,
+          10.0
+        ]
+      }
+    }
+  ],
+  "attempts": [
+    {
+      "step_index": 1,
+      "attempt_index": 1,
+      "state_id": "S0",
+      "state_digest": "53ca594b3c9f4be830966bae535ae9fa2877f4692704a9682600f502a4f3bc26",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "path_kind": "line",
+          "section_source": "inherit_target",
+          "length": 80.0,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "move_straight_80"
+        ],
+        "completed_goal_ids": [
+          "move_straight_80"
+        ],
+        "satisfied_components": [],
+        "rationale": "Host compiler bound the LLM-selected line primitive."
+      },
+      "resolved": {
+        "action_id": "A1",
+        "action_type": "ADD_MODULE",
+        "target_port": "START",
+        "module": "route",
+        "params": {
+          "path_kind": "line",
+          "section_source": "inherit_target",
+          "length": 80.0,
+          "direction": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "start_position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0
+        },
+        "consumed_port_ids": [
+          "START"
+        ],
+        "affected_goal_ids": [
+          "move_straight_80"
+        ],
+        "completed_goal_ids": [
+          "move_straight_80"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [],
+      "observations": []
+    },
+    {
+      "step_index": 2,
+      "attempt_index": 1,
+      "state_id": "S1",
+      "state_digest": "e433110ba9a833664aaa097fb258cae5de32c91f5e81c7814c8b1a25e4049037",
+      "phase": "commit",
+      "status": "accepted",
+      "draft": {
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "consumes_goal_index": 0,
+        "catalog_schema_version": 2,
+        "affected_goal_ids": [
+          "turn_90_deg"
+        ],
+        "completed_goal_ids": [
+          "turn_90_deg"
+        ],
+        "satisfied_components": [],
+        "rationale": null
+      },
+      "resolved": {
+        "action_id": "A2",
+        "action_type": "ADD_MODULE",
+        "target_port": "M1.out",
+        "module": "route",
+        "params": {
+          "section_source": "inherit_target",
+          "path_kind": "circular_arc",
+          "bend_radius": 30.0,
+          "sweep_angle": 90.0,
+          "plane_normal": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "start_position": [
+            0.0,
+            80.0,
+            0.0
+          ],
+          "axis": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "outer_diameter": 20.0,
+          "wall_thickness": 2.0,
+          "terminal_axis": [
+            1.0,
+            6.123233995736766e-17,
+            0.0
+          ]
+        },
+        "consumed_port_ids": [
+          "M1.out"
+        ],
+        "affected_goal_ids": [
+          "turn_90_deg"
+        ],
+        "completed_goal_ids": [
+          "turn_90_deg"
+        ],
+        "satisfied_components": []
+      },
+      "issue_codes": [
+        "STATIC_COLLISION_REQUIRES_FREECAD"
+      ],
+      "observations": [
+        {
+          "issue_id": "STEP_0002_01_STATIC_COLLISION_REQUIRES_FREECAD",
+          "issue_code": "STATIC_COLLISION_REQUIRES_FREECAD",
+          "check_name": "conservative_collision",
+          "message": "A curved/tapered envelope may intersect; FreeCAD Boolean evidence is authoritative.",
+          "step_index": 2,
+          "action_id": "A2",
+          "module_id": "M2",
+          "port_ids": [],
+          "target_port_id": "M1.out",
+          "expected": {},
+          "actual": {
+            "candidates": [
+              {
+                "module_ids": [
+                  "M2",
+                  "M1"
+                ],
+                "segments": [
+                  "segment_1",
+                  "segment_0"
+                ],
+                "candidate_segment": [
+                  [
+                    0.036136313844828294,
+                    81.47203022982254,
+                    0.0
+                  ],
+                  [
+                    0.1444581998340908,
+                    82.94051420988681,
+                    0.0
+                  ]
+                ],
+                "existing_segment": [
+                  [
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  [
+                    0.0,
+                    80.0,
+                    0.0
+                  ]
+                ],
+                "centerline_separation": 1.4724737113747333,
+                "required_separation": 20.0,
+                "clearance": -18.527526288625268
+              }
+            ]
+          },
+          "suggestion": {}
+        }
+      ]
+    }
+  ],
+  "planner_lineage": {
+    "intent": {
+      "interaction_id": "v1_ChZQUTFUYXYzTEE2eTEycm9QNEthUEFREhZQUTFUYXYzTEE2eTEycm9QNEthUEFR",
+      "turns": 1,
+      "last_input_tokens": 5153
+    }
+  },
+  "planner_schema_profiles": {},
+  "llm_usage": {
+    "calls": 2,
+    "input_tokens": 8781,
+    "cached_tokens": 0,
+    "output_tokens": 504,
+    "thought_tokens": 1241,
+    "tool_use_tokens": 0,
+    "total_tokens": 10526,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "action_budget_policy": {
+    "configured_soft_baseline": 12,
+    "deterministic_required_actions": 2,
+    "effective_action_limit": 12,
+    "hard_ceiling": 64,
+    "explicit_hard_limit": false,
+    "expanded": false,
+    "expansion_history": []
+  },
+  "diagnostic_journal": {
+    "records": [],
+    "calls_by_step": {},
+    "cache_hit_count": 0,
+    "futile_retry_avoided_count": 0
+  },
+  "pending_repair_observations": [],
+  "pending_draft": null,
+  "pending_draft_state_digest": null,
+  "pending_draft_attempt_index": null,
+  "next_attempt_index": 1,
+  "in_flight_operation": null,
+  "in_flight_started_at": null,
+  "preserved_suffix": null
+}

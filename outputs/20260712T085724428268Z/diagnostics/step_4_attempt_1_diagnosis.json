@@ -1,0 +1,146 @@
+{
+  "case_id": "fb280f75277c0303ca34c688241acc0104a945fbdd5b7e98a86901b0b93cec20",
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260712T085724428268Z",
+    "state_id": "S3",
+    "state_digest": "b988d6a421fa23142a123554e4d2fb24d300f0ec212090c0e847810aff17b8d6",
+    "contract_digest": "7db3c88edae1595d614cf1c5435ede77a527ef29e3ac3b04ffff7ce3fb4f085b",
+    "step_index": 4,
+    "attempt_index": 1,
+    "action_digest": "4d547b704b71041915a04c47cc964d97aab55f26f28982964a7fa2500151b12c",
+    "failure_signature": "d36a38ee46e7c57a36b7a24d77737769f4c1d23c9bd6d0c7476b8913f0e1bff4",
+    "evidence_digest": "a73078e88728d27a2c94a857a26cd024bf258a5353b8051a32f10056c40780d1",
+    "generator_version": "cadgen02-freecad-v25",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "70596f8945dd863eeb85abc1a06da624913390f7a7a65b8f934f29f71945f9e6",
+    "repair_epoch": 0
+  },
+  "advisor_response_body": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "summary": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction.",
+    "causal_chain": [
+      "The candidate attempts to attach a line route in direction [-1.0, 0.0, 0.0] to target port M3.out.",
+      "Target port M3.out has an axis of [-0.7071067811865476, 0.0, -0.7071067811865476].",
+      "To maintain continuity, the connection requires an aligned input axis, but the specified direction results in a dot product of ~0.707.",
+      "This angle mismatch fails the module_connection, port_contract, and route_continuity checks.",
+      "Goal g4 immutably demands a direction of -X, and the target_port cannot be changed in the current repair scope.",
+      "Therefore, the constraint conflict cannot be resolved without a rollback."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E003",
+      "E004",
+      "E005",
+      "E006",
+      "E007",
+      "E008"
+    ],
+    "recommendations": [],
+    "strategy_kind": "none",
+    "strategy_instruction": "Halt current repair. The conflicting geometric constraints between the immutable goal direction and the immutable target port axis cannot be satisfied.",
+    "verification_checks": [],
+    "missing_evidence": [],
+    "planner_instruction": "Do not retry in this state. The goal requires a -X direction, but the fixed target port M3.out is angled at 45 degrees. Roll back to an earlier step to correct the graph topology (e.g., by selecting the alternative port M3.out_1 which has the required [-1.0, 0.0, 0.0] axis)."
+  },
+  "diagnosis": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "summary": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction.",
+    "causal_chain": [
+      "The candidate attempts to attach a line route in direction [-1.0, 0.0, 0.0] to target port M3.out.",
+      "Target port M3.out has an axis of [-0.7071067811865476, 0.0, -0.7071067811865476].",
+      "To maintain continuity, the connection requires an aligned input axis, but the specified direction results in a dot product of ~0.707.",
+      "This angle mismatch fails the module_connection, port_contract, and route_continuity checks.",
+      "Goal g4 immutably demands a direction of -X, and the target_port cannot be changed in the current repair scope.",
+      "Therefore, the constraint conflict cannot be resolved without a rollback."
+    ],
+    "evidence_uses": [
+      {
+        "evidence_id": "E001",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      },
+      {
+        "evidence_id": "E003",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      },
+      {
+        "evidence_id": "E004",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      },
+      {
+        "evidence_id": "E005",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      },
+      {
+        "evidence_id": "E006",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      },
+      {
+        "evidence_id": "E007",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      },
+      {
+        "evidence_id": "E008",
+        "supports": "Geometrically incompatible constraints between the fixed target port's axis and the goal's required direction."
+      }
+    ],
+    "parameter_causality": [],
+    "direction_guidance": [],
+    "parameter_ranges": [],
+    "strategies": [],
+    "missing_evidence": [],
+    "planner_instruction": "Do not retry in this state. The goal requires a -X direction, but the fixed target port M3.out is angled at 45 degrees. Roll back to an earlier step to correct the graph topology (e.g., by selecting the alternative port M3.out_1 which has the required [-1.0, 0.0, 0.0] axis).",
+    "protocol_version": 1,
+    "state_id": "S3",
+    "contract_digest": "7db3c88edae1595d614cf1c5435ede77a527ef29e3ac3b04ffff7ce3fb4f085b",
+    "diagnostic_context_digest": "5f016df3e8fba3ac8cb45bd338ab157f0b1fb5cdf1b6d61631dc1fa3ae22da7e",
+    "failure_signature": "d36a38ee46e7c57a36b7a24d77737769f4c1d23c9bd6d0c7476b8913f0e1bff4",
+    "issue_ids": [
+      "STEP_0004_01_MODULE_INPUT_AXIS_MISMATCH",
+      "STEP_0004_02_PORT_CONTRACT_MISMATCH",
+      "STEP_0004_03_ROUTE_START_TANGENT_MISMATCH"
+    ]
+  },
+  "validated": true,
+  "model_part": "step_repair_advisor",
+  "model": "gemini-3.1-pro-preview",
+  "created_at": "2026-07-12T08:59:30.464426+00:00",
+  "usage_delta": {
+    "calls": 1,
+    "input_tokens": 5937,
+    "cached_tokens": 0,
+    "output_tokens": 491,
+    "thought_tokens": 2315,
+    "tool_use_tokens": 0,
+    "total_tokens": 8743,
+    "accounting_complete": true,
+    "unmetered_calls": 0
+  },
+  "protocol_attempt_count": 1,
+  "protocol_errors": [],
+  "planner_directive": {
+    "context_type": "step_geometry_diagnosis",
+    "state_id": "S3",
+    "diagnostic_context_digest": "5f016df3e8fba3ac8cb45bd338ab157f0b1fb5cdf1b6d61631dc1fa3ae22da7e",
+    "failure_signature": "d36a38ee46e7c57a36b7a24d77737769f4c1d23c9bd6d0c7476b8913f0e1bff4",
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "stop_contract_infeasible",
+    "confidence": "high",
+    "repair_scope": "params",
+    "change_fields": [],
+    "keep_fields": [],
+    "avoid_repeating_fields": [],
+    "direction_guidance": [],
+    "parameter_ranges": [],
+    "strategies": [],
+    "advisor_explanation": "Do not retry in this state. The goal requires a -X direction, but the fixed target port M3.out is angled at 45 degrees. Roll back to an earlier step to correct the graph topology (e.g., by selecting the alternative port M3.out_1 which has the required [-1.0, 0.0, 0.0] axis).",
+    "planner_instruction": "Select and author the next complete Action using the structured direction_guidance, parameter_ranges, and strategies in this diagnosis. Preserve keep_fields, do not repeat avoid fields, and revalidate the resulting candidate through every existing gate.",
+    "planner_selection_authority": "Ranges are advisory evidence only. The ordinary step planner must choose every final exact parameter and author the replacement Action.",
+    "validation_authority": "This diagnosis cannot accept the candidate or waive any check. The replacement action must pass every existing validator again."
+  },
+  "artifact_digest": "b7f5537e1ae2dac912d0b4e033305f46819afb701f7c39de508b8e5938f5117b"
+}

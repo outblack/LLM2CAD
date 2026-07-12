@@ -1,0 +1,289 @@
+{
+  "global_spec": {
+    "outer_diameter": 20.0,
+    "wall_thickness": 2.0,
+    "is_hollow": true,
+    "units": "mm"
+  },
+  "target_behavior": [
+    {
+      "goal_id": "move_straight_80",
+      "depends_on_goal_ids": [],
+      "allow_parallel": false,
+      "type": "move",
+      "direction": "+Y",
+      "path_kind": null,
+      "length": 80.0,
+      "angle": null,
+      "bend_radius": null,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    },
+    {
+      "goal_id": "turn_90_deg",
+      "depends_on_goal_ids": [
+        "move_straight_80"
+      ],
+      "allow_parallel": false,
+      "type": "turn",
+      "direction": "+X",
+      "path_kind": null,
+      "length": null,
+      "angle": 90.0,
+      "bend_radius": 30.0,
+      "plane_normal": null,
+      "branch_count": null,
+      "branch_angles": [],
+      "branch_plane_normal": null,
+      "required_outlet_directions": [],
+      "required_outlet_vectors": [],
+      "required_outlets": [],
+      "include_primary_outlet": null,
+      "junction_style": null,
+      "blend_radius": null,
+      "inner_blend_radius": null,
+      "max_hub_radius": null,
+      "diameter_out": null,
+      "wall_thickness_out": null,
+      "transition_length": null,
+      "offset": null,
+      "branch_outer_diameter": null,
+      "branch_wall_thickness": null,
+      "end_type": null,
+      "termination_thickness": null,
+      "component": null,
+      "component_spec": null,
+      "required_waypoints": [],
+      "waypoint_frame": null,
+      "waypoint_scale_policy": null,
+      "waypoint_safety_scale": null,
+      "terminal_position": null,
+      "terminal_axis": null,
+      "minimum_curvature_radius": null,
+      "connection_target": "another_open_port",
+      "notes": null
+    }
+  ],
+  "start_position": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "start_axis": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "expected_open_ports": 1,
+  "expected_open_ports_source": "derived",
+  "required_components": [],
+  "hard_constraints": [],
+  "geometric_constraints": [],
+  "design_notes": [],
+  "constraint_ledger": {
+    "schema_version": 1,
+    "ledger_digest": "c110e0cd5632eb67609f204e5dd8ea5254837b44f4d875a74399b8c5f666b9f2",
+    "constraints": [
+      {
+        "constraint_id": "section.outer_diameter",
+        "constraint_type": "circular_section_outer_diameter",
+        "source_goal_id": null,
+        "source_field": "global_spec.outer_diameter",
+        "source_span": null,
+        "priority": "safety",
+        "relation": "exact",
+        "value": 20.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "section.outer_diameter"
+        ]
+      },
+      {
+        "constraint_id": "section.wall_thickness",
+        "constraint_type": "positive_hollow_wall",
+        "source_goal_id": null,
+        "source_field": "global_spec.wall_thickness",
+        "source_span": null,
+        "priority": "safety",
+        "relation": "exact",
+        "value": 2.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "section.wall_thickness"
+        ]
+      },
+      {
+        "constraint_id": "topology.connected",
+        "constraint_type": "single_connected_pipe_network",
+        "source_goal_id": null,
+        "source_field": null,
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": true,
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "topology.graph"
+        ]
+      },
+      {
+        "constraint_id": "geometry.no_self_intersection",
+        "constraint_type": "positive_swept_envelope_clearance",
+        "source_goal_id": null,
+        "source_field": null,
+        "source_span": null,
+        "priority": "safety",
+        "relation": "minimum",
+        "value": 0.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "centerline.program"
+        ]
+      },
+      {
+        "constraint_id": "topology.expected_open_ports",
+        "constraint_type": "open_port_count",
+        "source_goal_id": null,
+        "source_field": null,
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": 1,
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "topology.open_ports"
+        ]
+      },
+      {
+        "constraint_id": "move_straight_80.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "move_straight_80",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "move",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "move_straight_80.primitive"
+        ]
+      },
+      {
+        "constraint_id": "move_straight_80.length",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "move_straight_80",
+        "source_field": "target_behavior[0].length",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 80.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "move_straight_80.length"
+        ]
+      },
+      {
+        "constraint_id": "turn_90_deg.primitive",
+        "constraint_type": "primitive_choice",
+        "source_goal_id": "turn_90_deg",
+        "source_field": "type/path_kind",
+        "source_span": null,
+        "priority": "topology",
+        "relation": "exact",
+        "value": {
+          "type": "turn",
+          "path_kind": null
+        },
+        "relaxable": false,
+        "tolerance": 0.0,
+        "variable_ids": [
+          "turn_90_deg.primitive"
+        ]
+      },
+      {
+        "constraint_id": "turn_90_deg.angle",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_90_deg",
+        "source_field": "target_behavior[1].angle",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 90.0,
+        "relaxable": false,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_90_deg.angle"
+        ]
+      },
+      {
+        "constraint_id": "turn_90_deg.bend_radius",
+        "constraint_type": "authored_driving_dimension",
+        "source_goal_id": "turn_90_deg",
+        "source_field": "target_behavior[1].bend_radius",
+        "source_span": null,
+        "priority": "driving",
+        "relation": "exact",
+        "value": 30.0,
+        "relaxable": true,
+        "tolerance": 0.0001,
+        "variable_ids": [
+          "turn_90_deg.bend_radius"
+        ]
+      }
+    ]
+  },
+  "global_preflight": {
+    "method_version": "global-centerline-preflight/1",
+    "status": "unknown",
+    "ledger_digest": "c110e0cd5632eb67609f204e5dd8ea5254837b44f4d875a74399b8c5f666b9f2",
+    "authored_program_digest": null,
+    "realized_program_digest": null,
+    "scale_factor": 1.0,
+    "deviations": [],
+    "conflicts": [],
+    "notes": [
+      "turn_90_deg arc requires angle, bend_radius and plane_normal"
+    ]
+  },
+  "prompt_sha256": "33547f7cebc19f74f3d6cd4e594e1cab554f0a1717f88daaca531ce355d12522",
+  "contract_digest": "165156ab240006e60b004c0fdff7aa4f0f3a8727fb37925fdf31786b8a83a958"
+}

@@ -1,0 +1,597 @@
+{
+  "schema_version": 1,
+  "ledger_digest": "502c77494c9a914f5ce00952890157a00b125345cdd045e22675ac16ca7d3d3d",
+  "constraints": [
+    {
+      "constraint_id": "section.outer_diameter",
+      "constraint_type": "circular_section_outer_diameter",
+      "source_goal_id": null,
+      "source_field": "global_spec.outer_diameter",
+      "source_span": ":\n\n- Constant outside diameter: 12 mm\n- Constant wall thickness: 2",
+      "priority": "safety",
+      "relation": "exact",
+      "value": 12.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "section.outer_diameter"
+      ]
+    },
+    {
+      "constraint_id": "section.wall_thickness",
+      "constraint_type": "positive_hollow_wall",
+      "source_goal_id": null,
+      "source_field": "global_spec.wall_thickness",
+      "source_span": "2 mm\n- Constant wall thickness: 2 mm\n- Circular hollow cross-sect",
+      "priority": "safety",
+      "relation": "exact",
+      "value": 2.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "section.wall_thickness"
+      ]
+    },
+    {
+      "constraint_id": "topology.connected",
+      "constraint_type": "single_connected_pipe_network",
+      "source_goal_id": null,
+      "source_field": null,
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": true,
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "topology.graph"
+      ]
+    },
+    {
+      "constraint_id": "geometry.no_self_intersection",
+      "constraint_type": "positive_swept_envelope_clearance",
+      "source_goal_id": null,
+      "source_field": null,
+      "source_span": null,
+      "priority": "safety",
+      "relation": "minimum",
+      "value": 0.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "centerline.program"
+      ]
+    },
+    {
+      "constraint_id": "topology.expected_open_ports",
+      "constraint_type": "open_port_count",
+      "source_goal_id": null,
+      "source_field": null,
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": 0,
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "topology.open_ports"
+      ]
+    },
+    {
+      "constraint_id": "start_flange.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "start_flange",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "connector",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "start_flange.primitive"
+      ]
+    },
+    {
+      "constraint_id": "start_flange.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "start_flange",
+      "source_field": "target_behavior[0].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 5.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "start_flange.length"
+      ]
+    },
+    {
+      "constraint_id": "supply_pipe.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "supply_pipe",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "supply_pipe.primitive"
+      ]
+    },
+    {
+      "constraint_id": "supply_pipe.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "supply_pipe",
+      "source_field": "target_behavior[1].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "supply_pipe.length"
+      ]
+    },
+    {
+      "constraint_id": "ur_junction.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "ur_junction",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "branch",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "ur_junction.primitive"
+      ]
+    },
+    {
+      "constraint_id": "upper_horiz_path.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "upper_horiz_path",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "upper_horiz_path.primitive"
+      ]
+    },
+    {
+      "constraint_id": "upper_horiz_path.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "upper_horiz_path",
+      "source_field": "target_behavior[3].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 50.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "upper_horiz_path.length"
+      ]
+    },
+    {
+      "constraint_id": "ul_corner.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "ul_corner",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "ul_corner.primitive"
+      ]
+    },
+    {
+      "constraint_id": "ul_corner.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "ul_corner",
+      "source_field": "target_behavior[4].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 90.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "ul_corner.angle"
+      ]
+    },
+    {
+      "constraint_id": "ul_corner.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "ul_corner",
+      "source_field": "target_behavior[4].bend_radius",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 30.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "ul_corner.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "left_vert_upper.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "left_vert_upper",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "left_vert_upper.primitive"
+      ]
+    },
+    {
+      "constraint_id": "left_vert_upper.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "left_vert_upper",
+      "source_field": "target_behavior[5].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "left_vert_upper.length"
+      ]
+    },
+    {
+      "constraint_id": "ml_junction.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "ml_junction",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "branch",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "ml_junction.primitive"
+      ]
+    },
+    {
+      "constraint_id": "right_vert_upper.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "right_vert_upper",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "right_vert_upper.primitive"
+      ]
+    },
+    {
+      "constraint_id": "right_vert_upper.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "right_vert_upper",
+      "source_field": "target_behavior[7].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "right_vert_upper.length"
+      ]
+    },
+    {
+      "constraint_id": "mr_junction.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "mr_junction",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "branch",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "mr_junction.primitive"
+      ]
+    },
+    {
+      "constraint_id": "mid_loop_bar.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "mid_loop_bar",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "connect",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "mid_loop_bar.primitive"
+      ]
+    },
+    {
+      "constraint_id": "coupling_mid.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "coupling_mid",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "connector",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "coupling_mid.primitive"
+      ]
+    },
+    {
+      "constraint_id": "coupling_mid.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "coupling_mid",
+      "source_field": "target_behavior[10].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "coupling_mid.length"
+      ]
+    },
+    {
+      "constraint_id": "ll_lower_vert.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "ll_lower_vert",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "ll_lower_vert.primitive"
+      ]
+    },
+    {
+      "constraint_id": "ll_lower_vert.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "ll_lower_vert",
+      "source_field": "target_behavior[11].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "ll_lower_vert.length"
+      ]
+    },
+    {
+      "constraint_id": "ll_corner.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "ll_corner",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "turn",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "ll_corner.primitive"
+      ]
+    },
+    {
+      "constraint_id": "ll_corner.angle",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "ll_corner",
+      "source_field": "target_behavior[12].angle",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 90.0,
+      "relaxable": false,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "ll_corner.angle"
+      ]
+    },
+    {
+      "constraint_id": "ll_corner.bend_radius",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "ll_corner",
+      "source_field": "target_behavior[12].bend_radius",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 30.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "ll_corner.bend_radius"
+      ]
+    },
+    {
+      "constraint_id": "lower_horiz_path.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "lower_horiz_path",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "lower_horiz_path.primitive"
+      ]
+    },
+    {
+      "constraint_id": "lower_horiz_path.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "lower_horiz_path",
+      "source_field": "target_behavior[13].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 50.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "lower_horiz_path.length"
+      ]
+    },
+    {
+      "constraint_id": "mr_lower_vert.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "mr_lower_vert",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "route",
+        "path_kind": "line"
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "mr_lower_vert.primitive"
+      ]
+    },
+    {
+      "constraint_id": "mr_lower_vert.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "mr_lower_vert",
+      "source_field": "target_behavior[14].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 40.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "mr_lower_vert.length"
+      ]
+    },
+    {
+      "constraint_id": "lower_loop_close.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "lower_loop_close",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "connect",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "lower_loop_close.primitive"
+      ]
+    },
+    {
+      "constraint_id": "coupling_lower.primitive",
+      "constraint_type": "primitive_choice",
+      "source_goal_id": "coupling_lower",
+      "source_field": "type/path_kind",
+      "source_span": null,
+      "priority": "topology",
+      "relation": "exact",
+      "value": {
+        "type": "connector",
+        "path_kind": null
+      },
+      "relaxable": false,
+      "tolerance": 0.0,
+      "variable_ids": [
+        "coupling_lower.primitive"
+      ]
+    },
+    {
+      "constraint_id": "coupling_lower.length",
+      "constraint_type": "authored_driving_dimension",
+      "source_goal_id": "coupling_lower",
+      "source_field": "target_behavior[16].length",
+      "source_span": null,
+      "priority": "driving",
+      "relation": "exact",
+      "value": 10.0,
+      "relaxable": true,
+      "tolerance": 0.0001,
+      "variable_ids": [
+        "coupling_lower.length"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "records": [
+    {
+      "case_id": "2a4bb08997c958e5b5fb80a44d8a24c6125b46a3d2aba09491de328b8fee1d21",
+      "diagnostic_context_digest": "b040a48850fe32e4a09f56e461086f8ae2ce07f8a54ebcf81a2861c184605841",
+      "failure_signature": "444ba3ea26557d5bd9b79896a4da352339a68811684120c1c866c2713887b1e8",
+      "state_id": "S2",
+      "step_index": 3,
+      "attempt_index": 1,
+      "repair_epoch": 0,
+      "status": "failed",
+      "artifact_path": "outputs/20260712T054842885011Z/diagnostics/step_3_attempt_1_advisor_failure.json",
+      "failure_reason": "host_validation_error"
+    }
+  ],
+  "calls_by_step": {
+    "3:0": 1
+  },
+  "cache_hit_count": 0,
+  "futile_retry_avoided_count": 0
+}

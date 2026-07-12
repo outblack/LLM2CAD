@@ -1,0 +1,489 @@
+{
+  "advisor_protocol_version": 2,
+  "binding": {
+    "protocol_version": 1,
+    "run_id": "20260712T054842885011Z",
+    "state_id": "S2",
+    "state_digest": "bad98a6cc97714c9fa01cac9fe15efc9ea806c3f59dd55ee4f8701ad00f6f487",
+    "contract_digest": "db90d660daeb326a2041992618b8d24298fdd55bed9abf31de74be45d9544ede",
+    "step_index": 3,
+    "attempt_index": 1,
+    "action_digest": "5406b72b65548160d62c96a15e8188f31065f35d84623d673b1723589b8e0c29",
+    "failure_signature": "444ba3ea26557d5bd9b79896a4da352339a68811684120c1c866c2713887b1e8",
+    "evidence_digest": "d2504d644d8534e48397c68912f7f535795e4631f8e53b2b5ae7431a01a20538",
+    "generator_version": "cadgen02-freecad-v24",
+    "validator_schema_version": 3,
+    "validator_policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+    "repair_epoch": 0
+  },
+  "issue_ids": [
+    "STEP_0003_01_BRANCH_STYLE_MISMATCH"
+  ],
+  "current_state": {
+    "state_id": "S2",
+    "state_version": 2,
+    "contract_digest": "db90d660daeb326a2041992618b8d24298fdd55bed9abf31de74be45d9544ede",
+    "remaining_goal_ids": [
+      "ur_junction",
+      "upper_horiz_path",
+      "ul_corner",
+      "left_vert_upper",
+      "ml_junction",
+      "right_vert_upper",
+      "mr_junction",
+      "mid_loop_bar",
+      "coupling_mid",
+      "ll_lower_vert",
+      "ll_corner",
+      "lower_horiz_path",
+      "mr_lower_vert",
+      "lower_loop_close",
+      "coupling_lower"
+    ],
+    "open_ports": [
+      {
+        "id": "M2.out",
+        "position": [
+          31.81980515339464,
+          0.0,
+          31.81980515339464
+        ],
+        "axis": [
+          0.7071067811865476,
+          0.0,
+          0.7071067811865476
+        ],
+        "outer_diameter": 12.0,
+        "wall_thickness": 2.0
+      }
+    ],
+    "placed_module_ids": [
+      "M1",
+      "M2"
+    ],
+    "connection_edges": [
+      {
+        "edge_id": "E1",
+        "port_a_id": "START",
+        "port_b_id": "M1.in",
+        "action_id": "A1",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      },
+      {
+        "edge_id": "E2",
+        "port_a_id": "M1.out",
+        "port_b_id": "M2.in",
+        "action_id": "A2",
+        "position_error": 0.0,
+        "anti_parallel_axis_dot": 1.0000000000000002,
+        "axis_angle_error": 0.0,
+        "od_error": 0.0,
+        "id_error": 0.0,
+        "wall_error": 0.0,
+        "outer_rim_error": 0.0,
+        "inner_rim_error": 0.0,
+        "connector_type_match": true,
+        "connector_gender_match": true,
+        "connector_standard_match": true,
+        "engagement": 0.0
+      }
+    ]
+  },
+  "immutable_goal_slice": {
+    "contract_digest": "db90d660daeb326a2041992618b8d24298fdd55bed9abf31de74be45d9544ede",
+    "goal_ids": [
+      "ur_junction"
+    ],
+    "goals": [
+      {
+        "goal_id": "ur_junction",
+        "depends_on_goal_ids": [
+          "supply_pipe"
+        ],
+        "allow_parallel": false,
+        "type": "branch",
+        "branch_angles": [],
+        "required_outlet_directions": [
+          "-X"
+        ],
+        "required_outlet_vectors": [],
+        "required_outlets": [],
+        "include_primary_outlet": true,
+        "junction_style": "smooth_hub",
+        "required_waypoints": [],
+        "connection_target": "another_open_port",
+        "notes": "Primary vertical to MR, branch horizontal to UL"
+      }
+    ],
+    "expected_open_ports": 0,
+    "expected_open_ports_source": "derived"
+  },
+  "rejected_draft": {
+    "target_port": "M2.out",
+    "module": "junction",
+    "params": {
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "primary",
+          "axis": [
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0
+        },
+        {
+          "role": "branch",
+          "axis": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0
+        }
+      ],
+      "blend_mode": "hard",
+      "max_hub_radius": 15.0
+    },
+    "consumes_goal_index": 0,
+    "catalog_schema_version": 2,
+    "affected_goal_ids": [
+      "ur_junction"
+    ],
+    "completed_goal_ids": [
+      "ur_junction"
+    ],
+    "satisfied_components": [],
+    "rationale": "Host compiler bound the LLM-selected binary junction primitive."
+  },
+  "resolved_action": {
+    "action_id": "A3",
+    "action_type": "ADD_MODULE",
+    "target_port": "M2.out",
+    "module": "junction",
+    "params": {
+      "section_source": "inherit_target",
+      "outlets": [
+        {
+          "role": "primary",
+          "axis": [
+            0.7071067811865476,
+            0.0,
+            0.7071067811865476
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        },
+        {
+          "role": "branch",
+          "axis": [
+            -1.0,
+            0.0,
+            0.0
+          ],
+          "length": 40.0,
+          "outer_diameter": 12.0,
+          "wall_thickness": 2.0,
+          "connector_type": "plain",
+          "connector_gender": "neutral",
+          "connector_standard": null
+        }
+      ],
+      "blend_mode": "hard",
+      "max_hub_radius": 15.0,
+      "start_position": [
+        31.81980515339464,
+        0.0,
+        31.81980515339464
+      ],
+      "axis": [
+        0.7071067811865476,
+        0.0,
+        0.7071067811865476
+      ],
+      "outer_diameter": 12.0,
+      "wall_thickness": 2.0,
+      "branch_count": 1,
+      "include_primary_outlet": true,
+      "outlet_vectors": [
+        [
+          0.7071067811865476,
+          0.0,
+          0.7071067811865476
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    "consumed_port_ids": [
+      "M2.out"
+    ],
+    "affected_goal_ids": [
+      "ur_junction"
+    ],
+    "completed_goal_ids": [
+      "ur_junction"
+    ],
+    "satisfied_components": []
+  },
+  "implicated_modules": [],
+  "failed_checks": [
+    {
+      "check_name": "branch_blend_style",
+      "issue_id": "STEP_0003_01_BRANCH_STYLE_MISMATCH",
+      "issue_code": "BRANCH_STYLE_MISMATCH",
+      "expected": {
+        "junction_style": "smooth_hub"
+      },
+      "actual": {
+        "blend_mode": "hard"
+      }
+    }
+  ],
+  "passed_check_summary": [],
+  "facts": [
+    {
+      "evidence_id": "E001",
+      "kind": "immutable_contract",
+      "statement": "The rejected transition remains bound to this state and immutable contract.",
+      "data": {
+        "state_id": "S2",
+        "contract_digest": "db90d660daeb326a2041992618b8d24298fdd55bed9abf31de74be45d9544ede",
+        "goal_ids": [
+          "ur_junction"
+        ]
+      }
+    },
+    {
+      "evidence_id": "E002",
+      "kind": "validator_policy",
+      "statement": "The host validator policy is immutable for this case.",
+      "data": {
+        "policy_id": "cadgen02-freecad-validator-v24",
+        "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+        "generator_version": "cadgen02-freecad-v24",
+        "validation_schema_version": 3
+      }
+    },
+    {
+      "evidence_id": "E003",
+      "kind": "relationship",
+      "statement": "A deterministic validator rejected the candidate.",
+      "data": {
+        "issue_id": "STEP_0003_01_BRANCH_STYLE_MISMATCH",
+        "issue_code": "BRANCH_STYLE_MISMATCH",
+        "check_name": "branch_blend_style",
+        "expected": {
+          "junction_style": "smooth_hub"
+        },
+        "actual": {
+          "blend_mode": "hard"
+        }
+      }
+    },
+    {
+      "evidence_id": "E004",
+      "kind": "measurement",
+      "statement": "FreeCAD or host check branch_blend_style supplied failure evidence.",
+      "data": {
+        "check_name": "branch_blend_style",
+        "issue_id": "STEP_0003_01_BRANCH_STYLE_MISMATCH",
+        "issue_code": "BRANCH_STYLE_MISMATCH",
+        "expected": {
+          "junction_style": "smooth_hub"
+        },
+        "actual": {
+          "blend_mode": "hard"
+        }
+      }
+    },
+    {
+      "evidence_id": "E005",
+      "kind": "parameter_effect",
+      "statement": "In the v21 hard-junction builder max_hub_radius does not construct the local material or define overlap allowance.",
+      "data": {
+        "policy_id": "resolver-local-interface-band-v1",
+        "generator_version": "cadgen02-freecad-v24",
+        "parameter_path": "/params/max_hub_radius",
+        "construction_effect": "none_in_hard_material_builder",
+        "failed_metric_effect": "none_on_local_interface_allowance"
+      }
+    }
+  ],
+  "field_ownership": [
+    {
+      "path": "/target_port",
+      "owner": "downstream_state_sensitive",
+      "mutable_in_current_repair": false,
+      "reason": "Changing the attachment port changes committed graph topology."
+    },
+    {
+      "path": "/module",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "A validated primitive/topology diagnosis may release the module choice."
+    },
+    {
+      "path": "/affected_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "Goal attribution is bound to the immutable intent."
+    },
+    {
+      "path": "/completed_goal_ids",
+      "owner": "goal_derived_immutable",
+      "mutable_in_current_repair": false,
+      "reason": "A failed candidate cannot rewrite completion claims."
+    },
+    {
+      "path": "/params",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "The planner authors the primitive parameter object."
+    },
+    {
+      "path": "/params/section_source",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/role",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/0/wall_thickness",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/role",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/0",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/1",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/axis/2",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/length",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/outer_diameter",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/outlets/1/wall_thickness",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/blend_mode",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/params/max_hub_radius",
+      "owner": "planner_authored",
+      "mutable_in_current_repair": true,
+      "reason": "This value was authored in the rejected draft."
+    },
+    {
+      "path": "/resolved_action",
+      "owner": "resolver_owned",
+      "mutable_in_current_repair": false,
+      "reason": "Resolved positions, axes and derived geometry are recomputed by the host."
+    },
+    {
+      "path": "/validator_policy",
+      "owner": "validator_policy",
+      "mutable_in_current_repair": false,
+      "reason": "Validation policy is executable host code, never a planner knob."
+    }
+  ],
+  "parameter_trials": [],
+  "deterministic_recommendations": [],
+  "allowed_strategy_kinds": [
+    "parameter_change",
+    "mode_change",
+    "primitive_change"
+  ]
+}

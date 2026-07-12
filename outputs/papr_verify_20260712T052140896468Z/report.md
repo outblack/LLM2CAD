@@ -1,0 +1,7 @@
+# PASS
+outputs/papr_verify_20260712T052140896468Z/views/isometric.png
+outputs/papr_verify_20260712T052140896468Z/views/front.png
+outputs/papr_verify_20260712T052140896468Z/views/top.png
+outputs/papr_verify_20260712T052140896468Z/views/right.png
+outputs/papr_verify_20260712T052140896468Z/views/left.png
+outputs/papr_verify_20260712T052140896468Z/views/back.png

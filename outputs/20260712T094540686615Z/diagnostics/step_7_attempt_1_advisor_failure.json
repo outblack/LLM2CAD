@@ -1,0 +1,65 @@
+{
+  "case_id": "c02eb6855db256124a02e0043012bca962e36d82272fc63bf08e9aed335b9f1e",
+  "diagnostic_context_digest": "d83c326936397a6939df73cdc7cab7338aa9eb43f082b82df4341d68e57ebe0b",
+  "failure_signature": "7e8d5a687478ec701bd9657f2bf6d3b6d66b45f0436f45243ca4b714b4263977",
+  "failure_reason": "host_validation_error",
+  "call_attempted": true,
+  "error_type": "DiagnosticValidationError",
+  "error": "advisor recommendation unit must not be blank",
+  "advisor_response": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "change_primitive_or_mode",
+    "confidence": "high",
+    "summary": "The candidate incorrectly attempted to satisfy 'lower_left_elbow' out of order. The planner must change the primitive to 'junction' and attach to the correct port to satisfy the required next goal 'mid_left_junction'.",
+    "causal_chain": [
+      "The candidate authored a 'route' module and claimed it satisfied 'lower_left_elbow' (E002).",
+      "Draft validation failed because completing 'lower_left_elbow' bypasses earlier pending goals and lacks required dependencies (E004).",
+      "The immutable contract explicitly defines 'mid_left_junction' as the required next goal (E001).",
+      "To resolve this sequence violation, the planner must change the primitive to 'junction' to correctly satisfy the 'branch' type goal 'mid_left_junction'."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E002",
+      "E004"
+    ],
+    "recommendations": [
+      {
+        "path": "/module",
+        "action": "replace",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "junction",
+        "unit": "",
+        "classification": "promising",
+        "rationale": "The required next goal 'mid_left_junction' is a branch, which requires a junction primitive instead of a route.",
+        "evidence_id": "E001"
+      }
+    ],
+    "strategy_kind": "primitive_change",
+    "strategy_instruction": "Replace the 'route' primitive with a 'junction' module. Target the appropriate port (such as M3.out) and configure the parameters to satisfy the 'mid_left_junction' goal according to its specification in the immutable contract.",
+    "verification_checks": [
+      "Verify that the affected_goal_ids list targets 'mid_left_junction'.",
+      "Verify that the module primitive is set to 'junction'.",
+      "Verify that the connection target matches the upstream port correctly."
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Discard the current 'route' candidate targeting 'lower_left_elbow'. Author a new candidate using a 'junction' module attached to the correct upstream port to satisfy the required next goal, 'mid_left_junction', respecting the immutable pending goal order."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    },
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-12T09:49:49.647052+00:00",
+  "artifact_digest": "adf712e22531370fae1526439ea3e56581bfd145200f3b1b61c89f95d104f8e6"
+}

@@ -1,0 +1,64 @@
+{
+  "case_id": "aa304aa7fede8395b63dfee5a298d9e569924e31309ac87db2f6c88099622314",
+  "diagnostic_context_digest": "3feb8a3839e3853c734e2ba973cc8405a6678ed22ee1ab496599d4afc1b257a4",
+  "failure_signature": "7e8d5a687478ec701bd9657f2bf6d3b6d66b45f0436f45243ca4b714b4263977",
+  "failure_reason": "host_validation_error",
+  "call_attempted": true,
+  "error_type": "DiagnosticValidationError",
+  "error": "advisor recommendation unit must not be blank",
+  "advisor_response": {
+    "diagnosis_class": "immutable_contract_conflict",
+    "disposition": "retry_planner",
+    "confidence": "high",
+    "summary": "The candidate incorrectly skipped the required pending goal 'left_mid_section' and targeted a non-existent port 'M6.out'.",
+    "causal_chain": [
+      "The immutable contract explicitly requires 'left_mid_section' to be the next satisfied goal.",
+      "The candidate attempted to bypass this by claiming the later 'mid_left_junction' goal.",
+      "The candidate also specified 'M6.out' as the target port, which is not currently open.",
+      "These goal-order and topology violations caused the draft validation to fail deterministically."
+    ],
+    "evidence_ids": [
+      "E001",
+      "E004",
+      "E005"
+    ],
+    "recommendations": [
+      {
+        "path": "/module",
+        "action": "replace",
+        "bound_mode": "none",
+        "lower_text": "",
+        "upper_text": "",
+        "preferred_text": "route",
+        "unit": "",
+        "classification": "promising",
+        "rationale": "The required next goal 'left_mid_section' is a linear move operation, which should be satisfied using a route primitive rather than a junction.",
+        "evidence_id": "E001"
+      }
+    ],
+    "strategy_kind": "primitive_change",
+    "strategy_instruction": "Change the module primitive to a route, target an existing open port, and address the required 'left_mid_section' goal to align with the pending goal order.",
+    "verification_checks": [
+      "Verify that target_port precisely matches an available open port ID.",
+      "Verify that affected_goal_ids matches the required_next_goal_ids."
+    ],
+    "missing_evidence": [],
+    "planner_instruction": "Draft a completely new action. Target a valid open port from the current state (e.g., M3.out or M5.out). Change the module primitive to 'route' to satisfy the 'left_mid_section' move goal and strictly follow the pending goal order."
+  },
+  "protocol_attempt_count": 2,
+  "protocol_errors": [
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    },
+    {
+      "error_type": "DiagnosticValidationError",
+      "failure_reason": "host_validation_error",
+      "error": "advisor recommendation unit must not be blank"
+    }
+  ],
+  "model_part": "step_repair_advisor",
+  "created_at": "2026-07-12T09:48:44.868652+00:00",
+  "artifact_digest": "70b3914038cc9081738c75a290d95c5b34b0a347d8137df4712de69028a63adb"
+}

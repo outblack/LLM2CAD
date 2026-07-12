@@ -1,0 +1,184 @@
+{
+  "attempt_id": 1,
+  "candidate_document": "CadGenCandidate_20260712T061547534024Z_1_1_c67bd386bef9",
+  "candidate_shape_fingerprints": {
+    "PipeAssembly": "44f6a44e4a9dfc5b525b2a48195b4f016e525f9c9a6220365b1e4cfc12df7a0d",
+    "solid_M1": "804f9a343876be26317c91d564df1bf1112a5d0fe690c42c94535ca89b5f6050"
+  },
+  "checks": {
+    "adjacent_interface_overlaps": [],
+    "anchored_inlet_bore_failures": [],
+    "anchored_inlet_count": 1,
+    "assembly": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          117.67766952966369,
+          15.0,
+          110.60660171779821
+        ],
+        "minimum": [
+          89.39339828220179,
+          -15.0,
+          82.32233047033631
+        ]
+      },
+      "construction_method": "module_boolean_fallback",
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 6440.2649398590775
+    },
+    "assembly_errors": [],
+    "backend_fallbacks": [],
+    "bore_network": {
+      "assembly_intrusion_allowance": 5.028558865041966e-06,
+      "assembly_intrusion_volume": 0.0,
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          109.90090915017403,
+          4.0,
+          102.82984133830855
+        ],
+        "minimum": [
+          97.17015866169145,
+          -4.0,
+          90.09909084982597
+        ]
+      },
+      "intrusion_check_method": "outer_minus_bore_construction_invariant",
+      "intrusion_module_ids": [],
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 502.8558865041966
+    },
+    "centerlines": {
+      "M1": {
+        "circular_sweep": null,
+        "curve_length": 10.0,
+        "minimum_nonlocal_distance": null,
+        "minimum_radius": null,
+        "passed": true,
+        "required_radius": null,
+        "required_self_clearance": null
+      }
+    },
+    "connection_failures": [],
+    "declared_downstream_open_port_count": 1,
+    "minimum_authored_wall_thickness": 2.0,
+    "module_errors": [],
+    "modules": {
+      "M1": {
+        "bop_errors": [],
+        "bounds": {
+          "maximum": [
+            117.67766952966369,
+            15.0,
+            110.60660171779821
+          ],
+          "minimum": [
+            89.39339828220179,
+            -15.0,
+            82.32233047033631
+          ]
+        },
+        "is_closed": true,
+        "is_null": false,
+        "is_valid": true,
+        "passed": true,
+        "shape_check_mode": "topology_without_global_bop_argument_analysis",
+        "solid_count": 1,
+        "volume": 6440.2649398590775
+      }
+    },
+    "non_adjacent_overlaps": [],
+    "outer_network": {
+      "bop_errors": [],
+      "bounds": {
+        "maximum": [
+          117.67766952966369,
+          15.0,
+          110.60660171779821
+        ],
+        "minimum": [
+          89.39339828220179,
+          -15.0,
+          82.32233047033631
+        ]
+      },
+      "construction_method": "module_outer_fuse_fallback",
+      "is_closed": true,
+      "is_null": false,
+      "is_valid": true,
+      "passed": true,
+      "shape_check_mode": "topology_without_global_bop_argument_analysis",
+      "solid_count": 1,
+      "volume": 6942.919764433445
+    },
+    "required_internal_section_module_count": 1,
+    "sampled_internal_section_count": 1,
+    "sampled_internal_sections_by_module": {
+      "M1": 1
+    },
+    "terminal_bore_failures": [],
+    "termination_seal_failures": [],
+    "wall_section_failures": [
+      {
+        "failures": [
+          {
+            "kind": "missing_wall_material",
+            "sample": 0
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 2
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 4
+          },
+          {
+            "kind": "missing_wall_material",
+            "sample": 6
+          }
+        ],
+        "module_id": "M1",
+        "section": "component_body_mid"
+      }
+    ]
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "20260414 (Git shallow)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "(HEAD detached at 0108fd4b4)",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "generator_version": "cadgen02-freecad-v24",
+  "module_ids": [
+    "M1"
+  ],
+  "passed": false,
+  "payload_digest": "c67bd386bef9ca5e0f1cbcc89867fba1eecd9181ccff4f4af41e712d75852202",
+  "run_id": "20260712T061547534024Z",
+  "schema_version": 3,
+  "state_id": "S1",
+  "state_version": 1,
+  "validator_policy": {
+    "generator_version": "cadgen02-freecad-v24",
+    "policy_digest": "a134b28e2403c49bc447501ec3fc6dcde8712ed5080ae91b3d163bbcbb610be1",
+    "policy_id": "cadgen02-freecad-validator-v24",
+    "validation_schema_version": 3
+  }
+}
