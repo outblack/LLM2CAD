@@ -1,1 +1,0 @@
-직선 inlet 뒤에 첫 번째 Y 분기를 만들고, 3D spline과 taper를 지난 뒤 두 번째 Y 분기로 끝나는 속이 빈 four-port manifold를 생성해줘.
